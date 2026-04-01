@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Australian Finance Tools</title>
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<style>
+:root{
+  --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
+  --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
+  --tx:#22313f;--txl:#6c7a89;--red:#e53935;
+  --bl:#3f7fb5;--bll:#edf5fb;--am:#b6862c;--aml:#faf2df;
+  --help:#e67e22;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;display:flex;flex-direction:column}
+
+/* ── Header ── */
+.hd{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+.hd-brand{display:flex;align-items:center;gap:14px}
+.hd-logo{width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.hd-logo svg{width:22px;height:22px;fill:#fff}
+.hd-title{font-size:1.2rem;font-weight:700;color:#fff;letter-spacing:.01em}
+.hd-sub{font-size:.8rem;color:rgba(255,255,255,.7);margin-top:1px}
+
+/* ── Hero ── */
+.hero-section{background:linear-gradient(135deg,rgba(255,253,250,.98),rgba(248,244,236,.98));border-bottom:1px solid var(--bdr);padding:48px 32px 40px;text-align:center}
+.hero-section h1{font-size:2rem;font-weight:800;color:var(--dk);margin-bottom:10px;letter-spacing:-.02em}
+.hero-section p{font-size:1.05rem;color:var(--txl);max-width:560px;margin:0 auto;line-height:1.6}
+
+/* ── Ad slot (top) ── */
+.top-ad{display:flex;justify-content:center;padding:16px 0 8px;background:var(--bg);border-bottom:1px solid var(--bdr)}
+.top-ad .ad-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;margin-bottom:4px}
+
+/* ── Grid ── */
+.container{max-width:1200px;margin:0 auto;padding:40px 24px;flex:1}
+.section-heading{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--txl);margin-bottom:20px;padding-bottom:8px;border-bottom:2px solid var(--bdr)}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+
+/* ── Tool Card ── */
+.tool-card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:24px;box-shadow:0 6px 20px rgba(45,50,40,.05);transition:transform .18s,box-shadow .18s;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+.tool-card:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(45,50,40,.11);border-color:var(--gr)}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--accent,var(--gr));border-radius:18px 18px 0 0}
+.tool-card.available::after{content:'Available';position:absolute;top:14px;right:14px;font-size:.68rem;font-weight:700;background:var(--grl);color:var(--gr);padding:3px 9px;border-radius:999px;border:1px solid var(--gr)}
+.tool-card.coming-soon{opacity:.7;cursor:default;pointer-events:none}
+.tool-card.coming-soon::after{content:'Coming Soon';position:absolute;top:14px;right:14px;font-size:.68rem;font-weight:700;background:#f1ede6;color:var(--txl);padding:3px 9px;border-radius:999px;border:1px solid var(--bdr)}
+.card-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--icon-bg,var(--grl));flex-shrink:0}
+.card-icon svg{width:22px;height:22px;fill:var(--icon-color,var(--gr))}
+.card-title{font-size:1.05rem;font-weight:700;color:var(--dk);line-height:1.3}
+.card-desc{font-size:.875rem;color:var(--txl);line-height:1.55;flex:1}
+.card-cta{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;color:var(--gr);margin-top:4px}
+.card-cta svg{width:14px;height:14px;fill:var(--gr);transition:transform .15s}
+.tool-card:hover .card-cta svg{transform:translateX(3px)}
+
+/* ── Footer ── */
+.ft{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:18px 32px;text-align:center;font-size:.8rem;color:rgba(255,255,255,.7);margin-top:auto}
+.ft a{color:rgba(255,255,255,.85);text-decoration:none}
+
+/* ── Responsive ── */
+@media(max-width:600px){
+  .hero-section{padding:32px 20px 28px}
+  .hero-section h1{font-size:1.5rem}
+  .container{padding:28px 16px}
+  .tools-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="hd">
+  <div class="hd-brand">
+    <div class="hd-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+    </div>
+    <div>
+      <div class="hd-title">Australian Finance Tools</div>
+      <div class="hd-sub">Free calculators for everyday financial decisions</div>
+    </div>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="hero-section">
+  <h1>Financial Calculators</h1>
+  <p>Simple, accurate tools to help you understand tax, loans, savings and more — built for Australians.</p>
+</div>
+
+<!-- Top Ad -->
+<div class="top-ad">
+  <div>
+    <div class="ad-label">Advertisement</div>
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</div>
+
+<!-- Calculator Grid -->
+<div class="container">
+  <div class="section-heading">All Calculators</div>
+  <div class="tools-grid">
+
+    <!-- 1. Income Tax -->
+    <a class="tool-card available" href="income-tax-calculator.html" style="--accent:#2a9d67;--icon-bg:#e7f8ef;--icon-color:#2a9d67">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zM9 13h6v2H9zm0-4h2v2H9zm4 0h2v2h-2zm-4 8h6v2H9z"/></svg>
+      </div>
+      <div class="card-title">Australian Income Tax</div>
+      <div class="card-desc">Calculate your take-home pay, tax, Medicare levy, HECS/HELP repayments and super for any financial year.</div>
+      <div class="card-cta">Open calculator <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+    </a>
+
+    <!-- 2. Home Loan Repayment -->
+    <a class="tool-card coming-soon" href="home-loan-calculator.html" style="--accent:#3f7fb5;--icon-bg:#edf5fb;--icon-color:#3f7fb5">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      </div>
+      <div class="card-title">Home Loan Repayment</div>
+      <div class="card-desc">Estimate your monthly repayments, total interest paid and loan amortisation schedule.</div>
+      <div class="card-cta">Open calculator <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+    </a>
+
+    <!-- 3. Personal Loan -->
+    <a class="tool-card coming-soon" href="personal-loan-calculator.html" style="--accent:#b6862c;--icon-bg:#faf2df;--icon-color:#b6862c">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+      </div>
+      <div class="card-title">Personal Loan Repayment</div>
+      <div class="card-desc">Work out repayments and total interest cost for any personal loan amount, rate and term.</div>
+      <div class="card-cta">Open calculator <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+    </a>
+
+    <!-- 4. Rent or Buy -->
+    <a class="tool-card coming-soon" href="rent-or-buy-calculator.html" style="--accent:#e67e22;--icon-bg:#fef4e8;--icon-color:#e67e22">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+      </div>
+      <div class="card-title">Rent or Buy</div>
+      <div class="card-desc">Compare the true long-term cost of renting versus buying a property in your area.</div>
+      <div class="card-cta">Open calculator <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+    </a>
+
+    <!-- 5. Rent or Invest -->
+    <a class="tool-card coming-soon" href="rent-or-invest-calculator.html" style="--accent:#2a9d67;--icon-bg:#e7f8ef;--icon-color:#2a9d67">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+      </div>
+      <div class="card-title">Rent or Invest</div>
+      <div class="card-desc">Model whether you're better off renting and investing the difference versus buying a home.</div>
+      <div class="card-cta">Open calculator <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+    </a>
+
+    <!-- 6. Savings Goal -->
+    <a class="tool-card coming-soon" href="savings-goal-calculator.html" style="--accent:#3f7fb5;--icon-bg:#edf5fb;--icon-color:#3f7fb5">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+      </div>
+      <div class="card-title">Savings Goal</div>
+      <div class="card-desc">Find out how long it will take to reach your savings target, or what you need to save each month.</div>
+      <div class="card-cta">Open calculator <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+    </a>
+
+    <!-- 7. HECS/HELP Repayment -->
+    <a class="tool-card coming-soon" href="hecs-calculator.html" style="--accent:#e67e22;--icon-bg:#fef4e8;--icon-color:#e67e22">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+      </div>
+      <div class="card-title">HECS/HELP Repayment</div>
+      <div class="card-desc">See when your student debt will be repaid based on your income, indexation and voluntary payments.</div>
+      <div class="card-cta">Open calculator <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+    </a>
+
+    <!-- 8. Offset Account Savings -->
+    <a class="tool-card coming-soon" href="offset-account-calculator.html" style="--accent:#b6862c;--icon-bg:#faf2df;--icon-color:#b6862c">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+      </div>
+      <div class="card-title">Offset Account Savings</div>
+      <div class="card-desc">Calculate how much interest and time an offset account saves on your home loan over its lifetime.</div>
+      <div class="card-cta">Open calculator <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+    </a>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="ft">
+  <span>Estimates only — general information, not personal financial advice. &nbsp;|&nbsp; <a href="#">Privacy Policy</a> &nbsp;|&nbsp; <a href="#">Disclaimer</a></span>
+</div>
+
+</body>
+</html>
