@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Australian Finance Tools — Income Tax Calculator</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
+  --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
+  --tx:#22313f;--txl:#6c7a89;--red:#e53935;
+  --bl:#3f7fb5;--bll:#edf5fb;--am:#b6862c;--aml:#faf2df;--help:#e67e22;--helpl:#fef4e8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14)}
+.topbar-logo a{display:flex;align-items:center;gap:10px;text-decoration:none}
+.app-mark{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:var(--gr);color:#fff;font-weight:800;font-size:1rem;box-shadow:0 8px 20px rgba(42,157,103,.28)}
+.topbar-title{color:#fff;font-size:1rem;font-weight:700}
+.topbar-subtitle{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.72);margin-top:2px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
+.badge{background:rgba(255,255,255,.15);color:#fff;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px;border:1px solid rgba(255,255,255,.12)}
+.badge.pt{background:rgba(42,157,103,.2);color:#d0fff0;border-color:rgba(42,157,103,.3)}
+.main-wrapper{background:transparent;padding:24px 32px;flex:1}
+.container{max-width:1500px;margin:0 auto}
+.hero{background:linear-gradient(135deg,rgba(255,253,250,.98),rgba(248,244,236,.98));border:1px solid var(--bdr);border-radius:22px;padding:22px 26px;margin-bottom:22px;box-shadow:0 12px 30px rgba(45,70,91,.05);display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.hero-text .eyebrow{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txl);font-weight:700}
+.hero-text h1{font-size:clamp(1.8rem,2.6vw,2.8rem);line-height:1.08;color:var(--dk);margin:.35rem 0 .55rem 0}
+.hero-text p{max-width:70ch;color:var(--txl);font-size:.98rem}
+.ad-slot{min-width:280px;max-width:380px;flex:0 0 340px;background:rgba(255,255,255,.72);border:1px dashed #b8c8d8;border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ad-slot-label{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--txl);font-weight:700;margin-bottom:6px}
+.ad-slot p{font-size:.9rem;color:var(--tx)}
+.layout{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06)}
+.card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
+.card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
+.card-header-row h2{margin:0;padding:0;border:none}
+.section-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gr);margin-top:16px;margin-bottom:10px;padding-top:12px;border-top:1px solid var(--bdr)}
+.section-label:first-of-type{margin-top:0;padding-top:0;border-top:none}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.8rem;font-weight:600;margin-bottom:4px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
+.field-hint{font-size:.75rem;color:var(--txl);margin-top:2px}
+.field input,.field select{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+.inline-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.toggle-group{margin-bottom:14px}
+.toggle-label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
+.toggle-switch{display:flex;border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+.toggle-switch input[type=radio]{display:none}
+.toggle-switch label{flex:1;text-align:center;padding:8px 10px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fffdf8;color:var(--txl);transition:all .15s;border-right:1px solid var(--bdr)}
+.toggle-switch label:last-of-type{border-right:none}
+.toggle-switch input[type=radio]:checked+label{background:var(--gr);color:#fff}
+.checkbox-field{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.checkbox-field input[type=checkbox]{width:18px;height:18px;accent-color:var(--gr)}
+.checkbox-field label{font-size:.88rem;font-weight:500;cursor:pointer}
+.derived-info{background:var(--grl);border:1px solid var(--gr);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.84rem;color:var(--tx);display:none}
+.derived-info span{font-weight:700;color:var(--dk)}
+.prorata-info{background:var(--aml);border:1px solid var(--am);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.84rem;color:var(--tx);display:none}
+.prorata-info span{font-weight:700}
+.info-banner{background:var(--bll);border:1px solid var(--bl);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.82rem;color:var(--tx);display:none}
+.info-banner strong{color:var(--bl)}
+.sj-note{background:var(--bll);border:1px solid var(--bl);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:.84rem;color:var(--tx)}
+.sj-note strong{color:var(--bl)}
+.warning-banner{background:#fff0ef;border:1px solid var(--red);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:.84rem;color:var(--red);font-weight:600;display:none}
+.warning-banner .warning-detail{font-weight:400;color:var(--tx);margin-top:4px;font-size:.8rem;line-height:1.5}
+.novated-fields,.ftb-fields,.seniors-fields,.mls-fields,.hourly-fields{margin-top:8px;margin-bottom:8px}
+.results-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.result-box{background:#f8f5ef;border:1px solid var(--bdr);border-radius:12px;padding:12px 14px}
+.result-box.highlight{background:var(--grl);border-color:var(--gr)}
+.result-box .label{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);font-weight:600;margin-bottom:2px}
+.result-box .value{font-size:1.15rem;font-weight:700;color:var(--dk)}
+.result-box.highlight .value{color:var(--gr);font-size:1.3rem}
+.combined-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.combined-table th{text-align:left;padding:8px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
+.combined-table th:not(:first-child){text-align:right}
+.combined-table td{padding:8px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
+.combined-table td:not(:first-child){text-align:right}
+.combined-table tr:last-child td{border-bottom:none}
+.combined-table .total-row td{font-weight:700;border-top:2px solid var(--dk);border-bottom:none}
+.combined-table .subtotal-row td{font-weight:600;border-top:1px solid var(--txl)}
+.combined-table .indent td:first-child{padding-left:24px;color:var(--txl);font-size:.82rem}
+.combined-table .section-header td{font-weight:700;background:var(--bg);padding-top:12px;border-bottom:1px solid var(--bdr);font-size:.8rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl)}
+.combined-table .negative td:not(:first-child),.negative-val{color:var(--red)!important;font-weight:700!important}
+.section-title{font-size:.85rem;font-weight:700;margin:20px 0 8px;color:var(--dk)}
+.bracket-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.bracket-table th{text-align:left;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;color:var(--txl);border-bottom:2px solid var(--bdr)}
+.bracket-table th:not(:first-child){text-align:right}
+.bracket-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
+.bracket-table th:not(:first-child),.bracket-table td:not(:first-child){text-align:right}
+.bracket-table .bracket-active td{color:var(--tx)}
+.bracket-table .bracket-inactive td{color:var(--txl)}
+.key-rates-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.key-rates-table th{text-align:left;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;color:var(--txl);border-bottom:2px solid var(--bdr)}
+.key-rates-table th:not(:first-child){text-align:right}
+.key-rates-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
+.key-rates-table td:not(:first-child){text-align:right}
+.results-lower{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:4px}
+@media(max-width:1000px){.results-lower{grid-template-columns:1fr}.results-grid{grid-template-columns:1fr 1fr}}
+.pie-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--bdr)}
+.pie-card{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:center;background:#f8f5ef;border:1px solid var(--bdr);border-radius:16px;padding:18px}
+@media(max-width:1000px){.pie-card{grid-template-columns:1fr}}
+.pie-wrap{display:flex;justify-content:center;align-items:center}
+#payPie{width:260px;height:260px}
+.pie-legend{display:grid;gap:12px}
+.legend-row{display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;align-items:center;font-size:.9rem}
+.legend-swatch{width:14px;height:14px;border-radius:999px}
+.legend-label{font-weight:600;color:var(--tx)}
+.legend-amount{font-weight:700;color:var(--dk);font-variant-numeric:tabular-nums;text-align:right}
+.legend-share{font-size:.82rem;color:var(--txl);text-align:right;min-width:42px}
+.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr)}
+.btn-action{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;letter-spacing:.3px}
+.btn-action svg{width:14px;height:14px;fill:currentColor}
+.btn-reset{background:var(--nv);color:#fff}
+.btn-reset:hover{background:#2d5268;color:#fff}
+.btn-export{background:var(--gr);color:#fff}
+.btn-export:hover{background:#228052}
+.note{font-size:.78rem;color:var(--txl);margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr);line-height:1.5}
+.ft{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center}
+.ft span,.ft a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem}
+.ft a:hover{color:#fff}
+.hidden{display:none!important}
+
+input[type=number]::placeholder{color:#c5bdb2;font-style:normal}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:.4}
+
+
+.input-wrap{position:relative;display:flex;align-items:center}
+.input-wrap .prefix,.input-wrap .suffix{position:absolute;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;user-select:none;z-index:1}
+.input-wrap .prefix{left:10px}
+.input-wrap .suffix{right:10px}
+.input-wrap input{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s}
+.input-wrap input.has-prefix{padding-left:22px}
+.input-wrap input.has-suffix{padding-right:28px}
+.input-wrap input:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+
+
+.combined-table .takehome-row td{font-weight:700;border-top:2px solid var(--dk);border-bottom:none;color:var(--gr)!important;background:var(--grl)}
+.combined-table .takehome-row td:first-child{border-radius:0}
+
+
+.collapsible-card{}
+.collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0;margin-bottom:0;text-align:left;gap:10px}
+.collapsible-header h2{color:var(--dk)}
+.collapsible-header:hover h2{color:var(--gr)}
+.collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center}
+.collapsible-header[aria-expanded="false"] .collapse-icon{transform:rotate(180deg)}
+.collapsible-body{overflow:hidden;transition:max-height .3s ease, opacity .25s ease;max-height:4000px;opacity:1}
+.collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
+.collapsible-header{padding-bottom:8px;border-bottom:2px solid var(--gr);margin-bottom:16px}
+.collapsible-header[aria-expanded="false"]{border-bottom-color:var(--bdr);margin-bottom:0}
+
+
+.combined-table .super-row td:not(:first-child){color:var(--bl)!important;font-weight:600}
+.combined-table .help-row td:not(:first-child){color:var(--help)!important;font-weight:600}
+.combined-table .super-total-row td{font-weight:700;border-top:1px solid var(--bl);background:color-mix(in srgb,var(--bll) 60%,var(--card))}.combined-table .super-total-row td:not(:first-child){color:var(--bl)!important}
+
+
+/* ── Right rail ad ─────────────────────────────────────────────── */
+.page-wrapper{display:flex;justify-content:center;align-items:flex-start;gap:0;width:100%;padding-top:0}
+.right-rail{display:none;width:200px;min-width:200px;padding:0 0 24px 12px;flex-shrink:0;align-self:flex-start;margin-top:290px}
+.rail-ad-unit{background:var(--card);border:1px solid var(--bdr);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(45,50,40,.06)}
+.rail-ad-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:8px 0 4px;border-bottom:1px solid var(--bdr)}
+.rail-ad-inner{padding:8px;display:flex;justify-content:center;align-items:center;min-height:620px}
+/* Show rail only on very wide screens */
+@media(min-width:1700px){
+  .right-rail{display:block}
+  .main-wrapper{flex:1;min-width:0}
+}
+
+
+/* ── Mobile mid-page ad ─────────────────────────────────────────── */
+.mobile-ad-slot{display:none;width:100%;justify-content:center;align-items:center;padding:12px 0;margin:4px 0}
+.mobile-ad-slot .ad-slot-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;margin-bottom:6px}
+.mobile-ad-inner{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:10px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+@media(max-width:899px){
+  .mobile-ad-slot{display:flex;flex-direction:column}
+}
+
+</style>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-logo">
+    <a href="index.html" title="Back to calculators">
+      <span class="app-mark">AF</span>
+    </a>
+  </div>
+  <div class="topbar-divider"></div>
+  <div>
+    <div class="topbar-title">Income Tax Calculator</div>
+    <div class="topbar-subtitle">Australian Finance Tools</div>
+  </div>
+  <div class="topbar-right">
+    <span class="badge pt hidden" id="ptBadge">Part-Time</span>
+    <span class="badge" id="fyBadge">FY 2025-26</span>
+    <span style="color:rgba(255,255,255,.5);font-size:.8rem" id="fySubtitle">1 Jul 2025 – 30 Jun 2026</span>
+  </div>
+</div>
+
+<div class="page-wrapper">
+<div class="main-wrapper">
+<div class="container">
+
+<div class="hero">
+  <div class="hero-text">
+    <div class="eyebrow">Australian Finance Tools</div>
+    <h1>Income Tax Calculator</h1>
+    <p>Estimate your tax, Medicare levy, HELP repayments, super, and take-home pay for Australian residents, foreign residents, and working holiday makers.</p>
+  </div>
+  <div class="ad-slot">
+    <div class="ad-slot-label">Advertisement</div>
+    <!-- Google AdSense — Large Rectangle 336×280 -->
+    <!-- Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
+    <!-- Replace data-ad-slot value with your ad slot ID -->
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:320px;height:100px"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- LEFT PANEL -->
+<div>
+
+  <!-- YOUR DETAILS -->
+  <div class="card">
+    <div class="card-header-row">
+      <h2>Your Details</h2>
+      <button class="btn-action btn-reset" onclick="resetAll()">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Reset
+      </button>
+    </div>
+
+    <div class="section-label">Income</div>
+    <div class="inline-fields">
+      <div class="field">
+        <label>Financial Year</label>
+        <select id="financialYear">
+          <option value="2023-24">2023-24</option>
+          <option value="2024-25">2024-25</option>
+          <option value="2025-26" selected>2025-26</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Pay Frequency</label>
+        <select id="frequency">
+          <option value="26">Fortnightly</option>
+          <option value="52">Weekly</option>
+          <option value="12">Monthly</option>
+        </select>
+      </div>
+    </div>
+    <div class="toggle-group">
+      <span class="toggle-label">Income Entry Method</span>
+      <div class="toggle-switch">
+        <input type="radio" name="incMethod" id="methodAnnual" value="annual" checked>
+        <label for="methodAnnual">Annual Salary</label>
+        <input type="radio" name="incMethod" id="methodHourly" value="hourly">
+        <label for="methodHourly">Hourly Rate</label>
+      </div>
+    </div>
+    <div id="annualField">
+      <div class="field"><label>Annual Salary / FTE ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="salary" value="100000" min="0" step="100"></div></div>
+    </div>
+    <div id="hourlyFields" class="hourly-fields hidden">
+      <div class="inline-fields">
+        <div class="field"><label>Hourly Rate ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="hourlyRate" value="50" min="0" step="0.5"></div></div>
+        <div class="field"><label>Hours Per Week</label><input type="number" id="hourlyHours" value="38" min="0" max="80" step="0.5"></div>
+      </div>
+      <div class="field"><label>Weeks Per Year</label><input type="number" id="hourlyWeeks" value="52" min="1" max="52" step="1"></div>
+      <div class="derived-info" id="hourlyDerived">Derived annual salary: <span id="hourlyAnnual">$0</span></div>
+    </div>
+    <div class="toggle-group">
+      <span class="toggle-label">Salary Includes Super?</span>
+      <div class="toggle-switch">
+        <input type="radio" name="superInc" id="superNo" value="no" checked>
+        <label for="superNo">No</label>
+        <input type="radio" name="superInc" id="superYes" value="yes">
+        <label for="superYes">Yes</label>
+      </div>
+    </div>
+    <div class="derived-info" id="derivedInfo">Base salary (excl. super): <span id="derivedSalary">$0</span> &nbsp;&nbsp; Super: <span id="derivedSuper">$0</span></div>
+    <div class="toggle-group">
+      <span class="toggle-label">Employment Basis</span>
+      <div class="toggle-switch">
+        <input type="radio" name="empBasis" id="basisFull" value="full" checked>
+        <label for="basisFull">Full-Time</label>
+        <input type="radio" name="empBasis" id="basisPart" value="part">
+        <label for="basisPart">Part-Time Pro-Rata</label>
+      </div>
+    </div>
+    <div id="partTimeFields" class="hidden">
+      <div class="inline-fields">
+        <div class="field"><label>Your Hours Per Week</label><input type="number" id="actualHours" value="22.8" min="0" max="80" step="0.1"></div>
+        <div class="field"><label>FTE Hours Per Week</label><input type="number" id="fteHours" value="38" min="1" max="80" step="0.1"></div>
+      </div>
+      <div class="prorata-info" id="prorataInfo" style="display:block">FTE fraction: <span id="fteFraction">0.6</span> &nbsp;&nbsp; Pro-rata salary: <span id="prorataSalary">$0</span></div>
+    </div>
+
+    <div class="section-label">Superannuation</div>
+    <div class="field">
+      <label>Super Guarantee Rate (%)</label>
+      <div class="input-wrap"><input class="has-suffix" type="number" id="superRate" value="12.0" min="0" max="30" step="0.5"><span class="suffix">%</span></div>
+    </div>
+    <div class="info-banner" id="sgCapBanner"><strong>SG maximum base applies.</strong> <span id="sgCapDetail"></span></div>
+    <div class="field">
+      <label>Additional Super Contributions (per year)</label>
+      <div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="salSac" placeholder="0" min="0" step="100"></div>
+      <div class="field-hint">Concessional contributions taxed at 15% up to the cap limit.</div>
+    </div>
+    <div class="warning-banner" id="capWarning"><span id="capWarningTitle"></span><div class="warning-detail" id="capWarningDetail"></div></div>
+
+    <div class="section-label">Tax Settings</div>
+    <div class="field">
+      <label>Residency Status</label>
+      <select id="residency">
+        <option value="resident">Australian Resident</option>
+        <option value="foreign">Foreign Resident</option>
+        <option value="whm">Working Holiday Maker</option>
+      </select>
+    </div>
+    <div class="toggle-group">
+      <span class="toggle-label">HECS/HELP, VSL, SSL or TSL Debt</span>
+      <div class="toggle-switch">
+        <input type="radio" name="helpDebtR" id="helpDebtNo" value="no" checked>
+        <label for="helpDebtNo">No</label>
+        <input type="radio" name="helpDebtR" id="helpDebtYes" value="yes">
+        <label for="helpDebtYes">Yes</label>
+      </div>
+    </div>
+    <div class="toggle-group">
+      <span class="toggle-label">Tax File Number Withheld</span>
+      <div class="toggle-switch">
+        <input type="radio" name="tfnR" id="tfnNo" value="no" checked>
+        <label for="tfnNo">No</label>
+        <input type="radio" name="tfnR" id="tfnYes" value="yes">
+        <label for="tfnYes">Yes</label>
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- ADDITIONAL OPTIONS (includes second job + additional income at top) -->
+  <div class="card collapsible-card" id="additionalOptionsCard">
+    <button class="collapsible-header" id="additionalOptionsToggle" onclick="toggleAdditionalOptions()" aria-expanded="true">
+      <h2 style="margin:0;padding:0;border:none">Additional Options</h2>
+      <span class="collapse-icon" id="collapseIcon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+      </span>
+    </button>
+    <div class="collapsible-body" id="additionalOptionsBody">
+
+    <div class="section-label">Additional Income</div>
+    <div class="checkbox-field"><input type="checkbox" id="showBonus"><label for="showBonus">Add additional income / annual bonus</label></div>
+    <div id="bonusWrap" class="hidden">
+      <div class="field"><label>Additional Income / Annual Bonus ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="bonus" placeholder="0" min="0" step="100"></div></div>
+    </div>
+
+
+    <div class="checkbox-field" style="margin-top:4px">
+      <input type="checkbox" id="hasSecondJob">
+      <label for="hasSecondJob">Add a second job</label>
+    </div>
+    <div id="secondJobFields" class="hidden">
+      <div class="sj-note"><strong>Important:</strong> You can only claim the tax-free threshold on one job. Second job income is added to your total taxable income and is usually withheld without the threshold applied.</div>
+      <div class="toggle-group">
+        <span class="toggle-label">Second Job Income Method</span>
+        <div class="toggle-switch">
+          <input type="radio" name="sjMethod" id="sjAnnual" value="annual" checked>
+          <label for="sjAnnual">Annual Salary</label>
+          <input type="radio" name="sjMethod" id="sjHourly" value="hourly">
+          <label for="sjHourly">Hourly Rate</label>
+        </div>
+      </div>
+      <div id="sjAnnualField" class="field"><label>Second Job Annual Salary ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="sjSalary" placeholder="0" min="0" step="100"></div></div>
+      <div id="sjHourlyFields" class="hourly-fields hidden">
+        <div class="inline-fields">
+          <div class="field"><label>Second Job Hourly Rate ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="sjHourlyRate" placeholder="0" min="0" step="0.5"></div></div>
+          <div class="field"><label>Second Job Hours Per Week</label><input type="number" id="sjHours" placeholder="0" min="0" max="80" step="0.5"></div>
+        </div>
+        <div class="field"><label>Second Job Weeks Per Year</label><input type="number" id="sjWeeks" value="52" min="1" max="52" step="1"></div>
+      </div>
+      <div class="toggle-group" style="margin-top:6px">
+        <span class="toggle-label">Second Job Employment Basis</span>
+        <div class="toggle-switch">
+          <input type="radio" name="sjBasis" id="sjBasisFull" value="full" checked>
+          <label for="sjBasisFull">Full-Time</label>
+          <input type="radio" name="sjBasis" id="sjBasisPart" value="part">
+          <label for="sjBasisPart">Part-Time Pro-Rata</label>
+        </div>
+      </div>
+      <div id="sjPartTimeFields" class="hidden">
+        <div class="inline-fields">
+          <div class="field"><label>Actual Hours Per Week</label><input type="number" id="sjActualHours" value="22.8" min="0" max="80" step="0.1"></div>
+          <div class="field"><label>FTE Hours Per Week</label><input type="number" id="sjFteHours" value="38" min="1" max="80" step="0.1"></div>
+        </div>
+        <div class="prorata-info" style="display:block">SJ FTE fraction: <span id="sjFteFraction">0.6</span> &nbsp;&nbsp; Pro-rata: <span id="sjProrataSalary">$0</span></div>
+      </div>
+      <div class="checkbox-field"><input type="checkbox" id="sjNoTFN" checked><label for="sjNoTFN">No tax-free threshold claimed on second job</label></div>
+      <div class="section-label">Second Job Superannuation</div>
+      <div class="field">
+        <label>Second Job Super Guarantee Rate (%)</label>
+        <div class="input-wrap"><input class="has-suffix" type="number" id="sjSuperRate" value="12.0" min="0" max="30" step="0.5"><span class="suffix">%</span></div>
+      </div>
+      <div class="field">
+        <label>Additional Super Contributions ($)</label>
+        <div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="sjSalSac" placeholder="0" min="0" step="100"></div>
+        <div class="field-hint">Pooled with primary job for concessional cap purposes.</div>
+      </div>
+    </div>
+
+    <div class="checkbox-field" style="margin-top:4px"><input type="checkbox" id="showExtraTax"><label for="showExtraTax">Withhold extra tax each pay period</label></div>
+    <div id="extraTaxWrap" class="hidden">
+      <div class="field" style="margin-top:6px"><label>Extra Tax Withheld Per Pay ($)</label><div class="input-wrap"><span class="prefix">$</span><input type="number" class="has-prefix" id="extraTax" placeholder="0" min="0" step="1"></div></div>
+    </div>
+
+    <div class="section-label">Medicare Levy Surcharge</div>
+    <div class="checkbox-field"><input type="checkbox" id="mlsEnabled"><label for="mlsEnabled">No private health insurance (MLS may apply)</label></div>
+    <div id="mlsFields" class="mls-fields hidden">
+      <div class="field">
+        <label>Family Status for MLS</label>
+        <select id="mlsFamily">
+          <option value="single">Single</option>
+          <option value="family">Family</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section-label">Tax Offsets</div>
+    <div class="checkbox-field"><input type="checkbox" id="seniorsOffset"><label for="seniorsOffset">Seniors and Pensioners Tax Offset (SAPTO)</label></div>
+    <div id="seniorsFields" class="seniors-fields hidden">
+      <div class="field">
+        <label>Filing Status</label>
+        <select id="seniorsStatus">
+          <option value="single">Single</option>
+          <option value="couple-each">Couple (each, separate income)</option>
+          <option value="couple-illness">Couple (separated by illness)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section-label">Family Tax Benefit</div>
+    <div class="checkbox-field"><input type="checkbox" id="ftbEnabled"><label for="ftbEnabled">Estimate Family Tax Benefit</label></div>
+    <div id="ftbFields" class="ftb-fields hidden">
+      <div class="inline-fields">
+        <div class="field"><label>Children Under 13</label><input type="number" id="ftbUnder13" value="1" min="0" max="20" step="1"></div>
+        <div class="field"><label>Children 13-15</label><input type="number" id="ftb13to15" value="0" min="0" max="20" step="1"></div>
+      </div>
+      <div class="inline-fields">
+        <div class="field"><label>Children 16-19</label><input type="number" id="ftb16to19" value="0" min="0" max="20" step="1"></div>
+        <div class="field"><label>Family Income ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="ftbFamilyIncome" placeholder="0" min="0" step="1000"></div><div class="field-hint">Combined annual income for FTB income test.</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Novated Lease</div>
+    <div class="checkbox-field"><input type="checkbox" id="novatedLease"><label for="novatedLease">I have a novated lease</label></div>
+    <div id="novatedFields" class="novated-fields hidden">
+      <div class="field"><label>Pre-Tax Deduction per year ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="novatedPreTax" placeholder="0" min="0" step="100"></div><div class="field-hint">Salary sacrifice portion, reduces taxable income.</div></div>
+      <div class="field"><label>Post-Tax Deduction per year ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="novatedPostTax" placeholder="0" min="0" step="100"></div><div class="field-hint">Employee contribution, deducted from net pay after tax.</div></div>
+    </div>
+
+    </div><!-- /collapsible-body -->
+  </div>
+
+</div><!-- /left panel -->
+
+<!-- Mobile mid-page ad — 300×250 Medium Rectangle -->
+<!-- Visible only on screens below 900px wide -->
+<div class="mobile-ad-slot">
+  <div class="mobile-ad-inner">
+    <div class="ad-slot-label">Advertisement</div>
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:300px;height:250px"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</div>
+
+<!-- RIGHT PANEL (RESULTS) -->
+<div>
+  <div class="card" id="results">
+    <h2>Results</h2>
+
+    <div class="results-grid">
+      <div class="result-box highlight">
+        <div class="label">Take-Home Pay (per period)</div>
+        <div class="value" id="takeHomePeriod">$0.00</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Gross Taxable Income</div>
+        <div class="value" id="grossDisplay">$0</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Effective Tax Rate</div>
+        <div class="value" id="effectiveRate">0%</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Marginal Tax Rate</div>
+        <div class="value" id="marginalRate">0%</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Total Super</div>
+        <div class="value" id="totalSuperDisplay">$0</div>
+      </div>
+    </div>
+
+    <table class="combined-table">
+      <thead><tr><th>Component</th><th>Weekly</th><th>Fortnightly</th><th>Monthly</th><th>Annual</th></tr></thead>
+      <tbody id="combinedBody"></tbody>
+    </table>
+
+    <!-- PIE CHART -->
+    <div class="pie-section">
+      <div class="section-title">Pay Breakdown (Annual)</div>
+      <div class="pie-card">
+        <div class="pie-wrap">
+          <canvas id="payPie" width="260" height="260" aria-label="Pie chart of annual pay breakdown"></canvas>
+        </div>
+        <div class="pie-legend" id="pieLegend">
+          <div class="legend-row"><span class="legend-swatch" style="background:#2a9d67"></span><span class="legend-label">Take-home pay</span><span class="legend-amount" id="pieHome">$0</span><span class="legend-share" id="pieHomePct">0%</span></div>
+          <div class="legend-row"><span class="legend-swatch" style="background:#e53935"></span><span class="legend-label">Tax and levies</span><span class="legend-amount" id="pieTax">$0</span><span class="legend-share" id="pieTaxPct">0%</span></div>
+          <div class="legend-row" id="pieHelpRow" style="display:none"><span class="legend-swatch" style="background:#e67e22"></span><span class="legend-label">HECS/HELP</span><span class="legend-amount" id="pieHelp">$0</span><span class="legend-share" id="pieHelpPct">0%</span></div>
+          <div class="legend-row"><span class="legend-swatch" style="background:#3f7fb5"></span><span class="legend-label">Superannuation</span><span class="legend-amount" id="pieSuper">$0</span><span class="legend-share" id="pieSuperPct">0%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-lower">
+      <div>
+        <div class="section-title">Tax Brackets</div>
+        <table class="bracket-table">
+          <thead><tr><th>Bracket</th><th>Taxable</th><th>Tax Applied</th></tr></thead>
+          <tbody id="bracketBody"></tbody>
+        </table>
+      </div>
+      <div>
+        <div class="section-title">Key Rates <span id="ratesYear">FY 2025-26</span></div>
+        <table class="key-rates-table">
+          <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+          <tbody id="ratesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn-action btn-export" onclick="exportCSV()">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zm-3-7l-4 4-4-4h2.5v-3h3v3H15z"/></svg>
+        Export CSV
+      </button>
+      <button class="btn-action btn-export" onclick="saveHTML()">
+        <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V7l-4-4zm-5 16a3 3 0 110-6 3 3 0 010 6zm3-10H5V5h10v4z"/></svg>
+        Save File
+      </button>
+      <div style="flex:1"></div>
+      <button class="btn-action btn-reset" onclick="resetAll();window.scrollTo({top:0,behavior:'smooth'});">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Start Over
+      </button>
+    </div>
+
+    <p class="note">This calculator provides estimates only. It does not account for all deductions, private health insurance rebates, or other individual circumstances. Super contributions tax (15%) on concessional contributions is paid inside the fund. Division 293 tax is paid from your super fund or by personal assessment. Family Tax Benefit estimates are indicative only. Consult a registered tax agent or Services Australia for personal advice.</p>
+  </div>
+</div><!-- /right panel -->
+
+</div><!-- /layout -->
+</div><!-- /container -->
+</div><!-- /main-wrapper -->
+
+<div class="right-rail">
+  <div class="rail-ad-unit">
+    <div class="rail-ad-label">Advertisement</div>
+    <div class="rail-ad-inner">
+      <!-- Google AdSense — Half Page 300×600 -->
+      <!-- Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
+      <!-- Replace data-ad-slot value with your ad slot ID -->
+      <ins class="adsbygoogle"
+           style="display:inline-block;width:160px;height:600px"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+</div><!-- /right-rail -->
+
+</div><!-- /page-wrapper -->
+<div class="ft"><span>Estimates only — general information, not personal financial advice.</span></div>
+
+
+<script>
+// ─── Formatters ────────────────────────────────────────────────────────────
+function fmt(n){var a=Math.abs(n);var s=a.toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});return(n<0?'-$':'$')+s;}
+function fmtW(n){return '$'+Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:0,maximumFractionDigits:0});}
+function rawNum(n){return(Math.round(n*100)/100).toFixed(2);}
+function asNum(v){return parseFloat(String(v||0).replace(/[^0-9.-]/g,''))||0;}
+var csvData=[];
+
+// ─── FY Config ─────────────────────────────────────────────────────────────
+var fyConfig={
+'2023-24':{label:'FY 2023-24',dates:'1 Jul 2023 – 30 Jun 2024',superDefault:11.0,medicareLower:24276,medicareUpper:30345,concessionalCap:27500,sgMaxQuarter:60220,div293Threshold:250000,mlsThresholds:{single:[90000,105000,140000],family:[180000,210000,280000]},rates:[0.01,0.0125,0.015],brackets:{resident:[{min:0,max:18200,rate:0},{min:18200,max:45000,rate:0.19},{min:45000,max:120000,rate:0.325},{min:120000,max:180000,rate:0.37},{min:180000,max:Infinity,rate:0.45}],foreign:[{min:0,max:120000,rate:0.325},{min:120000,max:180000,rate:0.37},{min:180000,max:Infinity,rate:0.45}],whm:[{min:0,max:45000,rate:0.15},{min:45000,max:120000,rate:0.325},{min:120000,max:180000,rate:0.37},{min:180000,max:Infinity,rate:0.45}]},lito:function(i){if(i<=45000)return 700;if(i<=66667)return Math.max(0,700-(i-45000)*0.05);return Math.max(0,325-(i-66667)*0.015);},sapto:{single:{max:2230,cutIn:32279,cutOut:50119},couple:{max:1602,cutIn:28974,cutOut:41790},illness:{max:2040,cutIn:31279,cutOut:95198}},noTfnRate:0.47,calcHELP:function(i){var t=[{mn:0,mx:51550,r:0},{mn:51550,mx:59518,r:.01},{mn:59518,mx:63089,r:.02},{mn:63089,mx:66875,r:.025},{mn:66875,mx:70888,r:.03},{mn:70888,mx:75140,r:.035},{mn:75140,mx:79649,r:.04},{mn:79649,mx:84429,r:.045},{mn:84429,mx:89494,r:.05},{mn:89494,mx:94865,r:.055},{mn:94865,mx:100557,r:.06},{mn:100557,mx:106590,r:.065},{mn:106590,mx:112985,r:.07},{mn:112985,mx:119764,r:.075},{mn:119764,mx:126950,r:.08},{mn:126950,mx:134568,r:.085},{mn:134568,mx:142642,r:.09},{mn:142642,mx:151200,r:.095},{mn:151200,mx:Infinity,r:.10}];for(var j=0;j<t.length;j++){if(i>=t[j].mn&&i<t[j].mx)return i*t[j].r;}return i*0.10;},helpShort:'Flat % of total income',ftbA:{rateUnder13:6536,rate13to15:8240,rate16to19:8240,incomeThreshold1:58108,taperRate1:0.20,incomeThreshold2:103368,taperRate2:0.30,baseRatePerChild:1849},ftbB:{primaryUnder5:4441,primary5to18:3186}},
+'2024-25':{label:'FY 2024-25',dates:'1 Jul 2024 – 30 Jun 2025',superDefault:11.5,medicareLower:26000,medicareUpper:32500,concessionalCap:30000,sgMaxQuarter:62270,div293Threshold:250000,mlsThresholds:{single:[93000,108000,144000],family:[186000,216000,288000]},rates:[0.01,0.0125,0.015],brackets:{resident:[{min:0,max:18200,rate:0},{min:18200,max:45000,rate:0.16},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}],foreign:[{min:0,max:45000,rate:0.30},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}],whm:[{min:0,max:45000,rate:0.15},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}]},lito:function(i){if(i<=45000)return 700;if(i<=66667)return Math.max(0,700-(i-45000)*0.05);return Math.max(0,325-(i-66667)*0.015);},sapto:{single:{max:2230,cutIn:33532,cutOut:51094},couple:{max:1602,cutIn:31468,cutOut:43750},illness:{max:2040,cutIn:31279,cutOut:95198}},noTfnRate:0.47,calcHELP:function(i){var t=[{mn:0,mx:54435,r:0},{mn:54435,mx:62850,r:.01},{mn:62850,mx:66620,r:.02},{mn:66620,mx:70618,r:.025},{mn:70618,mx:74855,r:.03},{mn:74855,mx:79346,r:.035},{mn:79346,mx:84107,r:.04},{mn:84107,mx:89154,r:.045},{mn:89154,mx:94503,r:.05},{mn:94503,mx:100174,r:.055},{mn:100174,mx:106185,r:.06},{mn:106185,mx:112556,r:.065},{mn:112556,mx:119310,r:.07},{mn:119310,mx:126467,r:.075},{mn:126467,mx:134056,r:.08},{mn:134056,mx:142100,r:.085},{mn:142100,mx:150626,r:.09},{mn:150626,mx:159663,r:.095},{mn:159663,mx:Infinity,r:.10}];for(var j=0;j<t.length;j++){if(i>=t[j].mn&&i<t[j].mx)return i*t[j].r;}return i*0.10;},helpShort:'Flat % of total income',ftbA:{rateUnder13:6706,rate13to15:8454,rate16to19:8454,incomeThreshold1:61063,taperRate1:0.20,incomeThreshold2:107413,taperRate2:0.30,baseRatePerChild:1896},ftbB:{primaryUnder5:4554,primary5to18:3268}},
+'2025-26':{label:'FY 2025-26',dates:'1 Jul 2025 – 30 Jun 2026',superDefault:12.0,medicareLower:26000,medicareUpper:32500,concessionalCap:30000,sgMaxQuarter:65070,div293Threshold:250000,mlsThresholds:{single:[96000,112000,148000],family:[192000,224000,296000]},rates:[0.01,0.0125,0.015],brackets:{resident:[{min:0,max:18200,rate:0},{min:18200,max:45000,rate:0.16},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}],foreign:[{min:0,max:45000,rate:0.30},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}],whm:[{min:0,max:45000,rate:0.15},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}]},lito:function(i){if(i<=45000)return 700;if(i<=66667)return Math.max(0,700-(i-45000)*0.05);return Math.max(0,325-(i-66667)*0.015);},sapto:{single:{max:2230,cutIn:33532,cutOut:51094},couple:{max:1602,cutIn:31468,cutOut:43750},illness:{max:2040,cutIn:31279,cutOut:95198}},noTfnRate:0.47,calcHELP:function(i){if(i<67000)return 0;if(i<125000)return(i-67000)*0.15;if(i<179285)return 8700+(i-125000)*0.17;return i*0.10;},helpShort:'Progressive marginal',ftbA:{rateUnder13:6900,rate13to15:8700,rate16to19:8700,incomeThreshold1:62634,taperRate1:0.20,incomeThreshold2:110000,taperRate2:0.30,baseRatePerChild:1950},ftbB:{primaryUnder5:4680,primary5to18:3360}}
+};
+
+function getFY(){return fyConfig[document.getElementById('financialYear').value]||fyConfig['2025-26'];}
+function isHourly(){return document.getElementById('methodHourly').checked;}
+function isSuperInc(){return document.getElementById('superYes').checked;}
+function isPartTime(){return document.getElementById('basisPart').checked;}
+function getInputSalary(){
+  if(isHourly()){
+    return (parseFloat(document.getElementById('hourlyRate').value)||0)*(parseFloat(document.getElementById('hourlyHours').value)||0)*(parseFloat(document.getElementById('hourlyWeeks').value)||0);
+  }
+  return parseFloat(document.getElementById('salary').value)||0;
+}
+function getSJSuperRate(){
+  if(!document.getElementById('hasSecondJob').checked) return 0;
+  return (parseFloat(document.getElementById('sjSuperRate').value)||0)/100;
+}
+function getSJSalSac(){
+  if(!document.getElementById('hasSecondJob').checked) return 0;
+  return parseFloat(document.getElementById('sjSalSac').value)||0;
+}
+function getSecondJobIncome(){
+  if(!document.getElementById('hasSecondJob').checked) return 0;
+  var method=document.querySelector('input[name="sjMethod"]:checked').value;
+  var income;
+  if(method==='hourly'){
+    income=(parseFloat(document.getElementById('sjHourlyRate').value)||0)*(parseFloat(document.getElementById('sjHours').value)||0)*(parseFloat(document.getElementById('sjWeeks').value)||0);
+  } else {
+    income=parseFloat(document.getElementById('sjSalary').value)||0;
+  }
+  var sjPart=document.getElementById('sjBasisPart')&&document.getElementById('sjBasisPart').checked;
+  if(sjPart){
+    var ah=parseFloat(document.getElementById('sjActualHours').value)||0;
+    var fh=parseFloat(document.getElementById('sjFteHours').value)||1;
+    var frac=Math.min(1,ah/fh);
+    income=income*frac;
+    var ff=document.getElementById('sjFteFraction');if(ff)ff.textContent=frac.toFixed(4);
+    var sp=document.getElementById('sjProrataSalary');if(sp)sp.textContent='$'+Math.round(income).toLocaleString('en-AU');
+  }
+  return income;
+}
+
+function calcIncomeTax(income,residency,fy){
+  var b=fy.brackets[residency];var tax=0;var details=[];
+  for(var j=0;j<b.length;j++){
+    if(income>b[j].min){var taxable=Math.min(income,b[j].max)-b[j].min;var t=taxable*b[j].rate;tax+=t;details.push({bracket:fmtW(b[j].min)+' – '+(b[j].max===Infinity?'∞':fmtW(b[j].max)),taxable:taxable,tax:t,rate:b[j].rate,active:income>b[j].min});}
+    else{details.push({bracket:fmtW(b[j].min)+' – '+(b[j].max===Infinity?'∞':fmtW(b[j].max)),taxable:0,tax:0,rate:b[j].rate,active:false});}
+  }
+  return{tax:tax,details:details};
+}
+function calcMedicare(income,fy){
+  var lower=fy.medicareLower,upper=fy.medicareUpper;
+  if(income<=lower)return 0;
+  if(income<=upper)return(income-lower)*0.1;
+  return income*0.02;
+}
+function calcMLS(income,fy,familyStatus){
+  var t=fy.mlsThresholds[familyStatus==='family'?'family':'single'];
+  if(income<t[0])return 0;
+  if(income<t[1])return income*0.01;
+  if(income<t[2])return income*0.0125;
+  return income*0.015;
+}
+function calcSAPTO(income,fy,status){
+  var s;
+  if(status==='couple-each')s=fy.sapto.couple;
+  else if(status==='couple-illness')s=fy.sapto.illness;
+  else s=fy.sapto.single;
+  if(income<=s.cutIn)return s.max;
+  if(income>=s.cutOut)return 0;
+  return Math.max(0,s.max-(income-s.cutIn)*s.max/(s.cutOut-s.cutIn));
+}
+function calcFTB(fy,under13,t13to15,t16to19,familyIncome){
+  var ftbA=fy.ftbA;var total=0;
+  var maxA=(under13*ftbA.rateUnder13)+(t13to15*ftbA.rate13to15)+(t16to19*ftbA.rate16to19);
+  var base=(under13+t13to15+t16to19)*ftbA.baseRatePerChild;
+  var reduced=maxA;
+  if(familyIncome>ftbA.incomeThreshold2)reduced=Math.max(base,maxA-(familyIncome-ftbA.incomeThreshold2)*ftbA.taperRate2);
+  else if(familyIncome>ftbA.incomeThreshold1)reduced=Math.max(base,maxA-(familyIncome-ftbA.incomeThreshold1)*ftbA.taperRate1);
+  total=Math.max(0,reduced);
+  return total;
+}
+
+// ─── Visibility ─────────────────────────────────────────────────────────────
+function syncVisibility(){
+  var hourly=document.getElementById('methodHourly').checked;
+  document.getElementById('annualField').classList.toggle('hidden',hourly);
+  document.getElementById('hourlyFields').classList.toggle('hidden',!hourly);
+  var superInc=document.getElementById('superYes').checked;
+  var di=document.getElementById('derivedInfo'); if(di) di.style.display=superInc?'block':'none';
+  var pt=document.getElementById('basisPart').checked;
+  document.getElementById('partTimeFields').classList.toggle('hidden',!pt);
+  document.getElementById('ptBadge').classList.toggle('hidden',!pt);
+  document.getElementById('novatedFields').classList.toggle('hidden',!document.getElementById('novatedLease').checked);
+  document.getElementById('seniorsFields').classList.toggle('hidden',!document.getElementById('seniorsOffset').checked);
+  document.getElementById('ftbFields').classList.toggle('hidden',!document.getElementById('ftbEnabled').checked);
+  document.getElementById('mlsFields').classList.toggle('hidden',!document.getElementById('mlsEnabled').checked);
+  var hasSJ=document.getElementById('hasSecondJob').checked;
+  document.getElementById('secondJobFields').classList.toggle('hidden',!hasSJ);
+  var sjHourly=document.querySelector('input[name="sjMethod"]:checked').value==='hourly';
+  document.getElementById('sjAnnualField').classList.toggle('hidden',sjHourly);
+  document.getElementById('sjHourlyFields').classList.toggle('hidden',!sjHourly);
+  var sjPart=document.getElementById('sjBasisPart')&&document.getElementById('sjBasisPart').checked;
+  var sjPTF=document.getElementById('sjPartTimeFields');
+  if(sjPTF) sjPTF.classList.toggle('hidden',!sjPart);
+  var showBonus=document.getElementById('showBonus').checked;
+  document.getElementById('bonusWrap').classList.toggle('hidden',!showBonus);
+  var showExtraTax=document.getElementById('showExtraTax')&&document.getElementById('showExtraTax').checked;
+  var etw=document.getElementById('extraTaxWrap');if(etw)etw.classList.toggle('hidden',!showExtraTax);
+}
+
+// ─── Main Calculate ──────────────────────────────────────────────────────────
+function calculate(){
+  syncVisibility();
+  var fy=getFY();
+  var freq=parseFloat(document.getElementById('frequency').value)||26;
+  var residency=document.getElementById('residency').value;
+  var superRate=(parseFloat(document.getElementById('superRate').value)||0)/100;
+  var salSac=parseFloat(document.getElementById('salSac').value)||0;
+  var extraTax=parseFloat(document.getElementById('extraTax').value)||0;
+  var novatedPreTax=document.getElementById('novatedLease').checked?(parseFloat(document.getElementById('novatedPreTax').value)||0):0;
+  var novatedPostTax=document.getElementById('novatedLease').checked?(parseFloat(document.getElementById('novatedPostTax').value)||0):0;
+  var bonus=document.getElementById('showBonus').checked?(parseFloat(document.getElementById('bonus').value)||0):0;
+  var inputSalary=getInputSalary();
+  var baseSalary=inputSalary;
+  var superAmt=0;
+  if(isSuperInc()){baseSalary=inputSalary/(1+superRate);superAmt=inputSalary-baseSalary;}
+  else{superAmt=baseSalary*superRate;}
+  var fteSalary=baseSalary;
+  var prorataFraction=1;
+  if(isPartTime()){
+    var ah=parseFloat(document.getElementById('actualHours').value)||0;
+    var fh=parseFloat(document.getElementById('fteHours').value)||1;
+    prorataFraction=Math.min(1,ah/fh);
+    baseSalary=fteSalary*prorataFraction;
+    superAmt=baseSalary*superRate;
+    document.getElementById('fteFraction').textContent=prorataFraction.toFixed(4);
+    document.getElementById('prorataSalary').textContent=fmtW(baseSalary);
+    document.getElementById('prorataInfo').style.display='block';
+  } else {document.getElementById('prorataInfo').style.display='none';}
+  if(isSuperInc()){document.getElementById('derivedSalary').textContent=fmtW(baseSalary);document.getElementById('derivedSuper').textContent=fmtW(superAmt);}
+  if(isHourly()){document.getElementById('hourlyAnnual').textContent=fmtW(inputSalary);document.getElementById('hourlyDerived').style.display='block';}
+  else{document.getElementById('hourlyDerived').style.display='none';}
+  // SG cap
+  var sgMaxAnnual=fy.sgMaxQuarter*4;
+  var sgCapBanner=document.getElementById('sgCapBanner');
+  if(baseSalary>sgMaxAnnual){
+    var cappedSuper=sgMaxAnnual*superRate;
+    document.getElementById('sgCapDetail').textContent='Super capped at '+fmtW(cappedSuper)+'/yr based on max earnings base.';
+    sgCapBanner.style.display='block';
+    superAmt=cappedSuper;
+  } else {sgCapBanner.style.display='none';}
+  // add second job income
+  var secondJobIncome=getSecondJobIncome();
+  var sjSuperRate=getSJSuperRate();
+  var sjSalSac=getSJSalSac();
+  var sjSuperAmt=secondJobIncome*sjSuperRate;
+  var taxableSalary=baseSalary-novatedPreTax-salSac+bonus+secondJobIncome;
+  var grossTaxable=taxableSalary;
+  // tax calc
+  var taxResult;
+  if(document.getElementById('tfnYes').checked){
+    taxResult={tax:grossTaxable*fy.noTfnRate,details:[]};
+  } else {
+    taxResult=calcIncomeTax(grossTaxable,residency,fy);
+  }
+  var incomeTax=taxResult.tax;
+  // lito
+  var lito=0;
+  if(residency==='resident'&&!document.getElementById('tfnYes').checked)lito=fy.lito(grossTaxable);
+  // sapto
+  var sapto=0;
+  if(document.getElementById('seniorsOffset').checked&&residency==='resident')sapto=calcSAPTO(grossTaxable,fy,document.getElementById('seniorsStatus').value);
+  incomeTax=Math.max(0,incomeTax-lito-sapto);
+  // medicare
+  var medicare=0;
+  if(residency==='resident')medicare=calcMedicare(grossTaxable,fy);
+  // mls
+  var mls=0;
+  if(document.getElementById('mlsEnabled').checked&&residency==='resident')mls=calcMLS(grossTaxable,fy,document.getElementById('mlsFamily').value);
+  // help
+  var help=0;
+  if(document.getElementById('helpDebtYes').checked)help=fy.calcHELP(grossTaxable);
+  // concessional cap check
+  var totalConcessional=superAmt+salSac+(secondJobIncome>0?sjSuperAmt+sjSalSac:0);
+  var capWarning=document.getElementById('capWarning');
+  if(totalConcessional>fy.concessionalCap){
+    document.getElementById('capWarningTitle').textContent='Concessional cap exceeded by '+fmtW(totalConcessional-fy.concessionalCap);
+    document.getElementById('capWarningDetail').textContent='Total concessional contributions of '+fmtW(totalConcessional)+' exceed the '+fmtW(fy.concessionalCap)+' cap. Excess is taxed at marginal rate.';
+    capWarning.style.display='block';
+  } else {capWarning.style.display='none';}
+  // div293
+  var div293=0;
+  var totalInc=grossTaxable+superAmt;
+  if(totalInc>fy.div293Threshold)div293=Math.min(superAmt,totalInc-fy.div293Threshold)*0.15;
+  // ftb
+  var ftbAnnual=0;
+  if(document.getElementById('ftbEnabled').checked){
+    var fi=parseFloat(document.getElementById('ftbFamilyIncome').value)||0;
+    ftbAnnual=calcFTB(fy,parseFloat(document.getElementById('ftbUnder13').value)||0,parseFloat(document.getElementById('ftb13to15').value)||0,parseFloat(document.getElementById('ftb16to19').value)||0,fi);
+  }
+  var totalTax=incomeTax+medicare+mls+help+(extraTax*freq);
+  var netAnnual=grossTaxable-totalTax-novatedPostTax+ftbAnnual;
+  var netPeriod=netAnnual/freq;
+  var effRate=grossTaxable>0?(totalTax/grossTaxable)*100:0;
+  // marginal rate
+  var margRate=0;
+  if(!document.getElementById('tfnYes').checked){var br=fy.brackets[residency];for(var k=br.length-1;k>=0;k--){if(grossTaxable>br[k].min){margRate=br[k].rate*100;break;}}}
+  else{margRate=fy.noTfnRate*100;}
+  // update summary boxes
+  document.getElementById('takeHomePeriod').textContent=fmt(netPeriod);
+  document.getElementById('grossDisplay').textContent=fmtW(grossTaxable);
+  document.getElementById('effectiveRate').textContent=effRate.toFixed(1)+'%';
+  document.getElementById('marginalRate').textContent=margRate.toFixed(0)+'%';
+  document.getElementById('totalSuperDisplay').textContent=fmtW(superAmt+(secondJobIncome>0?sjSuperAmt:0));
+  // build combined table
+  var rows=[];
+  function addRow(label,annual,opts){opts=opts||{};rows.push({label:label,annual:annual,cls:opts.cls||'',negative:opts.negative||false});}
+  function addSection(s){rows.push({section:s});}
+  addSection('INCOME');
+  addRow('Gross Salary',baseSalary);
+  if(secondJobIncome>0)addRow('Second Job Income',secondJobIncome);
+  if(bonus>0)addRow('Additional Income / Bonus',bonus);
+  if(novatedPreTax>0)addRow('Novated Lease (Pre-Tax)',novatedPreTax,{negative:true,cls:'indent negative'});
+  if(salSac>0)addRow('Super Salary Sacrifice',salSac,{negative:true,cls:'indent negative'});
+  addRow('Gross Taxable Income',grossTaxable,{cls:'subtotal-row'});
+  addSection('DEDUCTIONS');
+  addRow('Income Tax',incomeTax,{negative:true,cls:'negative'});
+  if(lito>0)addRow('LITO Offset',-lito,{cls:'indent'});
+  if(sapto>0)addRow('SAPTO Offset',-sapto,{cls:'indent'});
+  addRow('Medicare Levy',medicare,{negative:true,cls:'negative'});
+  if(mls>0)addRow('Medicare Levy Surcharge',mls,{negative:true,cls:'negative'});
+  if(help>0)addRow('HECS/HELP Repayment',help,{negative:true,cls:'help-row'});
+  if(extraTax*freq>0)addRow('Extra Tax Withheld',extraTax*freq,{negative:true,cls:'negative'});
+  if(div293>0)addRow('Division 293 Tax',div293,{negative:true,cls:'negative'});
+  if(novatedPostTax>0)addRow('Novated Lease (Post-Tax)',novatedPostTax,{negative:true,cls:'negative'});
+  if(ftbAnnual>0)addRow('Family Tax Benefit (A)',-ftbAnnual,{cls:'indent'});
+  addSection('TAKE-HOME');
+  addRow('Net Take-Home Pay',netAnnual,{cls:'takehome-row'});
+  addSection('SUPER');
+  addRow('Superannuation (SG)',superAmt,{cls:'super-row'});
+  if(salSac>0)addRow('Salary Sacrifice Super',salSac,{cls:'indent super-row'});
+  if(secondJobIncome>0){
+    addRow('Second Job Super (SG)',sjSuperAmt,{cls:'indent super-row'});
+    if(sjSalSac>0)addRow('Second Job Sal. Sacrifice',sjSalSac,{cls:'indent super-row'});
+  }
+  addRow('Total Superannuation',superAmt+salSac+(secondJobIncome>0?sjSuperAmt+sjSalSac:0),{cls:'super-total-row'});
+  // render table
+  var tbody=document.getElementById('combinedBody');
+  tbody.innerHTML='';
+  csvData=[];
+  for(var i=0;i<rows.length;i++){
+    var r=rows[i];
+    if(r.section){var tr=document.createElement('tr');tr.className='section-header';tr.innerHTML='<td colspan="5">'+r.section+'</td>';tbody.appendChild(tr);csvData.push({section:r.section});continue;}
+    var cls=r.cls||'';
+    var negative=r.negative||false;
+    var v=r.annual;
+    var tr=document.createElement('tr');tr.className=cls;
+    tr.innerHTML='<td>'+r.label+'</td>'+
+      '<td class="'+(negative?'negative-val':'')+'">'+fmt(v/52)+'</td>'+
+      '<td class="'+(negative?'negative-val':'')+'">'+fmt(v/26)+'</td>'+
+      '<td class="'+(negative?'negative-val':'')+'">'+fmt(v/12)+'</td>'+
+      '<td class="'+(negative?'negative-val':'')+'">'+fmt(v)+'</td>';
+    tbody.appendChild(tr);
+    csvData.push({label:r.label,annual:v});
+  }
+  // brackets
+  var bb=document.getElementById('bracketBody');bb.innerHTML='';
+  for(var k=0;k<taxResult.details.length;k++){
+    var d=taxResult.details[k];var tr=document.createElement('tr');
+    tr.className=d.active?'bracket-active':'bracket-inactive';
+    tr.innerHTML='<td>'+d.bracket+'</td><td>'+fmtW(d.taxable)+'</td><td>'+fmtW(d.tax)+'</td>';
+    bb.appendChild(tr);
+  }
+  // key rates
+  var rb=document.getElementById('ratesBody');rb.innerHTML='';
+  function addRate(k,v){var tr=document.createElement('tr');tr.innerHTML='<td>'+k+'</td><td>'+v+'</td>';rb.appendChild(tr);}
+  addRate('Super Guarantee Rate',superRate*100+'%');
+  addRate('Concessional Cap',fmtW(fy.concessionalCap));
+  addRate('Medicare Levy Threshold',fmtW(fy.medicareLower)+' – '+fmtW(fy.medicareUpper));
+  addRate('Medicare Levy','2.0% (resident)');
+  if(document.getElementById('helpDebtYes').checked) addRate('HELP Repayment Method',fy.helpShort);
+  if(totalInc>fy.div293Threshold) addRate('Div 293 Tax (applied)',fmtW(div293));
+  if(baseSalary>fy.sgMaxQuarter*4) addRate('SG Max Earnings Base',fmtW(fy.sgMaxQuarter*4)+'/yr');
+  if(totalConcessional>fy.concessionalCap) addRate('Concessional Excess',fmtW(totalConcessional-fy.concessionalCap));
+  document.getElementById('ratesYear').textContent=fy.label;
+  // update pie
+  updatePie(netAnnual,incomeTax+medicare+mls+(extraTax*freq),help,superAmt+(secondJobIncome>0?sjSuperAmt:0));
+}
+
+// ─── Pie Chart ───────────────────────────────────────────────────────────────
+var payChart=null;
+function updatePie(takeHome,tax,helpAmt,superAmt){
+  // tax already excludes HELP (passed separately), we show HELP as its own slice
+  var hasHelp=helpAmt>0;
+  var data,labels,colors;
+  if(hasHelp){
+    data=[Math.max(0,takeHome),Math.max(0,tax),Math.max(0,helpAmt),Math.max(0,superAmt)];
+    labels=['Take-home pay','Tax and levies','HECS/HELP','Superannuation'];
+    colors=['#2a9d67','#e53935','#e67e22','#3f7fb5'];
+  } else {
+    data=[Math.max(0,takeHome),Math.max(0,tax),Math.max(0,superAmt)];
+    labels=['Take-home pay','Tax and levies','Superannuation'];
+    colors=['#2a9d67','#e53935','#3f7fb5'];
+  }
+  var total=data.reduce(function(a,b){return a+b;},0)||1;
+  // legend
+  document.getElementById('pieHome').textContent='$'+Math.round(Math.max(0,takeHome)).toLocaleString('en-AU');
+  document.getElementById('pieTax').textContent='$'+Math.round(Math.max(0,tax)).toLocaleString('en-AU');
+  document.getElementById('pieSuper').textContent='$'+Math.round(Math.max(0,superAmt)).toLocaleString('en-AU');
+  document.getElementById('pieHomePct').textContent=((Math.max(0,takeHome)/total)*100).toFixed(1)+'%';
+  document.getElementById('pieTaxPct').textContent=((Math.max(0,tax)/total)*100).toFixed(1)+'%';
+  document.getElementById('pieSuperPct').textContent=((Math.max(0,superAmt)/total)*100).toFixed(1)+'%';
+  var helpRow=document.getElementById('pieHelpRow');
+  if(helpRow){
+    helpRow.style.display=hasHelp?'grid':'none';
+    document.getElementById('pieHelp').textContent='$'+Math.round(helpAmt).toLocaleString('en-AU');
+    document.getElementById('pieHelpPct').textContent=((helpAmt/total)*100).toFixed(1)+'%';
+  }
+  if(typeof Chart==='undefined') return;
+  var canvas=document.getElementById('payPie');
+  if(!canvas) return;
+  if(payChart){
+    payChart.data.labels=labels;
+    payChart.data.datasets[0].data=data;
+    payChart.data.datasets[0].backgroundColor=colors;
+    payChart.update();
+  } else {
+    payChart=new Chart(canvas,{
+      type:'pie',
+      data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderColor:'#ffffff',borderWidth:3,hoverOffset:6}]},
+      options:{responsive:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var v=ctx.raw||0;var pct=((v/total)*100).toFixed(1);return ' '+ctx.label+': $'+Math.round(v).toLocaleString('en-AU')+' ('+pct+'%)';}}}}}
+    });
+  }
+}
+
+// ─── FY Change ───────────────────────────────────────────────────────────────
+function onFYChange(){
+  var fy=getFY();
+  document.getElementById('fyBadge').textContent=fy.label;
+  document.getElementById('fySubtitle').textContent=fy.dates;
+  document.getElementById('superRate').value=fy.superDefault;
+  document.getElementById('sjSuperRate').value=fy.superDefault;
+  calculate();
+}
+
+// ─── Reset ───────────────────────────────────────────────────────────────────
+function resetAll(){
+  document.getElementById('financialYear').value='2025-26';
+  document.getElementById('salary').value='100000';
+  document.getElementById('hourlyRate').value='50';
+  document.getElementById('hourlyHours').value='38';
+  document.getElementById('hourlyWeeks').value='52';
+  document.getElementById('methodAnnual').checked=true;
+  document.getElementById('superNo').checked=true;
+  document.getElementById('basisFull').checked=true;
+  document.getElementById('bonus').value='';
+  document.getElementById('showBonus').checked=false;
+  document.getElementById('superRate').value='12.0';
+  document.getElementById('salSac').value='';
+  document.getElementById('frequency').value='26';
+  document.getElementById('residency').value='resident';
+  document.getElementById('helpDebtYes').checked=false;
+  document.getElementById('tfnYes').checked=false;
+  document.getElementById('extraTax').value='';
+  var set=document.getElementById('showExtraTax');if(set)set.checked=false;
+  document.getElementById('mlsEnabled').checked=false;
+  document.getElementById('mlsFamily').value='single';
+  document.getElementById('novatedLease').checked=false;
+  document.getElementById('novatedPreTax').value='';
+  document.getElementById('novatedPostTax').value='';
+  document.getElementById('seniorsOffset').checked=false;
+  document.getElementById('seniorsStatus').value='single';
+  document.getElementById('ftbEnabled').checked=false;
+  document.getElementById('ftbUnder13').value='1';
+  document.getElementById('ftb13to15').value='0';
+  document.getElementById('ftb16to19').value='0';
+  document.getElementById('ftbFamilyIncome').value='';
+  document.getElementById('actualHours').value='22.8';
+  document.getElementById('fteHours').value='38';
+  document.getElementById('hasSecondJob').checked=false;
+  document.getElementById('sjSalary').value='';
+  document.getElementById('sjHourlyRate').value='0';
+  document.getElementById('sjHours').value='0';
+  document.getElementById('sjWeeks').value='52';
+  document.getElementById('sjNoTFN').checked=false;
+  document.getElementById('sjAnnual').checked=true;
+  document.getElementById('sjSuperRate').value='12.0';
+  document.getElementById('sjSalSac').value='';
+  onFYChange();
+}
+
+// ─── CSV Export ──────────────────────────────────────────────────────────────
+function exportCSV(){
+  var fy=getFY();var lines=[];
+  lines.push('Australian Finance Tools — Income Tax Calculator Export');
+  lines.push('Financial Year,'+fy.label);
+  lines.push('Generated,'+(new Date()).toLocaleDateString('en-AU'));
+  lines.push('');lines.push('Component,Weekly,Fortnightly,Monthly,Annual');
+  for(var i=0;i<csvData.length;i++){
+    var r=csvData[i];
+    if(r.section){lines.push('');lines.push(r.section);continue;}
+    lines.push('"'+r.label+'",'+rawNum(r.annual/52)+','+rawNum(r.annual/26)+','+rawNum(r.annual/12)+','+rawNum(r.annual));
+  }
+  lines.push('');lines.push('Effective Tax Rate,'+document.getElementById('effectiveRate').textContent);
+  lines.push('Marginal Tax Rate,'+document.getElementById('marginalRate').textContent);
+  var blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8;'});
+  var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='income-tax-'+fy.label.replace(/\s/g,'-')+'.csv';link.click();URL.revokeObjectURL(link.href);
+}
+
+// ─── Save HTML ───────────────────────────────────────────────────────────────
+function saveHTML(){
+  var fy=getFY();var now=new Date();
+  var dateStr=now.toLocaleDateString('en-AU')+' '+now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+  var resultsHTML=document.getElementById('combinedBody').innerHTML;
+  var bracketHTML=document.getElementById('bracketBody').innerHTML;
+  var ratesHTML=document.getElementById('ratesBody').innerHTML;
+  var takeHome=document.getElementById('takeHomePeriod').textContent;
+  var gross=document.getElementById('grossDisplay').textContent;
+  var eff=document.getElementById('effectiveRate').textContent;
+  var marg=document.getElementById('marginalRate').textContent;
+  var sup=document.getElementById('totalSuperDisplay').textContent;
+  var freqLabel=document.getElementById('frequency').selectedOptions[0].text;
+  var h='<!DOCTYPE html><html lang="en-AU"><head><meta charset="UTF-8"><title>Tax Calculation - '+fy.label+' - '+dateStr+'</title>';
+  h+='<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f8fb;color:#22313f;line-height:1.5}';
+  h+='.hd{background:#3e5f75;padding:16px 32px;border-bottom:1px solid #6a92ad;display:flex;align-items:center;gap:16px}.hd-t{color:#fff;font-size:1rem;font-weight:700}.hd-b{background:#e7f8ef;color:#2a9d67;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;margin-left:auto}.hd-d{color:rgba(255,255,255,.7);font-size:.8rem}';
+  h+='.ct{max-width:1200px;margin:0 auto;padding:24px}.cd{background:#fff;border:1px solid #d7e1ea;border-radius:16px;padding:20px 24px;margin-bottom:16px}.cd h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #2a9d67;color:#2d465b}';
+  h+='.sg{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}.sb{background:#f4f8fb;border:1px solid #d7e1ea;border-radius:12px;padding:12px 14px}.sb.hl{background:#e7f8ef;border-color:#2a9d67}.sb .lb{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:#6c7a89;font-weight:600;margin-bottom:2px}.sb .vl{font-size:1.15rem;font-weight:700;color:#2d465b}.sb.hl .vl{color:#2a9d67;font-size:1.3rem}';
+  h+='table{width:100%;border-collapse:collapse;font-size:.88rem}th{text-align:left;padding:8px 10px;background:#f4f8fb;font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:#6c7a89;border-bottom:2px solid #d7e1ea}th:not(:first-child){text-align:right}td{padding:8px 10px;border-bottom:1px solid #d7e1ea;font-variant-numeric:tabular-nums}td:not(:first-child){text-align:right}';
+  h+='.total-row td{font-weight:700;border-top:2px solid #2d465b;border-bottom:none}.subtotal-row td{font-weight:600;border-top:1px solid #6c7a89}.indent td:first-child{padding-left:24px;color:#6c7a89;font-size:.82rem}.section-header td{font-weight:700;background:#f4f8fb;padding-top:12px;border-bottom:1px solid #d7e1ea;font-size:.8rem;text-transform:uppercase;letter-spacing:.3px;color:#6c7a89}.negative-val{color:#e53935!important;font-weight:700!important}';
+  h+='.bracket-active td{color:#22313f}.bracket-inactive td{color:#6c7a89}.lw{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}.st{font-size:.85rem;font-weight:700;margin:0 0 8px;color:#2d465b}';
+  h+='.stamp{font-size:.78rem;color:#6c7a89;margin-top:16px;padding-top:12px;border-top:1px solid #d7e1ea;line-height:1.5}';
+  h+='@media print{body{background:#fff}.ct{padding:16px}.cd{box-shadow:none;break-inside:avoid}}@media(max-width:800px){.sg{grid-template-columns:1fr 1fr}.lw{grid-template-columns:1fr}}';
+  h+='</style></head><body>';
+  h+='<div class="hd"><div class="hd-t">Income Tax Calculation Record</div><div class="hd-b">'+fy.label+'</div><div class="hd-d">Generated: '+dateStr+'</div></div>';
+  h+='<div class="ct"><div class="cd"><h2>Results Summary</h2><div class="sg">';
+  h+='<div class="sb hl"><div class="lb">Take-Home Pay ('+freqLabel+')</div><div class="vl">'+takeHome+'</div></div>';
+  h+='<div class="sb"><div class="lb">Gross Taxable Income</div><div class="vl">'+gross+'</div></div>';
+  h+='<div class="sb"><div class="lb">Effective Tax Rate</div><div class="vl">'+eff+'</div></div>';
+  h+='<div class="sb"><div class="lb">Marginal Tax Rate</div><div class="vl">'+marg+'</div></div>';
+  h+='<div class="sb"><div class="lb">Total Super</div><div class="vl">'+sup+'</div></div>';
+  h+='</div></div>';
+  h+='<div class="cd"><h2>Detailed Breakdown</h2><table><thead><tr><th>Component</th><th>Weekly</th><th>Fortnightly</th><th>Monthly</th><th>Annual</th></tr></thead><tbody>'+resultsHTML+'</tbody></table></div>';
+  h+='<div class="cd"><div class="lw"><div><div class="st">Tax Brackets ('+fy.label+')</div><table><thead><tr><th>Bracket</th><th>Taxable</th><th>Tax Applied</th></tr></thead><tbody>'+bracketHTML+'</tbody></table></div>';
+  h+='<div><div class="st">Key Rates</div><table><thead><tr><th>Parameter</th><th>Value</th></tr></thead><tbody>'+ratesHTML+'</tbody></table></div></div></div>';
+  h+='<p class="stamp">Estimates only — not financial advice. Generated on '+dateStr+' for '+fy.label+'.</p></div></body></html>';
+  var blob=new Blob([h],{type:'text/html;charset=utf-8'});
+  var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='tax-calculation-'+fy.label.replace(/\s/g,'-')+'-'+now.toISOString().slice(0,10)+'.html';link.click();URL.revokeObjectURL(link.href);
+}
+
+// ─── Event Listeners & Init ──────────────────────────────────────────────────
+
+function toggleAdditionalOptions(forceState){
+  var btn=document.getElementById('additionalOptionsToggle');
+  var body=document.getElementById('additionalOptionsBody');
+  if(!btn||!body) return;
+  var isOpen = btn.getAttribute('aria-expanded')==='true';
+  var open = forceState !== undefined ? forceState : !isOpen;
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  body.classList.toggle('collapsed', !open);
+}
+function setCollapsibleByViewport(){
+  // portrait or narrow = collapse; landscape/desktop = open
+  var portrait = window.innerWidth < window.innerHeight || window.innerWidth < 900;
+  toggleAdditionalOptions(!portrait);
+}
+window.addEventListener('resize', function(){
+  setCollapsibleByViewport();
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+  setCollapsibleByViewport();
+  // number/select inputs
+  ['salary','hourlyRate','hourlyHours','hourlyWeeks','superRate','salSac','extraTax','novatedPreTax','novatedPostTax','bonus','actualHours','fteHours','ftbUnder13','ftb13to15','ftb16to19','ftbFamilyIncome','sjSalary','sjHourlyRate','sjHours','sjWeeks','sjSuperRate','sjSalSac','sjActualHours','sjFteHours'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.addEventListener('input',calculate);
+  });
+  ['financialYear','frequency','residency','mlsFamily','seniorsStatus'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.addEventListener('change',function(){if(id==='financialYear')onFYChange();else calculate();});
+  });
+  ['methodAnnual','methodHourly','superNo','superYes','basisFull','basisPart','sjAnnual','sjHourly','sjBasisFull','sjBasisPart','helpDebtYes','helpDebtNo','tfnYes','tfnNo'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
+  });
+  ['novatedLease','seniorsOffset','ftbEnabled','mlsEnabled','hasSecondJob','showBonus','sjNoTFN','showExtraTax'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
+  });
+  onFYChange();
+});
+</script>
+
+</body>
+</html>
