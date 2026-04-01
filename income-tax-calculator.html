@@ -34,7 +34,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .ad-slot p{font-size:.9rem;color:var(--tx)}
 .layout{display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:24px;align-items:start}
 @media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
-@media(max-width:768px){.layout{grid-template-columns:1fr!important}.main-wrapper{padding:12px!important}}
 .card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06)}
 .card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
 .card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
@@ -294,6 +293,64 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   .inline-fields{display:flex!important;flex-direction:column!important;gap:8px!important}
   .results-grid{grid-template-columns:1fr 1fr!important}
   .layout{grid-template-columns:1fr!important}
+}
+
+
+/* ═══ S22 / iPhone portrait fix — 360px target ═══ */
+@media(max-width:480px){
+
+  /* Kill large horizontal padding everywhere */
+  .topbar{padding:10px 12px!important;gap:8px!important}
+  .ft{padding:12px 12px!important}
+  .hd{padding:12px 14px!important;gap:10px!important}
+  .main-wrapper{padding:8px!important}
+  .container{padding:0!important}
+  .card{padding:12px 12px!important}
+  .hero{padding:14px 12px!important;flex-direction:column!important}
+  .hero .ad-slot{display:none!important}
+
+  /* page-wrapper must not add width */
+  .page-wrapper{padding:0!important;width:100%!important;overflow-x:hidden!important}
+
+  /* Topbar right — wrap and shrink */
+  .topbar-right{gap:6px!important;flex-wrap:wrap!important}
+  .topbar-right button,.topbar-right a{font-size:.7rem!important;padding:5px 8px!important}
+
+  /* Toggle switches — allow wrapping for 3-option toggles */
+  .toggle-switch{flex-wrap:wrap!important;border-radius:8px!important}
+  .toggle-switch label{flex:1 1 auto!important;min-width:80px!important;text-align:center!important;font-size:.72rem!important;padding:6px 4px!important;white-space:nowrap!important}
+
+  /* Inline fields always stack */
+  .inline-fields{display:flex!important;flex-direction:column!important;gap:8px!important}
+
+  /* Results grid 2-col */
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .result-box{padding:8px!important}
+  .result-box .value{font-size:1rem!important}
+  .result-box .label{font-size:.68rem!important}
+
+  /* Tables scroll, never force width */
+  .combined-table,.bracket-table,.key-rates-table{
+    display:block!important;overflow-x:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    max-width:100%!important;font-size:.76rem!important
+  }
+  .combined-table th,.combined-table td,
+  .bracket-table th,.bracket-table td,
+  .key-rates-table th,.key-rates-table td{
+    white-space:nowrap!important;padding:5px 6px!important
+  }
+
+  /* Actions bar wraps */
+  .actions-bar{flex-wrap:wrap!important;gap:6px!important}
+  .btn-action{font-size:.76rem!important;padding:7px 10px!important}
+
+  /* Ensure nothing bleeds out */
+  html,body,
+  .container,.layout,.card,.hero,.hero-inner,
+  .main-wrapper,.page-wrapper{
+    max-width:100vw!important;box-sizing:border-box!important;overflow-x:hidden!important
+  }
 }
 
 </style>
