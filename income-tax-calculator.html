@@ -2,7 +2,7 @@
 <html lang="en-AU">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Australian Finance Tools — Income Tax Calculator</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
@@ -160,7 +160,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 /* ── Right rail ad ─────────────────────────────────────────────── */
 .page-wrapper{display:flex;justify-content:center;align-items:flex-start;gap:0;width:100%;padding-top:0}
-.right-rail{display:none;width:200px;min-width:200px;padding:0 0 24px 12px;flex-shrink:0;align-self:flex-start;margin-top:290px}
+.right-rail{display:none;width:200px;min-width:200px;padding:24px 0 24px 12px;flex-shrink:0;align-self:flex-start}
 .rail-ad-unit{background:var(--card);border:1px solid var(--bdr);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(45,50,40,.06)}
 .rail-ad-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:8px 0 4px;border-bottom:1px solid var(--bdr)}
 .rail-ad-inner{padding:8px;display:flex;justify-content:center;align-items:center;min-height:620px}
@@ -177,6 +177,108 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .mobile-ad-inner{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:10px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
 @media(max-width:899px){
   .mobile-ad-slot{display:flex;flex-direction:column}
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE — 480px and below (portrait phones)
+   Target: iPhone SE (375px), iPhone 14 (390px),
+           Samsung Galaxy (360–412px)
+═══════════════════════════════════════════════════════ */
+@media(max-width:480px){
+
+  /* Layout & spacing */
+  .main-wrapper{padding:10px}
+  .container{gap:10px}
+  .card{padding:14px 14px;border-radius:14px}
+  .topbar{padding:10px 14px;gap:10px}
+  .hd-title{font-size:1rem}
+  .hd-sub{font-size:.72rem}
+
+  /* Hero — stack vertically, hide ad slot */
+  .hero{flex-direction:column;padding:16px 14px;gap:10px}
+  .hero .ad-slot{display:none}
+  .hero-text h1{font-size:1.3rem}
+  .hero-text p{font-size:.85rem}
+
+  /* Section headings */
+  .card h2{font-size:1rem}
+  .section-label{font-size:.7rem}
+
+  /* Inline fields — stack on mobile */
+  .inline-fields{grid-template-columns:1fr!important;gap:8px}
+
+  /* Toggle switches — smaller text */
+  .toggle-switch label{font-size:.72rem;padding:7px 6px}
+  .toggle-label{font-size:.78rem}
+
+  /* Fields */
+  .field label{font-size:.8rem}
+  .field input,.field select{font-size:.9rem;padding:8px 10px}
+  .field input.has-prefix{padding-left:20px}
+  .field input.has-suffix{padding-right:24px}
+  .input-wrap .prefix,.input-wrap .suffix{font-size:.8rem}
+
+  /* Results summary tiles — 2 col */
+  .results-grid{grid-template-columns:1fr 1fr!important}
+  .result-box{padding:10px 10px}
+  .result-box .label{font-size:.72rem}
+  .result-box .value{font-size:1.1rem}
+
+  /* Combined table — horizontal scroll */
+  .combined-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;font-size:.78rem}
+  .combined-table thead th,.combined-table tbody td{padding:6px 8px;white-space:nowrap}
+
+  /* Bracket and rates tables */
+  .bracket-table,.key-rates-table{font-size:.78rem;display:block;overflow-x:auto}
+  .bracket-table th,.bracket-table td,
+  .key-rates-table th,.key-rates-table td{padding:5px 7px;white-space:nowrap}
+
+  /* Pie chart */
+  .pie-card{padding:12px}
+  #payPie{width:200px!important;height:200px!important}
+  .legend-row{font-size:.78rem;gap:6px}
+  .legend-amount{font-size:.78rem}
+
+  /* Results lower grid */
+  .results-lower{gap:12px}
+
+  /* Action buttons */
+  .actions-bar{flex-wrap:wrap;gap:8px}
+  .btn-action{font-size:.78rem;padding:8px 12px}
+
+  /* Collapsible header */
+  .collapsible-header h2{font-size:1rem}
+
+  /* SJ note */
+  .sj-note{font-size:.78rem}
+
+  /* Pro-rata info */
+  .prorata-info{font-size:.75rem}
+
+  /* Field hints */
+  .field-hint{font-size:.72rem}
+
+  /* Note at bottom */
+  .note{font-size:.75rem}
+
+  /* Footer */
+  .ft{font-size:.72rem;padding:12px 14px}
+}
+
+/* ═══════════════════════════════════════════════════════
+   TABLET — 481px to 768px
+═══════════════════════════════════════════════════════ */
+@media(min-width:481px) and (max-width:768px){
+  .main-wrapper{padding:12px}
+  .hero{padding:16px 18px}
+  .hero .ad-slot{display:none}
+  .card{padding:16px 18px}
+  .results-grid{grid-template-columns:1fr 1fr!important}
+  .combined-table{font-size:.82rem;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .combined-table thead th,.combined-table tbody td{white-space:nowrap;padding:6px 8px}
+  .inline-fields{grid-template-columns:1fr 1fr}
+  .toggle-switch label{font-size:.75rem;padding:7px 8px}
 }
 
 </style>
