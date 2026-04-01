@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Loan Repayment Calculator — Australian Finance Tools</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+
+:root{
+  --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
+  --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
+  --tx:#22313f;--txl:#6c7a89;--red:#e53935;
+  --bl:#3f7fb5;--bll:#edf5fb;--am:#b6862c;--aml:#faf2df;--help:#e67e22;--helpl:#fef4e8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14)}
+.topbar-logo a{display:flex;align-items:center;gap:10px;text-decoration:none}
+.app-mark{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:var(--gr);color:#fff;font-weight:800;font-size:1rem;box-shadow:0 8px 20px rgba(42,157,103,.28)}
+.topbar-title{color:#fff;font-size:1rem;font-weight:700}
+.topbar-subtitle{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.72);margin-top:2px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
+.badge{background:rgba(255,255,255,.15);color:#fff;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px;border:1px solid rgba(255,255,255,.12)}
+.badge.pt{background:rgba(42,157,103,.2);color:#d0fff0;border-color:rgba(42,157,103,.3)}
+.main-wrapper{background:transparent;padding:24px 32px;flex:1}
+.container{max-width:1500px;margin:0 auto}
+.hero{background:linear-gradient(135deg,rgba(255,253,250,.98),rgba(248,244,236,.98));border:1px solid var(--bdr);border-radius:22px;padding:22px 26px;margin-bottom:22px;box-shadow:0 12px 30px rgba(45,70,91,.05);display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.hero-text .eyebrow{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txl);font-weight:700}
+.hero-text h1{font-size:clamp(1.8rem,2.6vw,2.8rem);line-height:1.08;color:var(--dk);margin:.35rem 0 .55rem 0}
+.hero-text p{max-width:70ch;color:var(--txl);font-size:.98rem}
+.ad-slot{min-width:280px;max-width:380px;flex:0 0 340px;background:rgba(255,255,255,.72);border:1px dashed #b8c8d8;border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ad-slot-label{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--txl);font-weight:700;margin-bottom:6px}
+.ad-slot p{font-size:.9rem;color:var(--tx)}
+.layout{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06)}
+.card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
+.card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
+.card-header-row h2{margin:0;padding:0;border:none}
+.section-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gr);margin-top:16px;margin-bottom:10px;padding-top:12px;border-top:1px solid var(--bdr)}
+.section-label:first-of-type{margin-top:0;padding-top:0;border-top:none}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.8rem;font-weight:600;margin-bottom:4px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
+.field-hint{font-size:.75rem;color:var(--txl);margin-top:2px}
+.field input,.field select{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+.inline-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.toggle-group{margin-bottom:14px}
+.toggle-label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
+.toggle-switch{display:flex;border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+.toggle-switch input[type=radio]{display:none}
+.toggle-switch label{flex:1;text-align:center;padding:8px 10px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fffdf8;color:var(--txl);transition:all .15s;border-right:1px solid var(--bdr)}
+.toggle-switch label:last-of-type{border-right:none}
+.toggle-switch input[type=radio]:checked+label{background:var(--gr);color:#fff}
+.checkbox-field{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.checkbox-field input[type=checkbox]{width:18px;height:18px;accent-color:var(--gr)}
+.checkbox-field label{font-size:.88rem;font-weight:500;cursor:pointer}
+.derived-info{background:var(--grl);border:1px solid var(--gr);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.84rem;color:var(--tx);display:none}
+.derived-info span{font-weight:700;color:var(--dk)}
+.prorata-info{background:var(--aml);border:1px solid var(--am);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.84rem;color:var(--tx);display:none}
+.prorata-info span{font-weight:700}
+.info-banner{background:var(--bll);border:1px solid var(--bl);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.82rem;color:var(--tx);display:none}
+.info-banner strong{color:var(--bl)}
+.sj-note{background:var(--bll);border:1px solid var(--bl);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:.84rem;color:var(--tx)}
+.sj-note strong{color:var(--bl)}
+.warning-banner{background:#fff0ef;border:1px solid var(--red);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:.84rem;color:var(--red);font-weight:600;display:none}
+.warning-banner .warning-detail{font-weight:400;color:var(--tx);margin-top:4px;font-size:.8rem;line-height:1.5}
+.novated-fields,.ftb-fields,.seniors-fields,.mls-fields,.hourly-fields{margin-top:8px;margin-bottom:8px}
+.results-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.result-box{background:#f8f5ef;border:1px solid var(--bdr);border-radius:12px;padding:12px 14px}
+.result-box.highlight{background:var(--grl);border-color:var(--gr)}
+.result-box .label{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);font-weight:600;margin-bottom:2px}
+.result-box .value{font-size:1.15rem;font-weight:700;color:var(--dk)}
+.result-box.highlight .value{color:var(--gr);font-size:1.3rem}
+.combined-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.combined-table th{text-align:left;padding:8px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
+.combined-table th:not(:first-child){text-align:right}
+.combined-table td{padding:8px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
+.combined-table td:not(:first-child){text-align:right}
+.combined-table tr:last-child td{border-bottom:none}
+.combined-table .total-row td{font-weight:700;border-top:2px solid var(--dk);border-bottom:none}
+.combined-table .subtotal-row td{font-weight:600;border-top:1px solid var(--txl)}
+.combined-table .indent td:first-child{padding-left:24px;color:var(--txl);font-size:.82rem}
+.combined-table .section-header td{font-weight:700;background:var(--bg);padding-top:12px;border-bottom:1px solid var(--bdr);font-size:.8rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl)}
+.combined-table .negative td:not(:first-child),.negative-val{color:var(--red)!important;font-weight:700!important}
+.section-title{font-size:.85rem;font-weight:700;margin:20px 0 8px;color:var(--dk)}
+.bracket-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.bracket-table th{text-align:left;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;color:var(--txl);border-bottom:2px solid var(--bdr)}
+.bracket-table th:not(:first-child){text-align:right}
+.bracket-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
+.bracket-table th:not(:first-child),.bracket-table td:not(:first-child){text-align:right}
+.bracket-table .bracket-active td{color:var(--tx)}
+.bracket-table .bracket-inactive td{color:var(--txl)}
+.key-rates-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.key-rates-table th{text-align:left;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;color:var(--txl);border-bottom:2px solid var(--bdr)}
+.key-rates-table th:not(:first-child){text-align:right}
+.key-rates-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
+.key-rates-table td:not(:first-child){text-align:right}
+.results-lower{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:4px}
+@media(max-width:1000px){.results-lower{grid-template-columns:1fr}.results-grid{grid-template-columns:1fr 1fr}}
+.pie-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--bdr)}
+.pie-card{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:center;background:#f8f5ef;border:1px solid var(--bdr);border-radius:16px;padding:18px}
+@media(max-width:1000px){.pie-card{grid-template-columns:1fr}}
+.pie-wrap{display:flex;justify-content:center;align-items:center}
+#payPie{width:260px;height:260px}
+.pie-legend{display:grid;gap:12px}
+.legend-row{display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;align-items:center;font-size:.9rem}
+.legend-swatch{width:14px;height:14px;border-radius:999px}
+.legend-label{font-weight:600;color:var(--tx)}
+.legend-amount{font-weight:700;color:var(--dk);font-variant-numeric:tabular-nums;text-align:right}
+.legend-share{font-size:.82rem;color:var(--txl);text-align:right;min-width:42px}
+.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr)}
+.btn-action{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;letter-spacing:.3px}
+.btn-action svg{width:14px;height:14px;fill:currentColor}
+.btn-reset{background:var(--nv);color:#fff}
+.btn-reset:hover{background:#2d5268;color:#fff}
+.btn-export{background:var(--gr);color:#fff}
+.btn-export:hover{background:#228052}
+.note{font-size:.78rem;color:var(--txl);margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr);line-height:1.5}
+.ft{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center}
+.ft span,.ft a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem}
+.ft a:hover{color:#fff}
+.hidden{display:none!important}
+
+input[type=number]::placeholder{color:#c5bdb2;font-style:normal}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:.4}
+
+
+.input-wrap{position:relative;display:flex;align-items:center}
+.input-wrap .prefix,.input-wrap .suffix{position:absolute;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;user-select:none;z-index:1}
+.input-wrap .prefix{left:10px}
+.input-wrap .suffix{right:10px}
+.input-wrap input{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s}
+.input-wrap input.has-prefix{padding-left:22px}
+.input-wrap input.has-suffix{padding-right:28px}
+.input-wrap input:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+
+
+.combined-table .takehome-row td{font-weight:700;border-top:2px solid var(--dk);border-bottom:none;color:var(--gr)!important;background:var(--grl)}
+.combined-table .takehome-row td:first-child{border-radius:0}
+
+
+.collapsible-card{}
+.collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0;margin-bottom:0;text-align:left;gap:10px}
+.collapsible-header h2{color:var(--dk)}
+.collapsible-header:hover h2{color:var(--gr)}
+.collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center}
+.collapsible-header[aria-expanded="true"] .collapse-icon{transform:rotate(180deg)}
+.collapsible-body{overflow:hidden;transition:max-height .3s ease, opacity .25s ease;max-height:4000px;opacity:1}
+.collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
+.collapsible-header{padding-bottom:8px;border-bottom:2px solid var(--gr);margin-bottom:16px}
+.collapsible-header[aria-expanded="false"]{border-bottom-color:var(--bdr);margin-bottom:0}
+
+
+.combined-table .super-row td:not(:first-child){color:var(--bl)!important;font-weight:600}
+.combined-table .help-row td:not(:first-child){color:var(--help)!important;font-weight:600}
+.combined-table .super-total-row td{font-weight:700;border-top:1px solid var(--bl);background:color-mix(in srgb,var(--bll) 60%,var(--card))}.combined-table .super-total-row td:not(:first-child){color:var(--bl)!important}
+
+
+/* ── Right rail ad ─────────────────────────────────────────────── */
+/* Outer wrapper — wraps main content + rail */
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0;
+  width: 100%;
+}
+
+/* Main content takes remaining space */
+.main-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Right rail — static, no sticky, pushed down to align with results */
+.right-rail {
+  display: none;
+  width: 200px;
+  min-width: 200px;
+  padding: 0 0 24px 12px;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 290px;
+}
+
+/* Ad card styling */
+.rail-ad-unit {
+  background: #fffdfa;
+  border: 1px solid #ddd7cf;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(45,50,40,.06);
+}
+.rail-ad-label {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  color: #6c7a89;
+  text-align: center;
+  padding: 8px 0 4px;
+  border-bottom: 1px solid #ddd7cf;
+}
+.rail-ad-inner {
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 620px;
+}
+
+/* Show rail only on very wide screens */
+@media (min-width: 1700px) {
+  .right-rail { display: block; }
+}
+
+
+/* ── Mobile mid-page ad ─────────────────────────────────────────── */
+.mobile-ad-slot{display:none;width:100%;justify-content:center;align-items:center;padding:12px 0;margin:4px 0}
+.mobile-ad-slot .ad-slot-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;margin-bottom:6px}
+.mobile-ad-inner{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:10px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+@media(max-width:899px){
+  .mobile-ad-slot{display:flex;flex-direction:column}
+}
+
+
+.amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
+.amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
+.amort-table th:first-child,.amort-table th:nth-child(2){text-align:left}
+.amort-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums;text-align:right}
+.amort-table td:first-child,.amort-table td:nth-child(2){text-align:left}
+.amort-table .yr td{font-weight:700;background:var(--bg);font-size:.75rem;text-transform:uppercase;color:var(--txl);text-align:left}
+.amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:6px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s}
+.amort-btn:hover{border-color:var(--gr);color:var(--gr)}
+/* ── Mobile mid-page ad ─────────────────────────────────────────── */
+.mobile-ad-slot{display:none;width:100%;justify-content:center;align-items:center;padding:12px 0;margin:4px 0}
+.mobile-ad-slot .ad-slot-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;margin-bottom:6px}
+.mobile-ad-inner{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:10px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+@media(max-width:899px){
+  .mobile-ad-slot{display:flex;flex-direction:column}
+}
+.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
+.chart-wrap{background:#f8f5ef;border:1px solid var(--bdr);border-radius:14px;padding:14px 14px 10px}
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;justify-content:center}
+.chart-legend-item{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--tx)}
+.chart-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">
+    <a href="index.html" title="Back to calculators"><span class="app-mark">AF</span></a>
+  </div>
+  <div class="topbar-divider"></div>
+  <div>
+    <div class="topbar-title">Home Loan Repayment Calculator</div>
+    <div class="topbar-subtitle">Australian Finance Tools</div>
+  </div>
+  <div class="topbar-right"><span class="badge">2025–26</span></div>
+</div>
+
+<div class="page-wrapper">
+<div class="main-wrapper">
+<div class="container">
+
+<div class="hero">
+  <div class="hero-text">
+    <div class="eyebrow">Australian Finance Tools</div>
+    <h1>Home Loan Repayment Calculator</h1>
+    <p>Estimate your regular repayments, total interest paid, and see how your loan balance decreases over time.</p>
+  </div>
+  <div class="ad-slot">
+    <div class="ad-slot-label">Advertisement</div>
+    <p style="font-size:.82rem;color:var(--txl);text-align:center">Google Ad</p>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- LEFT -->
+<div>
+  <div class="card">
+    <div class="card-header-row">
+      <h2>Loan Details</h2>
+      <button class="btn-action btn-reset" id="btnReset1" type="button">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Reset
+      </button>
+    </div>
+
+    <div class="section-label">Loan Amount</div>
+    <div class="field">
+      <label for="fLoanAmt">Loan Amount</label>
+      <div class="input-wrap"><span class="prefix">$</span>
+        <input type="number" id="fLoanAmt" class="has-prefix" placeholder="e.g. 600000" min="0" step="1000">
+      </div>
+    </div>
+
+    <div class="section-label">Interest Rate</div>
+    <div class="field">
+      <label for="fRate">Annual Interest Rate</label>
+      <div class="input-wrap">
+        <input type="number" id="fRate" class="has-suffix" placeholder="e.g. 6.00" min="0" max="30" step="0.05">
+        <span class="suffix">%</span>
+      </div>
+    </div>
+
+    <div class="section-label">Loan Term</div>
+    <div class="field">
+      <label for="fTerm">Loan Term</label>
+      <div class="input-wrap">
+        <input type="number" id="fTerm" class="has-suffix" placeholder="e.g. 30" min="1" max="40" step="1">
+        <span class="suffix">yrs</span>
+      </div>
+    </div>
+
+    <div class="section-label">Repayment Frequency</div>
+    <div class="toggle-group">
+      <div class="toggle-switch">
+        <input type="radio" name="freq" id="rMonthly" value="monthly" checked>
+        <label for="rMonthly">Monthly</label>
+        <input type="radio" name="freq" id="rFortnightly" value="fortnightly">
+        <label for="rFortnightly">Fortnightly</label>
+        <input type="radio" name="freq" id="rWeekly" value="weekly">
+        <label for="rWeekly">Weekly</label>
+      </div>
+    </div>
+
+    <div class="section-label">Loan Type</div>
+    <div class="toggle-group">
+      <div class="toggle-switch">
+        <input type="radio" name="ltype" id="rPI" value="pi" checked>
+        <label for="rPI">Principal &amp; Interest</label>
+        <input type="radio" name="ltype" id="rIO" value="io">
+        <label for="rIO">Interest Only</label>
+      </div>
+    </div>
+
+    <div id="ioBlock" class="hidden">
+      <div class="field" style="margin-top:10px">
+        <label for="fIOPer">Interest-Only Period</label>
+        <div class="input-wrap">
+          <input type="number" id="fIOPer" class="has-suffix" placeholder="e.g. 5" min="1" max="15" step="1">
+          <span class="suffix">yrs</span>
+        </div>
+        <div class="field-hint">Loan reverts to P&amp;I for the remaining term after this period.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card collapsible-card">
+    <button class="collapsible-header" id="addlBtn" aria-expanded="true" aria-controls="addlBody" type="button">
+      <h2 style="margin:0;padding:0;border:none">Additional Options</h2>
+      <span class="collapse-icon">
+        <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 8 10 13 15 8"/></svg>
+      </span>
+    </button>
+    <div class="collapsible-body" id="addlBody">
+
+      <div class="section-label">Extra Repayments</div>
+      <div class="field">
+        <label for="fExtra">Extra Repayment per Period</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="fExtra" class="has-prefix" placeholder="e.g. 200" min="0" step="50">
+        </div>
+        <div class="field-hint">Additional amount on top of your minimum repayment each period.</div>
+      </div>
+
+      <div class="section-label">Offset Account</div>
+      <div class="checkbox-field">
+        <input type="checkbox" id="fOffsetToggle">
+        <label for="fOffsetToggle">Include offset account balance</label>
+      </div>
+      <div id="offsetBlock" class="hidden" style="margin-top:8px">
+        <div class="field">
+          <label for="fOffset">Offset Balance</label>
+          <div class="input-wrap"><span class="prefix">$</span>
+            <input type="number" id="fOffset" class="has-prefix" placeholder="e.g. 50000" min="0" step="1000">
+          </div>
+          <div class="field-hint">Interest is calculated on loan balance minus offset amount.</div>
+        </div>
+      </div>
+
+      <div class="section-label">Start Date</div>
+      <div class="field">
+        <label for="fStart">Loan Start Date</label>
+        <input type="month" id="fStart" style="width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8">
+        <div class="field-hint">Used to calculate your projected payoff date.</div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- end left -->
+
+<!-- RIGHT -->
+<div>
+  <!-- Mobile mid-page ad (300x250, visible below 900px) -->
+  <div class="mobile-ad-slot">
+    <div class="mobile-ad-inner">
+      <div class="ad-slot-label">Advertisement</div>
+      <ins class="adsbygoogle"
+           style="display:inline-block;width:300px;height:250px"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Results</h2>
+
+    <div class="results-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+      <div class="result-box highlight">
+        <div class="label" id="rRepayLbl">Monthly Repayment</div>
+        <div class="value" id="rRepay" style="color:var(--gr);font-size:1.3rem">—</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Total Repayments</div>
+        <div class="value" id="rTotal">—</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Total Interest</div>
+        <div class="value" id="rInterest" style="color:var(--red);font-weight:700">—</div>
+      </div>
+    </div>
+
+    <div id="ioMetrics" class="hidden" style="margin-bottom:14px">
+      <div class="results-grid" style="grid-template-columns:repeat(2,1fr)">
+        <div class="result-box">
+          <div class="label">IO Period Repayment</div>
+          <div class="value" id="rIORepay">—</div>
+        </div>
+        <div class="result-box">
+          <div class="label">P&amp;I Repayment (after IO)</div>
+          <div class="value" id="rPIAfter">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="derived-info" id="bannerExtra" style="display:none">
+      Extra repayments of <strong id="bnExtraAmt"></strong>/period saves <strong id="bnExtraSaved"></strong> in interest and pays off your loan <strong id="bnExtraTime"></strong> earlier.
+    </div>
+    <div class="derived-info" id="bannerOffset" style="display:none;background:var(--bll);border-color:var(--bl)">
+      Your offset of <strong id="bnOffAmt"></strong> saves <strong id="bnOffSaved"></strong> in interest, reducing your term by <strong id="bnOffTime"></strong>.
+    </div>
+    <div class="derived-info" id="bannerPayoff" style="display:none">
+      Based on your start date, your loan will be paid off by <strong id="bnPayoff"></strong>.<span id="bnPayoffNote"></span>
+    </div>
+
+    <div class="section-title">Repayment Breakdown</div>
+    <table class="combined-table">
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th style="text-align:right">Per Period</th>
+          <th style="text-align:right">Monthly</th>
+          <th style="text-align:right">Annual</th>
+          <th style="text-align:right">Loan Life</th>
+          <th style="text-align:right">% of Total</th>
+        </tr>
+      </thead>
+      <tbody id="tBody">
+        <tr><td colspan="6" style="color:var(--txl);font-style:italic;text-align:center;padding:18px">Enter loan details to see results</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Chart -->
+    <div class="chart-section">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px">
+        <div class="section-title" style="margin-bottom:0">Remaining Loan Balance Over Time</div>
+        <div style="font-size:.74rem;color:var(--txl);font-style:italic">&#9432; Hover to see interest / principal split by year</div>
+      </div>
+      <div class="chart-wrap" style="margin-top:10px">
+        <canvas id="myChart" height="120"></canvas>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(230,100,20,0.72)"></div>Interest Portion</div>
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(42,157,103,0.65)"></div>Principal Portion</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Amortisation -->
+    <button class="amort-btn" id="amortBtn" type="button">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+      Show Amortisation Schedule
+    </button>
+    <div id="amortSection" class="hidden">
+      <div class="amort-wrap">
+        <table class="amort-table">
+          <thead><tr><th>#</th><th>Period</th><th>Opening</th><th>Interest</th><th>Principal</th><th>Extra</th><th>Closing</th></tr></thead>
+          <tbody id="amortBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-bar">
+      <button class="btn-action btn-export" id="btnCSV" type="button">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
+        Export CSV
+      </button>
+      <button class="btn-action btn-export" id="btnAmortCSV" type="button">
+        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+        Export Amortisation CSV
+      </button>
+      <div style="flex:1"></div>
+      <button class="btn-action btn-reset" id="btnReset2" type="button">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Start Over
+      </button>
+    </div>
+
+    <div class="note">Estimates only. Assumes a constant interest rate for the full loan term and does not account for lender fees, rate changes, or early repayment restrictions. Not personal financial advice.</div>
+  </div>
+</div><!-- end right -->
+
+</div><!-- end layout -->
+</div><!-- /container -->
+  </div><!-- /main-wrapper -->
+
+  <div class="right-rail">
+    <div class="rail-ad-unit">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-wrapper -->
+
+<div class="ft"><span>Estimates only — general information, not personal financial advice.</span></div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── Refs ──────────────────────────────────────────────────────────────────
+  var el = function(id) { return document.getElementById(id); };
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function d2(n)  { return '$' + Math.abs(n).toLocaleString('en-AU', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+  function d0(n)  { return '$' + Math.round(Math.abs(n)).toLocaleString('en-AU'); }
+  function pct(n) { return n.toFixed(1) + '%'; }
+
+  function getFreq() { return document.querySelector('input[name="freq"]:checked').value; }
+  function getLType(){ return document.querySelector('input[name="ltype"]:checked').value; }
+  function ppy(f)    { return f === 'weekly' ? 52 : f === 'fortnightly' ? 26 : 12; }
+  function fLbl(f)   { return f === 'weekly' ? 'Weekly' : f === 'fortnightly' ? 'Fortnightly' : 'Monthly'; }
+
+  // ── Amortisation builder ──────────────────────────────────────────────────
+  function buildSched(P, annRate, termYrs, freq, extraPP, offsetBal, ltype, ioYrs) {
+    var n      = ppy(freq);
+    var r      = annRate / 100 / n;
+    var total  = termYrs * n;
+    var ioPers = ltype === 'io' ? (ioYrs || 0) * n : 0;
+    var piPers = total - ioPers;
+    var bal    = P;
+    var rows   = [];
+    var totInt = 0;
+
+    var piPmt = 0;
+    if (piPers > 0) {
+      piPmt = r === 0 ? P / piPers : P * (r * Math.pow(1+r, piPers)) / (Math.pow(1+r, piPers) - 1);
+    }
+    var postIOPmt = 0;
+
+    for (var i = 0; i < total; i++) {
+      if (bal < 0.005) break;
+      var eff  = Math.max(bal - offsetBal, 0);
+      var intr = eff * r;
+      var pmt, prin, ext;
+
+      if (i < ioPers) {
+        pmt  = eff * r;
+        prin = 0;
+        ext  = 0;
+      } else {
+        if (ioPers > 0 && i === ioPers) {
+          var rem = total - i;
+          postIOPmt = r === 0 ? bal / rem : bal * (r * Math.pow(1+r,rem)) / (Math.pow(1+r,rem) - 1);
+        }
+        pmt  = (ioPers > 0 && postIOPmt > 0) ? postIOPmt : piPmt;
+        prin = Math.min(pmt - intr, bal);
+        ext  = Math.min(extraPP, Math.max(bal - prin, 0));
+      }
+
+      var closing = Math.max(bal - prin - ext, 0);
+      totInt += intr;
+      rows.push({ opening: bal, interest: intr, principal: prin, extra: ext, repay: pmt, closing: closing });
+      bal = closing;
+    }
+    return { rows: rows, totalInterest: totInt };
+  }
+
+  // ── Chart ─────────────────────────────────────────────────────────────────
+  var chartObj  = null;
+  var chartStd  = null;
+
+  function buildChartArrays(rows, P, termYrs, freq) {
+    var n = ppy(freq);
+    var labels = [], debt = [], annInt = [null], cumPaid = [0];
+    for (var y = 0; y <= termYrs; y++) {
+      labels.push('Yr ' + y);
+      if (y === 0) {
+        debt.push(P);
+      } else {
+        var ei  = Math.min(y * n - 1, rows.length - 1);
+        var row = rows[ei];
+        debt.push(row ? Math.round(row.closing) : 0);
+        var yi = 0, yr = 0;
+        for (var k = (y-1)*n; k <= ei && k < rows.length; k++) {
+          yi += rows[k].interest;
+          yr += rows[k].repay + rows[k].extra;
+        }
+        annInt.push(Math.round(yi));
+        cumPaid.push(Math.round(cumPaid[y-1] + yr));
+      }
+    }
+    return { labels: labels, debt: debt, annInt: annInt, cumPaid: cumPaid };
+  }
+
+  function makeGrad(ctx, paidRatio) {
+    var h    = ctx.canvas.clientHeight || 120;
+    var g    = ctx.createLinearGradient(0, 0, 0, h);
+    var sp   = Math.max(0, Math.min(1, 1 - paidRatio));
+    g.addColorStop(0,  'rgba(230,100,20,0.72)');
+    g.addColorStop(sp, 'rgba(230,100,20,0.72)');
+    g.addColorStop(sp, 'rgba(42,157,103,0.65)');
+    g.addColorStop(1,  'rgba(42,157,103,0.65)');
+    return g;
+  }
+
+  function drawChart(cd) {
+    chartStd = cd;
+    var canvas = el('myChart');
+    var ctx    = canvas.getContext('2d');
+    if (chartObj) { chartObj.destroy(); chartObj = null; }
+
+    var P    = parseFloat(el('fLoanAmt').value) || 0;
+    var yMax = Math.ceil(Math.max.apply(null, cd.debt) / 50000) * 50000;
+
+    var lastIdx  = -1;
+    var rafBusy  = false;
+
+    var splitPlugin = {
+      id: 'split',
+      afterEvent: function(chart, args) {
+        var e = args.event;
+        if (e.type !== 'mousemove' && e.type !== 'mouseout') return;
+        var act = chart.tooltip._active;
+        var ni  = (act && act.length) ? act[0].index : -1;
+        if (ni === lastIdx) return;
+        lastIdx = ni;
+        if (rafBusy) return;
+        rafBusy = true;
+        requestAnimationFrame(function() {
+          rafBusy = false;
+          var ratio = 0;
+          if (lastIdx >= 0 && chartStd && chartStd.debt[lastIdx] != null) {
+            ratio = P > 0 ? (P - chartStd.debt[lastIdx]) / P : 0;
+          }
+          chart.data.datasets[0].backgroundColor = makeGrad(ctx, ratio);
+          chart.update('none');
+        });
+      }
+    };
+
+    chartObj = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: cd.labels,
+        datasets: [
+          {
+            label: 'Balance',
+            data:  cd.debt,
+            borderColor: '#e6641e',
+            backgroundColor: makeGrad(ctx, 0),
+            fill: 'origin',
+            tension: 0.4,
+            pointRadius: 3,
+            pointHoverRadius: 6,
+            pointBackgroundColor: '#e6641e',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 1.5,
+            borderWidth: 2.5
+          },
+          { label:'_p', data:cd.debt,    borderWidth:0, pointRadius:0, pointHoverRadius:0, backgroundColor:'transparent', borderColor:'transparent', fill:false },
+          { label:'_i', data:cd.annInt,  borderWidth:0, pointRadius:0, pointHoverRadius:0, backgroundColor:'transparent', borderColor:'transparent', fill:false },
+          { label:'_c', data:cd.cumPaid, borderWidth:0, pointRadius:0, pointHoverRadius:0, backgroundColor:'transparent', borderColor:'transparent', fill:false }
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode:'index', intersect:false },
+        plugins: {
+          legend: { display:false },
+          tooltip: {
+            backgroundColor: 'rgba(30,20,50,0.92)',
+            titleColor: '#fff',
+            bodyColor:  'rgba(255,255,255,0.88)',
+            padding: 11,
+            cornerRadius: 8,
+            callbacks: {
+              label: function(item) {
+                var l = item.dataset.label;
+                var v = '$' + Math.round(item.parsed.y).toLocaleString('en-AU');
+                var P2 = parseFloat(el('fLoanAmt').value) || 0;
+                if (l === 'Balance')             return '  Remaining debt: ' + v;
+                if (l === '_p')                  return '  Principal paid: $' + Math.round(P2 - item.parsed.y).toLocaleString('en-AU');
+                if (l === '_i' && item.parsed.y) return '  Interest this year: ' + v;
+                if (l === '_c')                  return '  Total paid to date: ' + v;
+                return null;
+              },
+              labelColor: function(item) {
+                var l = item.dataset.label;
+                if (l === 'Balance') return { borderColor:'#e6641e', backgroundColor:'#e6641e', borderRadius:2 };
+                if (l === '_p')      return { borderColor:'#2a9d67', backgroundColor:'#2a9d67', borderRadius:2 };
+                if (l === '_i')      return { borderColor:'#e53935', backgroundColor:'#e53935', borderRadius:2 };
+                if (l === '_c')      return { borderColor:'#888',    backgroundColor:'#888',    borderRadius:2 };
+                return { borderColor:'transparent', backgroundColor:'transparent' };
+              }
+            }
+          }
+        },
+        scales: {
+          x: { grid:{display:false}, ticks:{font:{size:10}, color:'#6c7a89', maxTicksLimit:16} },
+          y: {
+            min: 0, max: yMax,
+            grid: { color:'rgba(0,0,0,0.05)' },
+            ticks: { font:{size:10}, color:'#6c7a89', callback: function(v){ return '$'+Math.round(v/1000)+'k'; } }
+          }
+        },
+        animation: { duration:350 }
+      },
+      plugins: [splitPlugin]
+    });
+  }
+
+  // ── Main calculate ────────────────────────────────────────────────────────
+  var savedRows = [];
+
+  function calculate() {
+    var P      = parseFloat(el('fLoanAmt').value)    || 0;
+    var rate   = parseFloat(el('fRate').value)        || 0;
+    var term   = parseFloat(el('fTerm').value)        || 0;
+    var freq   = getFreq();
+    var ltype  = getLType();
+    var ioPer  = parseFloat(el('fIOPer').value)       || 0;
+    var extra  = parseFloat(el('fExtra').value)       || 0;
+    var useOff = el('fOffsetToggle').checked;
+    var offset = useOff ? (parseFloat(el('fOffset').value) || 0) : 0;
+    var startV = el('fStart').value;
+
+    if (!P || !rate || !term) { clearAll(); return; }
+
+    var n   = ppy(freq);
+    var r   = rate / 100 / n;
+
+    // Base schedule (no extra, no offset, P&I)
+    var baseS   = buildSched(P, rate, term, freq, 0, 0, 'pi', 0);
+    // Actual schedule
+    var actualS = buildSched(P, rate, term, freq, extra, offset, ltype, ioPer);
+
+    savedRows = actualS.rows;
+
+    var totInt   = actualS.totalInterest;
+    var totRepay = P + totInt;
+    var actPers  = actualS.rows.length;
+    var basePers = baseS.rows.length;
+    var baseInt  = baseS.totalInterest;
+
+    // Repayment amounts
+    var piPers = term * n - (ltype === 'io' ? ioPer * n : 0);
+    var piPmt  = r === 0 ? P / Math.max(piPers, 1) : P * (r * Math.pow(1+r,piPers)) / (Math.pow(1+r,piPers)-1);
+    var ioPmt  = P * r;
+    var basePmt= r === 0 ? P / (term*n) : P * (r * Math.pow(1+r,term*n)) / (Math.pow(1+r,term*n)-1);
+    var dispPmt= ltype === 'io' ? ioPmt : basePmt;
+
+    // ── Key metrics
+    el('rRepayLbl').textContent = fLbl(freq) + ' Repayment';
+    el('rRepay').textContent    = d2(dispPmt);
+    el('rTotal').textContent    = d0(totRepay);
+    el('rInterest').textContent = d0(totInt);
+
+    if (ltype === 'io' && ioPer > 0) {
+      el('ioMetrics').classList.remove('hidden');
+      el('rIORepay').textContent = d2(ioPmt);
+      el('rPIAfter').textContent = d2(piPmt);
+    } else {
+      el('ioMetrics').classList.add('hidden');
+    }
+
+    // ── Banners
+    var saved = baseInt - totInt;
+    var tSaved= basePers - actPers;
+    if (extra > 0 && saved > 100) {
+      el('bannerExtra').style.display = 'block';
+      el('bnExtraAmt').textContent    = d2(extra);
+      el('bnExtraSaved').textContent  = d0(saved);
+      el('bnExtraTime').textContent   = fmtTime(tSaved, freq);
+    } else {
+      el('bannerExtra').style.display = 'none';
+    }
+
+    if (useOff && offset > 0) {
+      var noOff  = buildSched(P, rate, term, freq, extra, 0, 'pi', 0);
+      var oSaved = noOff.totalInterest - totInt;
+      var oTime  = noOff.rows.length - actPers;
+      el('bannerOffset').style.display = 'block';
+      el('bnOffAmt').textContent       = d0(offset);
+      el('bnOffSaved').textContent     = d0(oSaved);
+      el('bnOffTime').textContent      = fmtTime(oTime, freq);
+    } else {
+      el('bannerOffset').style.display = 'none';
+    }
+
+    if (startV) {
+      var sp     = startV.split('-');
+      var sDate  = new Date(parseInt(sp[0]), parseInt(sp[1])-1, 1);
+      var payoff;
+      if      (freq === 'monthly')      { payoff = new Date(sDate); payoff.setMonth(payoff.getMonth() + actPers); }
+      else if (freq === 'fortnightly')  { payoff = new Date(sDate.getTime() + actPers * 14 * 86400000); }
+      else                              { payoff = new Date(sDate.getTime() + actPers * 7  * 86400000); }
+      el('bannerPayoff').style.display = 'block';
+      el('bnPayoff').textContent       = payoff.toLocaleDateString('en-AU', {month:'long', year:'numeric'});
+      el('bnPayoffNote').textContent   = tSaved > 0 ? ' That is ' + fmtTime(tSaved, freq) + ' earlier than standard.' : '';
+    } else {
+      el('bannerPayoff').style.display = 'none';
+    }
+
+    // ── Breakdown table
+    function mPmt(fq) {
+      var p2=ppy(fq), r2=rate/100/p2, n2=term*p2;
+      return r2===0 ? P/n2 : P*(r2*Math.pow(1+r2,n2))/(Math.pow(1+r2,n2)-1);
+    }
+    var mPay = mPmt('monthly');
+    var rows = '';
+
+    rows += '<tr><td>Minimum Repayment</td>'
+          + '<td style="text-align:right">' + d2(dispPmt) + '</td>'
+          + '<td style="text-align:right">' + d2(mPay) + '</td>'
+          + '<td style="text-align:right">' + d0(mPay*12) + '</td>'
+          + '<td style="text-align:right">' + d0(P + baseInt) + '</td>'
+          + '<td style="text-align:right;color:var(--txl)">100%</td></tr>';
+
+    if (extra > 0) {
+      rows += '<tr class="indent"><td>+ Extra Repayment</td>'
+            + '<td style="text-align:right">' + d2(extra) + '</td>'
+            + '<td style="text-align:right">' + d2(extra*(n/12)) + '</td>'
+            + '<td style="text-align:right">' + d0(extra*n) + '</td>'
+            + '<td style="text-align:right">' + d0(extra*actPers) + '</td>'
+            + '<td style="text-align:right;color:var(--txl)">—</td></tr>';
+    }
+
+    rows += '<tr class="section-header"><td colspan="6">Principal &amp; Interest Split</td></tr>';
+
+    rows += '<tr><td>Principal (Loan Amount)</td>'
+          + '<td style="text-align:right">—</td>'
+          + '<td style="text-align:right">—</td>'
+          + '<td style="text-align:right">' + d0(P/term) + '</td>'
+          + '<td style="text-align:right">' + d0(P) + '</td>'
+          + '<td style="text-align:right;color:var(--gr);font-weight:700">' + pct(P/totRepay*100) + '</td></tr>';
+
+    rows += '<tr class="negative"><td>Interest Cost</td>'
+          + '<td style="text-align:right">' + d2(dispPmt - P/(term*n)) + '</td>'
+          + '<td style="text-align:right">' + d2(mPay - P/(term*12)) + '</td>'
+          + '<td style="text-align:right">' + d0(totInt/term) + '</td>'
+          + '<td style="text-align:right">' + d0(totInt) + '</td>'
+          + '<td style="text-align:right;color:var(--red);font-weight:700">' + pct(totInt/totRepay*100) + '</td></tr>';
+
+    if (useOff && offset > 0) {
+      var noOff2 = buildSched(P, rate, term, freq, extra, 0, 'pi', 0);
+      var oSv2   = noOff2.totalInterest - totInt;
+      rows += '<tr style="background:var(--bll)"><td style="color:var(--bl);font-weight:600">&#8627; Offset Saving (' + d0(offset) + ')</td>'
+            + '<td style="text-align:right">—</td><td style="text-align:right">—</td>'
+            + '<td style="text-align:right;color:var(--bl);font-weight:600">' + d0(oSv2/term) + '/yr</td>'
+            + '<td style="text-align:right;color:var(--bl);font-weight:600">&#8722;' + d0(oSv2) + '</td>'
+            + '<td style="text-align:right;color:var(--bl);font-weight:600">' + pct(oSv2/noOff2.totalInterest*100) + ' less</td></tr>';
+    }
+
+    rows += '<tr class="total-row"><td>Total Repayments</td>'
+          + '<td style="text-align:right">' + d2(dispPmt+extra) + '</td>'
+          + '<td style="text-align:right">' + d2(mPay+extra*(n/12)) + '</td>'
+          + '<td style="text-align:right">' + d0((mPay+extra*(n/12))*12) + '</td>'
+          + '<td style="text-align:right">' + d0(totRepay) + '</td>'
+          + '<td style="text-align:right;color:var(--txl)">100%</td></tr>';
+
+    el('tBody').innerHTML = rows;
+
+    // ── Chart
+    var cd = buildChartArrays(actualS.rows, P, term, freq);
+    drawChart(cd);
+
+    // Rebuild amort if visible
+    if (!el('amortSection').classList.contains('hidden')) renderAmort();
+  }
+
+  // ── Clear ─────────────────────────────────────────────────────────────────
+  function clearAll() {
+    el('rRepay').textContent    = '—';
+    el('rTotal').textContent    = '—';
+    el('rInterest').textContent = '—';
+    el('tBody').innerHTML = '<tr><td colspan="6" style="color:var(--txl);font-style:italic;text-align:center;padding:18px">Enter loan details to see results</td></tr>';
+    ['bannerExtra','bannerOffset','bannerPayoff'].forEach(function(id){ el(id).style.display='none'; });
+    if (chartObj) { chartObj.destroy(); chartObj = null; }
+    el('amortBody').innerHTML = '';
+  }
+
+  function doReset() {
+    ['fLoanAmt','fRate','fTerm','fExtra','fOffset','fIOPer'].forEach(function(id){ el(id).value=''; });
+    el('fStart').value = '';
+    el('rMonthly').checked = true;
+    el('rPI').checked = true;
+    el('fOffsetToggle').checked = false;
+    el('offsetBlock').classList.add('hidden');
+    el('ioBlock').classList.add('hidden');
+    el('ioMetrics').classList.add('hidden');
+    el('amortSection').classList.add('hidden');
+    el('amortBtn').textContent = ' Show Amortisation Schedule';
+    clearAll();
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  // ── Amort table ───────────────────────────────────────────────────────────
+  function renderAmort() {
+    var freq   = getFreq();
+    var n      = ppy(freq);
+    var startV = el('fStart').value;
+    var sDate  = null;
+    if (startV) { var sp=startV.split('-'); sDate=new Date(parseInt(sp[0]),parseInt(sp[1])-1,1); }
+    var unit = freq==='weekly'?'Week':freq==='fortnightly'?'Fortnight':'Month';
+    var html = '', yr = 0;
+    savedRows.forEach(function(row, i) {
+      var y = Math.floor(i / n) + 1;
+      if (y !== yr) { yr=y; html+='<tr class="yr"><td colspan="7">Year '+y+'</td></tr>'; }
+      var lbl = unit + ' ' + (i+1);
+      if (sDate) {
+        var d;
+        if      (freq==='monthly')      { d=new Date(sDate); d.setMonth(d.getMonth()+i); }
+        else if (freq==='fortnightly')  { d=new Date(sDate.getTime()+i*14*86400000); }
+        else                            { d=new Date(sDate.getTime()+i*7*86400000); }
+        lbl = d.toLocaleDateString('en-AU',{month:'short',year:'numeric'});
+      }
+      html += '<tr>'
+            + '<td>'+(i+1)+'</td>'
+            + '<td>'+lbl+'</td>'
+            + '<td>'+d0(row.opening)+'</td>'
+            + '<td style="color:var(--red)">'+d0(row.interest)+'</td>'
+            + '<td>'+d0(row.principal)+'</td>'
+            + '<td>'+(row.extra>0?d0(row.extra):'—')+'</td>'
+            + '<td>'+d0(row.closing)+'</td>'
+            + '</tr>';
+    });
+    el('amortBody').innerHTML = html;
+  }
+
+  // ── Export ────────────────────────────────────────────────────────────────
+  function exportCSV() {
+    if (!savedRows.length) { alert('Please calculate first.'); return; }
+    var P    = parseFloat(el('fLoanAmt').value)||0;
+    var rate = parseFloat(el('fRate').value)||0;
+    var term = parseFloat(el('fTerm').value)||0;
+    var freq = getFreq();
+    var lines= ['Loan Amount,'+P,'Interest Rate,'+rate+'%','Loan Term,'+term+' years','','Component,Per Period,Monthly,Annual,Loan Life'];
+    el('tBody').querySelectorAll('tr').forEach(function(tr){
+      var cells=[]; tr.querySelectorAll('td').forEach(function(td){ cells.push('"'+td.textContent.trim()+'"'); });
+      if(cells.length) lines.push(cells.join(','));
+    });
+    var a=document.createElement('a');
+    a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(lines.join('\n'));
+    a.download='home-loan-summary.csv'; a.click();
+  }
+
+  function exportAmortCSV() {
+    if (!savedRows.length) { alert('Please calculate first.'); return; }
+    var freq  = getFreq();
+    var startV= el('fStart').value;
+    var sDate = null;
+    if (startV) { var sp=startV.split('-'); sDate=new Date(parseInt(sp[0]),parseInt(sp[1])-1,1); }
+    var unit  = freq==='weekly'?'Week':freq==='fortnightly'?'Fortnight':'Month';
+    var csv   = 'Period,Date,Opening Balance,Interest,Principal,Extra Repayment,Closing Balance,Cumulative Interest,Cumulative Principal\n';
+    var cumI  = 0, cumP = 0;
+    savedRows.forEach(function(row,i){
+      var lbl = unit+' '+(i+1);
+      if (sDate) {
+        var d;
+        if      (freq==='monthly')      { d=new Date(sDate); d.setMonth(d.getMonth()+i); }
+        else if (freq==='fortnightly')  { d=new Date(sDate.getTime()+i*14*86400000); }
+        else                            { d=new Date(sDate.getTime()+i*7*86400000); }
+        lbl=d.toLocaleDateString('en-AU',{month:'short',year:'numeric'});
+      }
+      cumI+=row.interest; cumP+=row.principal+row.extra;
+      csv+=(i+1)+',"'+lbl+'",'+row.opening.toFixed(2)+','+row.interest.toFixed(2)+','+row.principal.toFixed(2)+','+row.extra.toFixed(2)+','+row.closing.toFixed(2)+','+cumI.toFixed(2)+','+cumP.toFixed(2)+'\n';
+    });
+    var a=document.createElement('a');
+    a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+    a.download='home-loan-amortisation.csv'; a.click();
+  }
+
+  // ── Time formatter ────────────────────────────────────────────────────────
+  function fmtTime(periods, freq) {
+    if (periods <= 0) return 'no time';
+    var n   = ppy(freq);
+    var yrs = Math.floor(periods/n);
+    var rem = periods % n;
+    var u   = freq==='weekly'?'week':freq==='fortnightly'?'fortnight':'month';
+    var s   = yrs > 0 ? yrs+' year'+(yrs!==1?'s':'') : '';
+    if (rem > 0) { if(s) s+=' and '; s+=rem+' '+u+(rem!==1?'s':''); }
+    return s || 'no time';
+  }
+
+  // ── Collapsible ───────────────────────────────────────────────────────────
+  function initCollapsible() {
+    var btn  = el('addlBtn');
+    var body = el('addlBody');
+    function setOpen(open) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) body.classList.remove('collapsed'); else body.classList.add('collapsed');
+    }
+    btn.addEventListener('click', function() { setOpen(btn.getAttribute('aria-expanded') !== 'true'); });
+    setOpen(window.innerWidth >= 900);
+    window.addEventListener('resize', function() { setOpen(window.innerWidth >= 900); });
+  }
+
+  // ── Boot ──────────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    initCollapsible();
+
+    // Set defaults
+    var t = new Date();
+    el('fStart').value    = t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0');
+    el('fLoanAmt').value  = '500000';
+    el('fRate').value     = '6.00';
+    el('fTerm').value     = '30';
+    calculate();
+
+    // Input events
+    ['fLoanAmt','fRate','fTerm','fExtra','fOffset','fIOPer','fStart']
+      .forEach(function(id){ el(id).addEventListener('input', calculate); });
+
+    document.querySelectorAll('input[name="freq"], input[name="ltype"]')
+      .forEach(function(r){ r.addEventListener('change', calculate); });
+
+    el('fOffsetToggle').addEventListener('change', function() {
+      el('offsetBlock').classList.toggle('hidden', !this.checked);
+      calculate();
+    });
+
+    el('rIO').addEventListener('change', function() { el('ioBlock').classList.remove('hidden'); calculate(); });
+    el('rPI').addEventListener('change', function() { el('ioBlock').classList.add('hidden');    calculate(); });
+
+    el('btnReset1').addEventListener('click', doReset);
+    el('btnReset2').addEventListener('click', doReset);
+    el('btnCSV').addEventListener('click', exportCSV);
+    el('btnAmortCSV').addEventListener('click', exportAmortCSV);
+
+    el('amortBtn').addEventListener('click', function() {
+      var sec  = el('amortSection');
+      var open = sec.classList.contains('hidden');
+      if (open) { sec.classList.remove('hidden'); renderAmort(); this.textContent=' Hide Amortisation Schedule'; }
+      else       { sec.classList.add('hidden');                   this.textContent=' Show Amortisation Schedule'; }
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
