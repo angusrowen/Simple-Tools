@@ -10,37 +10,12 @@ if(window.innerWidth<=768){
 }
 </script>
 <meta charset="UTF-8">
-<style>html{overflow-x:hidden}body{overflow-x:hidden}
-/* ── Static side rails — fixed to viewport, don't scroll (desktop ≥1400px) ── */
-.side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;
-  position:fixed;top:50%;transform:translateY(-50%);z-index:10}
-.side-rail.left{left:0}
-.side-rail.right{right:0}
-.side-rail-inner{padding:8px;display:flex;flex-direction:column;align-items:center}
-.rail-ad-label{font-size:.68rem;font-weight:700;text-transform:uppercase;
-  letter-spacing:.4px;color:var(--txl);text-align:center;padding:7px 0 4px;
-  border-bottom:1px solid var(--bdr);margin-bottom:8px;width:100%}
-.rail-ad-inner{display:flex;justify-content:center;align-items:center}
-@media(min-width:1400px){
-  .side-rail{display:flex;flex-direction:column}
-}
-/* ── Mobile: hide ALL inline ads, allow anchor ads ── */
-@media(max-width:768px){
-  ins.adsbygoogle,
-  .ad-slot,
-  .mobile-ad-slot,
-  .mobile-ad-inner,
-  .side-rail{
-    display:none!important;
-    width:0!important;height:0!important;
-    max-width:0!important;overflow:hidden!important;
-  }
-}
-</style>
+<style>html{overflow-x:hidden}body{overflow-x:hidden}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Australian Finance Tools — Income Tax Calculator</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
+
 :root{
   --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
   --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
@@ -54,6 +29,7 @@ html{overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe 
 .app-mark{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:var(--gr);color:#fff;font-weight:800;font-size:1rem;box-shadow:0 8px 20px rgba(42,157,103,.28)}
 .topbar-title{color:#fff;font-size:1rem;font-weight:700}
 .topbar-subtitle{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.72);margin-top:2px}
+.topbar-desc{font-size:.68rem;color:rgba(255,255,255,.6);margin-top:3px;line-height:1.35}
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
 .badge{background:rgba(255,255,255,.15);color:#fff;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px;border:1px solid rgba(255,255,255,.12)}
@@ -195,15 +171,17 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 /* ── Right rail ad ─────────────────────────────────────────────── */
 .page-wrapper{display:flex;justify-content:center;align-items:stretch;gap:0;width:100%;padding-top:0;overflow:hidden}
-.right-rail{display:none;width:200px;min-width:200px;padding:24px 0 24px 12px;flex-shrink:0;align-self:flex-start}
+.side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;position:fixed;top:50%;transform:translateY(-50%);z-index:10}
+.side-rail.left{left:0}
+.side-rail.right{right:0}
+.side-rail-inner{padding:8px;display:flex;flex-direction:column;align-items:center}
+.rail-ad-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:7px 0 4px;border-bottom:1px solid var(--bdr);margin-bottom:8px;width:100%}
+.rail-ad-inner{display:flex;justify-content:center;align-items:center}
 .rail-ad-unit{background:var(--card);border:1px solid var(--bdr);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(45,50,40,.06)}
 .rail-ad-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:8px 0 4px;border-bottom:1px solid var(--bdr)}
 .rail-ad-inner{padding:8px;display:flex;justify-content:center;align-items:center;min-height:620px}
 /* Show rail only on very wide screens */
-@media(min-width:1700px){
-  .right-rail{display:block}
-  .main-wrapper{flex:1;min-width:0}
-}
+@media(min-width:1400px){.side-rail{display:flex;flex-direction:column}}
 
 
 /* ── Mobile mid-page ad ─────────────────────────────────────────── */
@@ -266,72 +244,31 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 /* ═══ Tablet 481–768px ═══ */
 
 
+@media(max-width:768px){
+  ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail{display:none!important;width:0!important;height:0!important;max-width:0!important;overflow:hidden!important}
+}
 @media(max-width:480px){
-  html{overflow-x:hidden!important}
-  body{overflow-x:hidden!important;width:100%!important}
-  .page-wrapper{overflow-x:hidden!important;box-sizing:border-box!important}
-
-  /* main-wrapper: reduce side padding so content fits within viewport
-     Debug showed main-wrapper=411px on 395px screen due to padding:24px 32px
-     Changing to padding:12px makes it 395px exactly */
-  .main-wrapper{padding:12px!important;box-sizing:border-box!important;width:100%!important;max-width:100%!important}
-  .container{box-sizing:border-box!important;width:100%!important}
-  .layout{grid-template-columns:1fr!important;gap:10px!important;box-sizing:border-box!important;width:100%!important}
-
-  .card{padding:12px!important;border-radius:12px!important;box-sizing:border-box!important;overflow:hidden!important}
-  .card h2{font-size:.9rem!important}
-  .section-label{font-size:.7rem!important}
+  .main-wrapper{padding:12px!important;box-sizing:border-box!important}
+  .layout{grid-template-columns:1fr!important;gap:10px!important}
+  .card{padding:12px!important}
   .topbar{padding:8px 14px!important}
   .topbar-right{flex-wrap:wrap!important;gap:6px!important}
-  .hd{padding:10px 14px!important}
-  .hd-title{font-size:.9rem!important}
-  .hd-sub{font-size:.68rem!important}
-  .hero{flex-direction:column!important;padding:14px 12px!important}
-  .hero .ad-slot,.right-rail{display:none!important}
-  .hero-text h1{font-size:1.2rem!important}
-  .hero-text p{font-size:.82rem!important}
-  .card-header-row{flex-wrap:wrap!important;gap:6px!important}
-  .card-header-row .btn-action{padding:5px 10px!important;font-size:.72rem!important}
-  .card-header-row .btn-action svg{width:13px!important;height:13px!important}
-  .toggle-switch{flex-wrap:wrap!important;width:100%!important;box-sizing:border-box!important}
-  .toggle-switch label{flex:1 1 80px!important;font-size:.72rem!important;padding:6px 4px!important;text-align:center!important;white-space:nowrap!important;min-width:0!important}
-  .inline-fields{display:flex!important;flex-direction:column!important;gap:8px!important}
-  .field label{font-size:.78rem!important}
-  .field input,.field select{font-size:.88rem!important;padding:7px 8px!important;width:100%!important;box-sizing:border-box!important}
-  .input-wrap{width:100%!important;box-sizing:border-box!important}
-  .checkbox-field{align-items:flex-start!important;gap:8px!important}
-  input[type=checkbox]{flex-shrink:0!important;margin-top:2px!important;width:16px!important;height:16px!important}
-  .checkbox-field label{flex:1!important;min-width:0!important;font-size:.8rem!important;line-height:1.4!important;word-wrap:break-word!important}
+  .toggle-switch label{font-size:.72rem!important;padding:6px 4px!important}
+  .field input,.field select{font-size:.88rem!important;padding:7px 8px!important}
+  .inline-fields{grid-template-columns:1fr!important}
   .results-grid{grid-template-columns:1fr 1fr!important;gap:6px!important}
-  .results-lower{grid-template-columns:1fr!important;gap:8px!important}
-  .result-box{padding:7px 8px!important}
-  .result-box .value{font-size:.95rem!important}
-  .result-box .label{font-size:.65rem!important}
-  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;width:100%!important;font-size:.74rem!important}
-  .combined-table th,.combined-table td,.bracket-table th,.bracket-table td,.key-rates-table th,.key-rates-table td{white-space:nowrap!important;padding:4px 6px!important}
+  .results-lower{grid-template-columns:1fr!important}
   .pie-card{grid-template-columns:1fr!important}
-  #payPie{width:170px!important;height:170px!important}
-  .legend-row{font-size:.74rem!important}
-  .actions-bar{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important;margin-top:14px!important}
-  .actions-bar .btn-action{font-size:.72rem!important;padding:7px 6px!important;justify-content:center!important;width:100%!important}
-  .actions-bar .btn-reset{grid-column:1/-1!important}
-  .collapsible-header h2{font-size:.88rem!important}
-  .note,.sj-note,.field-hint,.prorata-info{font-size:.72rem!important}
+  #payPie{width:180px!important;height:180px!important}
+  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;font-size:.74rem!important}
+  .actions-bar{grid-template-columns:1fr 1fr!important}
   .ft{padding:10px 14px!important;font-size:.7rem!important}
 }
 @media(min-width:481px) and (max-width:768px){
-  html,body{overflow-x:hidden}
   .main-wrapper{padding:14px 18px!important;box-sizing:border-box!important}
   .layout{grid-template-columns:1fr!important}
-  .hero .ad-slot{display:none!important}
-  .card{padding:14px 16px!important}
-  .combined-table,.bracket-table,.key-rates-table{display:block;overflow-x:auto;font-size:.82rem}
-  .combined-table th,.combined-table td{white-space:nowrap;padding:6px 8px}
-  .results-grid{grid-template-columns:1fr 1fr!important}
-  .toggle-switch label{font-size:.76rem!important}
-  .checkbox-field{align-items:flex-start!important;gap:8px!important}
-  input[type=checkbox]{flex-shrink:0!important;margin-top:2px!important}
 }
+
 
 /* Prevent AdSense iframes from causing horizontal scroll */
 ins.adsbygoogle,
@@ -342,6 +279,7 @@ ins.adsbygoogle iframe,
   max-width:100%!important;
   overflow:hidden!important;
 }
+
 
 </style>
   <!-- Google AdSense -->
