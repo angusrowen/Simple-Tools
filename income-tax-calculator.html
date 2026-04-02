@@ -1,8 +1,21 @@
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
+
+<script>
+if(window.innerWidth <= 768){
+  // Remove all adsbygoogle ins elements before Google script processes them
+  document.addEventListener('DOMContentLoaded', function(){
+    var ads = document.querySelectorAll('ins.adsbygoogle, .ad-slot, .mobile-ad-slot, .right-rail');
+    ads.forEach(function(el){ el.remove(); });
+  });
+  // Also override adsbygoogle push to do nothing on mobile
+  window.adsbygoogle = window.adsbygoogle || [];
+  window.adsbygoogle.push = function(){};
+}
+</script>
+
 <meta charset="UTF-8">
-<style>html{overflow-x:hidden}body{overflow-x:hidden}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Australian Finance Tools — Income Tax Calculator</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -299,14 +312,20 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   input[type=checkbox]{flex-shrink:0!important;margin-top:2px!important}
 }
 
-/* Prevent AdSense iframes from causing horizontal scroll */
-ins.adsbygoogle,
-ins.adsbygoogle iframe,
-.ad-slot,
-.mobile-ad-slot,
-.mobile-ad-inner{
-  max-width:100%!important;
-  overflow:hidden!important;
+@media(max-width:768px){
+  ins.adsbygoogle,
+  .ad-slot,
+  .mobile-ad-slot,
+  .mobile-ad-inner,
+  .right-rail,
+  [class*="ad-"]{
+    display:none!important;
+    width:0!important;
+    height:0!important;
+    overflow:hidden!important;
+    max-width:0!important;
+    visibility:hidden!important;
+  }
 }
 
 </style>
@@ -348,7 +367,7 @@ ins.adsbygoogle iframe,
     <!-- Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
     <!-- Replace data-ad-slot value with your ad slot ID -->
     <ins class="adsbygoogle"
-         style="display:inline-block;max-width:100%;width:320px;height:100px"
+         style="display:inline-block;width:320px;height:100px"
          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
          data-ad-slot="XXXXXXXXXX"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -609,7 +628,7 @@ ins.adsbygoogle iframe,
   <div class="mobile-ad-inner">
     <div class="ad-slot-label">Advertisement</div>
     <ins class="adsbygoogle"
-         style="display:inline-block;max-width:100%;width:300px;height:250px"
+         style="display:inline-block;width:300px;height:250px"
          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
          data-ad-slot="XXXXXXXXXX"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -714,7 +733,7 @@ ins.adsbygoogle iframe,
       <!-- Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
       <!-- Replace data-ad-slot value with your ad slot ID -->
       <ins class="adsbygoogle"
-           style="display:inline-block;max-width:100%;width:160px;height:600px"
+           style="display:inline-block;width:160px;height:600px"
            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
            data-ad-slot="XXXXXXXXXX"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -1161,7 +1180,21 @@ function saveHTML(){
   var marg=document.getElementById('marginalRate').textContent;
   var sup=document.getElementById('totalSuperDisplay').textContent;
   var freqLabel=document.getElementById('frequency').selectedOptions[0].text;
-  var h='<!DOCTYPE html><html lang="en-AU"><head><meta charset="UTF-8"><title>Tax Calculation - '+fy.label+' - '+dateStr+'</title>';
+  var h='<!DOCTYPE html><html lang="en-AU"><head>
+
+<script>
+if(window.innerWidth <= 768){
+  // Remove all adsbygoogle ins elements before Google script processes them
+  document.addEventListener('DOMContentLoaded', function(){
+    var ads = document.querySelectorAll('ins.adsbygoogle, .ad-slot, .mobile-ad-slot, .right-rail');
+    ads.forEach(function(el){ el.remove(); });
+  });
+  // Also override adsbygoogle push to do nothing on mobile
+  window.adsbygoogle = window.adsbygoogle || [];
+  window.adsbygoogle.push = function(){};
+}
+</script>
+<meta charset="UTF-8"><title>Tax Calculation - '+fy.label+' - '+dateStr+'</title>';
   h+='<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f8fb;color:#22313f;line-height:1.5}';
   h+='.hd{background:#3e5f75;padding:16px 32px;border-bottom:1px solid #6a92ad;display:flex;align-items:center;gap:16px}.hd-t{color:#fff;font-size:1rem;font-weight:700}.hd-b{background:#e7f8ef;color:#2a9d67;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;margin-left:auto}.hd-d{color:rgba(255,255,255,.7);font-size:.8rem}';
   h+='.ct{max-width:1200px;margin:0 auto;padding:24px}.cd{background:#fff;border:1px solid #d7e1ea;border-radius:16px;padding:20px 24px;margin-bottom:16px}.cd h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #2a9d67;color:#2d465b}';
