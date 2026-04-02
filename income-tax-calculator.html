@@ -1184,17 +1184,21 @@ function toggleAdditionalOptions(forceState){
   if(!btn||!body) return;
   var isOpen = btn.getAttribute('aria-expanded')==='true';
   var open = forceState !== undefined ? forceState : !isOpen;
+  // If user clicked (no forceState), mark as manually toggled
+  if(forceState === undefined) _userToggledOptions = true;
   btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   body.classList.toggle('collapsed', !open);
 }
+var _userToggledOptions = false;
 function setCollapsibleByViewport(){
+  // Only auto-set if user hasn't manually toggled
+  if(_userToggledOptions) return;
   // portrait or narrow = collapse; landscape/desktop = open
   var portrait = window.innerWidth < window.innerHeight || window.innerWidth < 900;
   toggleAdditionalOptions(!portrait);
 }
-window.addEventListener('resize', function(){
-  setCollapsibleByViewport();
-});
+// NO resize listener — keyboard open/close on mobile triggers resize
+// and would auto-collapse sections the user intentionally opened
 
 document.addEventListener('DOMContentLoaded',function(){
   setCollapsibleByViewport();
