@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
-
-<script>
-if(window.innerWidth <= 768){
-  // Remove all adsbygoogle ins elements before Google script processes them
-  document.addEventListener('DOMContentLoaded', function(){
-    var ads = document.querySelectorAll('ins.adsbygoogle, .ad-slot, .mobile-ad-slot, .right-rail');
-    ads.forEach(function(el){ el.remove(); });
-  });
-  // Also override adsbygoogle push to do nothing on mobile
-  window.adsbygoogle = window.adsbygoogle || [];
-  window.adsbygoogle.push = function(){};
-}
-</script>
-
 <meta charset="UTF-8">
+<style>html{overflow-x:hidden}body{overflow-x:hidden}
+/* ── Fixed side rails (desktop ≥1400px only) ── */
+.side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;
+  position:fixed;top:50%;transform:translateY(-50%)}
+.side-rail.left{left:0}
+.side-rail.right{right:0}
+.side-rail-inner{padding:8px;display:flex;flex-direction:column;align-items:center}
+.rail-ad-label{font-size:.68rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.4px;color:var(--txl);text-align:center;padding:7px 0 4px;
+  border-bottom:1px solid var(--bdr);margin-bottom:8px;width:100%}
+.rail-ad-inner{display:flex;justify-content:center;align-items:center}
+@media(min-width:1400px){
+  .side-rail{display:flex;flex-direction:column}
+  .main-wrapper{flex:1;min-width:0}
+}
+</style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Australian Finance Tools — Income Tax Calculator</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -312,20 +314,14 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   input[type=checkbox]{flex-shrink:0!important;margin-top:2px!important}
 }
 
-@media(max-width:768px){
-  ins.adsbygoogle,
-  .ad-slot,
-  .mobile-ad-slot,
-  .mobile-ad-inner,
-  .right-rail,
-  [class*="ad-"]{
-    display:none!important;
-    width:0!important;
-    height:0!important;
-    overflow:hidden!important;
-    max-width:0!important;
-    visibility:hidden!important;
-  }
+/* Prevent AdSense iframes from causing horizontal scroll */
+ins.adsbygoogle,
+ins.adsbygoogle iframe,
+.ad-slot,
+.mobile-ad-slot,
+.mobile-ad-inner{
+  max-width:100%!important;
+  overflow:hidden!important;
 }
 
 </style>
@@ -335,14 +331,15 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 <body>
 <div class="topbar">
   <div class="topbar-logo">
-    <a href="index.html" title="Back to calculators">
-      <span class="app-mark">AF</span>
+    <a href="index.html" title="Back to calculators" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;color:#fff;text-decoration:none">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
     </a>
   </div>
   <div class="topbar-divider"></div>
   <div>
     <div class="topbar-title">Income Tax Calculator</div>
     <div class="topbar-subtitle">Australian Finance Tools</div>
+    <div class="topbar-desc">Estimate your tax, Medicare levy, super &amp; take-home pay</div>
   </div>
   <div class="topbar-right">
     <span class="badge pt hidden" id="ptBadge">Part-Time</span>
@@ -352,27 +349,21 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 </div>
 
 <div class="page-wrapper">
+  <!-- Left ad rail -->
+  <div class="side-rail left">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+  </div>
 <div class="main-wrapper">
 <div class="container">
 
-<div class="hero">
-  <div class="hero-text">
-    <div class="eyebrow">Australian Finance Tools</div>
-    <h1>Income Tax Calculator</h1>
-    <p>Estimate your tax, Medicare levy, HELP repayments, super, and take-home pay for Australian residents, foreign residents, and working holiday makers.</p>
-  </div>
-  <div class="ad-slot">
-    <div class="ad-slot-label">Advertisement</div>
-    <!-- Google AdSense — Large Rectangle 336×280 -->
-    <!-- Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
-    <!-- Replace data-ad-slot value with your ad slot ID -->
-    <ins class="adsbygoogle"
-         style="display:inline-block;width:320px;height:100px"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-         data-ad-slot="XXXXXXXXXX"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-</div>
+
 
 <div class="layout">
 
@@ -628,7 +619,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   <div class="mobile-ad-inner">
     <div class="ad-slot-label">Advertisement</div>
     <ins class="adsbygoogle"
-         style="display:inline-block;width:300px;height:250px"
+         style="display:inline-block;max-width:100%;width:300px;height:250px"
          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
          data-ad-slot="XXXXXXXXXX"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -723,23 +714,20 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 </div><!-- /layout -->
 </div><!-- /container -->
-</div><!-- /main-wrapper -->
-
-<div class="right-rail">
-  <div class="rail-ad-unit">
-    <div class="rail-ad-label">Advertisement</div>
-    <div class="rail-ad-inner">
-      <!-- Google AdSense — Half Page 300×600 -->
-      <!-- Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
-      <!-- Replace data-ad-slot value with your ad slot ID -->
-      <ins class="adsbygoogle"
-           style="display:inline-block;width:160px;height:600px"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-           data-ad-slot="XXXXXXXXXX"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+  <!-- Right ad rail -->
+  <div class="side-rail right">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
     </div>
-  </div>
-</div><!-- /right-rail -->
+  </div><!-- /main-wrapper -->
+
+<!-- /right-rail -->
 
 </div><!-- /page-wrapper -->
 <div class="ft"><span>Estimates only — general information, not personal financial advice.</span></div>
@@ -1180,21 +1168,7 @@ function saveHTML(){
   var marg=document.getElementById('marginalRate').textContent;
   var sup=document.getElementById('totalSuperDisplay').textContent;
   var freqLabel=document.getElementById('frequency').selectedOptions[0].text;
-  var h='<!DOCTYPE html><html lang="en-AU"><head>
-
-<script>
-if(window.innerWidth <= 768){
-  // Remove all adsbygoogle ins elements before Google script processes them
-  document.addEventListener('DOMContentLoaded', function(){
-    var ads = document.querySelectorAll('ins.adsbygoogle, .ad-slot, .mobile-ad-slot, .right-rail');
-    ads.forEach(function(el){ el.remove(); });
-  });
-  // Also override adsbygoogle push to do nothing on mobile
-  window.adsbygoogle = window.adsbygoogle || [];
-  window.adsbygoogle.push = function(){};
-}
-</script>
-<meta charset="UTF-8"><title>Tax Calculation - '+fy.label+' - '+dateStr+'</title>';
+  var h='<!DOCTYPE html><html lang="en-AU"><head><meta charset="UTF-8"><title>Tax Calculation - '+fy.label+' - '+dateStr+'</title>';
   h+='<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f8fb;color:#22313f;line-height:1.5}';
   h+='.hd{background:#3e5f75;padding:16px 32px;border-bottom:1px solid #6a92ad;display:flex;align-items:center;gap:16px}.hd-t{color:#fff;font-size:1rem;font-weight:700}.hd-b{background:#e7f8ef;color:#2a9d67;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;margin-left:auto}.hd-d{color:rgba(255,255,255,.7);font-size:.8rem}';
   h+='.ct{max-width:1200px;margin:0 auto;padding:24px}.cd{background:#fff;border:1px solid #d7e1ea;border-radius:16px;padding:20px 24px;margin-bottom:16px}.cd h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #2a9d67;color:#2d465b}';
