@@ -150,7 +150,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .collapsible-header h2{color:var(--dk)}
 .collapsible-header:hover h2{color:var(--gr)}
 .collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center}
-.collapsible-header[aria-expanded="false"] .collapse-icon{transform:rotate(180deg)}
+.collapsible-header[aria-expanded="true"] .collapse-icon{transform:rotate(180deg)}
 .collapsible-body{overflow:hidden;transition:max-height .3s ease, opacity .25s ease;max-height:4000px;opacity:1}
 .collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
 .collapsible-header{padding-bottom:8px;border-bottom:2px solid var(--gr);margin-bottom:16px}
@@ -349,7 +349,6 @@ ins.adsbygoogle iframe,
     <div class="topbar-desc">Estimate repayments, interest costs &amp; loan payoff schedule</div>
   </div>
   <div class="topbar-right">
-    <span class="badge">2025-26</span>
   </div>
 </div>
 
@@ -564,7 +563,7 @@ ins.adsbygoogle iframe,
         <div style="font-size:.74rem;color:var(--txl);font-style:italic">&#9432; Hover to see interest / principal split by year</div>
       </div>
       <div class="chart-wrap" style="margin-top:10px">
-        <canvas id="myChart" height="120"></canvas>
+        <canvas id="myChart" height="140"></canvas>
         <div class="chart-legend">
           <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(230,100,20,0.72)"></div>Interest Portion</div>
           <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(42,157,103,0.65)"></div>Principal Portion</div>
@@ -734,7 +733,8 @@ ins.adsbygoogle iframe,
     if (chartObj) { chartObj.destroy(); chartObj = null; }
 
     var P    = parseFloat(el('fLoanAmt').value) || 0;
-    var yMax = Math.ceil(Math.max.apply(null, cd.debt) / 50000) * 50000;
+    var P0   = parseFloat(el('fLoanAmt').value) || 0;
+    var yMax = Math.ceil((P0 * 1.05) / 50000) * 50000;
 
     var lastIdx  = -1;
     var rafBusy  = false;
@@ -1116,7 +1116,6 @@ ins.adsbygoogle iframe,
     }
     btn.addEventListener('click', function() { setOpen(btn.getAttribute('aria-expanded') !== 'true'); });
     setOpen(window.innerWidth >= 900);
-    window.addEventListener('resize', function() { setOpen(window.innerWidth >= 900); });
   }
 
   // ── Boot ──────────────────────────────────────────────────────────────────
