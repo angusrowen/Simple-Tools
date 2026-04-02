@@ -7,6 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
 
+
 :root{
   --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
   --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
@@ -14,28 +15,30 @@
   --bl:#3f7fb5;--bll:#edf5fb;--am:#b6862c;--aml:#faf2df;--help:#e67e22;--helpl:#fef4e8;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+html{overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;width:100%}
 .topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14)}
 .topbar-logo a{display:flex;align-items:center;gap:10px;text-decoration:none}
 .app-mark{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:var(--gr);color:#fff;font-weight:800;font-size:1rem;box-shadow:0 8px 20px rgba(42,157,103,.28)}
 .topbar-title{color:#fff;font-size:1rem;font-weight:700}
 .topbar-subtitle{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.72);margin-top:2px}
+.topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px;line-height:1.35}
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
 .badge{background:rgba(255,255,255,.15);color:#fff;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px;border:1px solid rgba(255,255,255,.12)}
 .badge.pt{background:rgba(42,157,103,.2);color:#d0fff0;border-color:rgba(42,157,103,.3)}
-.main-wrapper{background:transparent;padding:24px 32px;flex:1}
-.container{max-width:1500px;margin:0 auto}
+.main-wrapper{background:transparent;padding:24px 32px;flex:1;min-width:0;overflow-x:hidden;max-width:100%;box-sizing:border-box;width:100%}
+.container{max-width:1500px;margin:0 auto;width:100%;min-width:0;overflow-x:hidden}
 .hero{background:linear-gradient(135deg,rgba(255,253,250,.98),rgba(248,244,236,.98));border:1px solid var(--bdr);border-radius:22px;padding:22px 26px;margin-bottom:22px;box-shadow:0 12px 30px rgba(45,70,91,.05);display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
 .hero-text .eyebrow{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txl);font-weight:700}
 .hero-text h1{font-size:clamp(1.8rem,2.6vw,2.8rem);line-height:1.08;color:var(--dk);margin:.35rem 0 .55rem 0}
 .hero-text p{max-width:70ch;color:var(--txl);font-size:.98rem}
-.ad-slot{min-width:280px;max-width:380px;flex:0 0 340px;background:rgba(255,255,255,.72);border:1px dashed #b8c8d8;border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ad-slot{min-width:280px;max-width:380px;flex:0 0 auto;width:340px;background:rgba(255,255,255,.72);border:1px dashed #b8c8d8;border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .ad-slot-label{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--txl);font-weight:700;margin-bottom:6px}
 .ad-slot p{font-size:.9rem;color:var(--tx)}
-.layout{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start}
+.layout{display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:24px;align-items:start;min-width:0}
+.layout>*{min-width:0;overflow-x:hidden}
 @media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
-.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06)}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06);min-width:0;box-sizing:border-box;max-width:100%}
 .card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
 .card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
 .card-header-row h2{margin:0;padding:0;border:none}
@@ -147,7 +150,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .collapsible-header h2{color:var(--dk)}
 .collapsible-header:hover h2{color:var(--gr)}
 .collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center}
-.collapsible-header[aria-expanded="true"] .collapse-icon{transform:rotate(180deg)}
+.collapsible-header[aria-expanded="false"] .collapse-icon{transform:rotate(180deg)}
 .collapsible-body{overflow:hidden;transition:max-height .3s ease, opacity .25s ease;max-height:4000px;opacity:1}
 .collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
 .collapsible-header{padding-bottom:8px;border-bottom:2px solid var(--gr);margin-bottom:16px}
@@ -160,62 +163,19 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 
 /* ── Right rail ad ─────────────────────────────────────────────── */
-/* Outer wrapper — wraps main content + rail */
-.page-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 0;
-  width: 100%;
-}
-
-/* Main content takes remaining space */
-.main-wrapper {
-  flex: 1;
-  min-width: 0;
-}
-
-/* Right rail — static, no sticky, pushed down to align with results */
-.right-rail {
-  display: none;
-  width: 200px;
-  min-width: 200px;
-  padding: 0 0 24px 12px;
-  flex-shrink: 0;
-  align-self: flex-start;
-  margin-top: 290px;
-}
-
-/* Ad card styling */
-.rail-ad-unit {
-  background: #fffdfa;
-  border: 1px solid #ddd7cf;
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(45,50,40,.06);
-}
-.rail-ad-label {
-  font-size: .7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .4px;
-  color: #6c7a89;
-  text-align: center;
-  padding: 8px 0 4px;
-  border-bottom: 1px solid #ddd7cf;
-}
-.rail-ad-inner {
-  padding: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 620px;
-}
-
+.page-wrapper{display:flex;justify-content:center;align-items:stretch;gap:0;width:100%;padding-top:0;overflow:hidden;position:relative;min-height:100vh}
+.side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;position:absolute;top:120px;z-index:10}
+.side-rail.left{left:0}
+.side-rail.right{right:0}
+.side-rail-inner{position:sticky;top:80px}
+.side-rail-inner{padding:8px;display:flex;flex-direction:column;align-items:center}
+.rail-ad-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:7px 0 4px;border-bottom:1px solid var(--bdr);margin-bottom:8px;width:100%}
+.rail-ad-inner{display:flex;justify-content:center;align-items:center}
+.rail-ad-unit{background:var(--card);border:1px solid var(--bdr);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(45,50,40,.06)}
+.rail-ad-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:8px 0 4px;border-bottom:1px solid var(--bdr)}
+.rail-ad-inner{padding:8px;display:flex;justify-content:center;align-items:center;min-height:620px}
 /* Show rail only on very wide screens */
-@media (min-width: 1700px) {
-  .right-rail { display: block; }
-}
+@media(min-width:1400px){.side-rail{display:flex;flex-direction:column}}
 
 
 /* ── Mobile mid-page ad ─────────────────────────────────────────── */
@@ -223,10 +183,120 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .mobile-ad-slot .ad-slot-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;margin-bottom:6px}
 .mobile-ad-inner{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:10px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
 @media(max-width:899px){
-  .mobile-ad-slot{display:flex;flex-direction:column}
+  .mobile-ad-slot{display:flex;flex-direction:column;overflow-x:hidden;width:100%}
 }
 
 
+/* ═══════════════════════════════════════════════════════
+   MOBILE — 480px and below (portrait phones)
+   Target: iPhone SE (375px), iPhone 14 (390px),
+           Samsung Galaxy (360–412px)
+═══════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════════════════════
+   TABLET — 481px to 768px
+═══════════════════════════════════════════════════════ */
+
+
+
+
+
+
+/* ═══ S22 / iPhone portrait fix — 360px target ═══ */
+
+
+
+
+/* ═══ Mobile Portrait — Samsung Galaxy S22 / iPhone (360–414px) ═══ */
+
+
+/* ═══ Tablet — 481px to 768px ═══ */
+
+
+/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
+
+
+/* ═══ Tablet — 481px–768px ═══ */
+
+
+/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
+
+
+/* ═══ Tablet — 481px–768px ═══ */
+
+
+/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
+
+
+/* ═══ Tablet — 481px–768px ═══ */
+
+
+/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
+
+
+/* ═══ Tablet 481–768px ═══ */
+
+
+@media(max-width:768px){
+  ins.adsbygoogle,script[src*="googlesyndication"],
+  .ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
+  [data-ad-client],[data-ad-slot]{
+    display:none!important;width:0!important;height:0!important;
+    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
+    position:absolute!important;pointer-events:none!important;
+  }
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;font-size:.78rem!important;max-width:100%!important}
+  .results-lower{grid-template-columns:1fr!important}
+}
+}
+}
+@media(max-width:480px){
+  .main-wrapper{padding:12px!important;box-sizing:border-box!important}
+  .layout{grid-template-columns:1fr!important;gap:10px!important}
+  .card{padding:12px!important}
+  .topbar{padding:8px 14px!important}
+  .topbar-right{flex-wrap:wrap!important;gap:6px!important}
+  .toggle-switch label{font-size:.72rem!important;padding:6px 4px!important}
+  .field input,.field select{font-size:.88rem!important;padding:7px 8px!important}
+  .inline-fields{grid-template-columns:1fr!important}
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:6px!important}
+  .results-lower{grid-template-columns:1fr!important}
+  .pie-card{grid-template-columns:1fr!important}
+  #payPie{width:180px!important;height:180px!important}
+  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;font-size:.74rem!important}
+  .actions-bar{grid-template-columns:1fr 1fr!important}
+  .ft{padding:10px 14px!important;font-size:.7rem!important}
+}
+@media(min-width:481px) and (max-width:768px){
+  .main-wrapper{padding:14px 18px!important;box-sizing:border-box!important}
+  .layout{grid-template-columns:1fr!important}
+}
+
+
+/* Prevent AdSense iframes from causing horizontal scroll */
+ins.adsbygoogle,
+ins.adsbygoogle iframe,
+.ad-slot,
+.mobile-ad-slot,
+.mobile-ad-inner{
+  max-width:100%!important;
+  overflow:hidden!important;
+}
+
+
+
+@media(max-width:1024px) and (pointer:coarse){
+  ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
+  [data-ad-client],[data-ad-slot]{
+    display:none!important;width:0!important;height:0!important;
+    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
+    position:absolute!important;pointer-events:none!important;
+  }
+}
+
+/* ── Home Loan extra styles ── */
 .amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
 .amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
 .amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
@@ -248,41 +318,58 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;justify-content:center}
 .chart-legend-item{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--tx)}
 .chart-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+
 </style>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f8fb;color:#22313f;line-height:1.5}';
+  h+='.hd{background:#3e5f75;padding:16px 32px;border-bottom:1px solid #6a92ad;display:flex;align-items:center;gap:16px}.hd-t{color:#fff;font-size:1rem;font-weight:700}.hd-b{background:#e7f8ef;color:#2a9d67;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;margin-left:auto}.hd-d{color:rgba(255,255,255,.7);font-size:.8rem}';
+  h+='.ct{max-width:1200px;margin:0 auto;padding:24px}.cd{background:#fff;border:1px solid #d7e1ea;border-radius:16px;padding:20px 24px;margin-bottom:16px}.cd h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #2a9d67;color:#2d465b}';
+  h+='.sg{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}.sb{background:#f4f8fb;border:1px solid #d7e1ea;border-radius:12px;padding:12px 14px}.sb.hl{background:#e7f8ef;border-color:#2a9d67}.sb .lb{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:#6c7a89;font-weight:600;margin-bottom:2px}.sb .vl{font-size:1.15rem;font-weight:700;color:#2d465b}.sb.hl .vl{color:#2a9d67;font-size:1.3rem}';
+  h+='table{width:100%;border-collapse:collapse;font-size:.88rem}th{text-align:left;padding:8px 10px;background:#f4f8fb;font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:#6c7a89;border-bottom:2px solid #d7e1ea}th:not(:first-child){text-align:right}td{padding:8px 10px;border-bottom:1px solid #d7e1ea;font-variant-numeric:tabular-nums}td:not(:first-child){text-align:right}';
+  h+='.total-row td{font-weight:700;border-top:2px solid #2d465b;border-bottom:none}.subtotal-row td{font-weight:600;border-top:1px solid #6c7a89}.indent td:first-child{padding-left:24px;color:#6c7a89;font-size:.82rem}.section-header td{font-weight:700;background:#f4f8fb;padding-top:12px;border-bottom:1px solid #d7e1ea;font-size:.8rem;text-transform:uppercase;letter-spacing:.3px;color:#6c7a89}.negative-val{color:#e53935!important;font-weight:700!important}';
+  h+='.bracket-active td{color:#22313f}.bracket-inactive td{color:#6c7a89}.lw{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}.st{font-size:.85rem;font-weight:700;margin:0 0 8px;color:#2d465b}';
+  h+='.stamp{font-size:.78rem;color:#6c7a89;margin-top:16px;padding-top:12px;border-top:1px solid #d7e1ea;line-height:1.5}';
+  h+='@media print{body{background:#fff}.ct{padding:16px}.cd{box-shadow:none;break-inside:avoid}}@media(max-width:800px){.sg{grid-template-columns:1fr 1fr}.lw{grid-template-columns:1fr}}';
+  h+='
+</style>
+<!-- Google AdSense -->
+  <script>if(window.innerWidth>768 && navigator.maxTouchPoints===0){document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></scr'+'ipt>');}</script>
 </head>
 <body>
 
 <div class="topbar">
   <div class="topbar-logo">
-    <a href="index.html" title="Back to calculators"><span class="app-mark">AF</span></a>
+    <a href="index.html" title="Back to calculators" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;color:#fff;text-decoration:none">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </a>
   </div>
   <div class="topbar-divider"></div>
   <div>
     <div class="topbar-title">Home Loan Repayment Calculator</div>
-    <div class="topbar-subtitle">Australian Finance Tools</div>
+    <div class="topbar-desc">Estimate repayments, interest costs &amp; loan payoff schedule</div>
   </div>
-  <div class="topbar-right"><span class="badge">2025–26</span></div>
+  <div class="topbar-right">
+    <span class="badge">2025-26</span>
+  </div>
 </div>
 
 <div class="page-wrapper">
+  <div class="side-rail left">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+  </div>
 <div class="main-wrapper">
 <div class="container">
 
-<div class="hero">
-  <div class="hero-text">
-    <div class="eyebrow">Australian Finance Tools</div>
-    <h1>Home Loan Repayment Calculator</h1>
-    <p>Estimate your regular repayments, total interest paid, and see how your loan balance decreases over time.</p>
-  </div>
-  <div class="ad-slot">
-    <div class="ad-slot-label">Advertisement</div>
-    <p style="font-size:.82rem;color:var(--txl);text-align:center">Google Ad</p>
-  </div>
-</div>
-
 <div class="layout">
 
-<!-- LEFT -->
+<!-- LEFT INPUTS -->
 <div>
   <div class="card">
     <div class="card-header-row">
@@ -397,19 +484,21 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   </div>
 </div><!-- end left -->
 
-<!-- RIGHT -->
+<!-- RIGHT RESULTS -->
 <div>
-  <!-- Mobile mid-page ad (300x250, visible below 900px) -->
+  <!-- Mobile mid-page ad — 300x250 Medium Rectangle -->
+  <!-- Visible only on screens below 900px wide -->
   <div class="mobile-ad-slot">
     <div class="mobile-ad-inner">
       <div class="ad-slot-label">Advertisement</div>
       <ins class="adsbygoogle"
-           style="display:inline-block;width:300px;height:250px"
+           style="display:inline-block;max-width:100%;width:300px;height:250px"
            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
            data-ad-slot="XXXXXXXXXX"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
   </div>
+
   <div class="card">
     <h2>Results</h2>
 
@@ -514,26 +603,25 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       </button>
     </div>
 
-    <div class="note">Estimates only. Assumes a constant interest rate for the full loan term and does not account for lender fees, rate changes, or early repayment restrictions. Not personal financial advice.</div>
+    <div class="note">Estimates only. Assumes a constant interest rate and does not account for lender fees, rate changes, or early repayment restrictions. Not personal financial advice.</div>
   </div>
 </div><!-- end right -->
 
 </div><!-- end layout -->
 </div><!-- /container -->
-  </div><!-- /main-wrapper -->
+</div><!-- /main-wrapper -->
 
-  <div class="right-rail">
-    <div class="rail-ad-unit">
+  <div class="side-rail right">
+    <div class="side-rail-inner">
       <div class="rail-ad-label">Advertisement</div>
       <div class="rail-ad-inner">
-        <ins class="adsbygoogle"
-             style="display:inline-block;width:160px;height:600px"
-             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-             data-ad-slot="XXXXXXXXXX"></ins>
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
     </div>
-  </div>
+  
+  </div><!-- /side-rail right -->
 
 </div><!-- /page-wrapper -->
 
