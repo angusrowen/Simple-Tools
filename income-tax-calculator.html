@@ -34,7 +34,7 @@ html{overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe 
 .app-mark{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:var(--gr);color:#fff;font-weight:800;font-size:1rem;box-shadow:0 8px 20px rgba(42,157,103,.28)}
 .topbar-title{color:#fff;font-size:1rem;font-weight:700}
 .topbar-subtitle{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.72);margin-top:2px}
-.topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px;line-height:1.35}
+.topbar-desc{font-size:.68rem;color:rgba(255,255,255,.6);margin-top:3px;line-height:1.35}
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
 .badge{background:rgba(255,255,255,.15);color:#fff;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px;border:1px solid rgba(255,255,255,.12)}
@@ -84,7 +84,7 @@ html{overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe 
 .warning-banner{background:#fff0ef;border:1px solid var(--red);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:.84rem;color:var(--red);font-weight:600;display:none}
 .warning-banner .warning-detail{font-weight:400;color:var(--tx);margin-top:4px;font-size:.8rem;line-height:1.5}
 .novated-fields,.ftb-fields,.seniors-fields,.mls-fields,.hourly-fields{margin-top:8px;margin-bottom:8px}
-.results-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.results-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:20px}
 .result-box{background:#f8f5ef;border:1px solid var(--bdr);border-radius:12px;padding:12px 14px}
 .result-box.highlight{background:var(--grl);border-color:var(--gr)}
 .result-box .label{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);font-weight:600;margin-bottom:2px}
@@ -326,7 +326,6 @@ ins.adsbygoogle iframe,
   <div class="topbar-right">
     <span class="badge pt hidden" id="ptBadge">Part-Time</span>
     <span class="badge" id="fyBadge">FY 2025-26</span>
-    <span style="color:rgba(255,255,255,.5);font-size:.8rem" id="fySubtitle">1 Jul 2025 – 30 Jun 2026</span>
   </div>
 </div>
 
@@ -539,9 +538,26 @@ ins.adsbygoogle iframe,
       </div>
     </div>
 
-    <div class="checkbox-field" style="margin-top:4px"><input type="checkbox" id="showExtraTax"><label for="showExtraTax">Withhold extra tax each pay period</label></div>
+    <div class="section-label">Withholding</div>
+    <div class="checkbox-field"><input type="checkbox" id="showExtraTax"><label for="showExtraTax">Withhold extra tax each pay period</label></div>
     <div id="extraTaxWrap" class="hidden">
       <div class="field" style="margin-top:6px"><label>Extra Tax Withheld Per Pay ($)</label><div class="input-wrap"><span class="prefix">$</span><input type="number" class="has-prefix" id="extraTax" placeholder="0" min="0" step="1"></div></div>
+    </div>
+    <div class="checkbox-field" style="margin-top:6px"><input type="checkbox" id="showPurchasedLeave"><label for="showPurchasedLeave">Purchased leave</label></div>
+    <div id="purchasedLeaveWrap" class="hidden">
+      <div class="field" style="margin-top:6px">
+        <label>Purchased Leave Weeks Per Year</label>
+        <input type="number" id="purchasedLeaveWeeks" placeholder="0" min="0" max="8" step="0.5">
+        <div class="field-hint">Salary is reduced proportionally, lowering taxable income and take-home pay.</div>
+      </div>
+    </div>
+    <div class="checkbox-field" style="margin-top:6px"><input type="checkbox" id="showGeneralSalSac"><label for="showGeneralSalSac">Additional salary sacrifice</label></div>
+    <div id="generalSalSacWrap" class="hidden">
+      <div class="field" style="margin-top:6px">
+        <label>Annual Salary Sacrifice Amount ($)</label>
+        <div class="input-wrap"><span class="prefix">$</span><input type="number" class="has-prefix" id="generalSalSacAmt" placeholder="0" min="0" step="100"></div>
+        <div class="field-hint">Pre-tax deduction (e.g. car, laptop, other benefits). Reduces taxable income.</div>
+      </div>
     </div>
 
     <div class="section-label">Medicare Levy Surcharge</div>
@@ -582,13 +598,6 @@ ins.adsbygoogle iframe,
       </div>
     </div>
 
-    <div class="section-label">Novated Lease</div>
-    <div class="checkbox-field"><input type="checkbox" id="novatedLease"><label for="novatedLease">I have a novated lease</label></div>
-    <div id="novatedFields" class="novated-fields hidden">
-      <div class="field"><label>Pre-Tax Deduction per year ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="novatedPreTax" placeholder="0" min="0" step="100"></div><div class="field-hint">Salary sacrifice portion, reduces taxable income.</div></div>
-      <div class="field"><label>Post-Tax Deduction per year ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="novatedPostTax" placeholder="0" min="0" step="100"></div><div class="field-hint">Employee contribution, deducted from net pay after tax.</div></div>
-    </div>
-
     </div><!-- /collapsible-body -->
   </div>
 
@@ -617,9 +626,17 @@ ins.adsbygoogle iframe,
         <div class="label">Take-Home Pay (per period)</div>
         <div class="value" id="takeHomePeriod">$0.00</div>
       </div>
+      <div class="result-box highlight">
+        <div class="label">Annual Take-Home Pay</div>
+        <div class="value" id="takeHomeAnnual">$0</div>
+      </div>
       <div class="result-box">
         <div class="label">Gross Taxable Income</div>
         <div class="value" id="grossDisplay">$0</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Total Super</div>
+        <div class="value" id="totalSuperDisplay">$0</div>
       </div>
       <div class="result-box">
         <div class="label">Effective Tax Rate</div>
@@ -628,10 +645,6 @@ ins.adsbygoogle iframe,
       <div class="result-box">
         <div class="label">Marginal Tax Rate</div>
         <div class="value" id="marginalRate">0%</div>
-      </div>
-      <div class="result-box">
-        <div class="label">Total Super</div>
-        <div class="value" id="totalSuperDisplay">$0</div>
       </div>
     </div>
 
@@ -818,7 +831,8 @@ function syncVisibility(){
   var pt=document.getElementById('basisPart').checked;
   document.getElementById('partTimeFields').classList.toggle('hidden',!pt);
   document.getElementById('ptBadge').classList.toggle('hidden',!pt);
-  document.getElementById('novatedFields').classList.toggle('hidden',!document.getElementById('novatedLease').checked);
+  document.getElementById('purchasedLeaveWrap').classList.toggle('hidden',!document.getElementById('showPurchasedLeave').checked);
+  document.getElementById('generalSalSacWrap').classList.toggle('hidden',!document.getElementById('showGeneralSalSac').checked);
   document.getElementById('seniorsFields').classList.toggle('hidden',!document.getElementById('seniorsOffset').checked);
   document.getElementById('ftbFields').classList.toggle('hidden',!document.getElementById('ftbEnabled').checked);
   document.getElementById('mlsFields').classList.toggle('hidden',!document.getElementById('mlsEnabled').checked);
@@ -845,8 +859,7 @@ function calculate(){
   var superRate=(parseFloat(document.getElementById('superRate').value)||0)/100;
   var salSac=parseFloat(document.getElementById('salSac').value)||0;
   var extraTax=parseFloat(document.getElementById('extraTax').value)||0;
-  var novatedPreTax=document.getElementById('novatedLease').checked?(parseFloat(document.getElementById('novatedPreTax').value)||0):0;
-  var novatedPostTax=document.getElementById('novatedLease').checked?(parseFloat(document.getElementById('novatedPostTax').value)||0):0;
+  var novatedPreTax=0;var novatedPostTax=0;
   var bonus=document.getElementById('showBonus').checked?(parseFloat(document.getElementById('bonus').value)||0):0;
   var inputSalary=getInputSalary();
   var baseSalary=inputSalary;
@@ -882,7 +895,10 @@ function calculate(){
   var sjSuperRate=getSJSuperRate();
   var sjSalSac=getSJSalSac();
   var sjSuperAmt=secondJobIncome*sjSuperRate;
-  var taxableSalary=baseSalary-novatedPreTax-salSac+bonus+secondJobIncome;
+  var purchasedLeaveWeeks=document.getElementById('showPurchasedLeave').checked?(parseFloat(document.getElementById('purchasedLeaveWeeks').value)||0):0;
+  var purchasedLeaveDeduction=purchasedLeaveWeeks>0?(purchasedLeaveWeeks/52)*baseSalary:0;
+  var generalSalSac=document.getElementById('showGeneralSalSac').checked?(parseFloat(document.getElementById('generalSalSacAmt').value)||0):0;
+  var taxableSalary=baseSalary-purchasedLeaveDeduction-generalSalSac-salSac+bonus+secondJobIncome;
   var grossTaxable=taxableSalary;
   // tax calc
   var taxResult;
@@ -936,6 +952,7 @@ function calculate(){
   else{margRate=fy.noTfnRate*100;}
   // update summary boxes
   document.getElementById('takeHomePeriod').textContent=fmt(netPeriod);
+  document.getElementById('takeHomeAnnual').textContent=fmtW(netAnnual);
   document.getElementById('grossDisplay').textContent=fmtW(grossTaxable);
   document.getElementById('effectiveRate').textContent=effRate.toFixed(1)+'%';
   document.getElementById('marginalRate').textContent=margRate.toFixed(0)+'%';
@@ -948,7 +965,8 @@ function calculate(){
   addRow('Gross Salary',baseSalary);
   if(secondJobIncome>0)addRow('Second Job Income',secondJobIncome);
   if(bonus>0)addRow('Additional Income / Bonus',bonus);
-  if(novatedPreTax>0)addRow('Novated Lease (Pre-Tax)',novatedPreTax,{negative:true,cls:'indent negative'});
+  if(purchasedLeaveDeduction>0)addRow('Purchased Leave',purchasedLeaveDeduction,{negative:true,cls:'indent negative'});
+  if(generalSalSac>0)addRow('General Salary Sacrifice',generalSalSac,{negative:true,cls:'indent negative'});
   if(salSac>0)addRow('Super Salary Sacrifice',salSac,{negative:true,cls:'indent negative'});
   addRow('Gross Taxable Income',grossTaxable,{cls:'subtotal-row'});
   addSection('DEDUCTIONS');
@@ -960,7 +978,6 @@ function calculate(){
   if(help>0)addRow('HECS/HELP Repayment',help,{negative:true,cls:'help-row'});
   if(extraTax*freq>0)addRow('Extra Tax Withheld',extraTax*freq,{negative:true,cls:'negative'});
   if(div293>0)addRow('Division 293 Tax',div293,{negative:true,cls:'negative'});
-  if(novatedPostTax>0)addRow('Novated Lease (Post-Tax)',novatedPostTax,{negative:true,cls:'negative'});
   if(ftbAnnual>0)addRow('Family Tax Benefit (A)',-ftbAnnual,{cls:'indent'});
   addSection('TAKE-HOME');
   addRow('Net Take-Home Pay',netAnnual,{cls:'takehome-row'});
@@ -1065,7 +1082,7 @@ function updatePie(takeHome,tax,helpAmt,superAmt){
 function onFYChange(){
   var fy=getFY();
   document.getElementById('fyBadge').textContent=fy.label;
-  document.getElementById('fySubtitle').textContent=fy.dates;
+  
   document.getElementById('superRate').value=fy.superDefault;
   document.getElementById('sjSuperRate').value=fy.superDefault;
   calculate();
@@ -1093,9 +1110,12 @@ function resetAll(){
   var set=document.getElementById('showExtraTax');if(set)set.checked=false;
   document.getElementById('mlsEnabled').checked=false;
   document.getElementById('mlsFamily').value='single';
-  document.getElementById('novatedLease').checked=false;
-  document.getElementById('novatedPreTax').value='';
-  document.getElementById('novatedPostTax').value='';
+  document.getElementById('showPurchasedLeave').checked=false;
+  document.getElementById('purchasedLeaveWeeks').value='';
+  document.getElementById('showGeneralSalSac').checked=false;
+  document.getElementById('generalSalSacAmt').value='';
+  if(document.getElementById('purchasedLeaveWrap'))document.getElementById('purchasedLeaveWrap').classList.add('hidden');
+  if(document.getElementById('generalSalSacWrap'))document.getElementById('generalSalSacWrap').classList.add('hidden');
   document.getElementById('seniorsOffset').checked=false;
   document.getElementById('seniorsStatus').value='single';
   document.getElementById('ftbEnabled').checked=false;
@@ -1202,7 +1222,7 @@ function setCollapsibleByViewport(){
 document.addEventListener('DOMContentLoaded',function(){
   setCollapsibleByViewport();
   // number/select inputs
-  ['salary','hourlyRate','hourlyHours','hourlyWeeks','superRate','salSac','extraTax','novatedPreTax','novatedPostTax','bonus','actualHours','fteHours','ftbUnder13','ftb13to15','ftb16to19','ftbFamilyIncome','sjSalary','sjHourlyRate','sjHours','sjWeeks','sjSuperRate','sjSalSac','sjActualHours','sjFteHours'].forEach(function(id){
+  ['salary','hourlyRate','hourlyHours','hourlyWeeks','superRate','salSac','extraTax','purchasedLeaveWeeks','generalSalSacAmt','bonus','actualHours','fteHours','ftbUnder13','ftb13to15','ftb16to19','ftbFamilyIncome','sjSalary','sjHourlyRate','sjHours','sjWeeks','sjSuperRate','sjSalSac','sjActualHours','sjFteHours'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.addEventListener('input',calculate);
   });
   ['financialYear','frequency','residency','mlsFamily','seniorsStatus'].forEach(function(id){
@@ -1211,7 +1231,7 @@ document.addEventListener('DOMContentLoaded',function(){
   ['methodAnnual','methodHourly','superNo','superYes','basisFull','basisPart','sjAnnual','sjHourly','sjBasisFull','sjBasisPart','helpDebtYes','helpDebtNo','tfnYes','tfnNo'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
   });
-  ['novatedLease','seniorsOffset','ftbEnabled','mlsEnabled','hasSecondJob','showBonus','sjNoTFN','showExtraTax'].forEach(function(id){
+  ['showPurchasedLeave','showGeneralSalSac','seniorsOffset','ftbEnabled','mlsEnabled','hasSecondJob','showBonus','sjNoTFN','showExtraTax'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
   });
   onFYChange();
