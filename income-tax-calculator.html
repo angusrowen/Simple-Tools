@@ -3,9 +3,17 @@
 <head>
 <script>
 if(window.innerWidth<=768){
+  // Completely disable AdSense on mobile
+  window.adsbygoogle={loaded:true,push:function(){}};
+  // Remove AdSense script before it loads
   document.addEventListener('DOMContentLoaded',function(){
-    document.querySelectorAll('ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail')
-      .forEach(function(el){el.remove();});
+    // Remove every ad-related element from DOM
+    document.querySelectorAll(
+      'ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,[data-ad-client],[data-ad-slot]'
+    ).forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});
+    // Remove AdSense script tags
+    document.querySelectorAll('script[src*="googlesyndication"]')
+      .forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});
   });
 }
 </script>
@@ -170,10 +178,11 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 
 /* ── Right rail ad ─────────────────────────────────────────────── */
-.page-wrapper{display:flex;justify-content:center;align-items:stretch;gap:0;width:100%;padding-top:0;overflow:hidden}
-.side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;position:fixed;top:50%;transform:translateY(-50%);z-index:10}
+.page-wrapper{display:flex;justify-content:center;align-items:stretch;gap:0;width:100%;padding-top:0;overflow:hidden;position:relative;min-height:100vh}
+.side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;position:absolute;top:120px;z-index:10}
 .side-rail.left{left:0}
 .side-rail.right{right:0}
+.side-rail-inner{position:sticky;top:80px}
 .side-rail-inner{padding:8px;display:flex;flex-direction:column;align-items:center}
 .rail-ad-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:7px 0 4px;border-bottom:1px solid var(--bdr);margin-bottom:8px;width:100%}
 .rail-ad-inner{display:flex;justify-content:center;align-items:center}
@@ -245,7 +254,14 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 
 @media(max-width:768px){
-  ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail{display:none!important;width:0!important;height:0!important;max-width:0!important;overflow:hidden!important}
+  ins.adsbygoogle,script[src*="googlesyndication"],
+  .ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
+  [data-ad-client],[data-ad-slot]{
+    display:none!important;width:0!important;height:0!important;
+    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
+    position:absolute!important;pointer-events:none!important;
+  }
+}
 }
 @media(max-width:480px){
   .main-wrapper{padding:12px!important;box-sizing:border-box!important}
@@ -283,7 +299,7 @@ ins.adsbygoogle iframe,
 
 </style>
   <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script>if(window.innerWidth>768){document.write('<scr'+'ipt async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX\" crossorigin=\"anonymous\"></scr'+'ipt>');}</script>
 </head>
 <body>
 <div class="topbar">
