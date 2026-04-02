@@ -43,7 +43,7 @@ html{overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe 
 .badge{background:rgba(255,255,255,.15);color:#fff;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px;border:1px solid rgba(255,255,255,.12)}
 .badge.pt{background:rgba(42,157,103,.2);color:#d0fff0;border-color:rgba(42,157,103,.3)}
 .main-wrapper{background:transparent;padding:24px 32px;flex:1;min-width:0;overflow-x:hidden;max-width:100%;box-sizing:border-box;width:100%}
-.container{max-width:1500px;margin:0 auto;width:100%}
+.container{max-width:1500px;margin:0 auto;width:100%;min-width:0;overflow-x:hidden}
 .hero{background:linear-gradient(135deg,rgba(255,253,250,.98),rgba(248,244,236,.98));border:1px solid var(--bdr);border-radius:22px;padding:22px 26px;margin-bottom:22px;box-shadow:0 12px 30px rgba(45,70,91,.05);display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
 .hero-text .eyebrow{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--txl);font-weight:700}
 .hero-text h1{font-size:clamp(1.8rem,2.6vw,2.8rem);line-height:1.08;color:var(--dk);margin:.35rem 0 .55rem 0}
@@ -51,9 +51,10 @@ html{overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe 
 .ad-slot{min-width:280px;max-width:380px;flex:0 0 auto;width:340px;background:rgba(255,255,255,.72);border:1px dashed #b8c8d8;border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .ad-slot-label{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--txl);font-weight:700;margin-bottom:6px}
 .ad-slot p{font-size:.9rem;color:var(--tx)}
-.layout{display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:24px;align-items:start}
+.layout{display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:24px;align-items:start;min-width:0}
+.layout>*{min-width:0;overflow-x:hidden}
 @media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
-.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06)}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06);min-width:0;box-sizing:border-box;max-width:100%}
 .card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
 .card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
 .card-header-row h2{margin:0;padding:0;border:none}
@@ -1161,45 +1162,7 @@ function saveHTML(){
   h+='<div class="cd"><h2>Detailed Breakdown</h2><table><thead><tr><th>Component</th><th>Weekly</th><th>Fortnightly</th><th>Monthly</th><th>Annual</th></tr></thead><tbody>'+resultsHTML+'</tbody></table></div>';
   h+='<div class="cd"><div class="lw"><div><div class="st">Tax Brackets ('+fy.label+')</div><table><thead><tr><th>Bracket</th><th>Taxable</th><th>Tax Applied</th></tr></thead><tbody>'+bracketHTML+'</tbody></table></div>';
   h+='<div><div class="st">Key Rates</div><table><thead><tr><th>Parameter</th><th>Value</th></tr></thead><tbody>'+ratesHTML+'</tbody></table></div></div></div>';
-  h+='<p class="stamp">Estimates only — not financial advice. Generated on '+dateStr+' for '+fy.label+'.</p></div>
-<script>
-window.addEventListener('load', function() {
-  var lines = [
-    'viewport: ' + window.innerWidth + 'x' + window.innerHeight,
-    'devicePixelRatio: ' + window.devicePixelRatio,
-    'body.scrollWidth: ' + document.body.scrollWidth,
-    'doc.scrollWidth: ' + document.documentElement.scrollWidth,
-    'adsbygoogle: ' + (window.adsbygoogle ? 'exists push=' + typeof window.adsbygoogle.push : 'undefined')
-  ];
-  var els = {
-    'page-wrapper': document.querySelector('.page-wrapper'),
-    'main-wrapper': document.querySelector('.main-wrapper'),
-    'container': document.querySelector('.container'),
-    'layout': document.querySelector('.layout'),
-    'card(first)': document.querySelector('.card'),
-  };
-  for(var k in els){
-    if(els[k]){
-      var r=els[k].getBoundingClientRect();
-      var cs=window.getComputedStyle(els[k]);
-      lines.push(k+': w='+Math.round(r.width)+' L='+Math.round(r.left)+' R='+Math.round(r.right)+' padL='+cs.paddingLeft+' padR='+cs.paddingRight);
-    }
-  }
-  // Show any ad elements still in DOM
-  var adEls = document.querySelectorAll('ins.adsbygoogle,.ad-slot,.mobile-ad-slot');
-  lines.push('ad elements in DOM: ' + adEls.length);
-  adEls.forEach(function(el,i){
-    var r=el.getBoundingClientRect();
-    lines.push(' ad['+i+']: w='+Math.round(r.width)+' display='+window.getComputedStyle(el).display);
-  });
-  var div=document.createElement('div');
-  div.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:rgba(0,0,0,0.88);color:#0f0;font-family:monospace;font-size:10px;padding:6px 8px;max-height:60vh;overflow-y:auto;white-space:pre;line-height:1.6';
-  div.textContent=lines.join('\n');
-  document.body.appendChild(div);
-});
-</script>
-
-</body></html>';
+  h+='<p class="stamp">Estimates only — not financial advice. Generated on '+dateStr+' for '+fy.label+'.</p></div></body></html>';
   var blob=new Blob([h],{type:'text/html;charset=utf-8'});
   var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='tax-calculation-'+fy.label.replace(/\s/g,'-')+'-'+now.toISOString().slice(0,10)+'.html';link.click();URL.revokeObjectURL(link.href);
 }
@@ -1240,44 +1203,6 @@ document.addEventListener('DOMContentLoaded',function(){
     var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
   });
   onFYChange();
-});
-</script>
-
-
-<script>
-window.addEventListener('load', function() {
-  var lines = [
-    'viewport: ' + window.innerWidth + 'x' + window.innerHeight,
-    'devicePixelRatio: ' + window.devicePixelRatio,
-    'body.scrollWidth: ' + document.body.scrollWidth,
-    'doc.scrollWidth: ' + document.documentElement.scrollWidth,
-    'adsbygoogle: ' + (window.adsbygoogle ? 'exists push=' + typeof window.adsbygoogle.push : 'undefined')
-  ];
-  var els = {
-    'page-wrapper': document.querySelector('.page-wrapper'),
-    'main-wrapper': document.querySelector('.main-wrapper'),
-    'container': document.querySelector('.container'),
-    'layout': document.querySelector('.layout'),
-    'card(first)': document.querySelector('.card'),
-  };
-  for(var k in els){
-    if(els[k]){
-      var r=els[k].getBoundingClientRect();
-      var cs=window.getComputedStyle(els[k]);
-      lines.push(k+': w='+Math.round(r.width)+' L='+Math.round(r.left)+' R='+Math.round(r.right)+' padL='+cs.paddingLeft+' padR='+cs.paddingRight);
-    }
-  }
-  // Show any ad elements still in DOM
-  var adEls = document.querySelectorAll('ins.adsbygoogle,.ad-slot,.mobile-ad-slot');
-  lines.push('ad elements in DOM: ' + adEls.length);
-  adEls.forEach(function(el,i){
-    var r=el.getBoundingClientRect();
-    lines.push(' ad['+i+']: w='+Math.round(r.width)+' display='+window.getComputedStyle(el).display);
-  });
-  var div=document.createElement('div');
-  div.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:rgba(0,0,0,0.88);color:#0f0;font-family:monospace;font-size:10px;padding:6px 8px;max-height:60vh;overflow-y:auto;white-space:pre;line-height:1.6';
-  div.textContent=lines.join('\n');
-  document.body.appendChild(div);
 });
 </script>
 
