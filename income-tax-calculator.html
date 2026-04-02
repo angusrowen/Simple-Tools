@@ -2,6 +2,7 @@
 <html lang="en-AU">
 <head>
 <meta charset="UTF-8">
+<style>html{overflow-x:hidden}body{overflow-x:hidden}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Australian Finance Tools — Income Tax Calculator</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -297,6 +298,17 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   .checkbox-field{align-items:flex-start!important;gap:8px!important}
   input[type=checkbox]{flex-shrink:0!important;margin-top:2px!important}
 }
+
+/* Prevent AdSense iframes from causing horizontal scroll */
+ins.adsbygoogle,
+ins.adsbygoogle iframe,
+.ad-slot,
+.mobile-ad-slot,
+.mobile-ad-inner{
+  max-width:100%!important;
+  overflow:hidden!important;
+}
+
 </style>
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
@@ -336,7 +348,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <!-- Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
     <!-- Replace data-ad-slot value with your ad slot ID -->
     <ins class="adsbygoogle"
-         style="display:inline-block;width:320px;height:100px"
+         style="display:inline-block;max-width:100%;width:320px;height:100px"
          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
          data-ad-slot="XXXXXXXXXX"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -597,7 +609,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   <div class="mobile-ad-inner">
     <div class="ad-slot-label">Advertisement</div>
     <ins class="adsbygoogle"
-         style="display:inline-block;width:300px;height:250px"
+         style="display:inline-block;max-width:100%;width:300px;height:250px"
          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
          data-ad-slot="XXXXXXXXXX"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -702,7 +714,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <!-- Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
       <!-- Replace data-ad-slot value with your ad slot ID -->
       <ins class="adsbygoogle"
-           style="display:inline-block;width:160px;height:600px"
+           style="display:inline-block;max-width:100%;width:160px;height:600px"
            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
            data-ad-slot="XXXXXXXXXX"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -1171,41 +1183,7 @@ function saveHTML(){
   h+='<div class="cd"><h2>Detailed Breakdown</h2><table><thead><tr><th>Component</th><th>Weekly</th><th>Fortnightly</th><th>Monthly</th><th>Annual</th></tr></thead><tbody>'+resultsHTML+'</tbody></table></div>';
   h+='<div class="cd"><div class="lw"><div><div class="st">Tax Brackets ('+fy.label+')</div><table><thead><tr><th>Bracket</th><th>Taxable</th><th>Tax Applied</th></tr></thead><tbody>'+bracketHTML+'</tbody></table></div>';
   h+='<div><div class="st">Key Rates</div><table><thead><tr><th>Parameter</th><th>Value</th></tr></thead><tbody>'+ratesHTML+'</tbody></table></div></div></div>';
-  h+='<p class="stamp">Estimates only — not financial advice. Generated on '+dateStr+' for '+fy.label+'.</p></div>
-<script>
-window.addEventListener('load', function() {
-  var els = {
-    'viewport w': null,
-    'html': document.documentElement,
-    'body': document.body,
-    'page-wrapper': document.querySelector('.page-wrapper'),
-    'main-wrapper': document.querySelector('.main-wrapper'),
-    'container': document.querySelector('.container'),
-    'layout': document.querySelector('.layout'),
-    'card': document.querySelector('.card'),
-    'card-header-row': document.querySelector('.card-header-row'),
-    'hero': document.querySelector('.hero'),
-  };
-  var lines = ['viewport: ' + window.innerWidth + 'x' + window.innerHeight];
-  lines.push('devicePixelRatio: ' + window.devicePixelRatio);
-  for (var k in els) {
-    if (els[k]) {
-      var r = els[k].getBoundingClientRect();
-      var cs = window.getComputedStyle(els[k]);
-      lines.push(k + ': w=' + Math.round(r.width) + ' L=' + Math.round(r.left) + ' R=' + Math.round(r.right) + ' pad=' + cs.paddingLeft + '/' + cs.paddingRight);
-    }
-  }
-  // Also check scrollWidth
-  lines.push('body.scrollWidth=' + document.body.scrollWidth);
-  lines.push('doc.scrollWidth=' + document.documentElement.scrollWidth);
-  var div = document.createElement('div');
-  div.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:rgba(0,0,0,0.88);color:#0f0;font-family:monospace;font-size:10px;padding:6px 8px;max-height:55vh;overflow-y:auto;white-space:pre;line-height:1.5';
-  div.textContent = lines.join('\n');
-  document.body.appendChild(div);
-});
-</script>
-
-</body></html>';
+  h+='<p class="stamp">Estimates only — not financial advice. Generated on '+dateStr+' for '+fy.label+'.</p></div></body></html>';
   var blob=new Blob([h],{type:'text/html;charset=utf-8'});
   var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='tax-calculation-'+fy.label.replace(/\s/g,'-')+'-'+now.toISOString().slice(0,10)+'.html';link.click();URL.revokeObjectURL(link.href);
 }
@@ -1246,40 +1224,6 @@ document.addEventListener('DOMContentLoaded',function(){
     var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
   });
   onFYChange();
-});
-</script>
-
-
-<script>
-window.addEventListener('load', function() {
-  var els = {
-    'viewport w': null,
-    'html': document.documentElement,
-    'body': document.body,
-    'page-wrapper': document.querySelector('.page-wrapper'),
-    'main-wrapper': document.querySelector('.main-wrapper'),
-    'container': document.querySelector('.container'),
-    'layout': document.querySelector('.layout'),
-    'card': document.querySelector('.card'),
-    'card-header-row': document.querySelector('.card-header-row'),
-    'hero': document.querySelector('.hero'),
-  };
-  var lines = ['viewport: ' + window.innerWidth + 'x' + window.innerHeight];
-  lines.push('devicePixelRatio: ' + window.devicePixelRatio);
-  for (var k in els) {
-    if (els[k]) {
-      var r = els[k].getBoundingClientRect();
-      var cs = window.getComputedStyle(els[k]);
-      lines.push(k + ': w=' + Math.round(r.width) + ' L=' + Math.round(r.left) + ' R=' + Math.round(r.right) + ' pad=' + cs.paddingLeft + '/' + cs.paddingRight);
-    }
-  }
-  // Also check scrollWidth
-  lines.push('body.scrollWidth=' + document.body.scrollWidth);
-  lines.push('doc.scrollWidth=' + document.documentElement.scrollWidth);
-  var div = document.createElement('div');
-  div.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:rgba(0,0,0,0.88);color:#0f0;font-family:monospace;font-size:10px;padding:6px 8px;max-height:55vh;overflow-y:auto;white-space:pre;line-height:1.5';
-  div.textContent = lines.join('\n');
-  document.body.appendChild(div);
 });
 </script>
 
