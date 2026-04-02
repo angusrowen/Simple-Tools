@@ -2,16 +2,13 @@
 <html lang="en-AU">
 <head>
 <script>
-if(window.innerWidth<=768){
-  // Completely disable AdSense on mobile
+var _isMobile = window.innerWidth<=768 || (navigator.maxTouchPoints>0 && window.innerWidth<=1024);
+if(_isMobile){
   window.adsbygoogle={loaded:true,push:function(){}};
-  // Remove AdSense script before it loads
   document.addEventListener('DOMContentLoaded',function(){
-    // Remove every ad-related element from DOM
     document.querySelectorAll(
       'ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,[data-ad-client],[data-ad-slot]'
     ).forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});
-    // Remove AdSense script tags
     document.querySelectorAll('script[src*="googlesyndication"]')
       .forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});
   });
@@ -262,6 +259,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     max-width:0!important;overflow:hidden!important;visibility:hidden!important;
     position:absolute!important;pointer-events:none!important;
   }
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;font-size:.78rem!important;max-width:100%!important}
+  .results-lower{grid-template-columns:1fr!important}
+}
 }
 }
 @media(max-width:480px){
@@ -298,9 +299,17 @@ ins.adsbygoogle iframe,
 }
 
 
-</style>
+
+@media(max-width:1024px) and (pointer:coarse){
+  ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
+  [data-ad-client],[data-ad-slot]{
+    display:none!important;width:0!important;height:0!important;
+    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
+    position:absolute!important;pointer-events:none!important;
+  }
+}</style>
   <!-- Google AdSense -->
-  <script>if(window.innerWidth>768){document.write('<scr'+'ipt async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX\" crossorigin=\"anonymous\"></scr'+'ipt>');}</script>
+  <script>if(window.innerWidth>768 && navigator.maxTouchPoints===0){document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></scr'+'ipt>');}</script>
 </head>
 <body>
 <div class="topbar">
