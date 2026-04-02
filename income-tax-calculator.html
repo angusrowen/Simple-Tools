@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
+<script>
+if(window.innerWidth<=768){
+  document.addEventListener('DOMContentLoaded',function(){
+    document.querySelectorAll('ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail')
+      .forEach(function(el){el.remove();});
+  });
+}
+</script>
 <meta charset="UTF-8">
 <style>html{overflow-x:hidden}body{overflow-x:hidden}
-/* ── Fixed side rails (desktop ≥1400px only) ── */
+/* ── Static side rails — fixed to viewport, don't scroll (desktop ≥1400px) ── */
 .side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;
-  position:fixed;top:50%;transform:translateY(-50%)}
+  position:fixed;top:50%;transform:translateY(-50%);z-index:10}
 .side-rail.left{left:0}
 .side-rail.right{right:0}
 .side-rail-inner{padding:8px;display:flex;flex-direction:column;align-items:center}
@@ -15,7 +23,18 @@
 .rail-ad-inner{display:flex;justify-content:center;align-items:center}
 @media(min-width:1400px){
   .side-rail{display:flex;flex-direction:column}
-  .main-wrapper{flex:1;min-width:0}
+}
+/* ── Mobile: hide ALL inline ads, allow anchor ads ── */
+@media(max-width:768px){
+  ins.adsbygoogle,
+  .ad-slot,
+  .mobile-ad-slot,
+  .mobile-ad-inner,
+  .side-rail{
+    display:none!important;
+    width:0!important;height:0!important;
+    max-width:0!important;overflow:hidden!important;
+  }
 }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -349,7 +368,6 @@ ins.adsbygoogle iframe,
 </div>
 
 <div class="page-wrapper">
-  <!-- Left ad rail -->
   <div class="side-rail left">
     <div class="side-rail-inner">
       <div class="rail-ad-label">Advertisement</div>
@@ -715,7 +733,6 @@ ins.adsbygoogle iframe,
 </div><!-- /layout -->
 </div><!-- /container -->
 </div>
-  <!-- Right ad rail -->
   <div class="side-rail right">
     <div class="side-rail-inner">
       <div class="rail-ad-label">Advertisement</div>
