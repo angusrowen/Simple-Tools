@@ -170,6 +170,38 @@ ins.adsbygoogle,ins.adsbygoogle iframe{max-width:100%!important;overflow:hidden!
 </style>
 <!-- Google AdSense -->
   <script>if(window.innerWidth>768 && navigator.maxTouchPoints===0){document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></scr'+'ipt>');}</script>
+
+<style id="debug-style">
+  #debug-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.85);
+    color: #0f0;
+    font-family: monospace;
+    font-size: 11px;
+    padding: 8px 12px;
+    z-index: 99999;
+    line-height: 1.6;
+    border-top: 2px solid #0f0;
+  }
+  #debug-panel span { margin-right: 16px; }
+  #debug-overflow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255,0,0,0.15);
+    color: red;
+    font-family: monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    z-index: 99999;
+    border-bottom: 2px solid red;
+  }
+  .debug-highlight { outline: 2px solid red !important; }
+</style>
 </head>
 <body>
 
@@ -759,6 +791,61 @@ document.addEventListener('DOMContentLoaded',function(){
   if(window.innerWidth<900)b.classList.add('collapsed'),g('addlBtn').setAttribute('aria-expanded','false');
 });
 
+})();
+</script>
+
+<script>
+(function(){
+  // Create panels
+  var panel = document.createElement('div');
+  panel.id = 'debug-panel';
+  document.body.appendChild(panel);
+
+  var overflow = document.createElement('div');
+  overflow.id = 'debug-overflow';
+  document.body.appendChild(overflow);
+
+  function update() {
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var dw = document.documentElement.scrollWidth;
+    var dh = document.documentElement.scrollHeight;
+    var bw = document.body.scrollWidth;
+    var overflowAmt = Math.max(dw, bw) - vw;
+
+    panel.innerHTML =
+      '<span>viewport: ' + vw + 'x' + vh + 'px</span>' +
+      '<span>doc.scrollWidth: ' + dw + 'px</span>' +
+      '<span>body.scrollWidth: ' + bw + 'px</span>' +
+      '<span>overflow: ' + (overflowAmt > 0 ? '<span style="color:red">+' + overflowAmt + 'px OVERFLOW</span>' : '<span style="color:#0f0">none</span>') + '</span>' +
+      '<span>devicePixelRatio: ' + window.devicePixelRatio + '</span>';
+
+    // Find overflowing elements
+    var allEls = document.querySelectorAll('*');
+    var offenders = [];
+    for (var i = 0; i < allEls.length; i++) {
+      var el = allEls[i];
+      if (el.id === 'debug-panel' || el.id === 'debug-overflow') continue;
+      var rect = el.getBoundingClientRect();
+      if (rect.right > vw + 2) {
+        offenders.push((el.className ? '.' + String(el.className).split(' ')[0] : el.tagName.toLowerCase()) +
+          ' right:' + Math.round(rect.right) + 'px width:' + Math.round(rect.width) + 'px');
+      }
+    }
+
+    if (offenders.length > 0) {
+      overflow.style.display = 'block';
+      overflow.innerHTML = '⚠ OVERFLOW ELEMENTS: ' + offenders.slice(0,5).join(' | ');
+    } else {
+      overflow.style.display = 'none';
+    }
+  }
+
+  update();
+  window.addEventListener('resize', update);
+  window.addEventListener('load', update);
+  setTimeout(update, 500);
+  setTimeout(update, 1500);
 })();
 </script>
 </body>
