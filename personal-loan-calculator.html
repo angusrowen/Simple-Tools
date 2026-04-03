@@ -15,7 +15,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;overflow-x:hidden}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
-.topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
+.topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
 .topbar-logo a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;color:#fff;text-decoration:none}
 .topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
 .topbar-title{color:#fff;font-size:1rem;font-weight:700}
@@ -86,16 +86,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;justify-content:center}
 .chart-legend-item{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--tx)}
 .chart-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0}
-.pie-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--bdr)}
-.pie-card{display:grid;grid-template-columns:260px 1fr;gap:18px;align-items:center;background:#f8f5ef;border:1px solid var(--bdr);border-radius:16px;padding:18px}
-.pie-wrap{display:flex;justify-content:center;align-items:center}
-#payPie{width:240px;height:240px}
-.pie-legend{display:grid;gap:10px}
-.legend-row{display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;align-items:center;font-size:.88rem}
-.legend-swatch{width:14px;height:14px;border-radius:999px;flex-shrink:0}
-.legend-label{font-weight:600;color:var(--tx)}
-.legend-amount{font-weight:700;color:var(--dk);font-variant-numeric:tabular-nums;text-align:right}
-.legend-pct{font-size:.8rem;color:var(--txl);text-align:right;min-width:40px}
 .amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:6px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s}
 .amort-btn:hover{border-color:var(--gr);color:var(--gr)}
 .amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
@@ -117,7 +107,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 /* ── Responsive: tablet ── */
 @media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
-@media(max-width:1000px){.pie-card{grid-template-columns:1fr}}
+@media(max-width:1000px){.results-lower{grid-template-columns:1fr}.results-grid{grid-template-columns:1fr 1fr}}
 .page-wrapper{display:flex;justify-content:center;align-items:stretch;gap:0;width:100%;padding-top:0;overflow:hidden;position:relative;min-height:100vh}
 .side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;position:absolute;top:120px;z-index:10}
 .side-rail.left{left:0}
@@ -134,65 +124,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 
 /* ── Mobile mid-page ad ─────────────────────────────────────────── */
-.mobile-ad-slot{display:none;width:100%;justify-content:center;align-items:center;padding:12px 0;margin:4px 0}
-.mobile-ad-slot .ad-slot-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;margin-bottom:6px}
-.mobile-ad-inner{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:10px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
-@media(max-width:899px){
-  .mobile-ad-slot{display:flex;flex-direction:column;overflow-x:hidden;width:100%}
-}
-
-
-/* ═══════════════════════════════════════════════════════
-   MOBILE — 480px and below (portrait phones)
-   Target: iPhone SE (375px), iPhone 14 (390px),
-           Samsung Galaxy (360–412px)
-═══════════════════════════════════════════════════════ */
-
-
-/* ═══════════════════════════════════════════════════════
-   TABLET — 481px to 768px
-═══════════════════════════════════════════════════════ */
-
-
-
-
-
-
-/* ═══ S22 / iPhone portrait fix — 360px target ═══ */
-
-
-
-
-/* ═══ Mobile Portrait — Samsung Galaxy S22 / iPhone (360–414px) ═══ */
-
-
-/* ═══ Tablet — 481px to 768px ═══ */
-
-
-/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
-
-
-/* ═══ Tablet — 481px–768px ═══ */
-
-
-/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
-
-
-/* ═══ Tablet — 481px–768px ═══ */
-
-
-/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
-
-
-/* ═══ Tablet — 481px–768px ═══ */
-
-
-/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
-
-
-/* ═══ Tablet 481–768px ═══ */
-
-
+@media(min-width:1400px){.side-rail{display:flex;flex-direction:column}}
 @media(max-width:768px){
   ins.adsbygoogle,script[src*="googlesyndication"],
   .ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
@@ -204,8 +136,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}
   .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;font-size:.78rem!important;max-width:100%!important}
   .results-lower{grid-template-columns:1fr!important}
-}
-}
 }
 @media(max-width:480px){
   .main-wrapper{padding:12px!important;box-sizing:border-box!important}
@@ -220,7 +150,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   .results-lower{grid-template-columns:1fr!important}
   .pie-card{grid-template-columns:1fr!important}
   #payPie{width:180px!important;height:180px!important}
-  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;font-size:.74rem!important}
+  .bd-table,.amort-table{display:block!important;overflow-x:auto!important;font-size:.74rem!important}
   .actions-bar{grid-template-columns:1fr 1fr!important}
   .ft{padding:10px 14px!important;font-size:.7rem!important}
 }
@@ -228,81 +158,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   .main-wrapper{padding:14px 18px!important;box-sizing:border-box!important}
   .layout{grid-template-columns:1fr!important}
 }
-
-
-/* Prevent AdSense iframes from causing horizontal scroll */
-ins.adsbygoogle,
-ins.adsbygoogle iframe,
-.ad-slot,
-.mobile-ad-slot,
-.mobile-ad-inner{
-  max-width:100%!important;
-  overflow:hidden!important;
-}
-
-
-
-@media(max-width:1024px) and (pointer:coarse){
-  ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
-  [data-ad-client],[data-ad-slot]{
-    display:none!important;width:0!important;height:0!important;
-    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
-    position:absolute!important;pointer-events:none!important;
-  }
-}
-
-@media(max-width:899px){
-  .mobile-ad-slot{display:flex;flex-direction:column;overflow-x:hidden;width:100%}
-}
-@media(max-width:768px){
-  ins.adsbygoogle,script[src*="googlesyndication"],
-  .ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
-  [data-ad-client],[data-ad-slot]{
-    display:none!important;width:0!important;height:0!important;
-    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
-    position:absolute!important;pointer-events:none!important;
-  }
-  .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}
-  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;font-size:.78rem!important;max-width:100%!important}
-  .results-lower{grid-template-columns:1fr!important}
-}
-}
-}
-@media(max-width:480px){
-  .main-wrapper{padding:12px!important;box-sizing:border-box!important}
-  .layout{grid-template-columns:1fr!important;gap:10px!important}
-  .card{padding:12px!important}
-  .topbar{padding:8px 14px!important}
-  .topbar-right{flex-wrap:wrap!important;gap:6px!important}
-  .toggle-switch label{font-size:.72rem!important;padding:6px 4px!important}
-  .field input,.field select{font-size:.88rem!important;padding:7px 8px!important}
-  .inline-fields{grid-template-columns:1fr!important}
-  .results-grid{grid-template-columns:1fr 1fr!important;gap:6px!important}
-  .results-lower{grid-template-columns:1fr!important}
-  .pie-card{grid-template-columns:1fr!important}
-  #payPie{width:180px!important;height:180px!important}
-  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;font-size:.74rem!important}
-  .actions-bar{grid-template-columns:1fr 1fr!important}
-  .ft{padding:10px 14px!important;font-size:.7rem!important}
-}
-@media(min-width:481px) and (max-width:768px){
-  .main-wrapper{padding:14px 18px!important;box-sizing:border-box!important}
-  .layout{grid-template-columns:1fr!important}
-}
-
-
-/* Prevent AdSense iframes from causing horizontal scroll */
-ins.adsbygoogle,
-ins.adsbygoogle iframe,
-.ad-slot,
-.mobile-ad-slot,
-.mobile-ad-inner{
-  max-width:100%!important;
-  overflow:hidden!important;
-}
-
-
-
+ins.adsbygoogle,ins.adsbygoogle iframe{max-width:100%!important;overflow:hidden!important}
 @media(max-width:1024px) and (pointer:coarse){
   ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
   [data-ad-client],[data-ad-slot]{
@@ -320,7 +176,7 @@ ins.adsbygoogle iframe,
 <div class="topbar">
   <div class="topbar-logo">
     <a href="index.html" title="Back to calculators">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
     </a>
   </div>
   <div class="topbar-divider"></div>
@@ -541,14 +397,6 @@ ins.adsbygoogle iframe,
       </div>
     </div>
 
-    <div class="pie-section">
-      <div class="section-title">Cost Breakdown</div>
-      <div class="pie-card">
-        <div class="pie-wrap"><canvas id="payPie"></canvas></div>
-        <div class="pie-legend" id="pieLegend"><div style="color:var(--txl);font-style:italic;font-size:.88rem">Enter loan details to see breakdown</div></div>
-      </div>
-    </div>
-
     <button class="amort-btn" id="amortBtn" type="button">
       <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
       Show Repayment Schedule
@@ -585,7 +433,6 @@ ins.adsbygoogle iframe,
 </div><!-- end layout -->
 </div><!-- end container -->
 </div><!-- end main-wrapper -->
-
   <div class="side-rail right">
     <div class="side-rail-inner">
       <div class="rail-ad-label">Advertisement</div>
@@ -632,7 +479,7 @@ function buildSched(P,rate,yrs,freq,extra,balloon){
   return{rows:rows,totalInterest:totInt,pmt:pmt};
 }
 
-var lineChart=null,pieChart=null,lastCD=null;
+var lineChart=null,lastCD=null;
 
 function chartData(rows,P,yrs,freq){
   var n=ppy(freq),labels=[],debt=[],annInt=[null],cumPaid=[0];
@@ -719,25 +566,6 @@ function drawLine(cd){
   });
 }
 
-function drawPie(principal,totalInt,totalFees){
-  var canvas=g('payPie'),ctx=canvas.getContext('2d');
-  if(pieChart){pieChart.destroy();pieChart=null;}
-  var total=principal+totalInt+totalFees;
-  var data=[Math.round(principal),Math.round(totalInt)];
-  var lbls=['Principal','Interest'],cols=['#2a9d67','#e53935'];
-  if(totalFees>0){data.push(Math.round(totalFees));lbls.push('Fees');cols.push('#b6862c');}
-  pieChart=new Chart(ctx,{
-    type:'doughnut',
-    data:{labels:lbls,datasets:[{data:data,backgroundColor:cols,borderWidth:2,borderColor:'#fffdfa',hoverOffset:8}]},
-    options:{responsive:true,cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(item){return ' '+item.label+': '+fmt0(item.parsed)+' ('+(item.parsed/total*100).toFixed(1)+'%)';}}}}}
-  });
-  var leg=g('pieLegend'),h='';
-  for(var i=0;i<data.length;i++){
-    h+='<div class="legend-row"><div class="legend-swatch" style="background:'+cols[i]+'"></div><span class="legend-label">'+lbls[i]+'</span><span class="legend-amount">'+fmt0(data[i])+'</span><span class="legend-pct">'+(data[i]/total*100).toFixed(1)+'%</span></div>';
-  }
-  h+='<div class="legend-row" style="border-top:1px solid var(--bdr);padding-top:8px;margin-top:4px"><div class="legend-swatch" style="background:var(--dk)"></div><span class="legend-label" style="font-weight:700">Total Cost</span><span class="legend-amount">'+fmt0(total)+'</span><span class="legend-pct">100%</span></div>';
-  leg.innerHTML=h;
-}
 
 function calculate(){
   var P      = parseFloat(g('fAmt').value)||0;
@@ -830,7 +658,6 @@ function calculate(){
   g('tBody').innerHTML=t;
 
   drawLine(chartData(rows,P,yrs,freq));
-  drawPie(P,totInt,totFees);
 
   var mn2=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var sd2=null;
@@ -873,9 +700,7 @@ function doReset(){
   g('bannerExtra').style.display='none';g('bannerBalloon').style.display='none';g('bannerPayoff').style.display='none';
   g('tBody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
   g('amortBody').innerHTML='';
-  g('pieLegend').innerHTML='<div style="color:var(--txl);font-style:italic;font-size:.88rem">Enter loan details to see breakdown</div>';
   if(lineChart){lineChart.destroy();lineChart=null;}
-  if(pieChart){pieChart.destroy();pieChart=null;}
 }
 g('btnReset1').addEventListener('click',doReset);
 g('btnReset2').addEventListener('click',doReset);
