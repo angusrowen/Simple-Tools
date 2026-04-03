@@ -15,7 +15,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;overflow-x:hidden}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
-.topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
+.topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
 .topbar-logo a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;color:#fff;text-decoration:none}
 .topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
 .topbar-title{color:#fff;font-size:1rem;font-weight:700}
@@ -116,86 +116,211 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .hidden{display:none!important}
 
 /* ── Responsive: tablet ── */
-@media(max-width:1000px){
-  .layout{grid-template-columns:1fr}
-  .main-wrapper{padding:16px}
-  .topbar{padding:12px 16px}
-  .pie-card{grid-template-columns:1fr}
-  .results-grid{grid-template-columns:1fr 1fr}
-}
-
-/* ── Responsive: 768px ── */
-@media(max-width:768px){
-  .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}
-  .bd-table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;font-size:.78rem!important;max-width:100%!important}
-}
-
-/* ── Responsive: mobile portrait ≤480px ── */
-@media(max-width:480px){
-  .main-wrapper{padding:12px!important;box-sizing:border-box!important}
-  .layout{grid-template-columns:1fr!important;gap:10px!important}
-  .card{padding:12px!important}
-  .topbar{padding:10px 16px!important}
-  .toggle-switch label{font-size:.72rem!important;padding:6px 4px!important}
-  .input-wrap input,.field select{font-size:.88rem!important;padding:7px 8px!important}
-  input[type=month]{font-size:.88rem!important;padding:7px 8px!important}
-  .results-grid{grid-template-columns:1fr 1fr!important;gap:6px!important}
-  .result-box .val{font-size:1rem!important}
-  .result-box.hl .val{font-size:1.1rem!important}
-  .pie-card{grid-template-columns:1fr!important;padding:12px!important}
-  #payPie{width:180px!important;height:180px!important}
-  .bd-table{display:block!important;overflow-x:auto!important;font-size:.74rem!important}
-  .actions-bar{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}
-  .actions-bar>div[style]{display:none!important}
-  .ft{padding:10px 14px!important;font-size:.7rem!important}
-  .chart-section{margin-top:14px}
-  .pie-section{margin-top:14px}
-}
-
-/* ── Responsive: tablet 481–768px ── */
-@media(min-width:481px) and (max-width:768px){
-  .main-wrapper{padding:14px 18px!important;box-sizing:border-box!important}
-  .layout{grid-template-columns:1fr!important}
-  .pie-card{grid-template-columns:1fr!important}
-  #payPie{width:200px!important;height:200px!important}
-}
-
-/* ── Side rails (desktop ad placement) ── */
-.page-wrapper{display:flex;justify-content:center;align-items:stretch;gap:0;width:100%;overflow:hidden;position:relative;min-height:100vh}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
+@media(max-width:1000px){.pie-card{grid-template-columns:1fr}}
+.page-wrapper{display:flex;justify-content:center;align-items:stretch;gap:0;width:100%;padding-top:0;overflow:hidden;position:relative;min-height:100vh}
 .side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;position:absolute;top:120px;z-index:10}
 .side-rail.left{left:0}
 .side-rail.right{right:0}
-.side-rail-inner{position:sticky;top:80px;padding:8px;display:flex;flex-direction:column;align-items:center}
+.side-rail-inner{position:sticky;top:80px}
+.side-rail-inner{padding:8px;display:flex;flex-direction:column;align-items:center}
 .rail-ad-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:7px 0 4px;border-bottom:1px solid var(--bdr);margin-bottom:8px;width:100%}
 .rail-ad-inner{display:flex;justify-content:center;align-items:center}
 .rail-ad-unit{background:var(--card);border:1px solid var(--bdr);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(45,50,40,.06)}
 .rail-ad-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:8px 0 4px;border-bottom:1px solid var(--bdr)}
 .rail-ad-inner{padding:8px;display:flex;justify-content:center;align-items:center;min-height:620px}
+/* Show rail only on very wide screens */
 @media(min-width:1400px){.side-rail{display:flex;flex-direction:column}}
 
-/* ── Mobile mid-page ad ── */
+
+/* ── Mobile mid-page ad ─────────────────────────────────────────── */
 .mobile-ad-slot{display:none;width:100%;justify-content:center;align-items:center;padding:12px 0;margin:4px 0}
 .mobile-ad-slot .ad-slot-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;margin-bottom:6px}
 .mobile-ad-inner{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:10px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
-@media(max-width:899px){.mobile-ad-slot{display:flex;flex-direction:column;overflow-x:hidden;width:100%}}
+@media(max-width:899px){
+  .mobile-ad-slot{display:flex;flex-direction:column;overflow-x:hidden;width:100%}
+}
 
-/* Hide ads on touch/small screens */
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE — 480px and below (portrait phones)
+   Target: iPhone SE (375px), iPhone 14 (390px),
+           Samsung Galaxy (360–412px)
+═══════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════════════════════
+   TABLET — 481px to 768px
+═══════════════════════════════════════════════════════ */
+
+
+
+
+
+
+/* ═══ S22 / iPhone portrait fix — 360px target ═══ */
+
+
+
+
+/* ═══ Mobile Portrait — Samsung Galaxy S22 / iPhone (360–414px) ═══ */
+
+
+/* ═══ Tablet — 481px to 768px ═══ */
+
+
+/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
+
+
+/* ═══ Tablet — 481px–768px ═══ */
+
+
+/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
+
+
+/* ═══ Tablet — 481px–768px ═══ */
+
+
+/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
+
+
+/* ═══ Tablet — 481px–768px ═══ */
+
+
+/* ═══ Mobile Portrait — S22 / iPhone (≤480px) ═══ */
+
+
+/* ═══ Tablet 481–768px ═══ */
+
+
 @media(max-width:768px){
-  ins.adsbygoogle,[data-ad-client],[data-ad-slot],.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail{display:none!important;width:0!important;height:0!important;max-width:0!important;overflow:hidden!important;visibility:hidden!important;position:absolute!important;pointer-events:none!important}
+  ins.adsbygoogle,script[src*="googlesyndication"],
+  .ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
+  [data-ad-client],[data-ad-slot]{
+    display:none!important;width:0!important;height:0!important;
+    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
+    position:absolute!important;pointer-events:none!important;
+  }
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;font-size:.78rem!important;max-width:100%!important}
+  .results-lower{grid-template-columns:1fr!important}
 }
+}
+}
+@media(max-width:480px){
+  .main-wrapper{padding:12px!important;box-sizing:border-box!important}
+  .layout{grid-template-columns:1fr!important;gap:10px!important}
+  .card{padding:12px!important}
+  .topbar{padding:8px 14px!important}
+  .topbar-right{flex-wrap:wrap!important;gap:6px!important}
+  .toggle-switch label{font-size:.72rem!important;padding:6px 4px!important}
+  .field input,.field select{font-size:.88rem!important;padding:7px 8px!important}
+  .inline-fields{grid-template-columns:1fr!important}
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:6px!important}
+  .results-lower{grid-template-columns:1fr!important}
+  .pie-card{grid-template-columns:1fr!important}
+  #payPie{width:180px!important;height:180px!important}
+  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;font-size:.74rem!important}
+  .actions-bar{grid-template-columns:1fr 1fr!important}
+  .ft{padding:10px 14px!important;font-size:.7rem!important}
+}
+@media(min-width:481px) and (max-width:768px){
+  .main-wrapper{padding:14px 18px!important;box-sizing:border-box!important}
+  .layout{grid-template-columns:1fr!important}
+}
+
+
+/* Prevent AdSense iframes from causing horizontal scroll */
+ins.adsbygoogle,
+ins.adsbygoogle iframe,
+.ad-slot,
+.mobile-ad-slot,
+.mobile-ad-inner{
+  max-width:100%!important;
+  overflow:hidden!important;
+}
+
+
+
 @media(max-width:1024px) and (pointer:coarse){
-  ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,[data-ad-client],[data-ad-slot]{display:none!important;width:0!important;height:0!important;max-width:0!important;overflow:hidden!important;visibility:hidden!important;position:absolute!important;pointer-events:none!important}
+  ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
+  [data-ad-client],[data-ad-slot]{
+    display:none!important;width:0!important;height:0!important;
+    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
+    position:absolute!important;pointer-events:none!important;
+  }
 }
-ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner{max-width:100%!important;overflow:hidden!important}
+
+@media(max-width:899px){
+  .mobile-ad-slot{display:flex;flex-direction:column;overflow-x:hidden;width:100%}
+}
+@media(max-width:768px){
+  ins.adsbygoogle,script[src*="googlesyndication"],
+  .ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
+  [data-ad-client],[data-ad-slot]{
+    display:none!important;width:0!important;height:0!important;
+    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
+    position:absolute!important;pointer-events:none!important;
+  }
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;font-size:.78rem!important;max-width:100%!important}
+  .results-lower{grid-template-columns:1fr!important}
+}
+}
+}
+@media(max-width:480px){
+  .main-wrapper{padding:12px!important;box-sizing:border-box!important}
+  .layout{grid-template-columns:1fr!important;gap:10px!important}
+  .card{padding:12px!important}
+  .topbar{padding:8px 14px!important}
+  .topbar-right{flex-wrap:wrap!important;gap:6px!important}
+  .toggle-switch label{font-size:.72rem!important;padding:6px 4px!important}
+  .field input,.field select{font-size:.88rem!important;padding:7px 8px!important}
+  .inline-fields{grid-template-columns:1fr!important}
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:6px!important}
+  .results-lower{grid-template-columns:1fr!important}
+  .pie-card{grid-template-columns:1fr!important}
+  #payPie{width:180px!important;height:180px!important}
+  .combined-table,.bracket-table,.key-rates-table{display:block!important;overflow-x:auto!important;font-size:.74rem!important}
+  .actions-bar{grid-template-columns:1fr 1fr!important}
+  .ft{padding:10px 14px!important;font-size:.7rem!important}
+}
+@media(min-width:481px) and (max-width:768px){
+  .main-wrapper{padding:14px 18px!important;box-sizing:border-box!important}
+  .layout{grid-template-columns:1fr!important}
+}
+
+
+/* Prevent AdSense iframes from causing horizontal scroll */
+ins.adsbygoogle,
+ins.adsbygoogle iframe,
+.ad-slot,
+.mobile-ad-slot,
+.mobile-ad-inner{
+  max-width:100%!important;
+  overflow:hidden!important;
+}
+
+
+
+@media(max-width:1024px) and (pointer:coarse){
+  ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
+  [data-ad-client],[data-ad-slot]{
+    display:none!important;width:0!important;height:0!important;
+    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
+    position:absolute!important;pointer-events:none!important;
+  }
+}
 </style>
-<script>if(window.innerWidth>768&&navigator.maxTouchPoints===0){document.write('<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"><\/script>');}</script>
+<!-- Google AdSense -->
+  <script>if(window.innerWidth>768 && navigator.maxTouchPoints===0){document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></scr'+'ipt>');}</script>
 </head>
 <body>
 
 <div class="topbar">
   <div class="topbar-logo">
     <a href="index.html" title="Back to calculators">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
     </a>
   </div>
   <div class="topbar-divider"></div>
@@ -206,18 +331,16 @@ ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner
 </div>
 
 <div class="page-wrapper">
-
-<!-- Left ad rail -->
-<div class="side-rail left">
-  <div class="side-rail-inner">
-    <div class="rail-ad-label">Advertisement</div>
-    <div class="rail-ad-inner">
-      <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-      <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  <div class="side-rail left">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
     </div>
   </div>
-</div>
-
 <div class="main-wrapper">
 <div class="container">
 <div class="layout">
@@ -353,14 +476,6 @@ ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner
 
 <!-- RIGHT RESULTS -->
 <div>
-  <!-- Mobile mid-page ad (300x250, visible below 900px only) -->
-  <div class="mobile-ad-slot">
-    <div class="mobile-ad-inner">
-      <div class="ad-slot-label">Advertisement</div>
-      <ins class="adsbygoogle" style="display:inline-block;max-width:100%;width:300px;height:250px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-      <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-    </div>
-  </div>
   <div class="card">
     <h2>Results</h2>
 
@@ -467,20 +582,21 @@ ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner
   </div>
 </div>
 
-</div></div></div><!-- /main-wrapper -->
+</div><!-- end layout -->
+</div><!-- end container -->
+</div><!-- end main-wrapper -->
 
-</div><!-- /page-wrapper -->
-
-<!-- Right ad rail -->
-<div class="side-rail right">
-  <div class="side-rail-inner">
-    <div class="rail-ad-label">Advertisement</div>
-    <div class="rail-ad-inner">
-      <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-      <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  <div class="side-rail right">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
     </div>
   </div>
-</div>
+</div><!-- end page-wrapper -->
 
 <div class="ft"><span>Estimates only &mdash; general information, not personal financial advice.</span></div>
 
