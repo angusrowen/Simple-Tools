@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Savings Goal Calculator</title>
+<style>
+:root{
+  --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
+  --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
+  --tx:#22313f;--txl:#6c7a89;--red:#e53935;
+  --bl:#3f7fb5;--bll:#edf5fb;--am:#b6862c;--aml:#faf2df;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
+.topbar-logo a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;color:#fff;text-decoration:none}
+.topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
+.topbar-title{color:#fff;font-size:1rem;font-weight:700}
+.topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px}
+.main-wrapper{padding:24px 32px;flex:1;box-sizing:border-box;width:100%}
+.container{max-width:1100px;margin:0 auto}
+.layout{display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:24px;align-items:start}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06)}
+.card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
+.card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
+.card-header-row h2{margin:0;padding:0;border:none;font-size:1rem;color:var(--dk)}
+.section-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gr);margin-top:16px;margin-bottom:10px;padding-top:12px;border-top:1px solid var(--bdr)}
+.section-label.first{margin-top:0;padding-top:0;border-top:none}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.8rem;font-weight:600;margin-bottom:4px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
+.field-hint{font-size:.75rem;color:var(--txl);margin-top:2px}
+.field select{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8}
+.field select:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+.toggle-group{margin-bottom:14px}
+.toggle-label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
+.toggle-switch{display:flex;border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+.toggle-switch input[type=radio]{display:none}
+.toggle-switch label{flex:1;text-align:center;padding:8px 10px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fffdf8;color:var(--txl);transition:all .15s;border-right:1px solid var(--bdr)}
+.toggle-switch label:last-of-type{border-right:none}
+.toggle-switch input[type=radio]:checked+label{background:var(--gr);color:#fff}
+.input-wrap{position:relative;display:flex;align-items:center}
+.input-wrap .prefix,.input-wrap .suffix{position:absolute;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;z-index:1}
+.input-wrap .prefix{left:10px}
+.input-wrap .suffix{right:10px}
+.input-wrap input{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s}
+.input-wrap input.has-prefix{padding-left:22px}
+.input-wrap input.has-suffix{padding-right:28px}
+.input-wrap input:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:.4}
+input[type=text]{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;font-family:inherit}
+input[type=text]:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+input[type=month]{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8}
+input[type=month]:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+.collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0 0 8px 0;border-bottom:2px solid var(--gr);margin-bottom:16px;text-align:left;gap:10px}
+.collapsible-header[aria-expanded="false"]{border-bottom-color:var(--bdr);margin-bottom:0}
+.collapsible-header h2{margin:0;padding:0;border:none;font-size:1rem;color:var(--dk)}
+.collapsible-header:hover h2{color:var(--gr)}
+.collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center}
+.collapsible-header[aria-expanded="true"] .collapse-icon{transform:rotate(180deg)}
+.collapsible-body{overflow:hidden;transition:max-height .3s ease,opacity .25s ease;max-height:4000px;opacity:1}
+.collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.result-box{background:#f8f5ef;border:1px solid var(--bdr);border-radius:12px;padding:12px 14px}
+.result-box.hl{background:var(--grl);border-color:var(--gr)}
+.result-box .lbl{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);font-weight:600;margin-bottom:2px}
+.result-box .val{font-size:1.15rem;font-weight:700;color:var(--dk)}
+.result-box.hl .val{color:var(--gr);font-size:1.3rem}
+.banner{border-radius:8px;padding:10px 13px;margin-bottom:12px;font-size:.84rem;display:none}
+.bn-green{background:var(--grl);border:1px solid var(--gr);color:var(--tx)}
+.bn-blue{background:var(--bll);border:1px solid var(--bl);color:var(--tx)}
+.section-title{font-size:.85rem;font-weight:700;margin:18px 0 8px;color:var(--dk)}
+.bd-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.bd-table th{text-align:left;padding:8px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
+.bd-table th:not(:first-child){text-align:right}
+.bd-table td{padding:8px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
+.bd-table td:not(:first-child){text-align:right}
+.bd-table tr:last-child td{border-bottom:none}
+.bd-table .total-row td{font-weight:700;border-top:2px solid var(--dk);border-bottom:none}
+.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
+.chart-header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chart-hint{font-size:.74rem;color:var(--txl);font-style:italic}
+.chart-wrap{background:#f8f5ef;border:1px solid var(--bdr);border-radius:14px;padding:14px 14px 10px}
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;justify-content:center}
+.chart-legend-item{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--tx)}
+.chart-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.progress-wrap{margin-bottom:16px}
+.progress-label-row{display:flex;justify-content:space-between;font-size:.78rem;color:var(--txl);margin-bottom:5px}
+.progress-bar-bg{background:#e8e3d8;border-radius:99px;height:12px;overflow:hidden;border:1px solid var(--bdr)}
+.progress-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gr),#57c48a);transition:width .6s ease}
+.amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:6px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s;font-family:inherit}
+.amort-btn:hover{border-color:var(--gr);color:var(--gr)}
+.amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
+.amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
+.amort-table th:first-child,.amort-table th:nth-child(2){text-align:left}
+.amort-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums;text-align:right}
+.amort-table td:first-child,.amort-table td:nth-child(2){text-align:left}
+.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;letter-spacing:.3px;font-family:inherit}
+.btn svg{width:14px;height:14px;fill:currentColor}
+.btn-navy{background:var(--nv);color:#fff}.btn-navy:hover{background:#2d5268}
+.btn-green{background:var(--gr);color:#fff}.btn-green:hover{background:#228052}
+.lump-row{display:grid;grid-template-columns:1fr 1fr 34px;gap:8px;margin-bottom:10px;align-items:end}
+.lump-remove{background:#f8f5ef;border:1px solid var(--bdr);border-radius:8px;color:var(--red);cursor:pointer;height:38px;width:34px;font-size:1rem;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.lump-remove:hover{background:#fde8e8;border-color:var(--red)}
+.note{font-size:.78rem;color:var(--txl);margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr);line-height:1.5}
+.ft{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ft span{color:rgba(255,255,255,.75);font-size:.82rem}
+.hidden{display:none!important}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}.results-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.main-wrapper{padding:12px!important}.card{padding:12px!important}.results-grid{grid-template-columns:1fr 1fr!important}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">
+    <a href="index.html" title="Back to calculators">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+    </a>
+  </div>
+  <div class="topbar-divider"></div>
+  <div>
+    <div class="topbar-title">Savings Goal Calculator</div>
+    <div class="topbar-desc">Plan your savings target &mdash; time to goal, required contributions, lump sums &amp; inflation adjustment</div>
+  </div>
+</div>
+
+<div class="main-wrapper">
+<div class="container">
+<div class="layout">
+
+<!-- LEFT -->
+<div>
+  <div class="card">
+    <div class="card-header-row">
+      <h2>Savings Details</h2>
+      <button class="btn btn-navy" id="btnReset" type="button">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Reset
+      </button>
+    </div>
+
+    <div class="section-label first">Goal</div>
+    <div class="field">
+      <label for="fGoal">Savings Goal</label>
+      <div class="input-wrap"><span class="prefix">$</span>
+        <input type="number" id="fGoal" class="has-prefix" placeholder="e.g. 50000" min="0" step="500" value="50000">
+      </div>
+    </div>
+    <div class="field">
+      <label for="fGoalLabel">Goal Label <span style="font-weight:400;text-transform:none">(optional)</span></label>
+      <input type="text" id="fGoalLabel" placeholder="e.g. House deposit, Emergency fund&hellip;">
+    </div>
+
+    <div class="section-label">Current Savings</div>
+    <div class="field">
+      <label for="fInitial">Initial / Current Balance</label>
+      <div class="input-wrap"><span class="prefix">$</span>
+        <input type="number" id="fInitial" class="has-prefix" placeholder="e.g. 5000" min="0" step="500" value="5000">
+      </div>
+      <div class="field-hint">Amount you already have saved toward this goal.</div>
+    </div>
+
+    <div class="section-label">Calculate Mode</div>
+    <div class="toggle-group">
+      <div class="toggle-switch">
+        <input type="radio" name="calcMode" id="rTime" value="time" checked>
+        <label for="rTime">Time to Goal</label>
+        <input type="radio" name="calcMode" id="rContrib" value="contribution">
+        <label for="rContrib">Required Contribution</label>
+      </div>
+    </div>
+
+    <div class="section-label">Regular Contributions</div>
+    <div class="field">
+      <label for="fContrib">Contribution Amount</label>
+      <div class="input-wrap"><span class="prefix">$</span>
+        <input type="number" id="fContrib" class="has-prefix" placeholder="e.g. 800" min="0" step="50" value="800">
+      </div>
+    </div>
+    <div class="toggle-group">
+      <span class="toggle-label">Frequency</span>
+      <div class="toggle-switch">
+        <input type="radio" name="freq" id="rWeekly" value="52">
+        <label for="rWeekly">Weekly</label>
+        <input type="radio" name="freq" id="rFortnightly" value="26">
+        <label for="rFortnightly">Fortnightly</label>
+        <input type="radio" name="freq" id="rMonthly" value="12" checked>
+        <label for="rMonthly">Monthly</label>
+        <input type="radio" name="freq" id="rAnnually" value="1">
+        <label for="rAnnually">Annually</label>
+      </div>
+    </div>
+
+    <div class="field hidden" id="targetField">
+      <label for="fTarget">Target Timeframe</label>
+      <div class="input-wrap">
+        <input type="number" id="fTarget" class="has-suffix" placeholder="e.g. 5" min="0.25" max="50" step="0.25" value="5">
+        <span class="suffix">yrs</span>
+      </div>
+    </div>
+
+    <div class="section-label">Interest Rate</div>
+    <div class="field">
+      <label for="fRate">Annual Interest Rate</label>
+      <div class="input-wrap">
+        <input type="number" id="fRate" class="has-suffix" placeholder="e.g. 4.5" min="0" max="50" step="0.1" value="4.5">
+        <span class="suffix">%</span>
+      </div>
+      <div class="field-hint">Compounded at contribution frequency.</div>
+    </div>
+
+    <div class="section-label">Start Date</div>
+    <div class="field">
+      <label for="fStart">Start Month</label>
+      <input type="month" id="fStart">
+      <div class="field-hint">Used to calculate your projected goal date.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <button class="collapsible-header" id="addlBtn" aria-expanded="true" aria-controls="addlBody" type="button">
+      <h2>Additional Options</h2>
+      <span class="collapse-icon">
+        <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 8 10 13 15 8"/></svg>
+      </span>
+    </button>
+    <div class="collapsible-body" id="addlBody">
+      <div class="section-label first">Lump Sum Top-Ups</div>
+      <div class="field-hint" style="margin-bottom:10px">Add one-off deposits at a specific year (e.g. tax return, bonus).</div>
+      <div id="lumpList"></div>
+      <button type="button" class="amort-btn" id="btnAddLump">+ Add Lump Sum</button>
+
+      <div class="section-label">Inflation Adjustment</div>
+      <div class="toggle-group">
+        <div class="toggle-switch">
+          <input type="radio" name="inflMode" id="rInflOff" value="off" checked>
+          <label for="rInflOff">Off</label>
+          <input type="radio" name="inflMode" id="rInflOn" value="on">
+          <label for="rInflOn">Show Real Values</label>
+        </div>
+      </div>
+      <div id="inflField" class="hidden">
+        <div class="field">
+          <label for="fInfl">Annual Inflation Rate</label>
+          <div class="input-wrap">
+            <input type="number" id="fInfl" class="has-suffix" min="0" max="20" step="0.1" value="2.5">
+            <span class="suffix">%</span>
+          </div>
+          <div class="field-hint">Shows closing balances in today&rsquo;s purchasing power. Does not change nominal calculations.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT -->
+<div>
+  <div class="card">
+    <h2>Results</h2>
+
+    <div class="results-grid">
+      <div class="result-box hl">
+        <div class="lbl" id="rMainLbl">Time to Goal</div>
+        <div class="val" id="rMain">&mdash;</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Total Deposited</div>
+        <div class="val" id="rDeposited">&mdash;</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Interest Earned</div>
+        <div class="val" id="rInterest" style="color:var(--gr)">&mdash;</div>
+      </div>
+      <div class="result-box hidden" id="rLumpBox">
+        <div class="lbl">Total Lump Sums</div>
+        <div class="val" id="rLump" style="color:var(--am)">&mdash;</div>
+      </div>
+      <div class="result-box hidden" id="rRealBox">
+        <div class="lbl">Real Value (Today&rsquo;s $)</div>
+        <div class="val" id="rReal" style="color:var(--bl)">&mdash;</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Goal Date</div>
+        <div class="val" id="rGoalDate" style="font-size:.95rem">&mdash;</div>
+      </div>
+    </div>
+
+    <div class="banner bn-green" id="bannerGoal"></div>
+    <div class="banner bn-blue"  id="bannerReal"></div>
+
+    <div class="section-title">Progress Toward Goal</div>
+    <div class="progress-wrap">
+      <div class="progress-label-row">
+        <span id="progStart">$0 saved</span>
+        <span id="progPct" style="font-weight:700;color:var(--gr)">0%</span>
+      </div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progFill" style="width:0%"></div></div>
+      <div class="progress-label-row" style="margin-top:4px">
+        <span id="progGoal">Goal: $0</span>
+        <span id="progDate">&mdash;</span>
+      </div>
+    </div>
+
+    <div class="section-title">Savings Breakdown</div>
+    <table class="bd-table">
+      <thead><tr><th>Component</th><th>Per Period</th><th>Annual</th><th>Total</th><th>% of Goal</th></tr></thead>
+      <tbody id="tBody"><tr><td colspan="5" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter savings details to see results</td></tr></tbody>
+    </table>
+
+    <div class="chart-section">
+      <div class="chart-header">
+        <div class="section-title" style="margin:0">Savings Growth Over Time</div>
+        <div class="chart-hint">&#9432; Hover to see balance breakdown by year</div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="myChart" height="140"></canvas>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(42,157,103,0.75)"></div>Contributions</div>
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(63,127,181,0.75)"></div>Interest</div>
+          <div class="chart-legend-item hidden" id="lumpLegend"><div class="chart-swatch" style="background:rgba(182,134,44,0.75)"></div>Lump Sums</div>
+          <div class="chart-legend-item hidden" id="realLegend"><div class="chart-swatch" style="background:rgba(229,57,53,0.7)"></div>Real Value</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="amort-btn" id="schedBtn" type="button">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+      Show Year-by-Year Schedule
+    </button>
+    <div id="schedSection" class="hidden">
+      <div class="amort-wrap">
+        <table class="amort-table">
+          <thead><tr>
+            <th style="text-align:left">Year</th>
+            <th style="text-align:left">Date</th>
+            <th>Opening</th><th>Contributions</th><th>Lump Sum</th>
+            <th>Interest</th><th>Closing</th>
+            <th id="realSchedCol" class="hidden">Real Value</th>
+            <th>% of Goal</th>
+          </tr></thead>
+          <tbody id="schedBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn btn-green" id="btnCSV" type="button">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
+        Export Summary CSV
+      </button>
+      <button class="btn btn-green" id="btnSchedCSV" type="button">
+        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+        Export Schedule CSV
+      </button>
+    </div>
+
+    <div class="note">Estimates only. Assumes a constant interest rate and regular contributions at the start of each period, compounded at contribution frequency. Inflation adjustment shows purchasing power in today&rsquo;s dollars and does not alter nominal projections. Lump sums applied at start of specified year. Not personal financial advice.</div>
+  </div>
+</div>
+
+</div></div></div>
+<div class="ft"><span>Estimates only &mdash; general information, not personal financial advice.</span></div>
+
+<!-- Chart.js loaded first, then our script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+// All code runs after the full page + Chart.js has loaded
+window.addEventListener('load', function() {
+
+  var barChart   = null;
+  var lastRows   = [];
+  var lastGoal   = 0;
+  var lastFreq   = 12;
+  var lumpCount  = 0;
+
+  // Helpers
+  function g(id)    { return document.getElementById(id); }
+  function show(id) { g(id).classList.remove('hidden'); }
+  function hide(id) { g(id).classList.add('hidden'); }
+  function fmt2(n)  { return '$' + Math.abs(n).toLocaleString('en-AU', {minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function fmt0(n)  { return '$' + Math.round(Math.abs(n)).toLocaleString('en-AU'); }
+  function fpct(n)  { return n.toFixed(1) + '%'; }
+
+  function getFreq() { return parseInt(document.querySelector('input[name="freq"]:checked').value); }
+  function getMode() { return document.querySelector('input[name="calcMode"]:checked').value; }
+  function getInfl() { return document.querySelector('input[name="inflMode"]:checked').value === 'on'; }
+  function freqShort(f) { return f===52?'wk':f===26?'fn':f===12?'mo':'yr'; }
+  function freqFull(f)  { return f===52?'Weekly':f===26?'Fortnightly':f===12?'Monthly':'Annually'; }
+
+  // Set today as default start date
+  var now = new Date();
+  g('fStart').value = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+
+  // Date helpers
+  function goalDateStr(startYM, periods, freq) {
+    if (!startYM) return '—';
+    var parts = startYM.split('-');
+    var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, 1);
+    d.setMonth(d.getMonth() + Math.ceil(periods / (freq/12)));
+    var mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return mn[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function yearDateStr(startYM, yearNum) {
+    if (!startYM) return 'Year ' + yearNum;
+    var parts = startYM.split('-');
+    var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1 + yearNum*12, 1);
+    var mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return mn[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  // Lump sums
+  function addLump() {
+    var id = lumpCount++;
+    var div = document.createElement('div');
+    div.id = 'lump_' + id;
+    div.className = 'lump-row';
+    div.innerHTML =
+      '<div class="field" style="margin:0"><label>Amount</label>'
+      + '<div class="input-wrap"><span class="prefix">$</span>'
+      + '<input type="number" id="la_'+id+'" class="has-prefix" min="0" step="100" value="1000"></div></div>'
+      + '<div class="field" style="margin:0"><label>At Year #</label>'
+      + '<div class="input-wrap"><input type="number" id="ly_'+id+'" min="1" max="50" step="1" value="1"></div></div>'
+      + '<button type="button" class="lump-remove">&#x2715;</button>';
+    g('lumpList').appendChild(div);
+    g('la_'+id).addEventListener('input', calculate);
+    g('ly_'+id).addEventListener('input', calculate);
+    div.querySelector('.lump-remove').addEventListener('click', function(){ div.remove(); calculate(); });
+    calculate();
+  }
+
+  function getLumps() {
+    var m = {};
+    document.querySelectorAll('[id^="la_"]').forEach(function(el) {
+      var id  = el.id.replace('la_','');
+      var lyEl = g('ly_'+id);
+      if (!lyEl) return;
+      var amt = parseFloat(el.value) || 0;
+      var yr  = parseInt(lyEl.value) || 1;
+      m[yr] = (m[yr]||0) + amt;
+    });
+    return m;
+  }
+
+  // Main calculate
+  function calculate() {
+    var goal    = parseFloat(g('fGoal').value)    || 0;
+    var initial = parseFloat(g('fInitial').value) || 0;
+    var freq    = getFreq();
+    var rate    = parseFloat(g('fRate').value)    || 0;
+    var mode    = getMode();
+    var startYM = g('fStart').value;
+    var lumps   = getLumps();
+    var inflOn  = getInfl();
+    var inflRate = inflOn ? (parseFloat(g('fInfl').value) || 0) : 0;
+    var r       = rate / 100 / freq;
+
+    if (goal <= 0) return;
+
+    var contrib = parseFloat(g('fContrib').value) || 0;
+    var periods;
+
+    if (mode === 'contribution') {
+      var ty = parseFloat(g('fTarget').value) || 1;
+      periods = Math.round(ty * freq);
+      var growth = Math.pow(1+r, periods);
+      contrib = r === 0
+        ? Math.max(0, (goal-initial) / periods)
+        : Math.max(0, (goal - initial*growth) * r / (growth-1));
+      g('fContrib').value = contrib.toFixed(2);
+    } else {
+      if (initial >= goal) {
+        periods = 0;
+      } else {
+        var bal = initial, p = 0, maxP = freq * 60;
+        while (bal < goal && p < maxP) {
+          var chkYr = Math.floor(p/freq) + 1;
+          if (p % freq === 0 && lumps[chkYr]) bal += lumps[chkYr];
+          bal += contrib;
+          bal += bal * r;
+          p++;
+        }
+        periods = p;
+      }
+    }
+
+    // Build schedule
+    var years      = Math.max(1, Math.ceil(periods/freq));
+    var balance    = initial;
+    var totC=0, totI=0, totL=0;
+    var rows=[], lbls=[], cC=[], cI=[], cL=[], cR=[];
+
+    for (var y=1; y<=years; y++) {
+      var opening = balance;
+      var yC=0, yI=0, yL=0;
+      var ppy = (y===years) ? (periods-(y-1)*freq) : freq;
+      if (lumps[y]) { balance += lumps[y]; yL += lumps[y]; }
+      for (var pp=0; pp<ppy; pp++) {
+        if (balance >= goal*1.0001) break;
+        balance += contrib; yC += contrib;
+        var intr = balance*r; balance += intr; yI += intr;
+      }
+      balance = Math.min(balance, goal*1.001);
+      totC+=yC; totI+=yI; totL+=yL;
+      var realVal = inflOn ? balance / Math.pow(1+inflRate/100, y) : null;
+      rows.push({year:y, opening:opening, contrib:yC, lump:yL, interest:yI, closing:balance, real:realVal});
+      lbls.push('Yr '+y);
+      cC.push(Math.round(initial+totC));
+      cI.push(Math.round(totI));
+      cL.push(Math.round(totL));
+      cR.push(realVal!==null ? Math.round(realVal) : null);
+    }
+    lastRows=rows; lastGoal=goal; lastFreq=freq;
+
+    // Time string
+    var yN = periods/freq;
+    var yF = Math.floor(yN), mR = Math.round((yN-yF)*12);
+    var timeStr = '';
+    if (yF>0) timeStr += yF+(yF===1?' yr':' yrs');
+    if (mR>0) timeStr += (timeStr?' ':'')+mR+(mR===1?' mo':' mos');
+    if (!timeStr) timeStr = '< 1 mo';
+
+    var gd = goalDateStr(startYM, periods, freq);
+
+    // Result boxes
+    g('rMainLbl').textContent   = mode==='contribution' ? 'Required / '+freqShort(freq) : 'Time to Goal';
+    g('rMain').textContent      = mode==='contribution' ? fmt0(contrib) : timeStr;
+    g('rDeposited').textContent = fmt0(initial+totC);
+    g('rInterest').textContent  = fmt0(totI);
+    g('rGoalDate').textContent  = gd;
+
+    if (totL>0) { show('rLumpBox'); g('rLump').textContent=fmt0(totL); } else { hide('rLumpBox'); }
+    if (inflOn&&rows.length) { show('rRealBox'); g('rReal').textContent=fmt0(rows[rows.length-1].real); } else { hide('rRealBox'); }
+
+    // Banners
+    var lbl = g('fGoalLabel').value || 'your goal';
+    var bn = g('bannerGoal');
+    bn.style.display = '';
+    bn.innerHTML = 'You will reach <strong>'+lbl+'</strong> ('+fmt0(goal)+') in <strong>'+timeStr+'</strong>'
+      + (gd!=='—' ? ' by <strong>'+gd+'</strong>' : '')+'.';
+    if (inflOn&&rows.length) {
+      g('bannerReal').style.display='';
+      g('bannerReal').innerHTML='In today's dollars (at '+inflRate+'% inflation), your '+fmt0(goal)
+        +' goal will be worth approximately <strong>'+fmt0(rows[rows.length-1].real)+'</strong>.';
+    } else { g('bannerReal').style.display='none'; }
+
+    // Progress bar
+    var pPct = Math.min(100, (initial/goal)*100);
+    g('progFill').style.width  = pPct.toFixed(1)+'%';
+    g('progPct').textContent   = pPct.toFixed(1)+'%';
+    g('progStart').textContent = fmt0(initial)+' saved';
+    g('progGoal').textContent  = 'Goal: '+fmt0(goal);
+    g('progDate').textContent  = 'Target: '+gd;
+
+    // Breakdown table
+    var t = '';
+    t += '<tr><td>Initial Savings</td><td>&mdash;</td><td>&mdash;</td><td>'+fmt0(initial)+'</td><td>'+fpct(initial/goal*100)+'</td></tr>';
+    t += '<tr><td>Regular Contributions</td><td>'+fmt2(contrib)+'</td><td>'+fmt0(contrib*freq)+'</td><td>'+fmt0(totC)+'</td><td>'+fpct(totC/goal*100)+'</td></tr>';
+    if (totL>0) t += '<tr><td>Lump Sum Top-Ups</td><td>&mdash;</td><td>&mdash;</td><td>'+fmt0(totL)+'</td><td>'+fpct(totL/goal*100)+'</td></tr>';
+    t += '<tr><td>Interest Earned</td><td>&mdash;</td><td>&mdash;</td><td>'+fmt0(totI)+'</td><td>'+fpct(totI/goal*100)+'</td></tr>';
+    t += '<tr class="total-row"><td>Total at Goal</td><td>&mdash;</td><td>&mdash;</td><td>'+fmt0(initial+totC+totL+totI)+'</td><td>100%</td></tr>';
+    g('tBody').innerHTML = t;
+
+    // Chart legends
+    if (totL>0) show('lumpLegend'); else hide('lumpLegend');
+    if (inflOn) show('realLegend'); else hide('realLegend');
+
+    // Chart
+    var ctx = g('myChart').getContext('2d');
+    if (barChart) { barChart.destroy(); barChart=null; }
+    var datasets = [
+      {label:'Contributions', data:cC, backgroundColor:'rgba(42,157,103,0.75)', stack:'a'},
+      {label:'Interest',      data:cI, backgroundColor:'rgba(63,127,181,0.75)', stack:'a'}
+    ];
+    if (totL>0) datasets.push({label:'Lump Sums', data:cL, backgroundColor:'rgba(182,134,44,0.75)', stack:'a'});
+    if (inflOn) datasets.push({label:'Real Value', data:cR, type:'line', borderColor:'rgba(229,57,53,0.85)', backgroundColor:'transparent', borderWidth:2, pointRadius:3, pointBackgroundColor:'rgba(229,57,53,0.9)', fill:false, tension:0.3});
+    barChart = new Chart(ctx, {
+      type:'bar', data:{labels:lbls, datasets:datasets},
+      options:{
+        responsive:true, interaction:{mode:'index',intersect:false},
+        plugins:{
+          legend:{display:false},
+          tooltip:{backgroundColor:'rgba(30,20,50,0.92)',titleColor:'#fff',bodyColor:'rgba(255,255,255,0.88)',padding:11,cornerRadius:8,
+            callbacks:{label:function(item){return '  '+item.dataset.label+': '+fmt0(item.raw);}}}
+        },
+        scales:{
+          x:{stacked:true,grid:{display:false},ticks:{font:{size:10},color:'#6c7a89'}},
+          y:{stacked:true,grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#6c7a89',callback:function(v){return '$'+v.toLocaleString('en-AU');}}}
+        }
+      }
+    });
+
+    // Year schedule
+    if (inflOn) show('realSchedCol'); else hide('realSchedCol');
+    var sh='';
+    rows.forEach(function(row){
+      sh += '<tr>'
+        +'<td>Year '+row.year+'</td>'
+        +'<td>'+yearDateStr(startYM,row.year)+'</td>'
+        +'<td>'+fmt0(row.opening)+'</td>'
+        +'<td style="color:var(--gr)">'+fmt0(row.contrib)+'</td>'
+        +'<td style="color:var(--am)">'+(row.lump>0?fmt0(row.lump):'&mdash;')+'</td>'
+        +'<td style="color:var(--bl)">'+fmt0(row.interest)+'</td>'
+        +'<td style="font-weight:700">'+fmt0(row.closing)+'</td>'
+        +(inflOn?'<td style="color:var(--bl)">'+fmt0(row.real)+'</td>':'')
+        +'<td>'+fpct(Math.min(100,row.closing/goal*100))+'</td>'
+        +'</tr>';
+    });
+    g('schedBody').innerHTML = sh;
+  }
+
+  // UI toggles
+  document.querySelectorAll('input[name="calcMode"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      var isC = getMode()==='contribution';
+      if (isC) show('targetField'); else hide('targetField');
+      g('fContrib').readOnly  = isC;
+      g('fContrib').style.opacity = isC ? '.5' : '1';
+      calculate();
+    });
+  });
+
+  document.querySelectorAll('input[name="inflMode"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      var on = getInfl();
+      if (on) show('inflField'); else hide('inflField');
+      if (on) show('rRealBox');  else hide('rRealBox');
+      calculate();
+    });
+  });
+
+  g('addlBtn').addEventListener('click', function(){
+    var exp = this.getAttribute('aria-expanded')==='true';
+    this.setAttribute('aria-expanded', String(!exp));
+    g('addlBody').classList.toggle('collapsed', exp);
+  });
+
+  g('schedBtn').addEventListener('click', function(){
+    var hidden = g('schedSection').classList.toggle('hidden');
+    var ico = '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> ';
+    this.innerHTML = ico + (hidden ? 'Show Year-by-Year Schedule' : 'Hide Year-by-Year Schedule');
+  });
+
+  g('btnAddLump').addEventListener('click', addLump);
+
+  // Reset
+  g('btnReset').addEventListener('click', function(){
+    g('fGoal').value='50000'; g('fInitial').value='5000'; g('fContrib').value='800';
+    g('fRate').value='4.5'; g('fGoalLabel').value=''; g('fTarget').value='5';
+    g('rMonthly').checked=true; g('rTime').checked=true; g('rInflOff').checked=true;
+    g('fContrib').readOnly=false; g('fContrib').style.opacity='1';
+    hide('targetField'); hide('inflField'); hide('rRealBox'); hide('rLumpBox');
+    g('lumpList').innerHTML='';
+    var n=new Date();
+    g('fStart').value=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0');
+    calculate();
+  });
+
+  // CSV
+  function dlCSV(name, content){
+    var blob=new Blob([content],{type:'text/csv'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+  }
+  g('btnCSV').addEventListener('click', function(){
+    var lbl=g('fGoalLabel').value||'Savings_Goal';
+    var lines=['Savings Goal Calculator - Summary','Goal,'+fmt0(lastGoal),
+      'Rate,'+g('fRate').value+'%','Frequency,'+freqFull(lastFreq),
+      'Contribution,'+fmt2(parseFloat(g('fContrib').value)||0),
+      'Total Deposited,'+g('rDeposited').textContent,
+      'Interest Earned,'+g('rInterest').textContent,
+      'Goal Date,'+g('rGoalDate').textContent];
+    dlCSV(lbl.replace(/\s+/g,'_')+'_summary.csv', lines.join('
+'));
+  });
+  g('btnSchedCSV').addEventListener('click', function(){
+    if (!lastRows.length) return;
+    var inflOn=getInfl(), startYM=g('fStart').value;
+    var hdr='Year,Date,Opening,Contributions,Lump Sum,Interest,Closing'+(inflOn?',Real Value':'')+',% of Goal';
+    var lines=[hdr];
+    lastRows.forEach(function(row){
+      var r=[row.year, yearDateStr(startYM,row.year), Math.round(row.opening),
+        Math.round(row.contrib), Math.round(row.lump), Math.round(row.interest), Math.round(row.closing)];
+      if (inflOn) r.push(Math.round(row.real));
+      r.push(fpct(Math.min(100,row.closing/lastGoal*100)));
+      lines.push(r.join(','));
+    });
+    var lbl=g('fGoalLabel').value||'Savings_Goal';
+    dlCSV(lbl.replace(/\s+/g,'_')+'_schedule.csv', lines.join('
+'));
+  });
+
+  // Input listeners
+  ['fGoal','fInitial','fContrib','fRate','fTarget','fGoalLabel','fInfl','fStart'].forEach(function(id){
+    g(id).addEventListener('input',  calculate);
+    g(id).addEventListener('change', calculate);
+  });
+  document.querySelectorAll('input[name="freq"]').forEach(function(r){ r.addEventListener('change', calculate); });
+
+  // Collapse on mobile
+  if (window.innerWidth < 900) {
+    g('addlBody').classList.add('collapsed');
+    g('addlBtn').setAttribute('aria-expanded','false');
+  }
+
+  // Run on load
+  calculate();
+
+}); // end window.load
+</script>
+</body>
+</html>
