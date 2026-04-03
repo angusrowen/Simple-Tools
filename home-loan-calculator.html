@@ -16,7 +16,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;width:100%}
-.topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14)}
+.topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14)}
 .topbar-logo a{display:flex;align-items:center;gap:10px;text-decoration:none}
 .app-mark{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:var(--gr);color:#fff;font-weight:800;font-size:1rem;box-shadow:0 8px 20px rgba(42,157,103,.28)}
 .topbar-title{color:#fff;font-size:1rem;font-weight:700}
@@ -321,6 +321,7 @@ ins.adsbygoogle iframe,
 
 </style>
 <style>
+body{background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%) !important;}
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f8fb;color:#22313f;line-height:1.5}';
   h+='.hd{background:#3e5f75;padding:16px 32px;border-bottom:1px solid #6a92ad;display:flex;align-items:center;gap:16px}.hd-t{color:#fff;font-size:1rem;font-weight:700}.hd-b{background:#e7f8ef;color:#2a9d67;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;margin-left:auto}.hd-d{color:rgba(255,255,255,.7);font-size:.8rem}';
   h+='.ct{max-width:1200px;margin:0 auto;padding:24px}.cd{background:#fff;border:1px solid #d7e1ea;border-radius:16px;padding:20px 24px;margin-bottom:16px}.cd h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #2a9d67;color:#2d465b}';
@@ -448,6 +449,24 @@ ins.adsbygoogle iframe,
     </button>
     <div class="collapsible-body" id="addlBody">
 
+      <div class="section-label first">Establishment Fee</div>
+      <div class="field">
+        <label for="fEstFee">Upfront Establishment Fee</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="fEstFee" class="has-prefix" placeholder="e.g. 600 (optional)" min="0" step="10">
+        </div>
+        <div class="field-hint">One-off fee charged at loan settlement. Added to your total cost.</div>
+      </div>
+
+      <div class="section-label">Monthly Fee</div>
+      <div class="field">
+        <label for="fMFee">Ongoing Monthly Fee</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="fMFee" class="has-prefix" placeholder="e.g. 10 (optional)" min="0" step="1">
+        </div>
+        <div class="field-hint">Recurring account-keeping fee charged each month over the loan term.</div>
+      </div>
+
       <div class="section-label">Extra Repayments</div>
       <div class="field">
         <label for="fExtra">Extra Repayment per Period</label>
@@ -458,18 +477,12 @@ ins.adsbygoogle iframe,
       </div>
 
       <div class="section-label">Offset Account</div>
-      <div class="checkbox-field">
-        <input type="checkbox" id="fOffsetToggle">
-        <label for="fOffsetToggle">Include offset account balance</label>
-      </div>
-      <div id="offsetBlock" class="hidden" style="margin-top:8px">
-        <div class="field">
-          <label for="fOffset">Offset Balance</label>
-          <div class="input-wrap"><span class="prefix">$</span>
-            <input type="number" id="fOffset" class="has-prefix" placeholder="e.g. 50000" min="0" step="1000">
-          </div>
-          <div class="field-hint">Interest is calculated on loan balance minus offset amount.</div>
+      <div class="field">
+        <label for="fOffset">Offset Balance</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="fOffset" class="has-prefix" placeholder="e.g. 50000 (optional)" min="0" step="1000">
         </div>
+        <div class="field-hint">Interest is calculated on loan balance minus offset amount.</div>
       </div>
 
       <div class="section-label">Start Date</div>
@@ -513,6 +526,18 @@ ins.adsbygoogle iframe,
       <div class="result-box">
         <div class="label">Total Interest</div>
         <div class="value" id="rInterest" style="color:var(--red);font-weight:700">—</div>
+      </div>
+      <div class="result-box" id="rFeeBox" style="display:none">
+        <div class="label">Total Fees</div>
+        <div class="value" id="rFees" style="color:var(--am)">—</div>
+      </div>
+      <div class="result-box" id="rCostBox" style="display:none">
+        <div class="label">Total Cost of Loan</div>
+        <div class="value" id="rCost">—</div>
+      </div>
+      <div class="result-box" id="rCmpBox" style="display:none">
+        <div class="label">Comparison Rate <span style="font-size:.65rem;font-weight:400;text-transform:none">(est.)</span></div>
+        <div class="value" id="rCmp" style="color:var(--bl)">—</div>
       </div>
     </div>
 
@@ -733,8 +758,8 @@ ins.adsbygoogle iframe,
     if (chartObj) { chartObj.destroy(); chartObj = null; }
 
     var P    = parseFloat(el('fLoanAmt').value) || 0;
-    var P0   = parseFloat(el('fLoanAmt').value) || 0;
-    var yMax = Math.ceil((P0 * 1.05) / 50000) * 50000;
+    var P0      = parseFloat(el('fLoanAmt').value) || 0;
+    var yMax    = Math.ceil(P0 * 1.25 / 50000) * 50000;
 
     var lastIdx  = -1;
     var rafBusy  = false;
@@ -823,16 +848,10 @@ ins.adsbygoogle iframe,
         scales: {
           x: { grid:{display:false}, ticks:{font:{size:10}, color:'#6c7a89', maxTicksLimit:16} },
           y: {
-            min: 0, max: yMax,
-            grid: { color:'rgba(0,0,0,0.05)' },
-            ticks: {
-              font:{size:10}, color:'#6c7a89',
-              stepSize: 100000,
-              callback: function(v) {
-                if (v > loanAmt) return null;
-                return '$'+Math.round(v/1000)+'k';
-              }
-            }
+            min: 0,
+            max: yMax,
+            grid: { color:'rgba(0,0,0,.05)' },
+            ticks: { font:{size:10}, color:'#6c7a89', callback: function(v){ return '$'+v.toLocaleString('en-AU'); } }
           }
         },
         animation: { duration:350 }
@@ -849,16 +868,17 @@ ins.adsbygoogle iframe,
     var rate   = parseFloat(el('fRate').value)        || 0;
     var term   = parseFloat(el('fTerm').value)        || 0;
     var freq   = getFreq();
+    var n      = ppy(freq);
     var ltype  = getLType();
     var ioPer  = parseFloat(el('fIOPer').value)       || 0;
     var extra  = parseFloat(el('fExtra').value)       || 0;
-    var useOff = el('fOffsetToggle').checked;
-    var offset = useOff ? (parseFloat(el('fOffset').value) || 0) : 0;
+    var offset = parseFloat(el('fOffset').value) || 0;
+    var estFee = parseFloat(el('fEstFee').value) || 0;
+    var mFee   = parseFloat(el('fMFee').value)   || 0;
     var startV = el('fStart').value;
 
     if (!P || !rate || !term) { clearAll(); return; }
 
-    var n   = ppy(freq);
     var r   = rate / 100 / n;
 
     // Base schedule (no extra, no offset, P&I)
@@ -869,7 +889,11 @@ ins.adsbygoogle iframe,
     savedRows = actualS.rows;
 
     var totInt   = actualS.totalInterest;
-    var totRepay = P + totInt;
+    var mFeePerPer = freq==='monthly' ? mFee : freq==='fortnightly' ? mFee*12/26 : mFee*12/52;
+    var totMFees   = mFee * term * 12;
+    var totalFees  = estFee + totMFees;
+    var totRepay   = P + totInt;
+    var totCost    = totRepay + totalFees;
     var actPers  = actualS.rows.length;
     var basePers = baseS.rows.length;
     var baseInt  = baseS.totalInterest;
@@ -886,6 +910,33 @@ ins.adsbygoogle iframe,
     el('rRepay').textContent    = d2(dispPmt);
     el('rTotal').textContent    = d0(totRepay);
     el('rInterest').textContent = d0(totInt);
+
+    if (totalFees > 0) {
+      // Comparison rate via Newton-Raphson IRR
+      function compRate() {
+        var pmtAdj = dispPmt + mFeePerPer;
+        var cf = [-(P - estFee)];
+        for (var i = 0; i < actPers; i++) cf.push(pmtAdj);
+        var cr = rate / 100 / n;
+        for (var it = 0; it < 80; it++) {
+          var f = cf[0], df = 0;
+          for (var j = 1; j < cf.length; j++) { f += cf[j]/Math.pow(1+cr,j); df -= j*cf[j]/Math.pow(1+cr,j+1); }
+          if (Math.abs(df) < 1e-15) break;
+          var rn = cr - f/df; if (Math.abs(rn-cr) < 1e-9) { cr=rn; break; } cr=rn;
+        }
+        return cr * n * 100;
+      }
+      el('rFeeBox').style.display  = '';
+      el('rFees').textContent      = d0(totalFees);
+      el('rCostBox').style.display = '';
+      el('rCost').textContent      = d0(totCost);
+      el('rCmpBox').style.display  = '';
+      el('rCmp').textContent       = compRate().toFixed(2) + '%';
+    } else {
+      el('rFeeBox').style.display  = 'none';
+      el('rCostBox').style.display = 'none';
+      el('rCmpBox').style.display  = 'none';
+    }
 
     if (ltype === 'io' && ioPer > 0) {
       el('ioMetrics').classList.remove('hidden');
@@ -907,7 +958,7 @@ ins.adsbygoogle iframe,
       el('bannerExtra').style.display = 'none';
     }
 
-    if (useOff && offset > 0) {
+    if (offset > 0) {
       var noOff  = buildSched(P, rate, term, freq, extra, 0, 'pi', 0);
       var oSaved = noOff.totalInterest - totInt;
       var oTime  = noOff.rows.length - actPers;
@@ -933,63 +984,43 @@ ins.adsbygoogle iframe,
       el('bannerPayoff').style.display = 'none';
     }
 
-    // ── Breakdown table
-    function mPmt(fq) {
-      var p2=ppy(fq), r2=rate/100/p2, n2=term*p2;
-      return r2===0 ? P/n2 : P*(r2*Math.pow(1+r2,n2))/(Math.pow(1+r2,n2)-1);
+    // ── Breakdown table (PL-style)
+    function trow(lbl, pp, life, rowStyle) {
+      var mo  = freq==='weekly' ? pp*52/12 : freq==='fortnightly' ? pp*26/12 : pp;
+      var ann = mo * 12;
+      var pct = totCost > 0 ? (life/totCost*100) : 0;
+      var s   = rowStyle ? ' style="'+rowStyle+'"' : '';
+      return '<tr'+s+'><td>'+lbl+'</td>'
+           + '<td style="text-align:right">'+d2(pp)+'</td>'
+           + '<td style="text-align:right">'+d2(mo)+'</td>'
+           + '<td style="text-align:right">'+d0(ann)+'</td>'
+           + '<td style="text-align:right">'+d0(life)+'</td>'
+           + '<td style="text-align:right">'+pct.toFixed(1)+'%</td></tr>';
     }
-    var mPay = mPmt('monthly');
     var rows = '';
-
-    rows += '<tr><td>Minimum Repayment</td>'
-          + '<td style="text-align:right">' + d2(dispPmt) + '</td>'
-          + '<td style="text-align:right">' + d2(mPay) + '</td>'
-          + '<td style="text-align:right">' + d0(mPay*12) + '</td>'
-          + '<td style="text-align:right">' + d0(P + baseInt) + '</td>'
-          + '<td style="text-align:right;color:var(--txl)">100%</td></tr>';
-
-    if (extra > 0) {
-      rows += '<tr class="indent"><td>+ Extra Repayment</td>'
-            + '<td style="text-align:right">' + d2(extra) + '</td>'
-            + '<td style="text-align:right">' + d2(extra*(n/12)) + '</td>'
-            + '<td style="text-align:right">' + d0(extra*n) + '</td>'
-            + '<td style="text-align:right">' + d0(extra*actPers) + '</td>'
-            + '<td style="text-align:right;color:var(--txl)">—</td></tr>';
-    }
-
-    rows += '<tr class="section-header"><td colspan="6">Principal &amp; Interest Split</td></tr>';
-
-    rows += '<tr><td>Principal (Loan Amount)</td>'
-          + '<td style="text-align:right">—</td>'
-          + '<td style="text-align:right">—</td>'
-          + '<td style="text-align:right">' + d0(P/term) + '</td>'
-          + '<td style="text-align:right">' + d0(P) + '</td>'
-          + '<td style="text-align:right;color:var(--gr);font-weight:700">' + pct(P/totRepay*100) + '</td></tr>';
-
-    rows += '<tr class="negative"><td>Interest Cost</td>'
-          + '<td style="text-align:right">' + d2(dispPmt - P/(term*n)) + '</td>'
-          + '<td style="text-align:right">' + d2(mPay - P/(term*12)) + '</td>'
-          + '<td style="text-align:right">' + d0(totInt/term) + '</td>'
-          + '<td style="text-align:right">' + d0(totInt) + '</td>'
-          + '<td style="text-align:right;color:var(--red);font-weight:700">' + pct(totInt/totRepay*100) + '</td></tr>';
-
-    if (useOff && offset > 0) {
+    rows += trow('Minimum Repayment', dispPmt, dispPmt * actPers);
+    if (extra > 0) rows += trow('+ Extra Repayment', extra, extra * actPers);
+    rows += trow('Principal Repayment', actualS.rows[0] ? actualS.rows[0].principal : 0, P);
+    rows += trow('Interest', actualS.rows[0] ? actualS.rows[0].interest : 0, totInt);
+    if (mFee > 0)   rows += trow('Monthly Fee', mFeePerPer, totMFees);
+    if (estFee > 0) rows += '<tr><td>Establishment Fee (upfront)</td>'
+                          + '<td style="text-align:right">—</td><td style="text-align:right">—</td>'
+                          + '<td style="text-align:right">—</td>'
+                          + '<td style="text-align:right">'+d0(estFee)+'</td>'
+                          + '<td style="text-align:right">'+(estFee/totCost*100).toFixed(1)+'%</td></tr>';
+    if (offset > 0) {
       var noOff2 = buildSched(P, rate, term, freq, extra, 0, 'pi', 0);
       var oSv2   = noOff2.totalInterest - totInt;
-      rows += '<tr style="background:var(--bll)"><td style="color:var(--bl);font-weight:600">&#8627; Offset Saving (' + d0(offset) + ')</td>'
+      rows += '<tr style="background:var(--bll)"><td style="color:var(--bl);font-weight:600">&#8627; Offset Saving ('+d0(offset)+')</td>'
             + '<td style="text-align:right">—</td><td style="text-align:right">—</td>'
-            + '<td style="text-align:right;color:var(--bl);font-weight:600">' + d0(oSv2/term) + '/yr</td>'
-            + '<td style="text-align:right;color:var(--bl);font-weight:600">&#8722;' + d0(oSv2) + '</td>'
-            + '<td style="text-align:right;color:var(--bl);font-weight:600">' + pct(oSv2/noOff2.totalInterest*100) + ' less</td></tr>';
+            + '<td style="text-align:right;color:var(--bl)">'+d0(oSv2/term)+'/yr</td>'
+            + '<td style="text-align:right;color:var(--bl)">&#8722;'+d0(oSv2)+'</td>'
+            + '<td style="text-align:right;color:var(--bl)">'+(oSv2/noOff2.totalInterest*100).toFixed(1)+'% less</td></tr>';
     }
-
-    rows += '<tr class="total-row"><td>Total Repayments</td>'
-          + '<td style="text-align:right">' + d2(dispPmt+extra) + '</td>'
-          + '<td style="text-align:right">' + d2(mPay+extra*(n/12)) + '</td>'
-          + '<td style="text-align:right">' + d0((mPay+extra*(n/12))*12) + '</td>'
-          + '<td style="text-align:right">' + d0(totRepay) + '</td>'
-          + '<td style="text-align:right;color:var(--txl)">100%</td></tr>';
-
+    rows += '<tr class="total-row"><td>Total Cost of Loan</td>'
+          + '<td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td>'
+          + '<td style="text-align:right">'+d0(totCost)+'</td>'
+          + '<td style="text-align:right">100%</td></tr>';
     el('tBody').innerHTML = rows;
 
     // ── Chart
@@ -1012,12 +1043,10 @@ ins.adsbygoogle iframe,
   }
 
   function doReset() {
-    ['fLoanAmt','fRate','fTerm','fExtra','fOffset','fIOPer'].forEach(function(id){ el(id).value=''; });
+    ['fLoanAmt','fRate','fTerm','fExtra','fOffset','fIOPer','fEstFee','fMFee'].forEach(function(id){ el(id).value=''; });
     el('fStart').value = '';
     el('rMonthly').checked = true;
     el('rPI').checked = true;
-    el('fOffsetToggle').checked = false;
-    el('offsetBlock').classList.add('hidden');
     el('ioBlock').classList.add('hidden');
     el('ioMetrics').classList.add('hidden');
     el('amortSection').classList.add('hidden');
@@ -1139,16 +1168,11 @@ ins.adsbygoogle iframe,
     calculate();
 
     // Input events
-    ['fLoanAmt','fRate','fTerm','fExtra','fOffset','fIOPer','fStart']
+    ['fLoanAmt','fRate','fTerm','fExtra','fOffset','fIOPer','fStart','fEstFee','fMFee']
       .forEach(function(id){ el(id).addEventListener('input', calculate); });
 
     document.querySelectorAll('input[name="freq"], input[name="ltype"]')
       .forEach(function(r){ r.addEventListener('change', calculate); });
-
-    el('fOffsetToggle').addEventListener('change', function() {
-      el('offsetBlock').classList.toggle('hidden', !this.checked);
-      calculate();
-    });
 
     el('rIO').addEventListener('change', function() { el('ioBlock').classList.remove('hidden'); calculate(); });
     el('rPI').addEventListener('change', function() { el('ioBlock').classList.add('hidden');    calculate(); });
