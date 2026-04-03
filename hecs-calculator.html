@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HECS-HELP Student Loan Calculator</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
+  --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
+  --tx:#22313f;--txl:#6c7a89;--red:#e53935;
+  --bl:#3f7fb5;--bll:#edf5fb;--am:#b6862c;--aml:#faf2df;
+  --pu:#7b5ea7;--pul:#f3eeff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+.topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
+.topbar-logo a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;color:#fff;text-decoration:none}
+.topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
+.topbar-title{color:#fff;font-size:1rem;font-weight:700}
+.topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px}
+.main-wrapper{background:transparent;padding:24px 32px;flex:1;min-width:0;overflow-x:hidden;max-width:100%;box-sizing:border-box;width:100%}
+.container{max-width:1100px;margin:0 auto;width:100%;min-width:0;overflow-x:hidden}
+.layout{display:grid;grid-template-columns:minmax(0,390px) 1fr;gap:24px;align-items:start;min-width:0;overflow-x:hidden}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06);min-width:0;box-sizing:border-box;max-width:100%}
+.card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
+.card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
+.card-header-row h2{margin:0;padding:0;border:none;font-size:1rem;color:var(--dk)}
+.section-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gr);margin-top:16px;margin-bottom:10px;padding-top:12px;border-top:1px solid var(--bdr)}
+.section-label.first{margin-top:0;padding-top:0;border-top:none}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.8rem;font-weight:600;margin-bottom:4px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
+.field-hint{font-size:.75rem;color:var(--txl);margin-top:2px}
+.field select{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s}
+.field select:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+.toggle-group{margin-bottom:14px}
+.toggle-label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
+.toggle-switch{display:flex;border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+.toggle-switch input[type=radio]{display:none}
+.toggle-switch label{flex:1;text-align:center;padding:8px 10px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fffdf8;color:var(--txl);transition:all .15s;border-right:1px solid var(--bdr)}
+.toggle-switch label:last-of-type{border-right:none}
+.toggle-switch input[type=radio]:checked+label{background:var(--gr);color:#fff}
+.input-wrap{position:relative;display:flex;align-items:center}
+.input-wrap .prefix,.input-wrap .suffix{position:absolute;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;user-select:none;z-index:1}
+.input-wrap .prefix{left:10px}
+.input-wrap .suffix{right:10px}
+.input-wrap input{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s}
+.input-wrap input.has-prefix{padding-left:22px}
+.input-wrap input.has-suffix{padding-right:28px}
+.input-wrap input:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+input[type=number]::placeholder{color:#c5bdb2}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:.4}
+.range-wrap{margin-top:4px}
+input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
+.range-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--txl);margin-top:2px}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.result-box{background:#f8f5ef;border:1px solid var(--bdr);border-radius:12px;padding:12px 14px}
+.result-box.hl{background:var(--grl);border-color:var(--gr)}
+.result-box.hl-pu{background:var(--pul);border-color:var(--pu)}
+.result-box .lbl{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);font-weight:600;margin-bottom:2px}
+.result-box .val{font-size:1.15rem;font-weight:700;color:var(--dk)}
+.result-box.hl .val{color:var(--gr);font-size:1.3rem}
+.result-box.hl-pu .val{color:var(--pu);font-size:1.3rem}
+.banner{border-radius:8px;padding:10px 13px;margin-bottom:12px;font-size:.84rem}
+.bn-green{background:var(--grl);border:1px solid var(--gr);color:var(--tx)}
+.bn-amber{background:var(--aml);border:1px solid var(--am);color:var(--tx)}
+.bn-red{background:#fdecea;border:1px solid var(--red);color:var(--tx)}
+.bn-blue{background:var(--bll);border:1px solid var(--bl);color:var(--tx)}
+.section-title{font-size:.85rem;font-weight:700;margin:18px 0 8px;color:var(--dk)}
+.bd-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.bd-table th{text-align:left;padding:8px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
+.bd-table th:not(:first-child){text-align:right}
+.bd-table td{padding:8px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
+.bd-table td:not(:first-child){text-align:right}
+.bd-table tr:last-child td{border-bottom:none}
+.bd-table .total-row td{font-weight:700;border-top:2px solid var(--dk);border-bottom:none}
+.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
+.chart-header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chart-hint{font-size:.74rem;color:var(--txl);font-style:italic}
+.chart-wrap{background:#f8f5ef;border:1px solid var(--bdr);border-radius:14px;padding:14px 14px 10px}
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;justify-content:center}
+.chart-legend-item{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--tx)}
+.chart-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:6px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s}
+.amort-btn:hover{border-color:var(--gr);color:var(--gr)}
+.amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
+.amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
+.amort-table th:first-child{text-align:left}
+.amort-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums;text-align:right}
+.amort-table td:first-child{text-align:left}
+.amort-table .yr-row td{font-weight:700;background:#edf5fb;color:var(--bl);font-size:.75rem;text-transform:uppercase}
+.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;letter-spacing:.3px}
+.btn svg{width:14px;height:14px;fill:currentColor}
+.btn-navy{background:var(--nv);color:#fff}.btn-navy:hover{background:#2d5268}
+.btn-green{background:var(--gr);color:#fff}.btn-green:hover{background:#228052}
+.note{font-size:.78rem;color:var(--txl);margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr);line-height:1.5}
+.ft{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ft span{color:rgba(255,255,255,.75);font-size:.82rem}
+.threshold-badge{display:inline-block;background:var(--grl);border:1px solid var(--gr);border-radius:6px;padding:2px 8px;font-size:.8rem;font-weight:700;color:var(--gr);margin-left:6px}
+.threshold-badge.above{background:var(--aml);border-color:var(--am);color:var(--am)}
+.threshold-badge.high{background:#fdecea;border-color:var(--red);color:var(--red)}
+.inline-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.volunteer-note{font-size:.8rem;color:var(--txl);background:var(--bll);border:1px solid var(--bl);border-radius:8px;padding:8px 12px;margin-top:8px}
+/* Collapsible */
+.collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0 0 8px 0;border-bottom:2px solid var(--gr);margin-bottom:16px;text-align:left;gap:10px}
+.collapsible-header[aria-expanded="false"]{border-bottom-color:var(--bdr);margin-bottom:0}
+.collapsible-header h2{margin:0;padding:0;border:none;font-size:1rem;color:var(--dk)}
+.collapsible-header:hover h2{color:var(--gr)}
+.collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center}
+.collapsible-header[aria-expanded="true"] .collapse-icon{transform:rotate(180deg)}
+.collapsible-body{overflow:hidden;transition:max-height .3s ease,opacity .25s ease;max-height:4000px;opacity:1}
+.collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
+/* Bracket table */
+.bracket-table{width:100%;border-collapse:collapse;font-size:.83rem;margin-top:8px}
+.bracket-table th{padding:7px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);text-align:left}
+.bracket-table th:last-child{text-align:right}
+.bracket-table td{padding:7px 10px;border-bottom:1px solid var(--bdr)}
+.bracket-table td:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.bracket-table tr.active-row td{background:var(--grl);font-weight:700;color:var(--gr)}
+.bracket-table tr:last-child td{border-bottom:none}
+/* Responsive */
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
+@media(max-width:768px){.results-grid{grid-template-columns:1fr 1fr!important}.inline-fields{grid-template-columns:1fr}}
+@media(max-width:480px){.main-wrapper{padding:12px!important}.layout{gap:10px!important}.card{padding:12px!important}.topbar{padding:8px 14px!important}.results-grid{grid-template-columns:1fr 1fr!important}}
+html{overflow-x:hidden}
+html,body{width:100%;max-width:100%}
+.layout>*{min-width:0;overflow-x:hidden}
+.card{box-sizing:border-box;width:100%;max-width:100%}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">
+    <a href="index.html" title="Back to calculators">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+    </a>
+  </div>
+  <div class="topbar-divider"></div>
+  <div>
+    <div class="topbar-title">HECS-HELP Student Loan Calculator</div>
+    <div class="topbar-desc">Estimate your compulsory repayments, payoff timeline &amp; indexation impact — 2025–26 ATO rates</div>
+  </div>
+</div>
+
+<div class="main-wrapper">
+<div class="container">
+<div class="layout">
+
+<!-- ═══════════════ LEFT — INPUTS ═══════════════ -->
+<div>
+  <div class="card">
+    <div class="card-header-row">
+      <h2>Your Details</h2>
+      <button class="btn btn-navy" id="btnReset" type="button">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.96 7.96 0 0 0 12 4a8 8 0 1 0 8 8h-2a6 6 0 1 1-1.76-4.24L13 11h7V4l-2.35 2.35z"/></svg>
+        Reset
+      </button>
+    </div>
+
+    <div class="section-label first">Loan Balance</div>
+    <div class="field">
+      <label for="loanBalance">Current HECS-HELP Debt</label>
+      <div class="input-wrap"><span class="prefix">$</span>
+        <input type="number" id="loanBalance" class="has-prefix" value="35000" min="0" max="999999" step="500" placeholder="e.g. 35000">
+      </div>
+      <div class="range-wrap">
+        <input type="range" id="loanBalanceRange" min="0" max="200000" step="500" value="35000">
+        <div class="range-labels"><span>$0</span><span>$200k</span></div>
+      </div>
+    </div>
+
+    <div class="section-label">Income</div>
+    <div class="field">
+      <label for="grossIncome">Annual Taxable Income</label>
+      <div class="input-wrap"><span class="prefix">$</span>
+        <input type="number" id="grossIncome" class="has-prefix" value="75000" min="0" max="999999" step="1000" placeholder="e.g. 75000">
+      </div>
+      <div class="range-wrap">
+        <input type="range" id="grossIncomeRange" min="0" max="300000" step="1000" value="75000">
+        <div class="range-labels"><span>$0</span><span>$300k</span></div>
+      </div>
+      <div class="field-hint">Use your repayment income (taxable income + reportable fringe benefits + net investment losses + reportable super contributions).</div>
+    </div>
+    <div class="field">
+      <label for="incomeGrowth">Expected Annual Income Growth</label>
+      <div class="input-wrap">
+        <input type="number" id="incomeGrowth" class="has-suffix" value="3" min="0" max="20" step="0.5" placeholder="3">
+        <span class="suffix">%</span>
+      </div>
+    </div>
+
+    <div class="section-label">Indexation</div>
+    <div class="field">
+      <label for="indexRate">Annual Indexation Rate</label>
+      <div class="input-wrap">
+        <input type="number" id="indexRate" class="has-suffix" value="3.2" min="0" max="15" step="0.1" placeholder="3.2">
+        <span class="suffix">%</span>
+      </div>
+      <div class="field-hint">2025 ATO rate: 3.2% (lower of CPI or WPI). Adjust for your own projection.</div>
+    </div>
+
+    <div class="section-label">Optional: Voluntary Repayments</div>
+    <div class="field">
+      <label for="extraRepay">Additional Voluntary Repayment</label>
+      <div class="input-wrap"><span class="prefix">$</span>
+        <input type="number" id="extraRepay" class="has-prefix" value="0" min="0" max="999999" step="100" placeholder="0">
+      </div>
+      <div class="field-hint">Per year, on top of compulsory repayment.</div>
+    </div>
+
+    <div class="section-label">Scenario Comparison</div>
+    <div class="toggle-group">
+      <span class="toggle-label">Compare With / Without Voluntary</span>
+      <div class="toggle-switch">
+        <input type="radio" name="compare" id="cmpOff" value="off" checked>
+        <label for="cmpOff">Off</label>
+        <input type="radio" name="compare" id="cmpOn" value="on">
+        <label for="cmpOn">On</label>
+      </div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /left -->
+
+<!-- ═══════════════ RIGHT — RESULTS ═══════════════ -->
+<div>
+
+  <!-- Summary cards -->
+  <div class="card" id="resultsCard">
+    <h2>Results <span id="threshBadge" class="threshold-badge" style="display:none"></span></h2>
+
+    <div id="belowThreshBanner" class="banner bn-amber" style="display:none">
+      ⚠️ Your income is <strong>below the $67,000 repayment threshold</strong>. No compulsory HECS repayment is required this year — but indexation still applies to your balance.
+    </div>
+    <div id="aboveThreshBanner" class="banner bn-green" style="display:none">
+      ✅ Your income is above the repayment threshold. Compulsory repayments will be withheld by your employer via PAYG.
+    </div>
+
+    <div class="results-grid">
+      <div class="result-box hl">
+        <div class="lbl">Annual Repayment</div>
+        <div class="val" id="rAnnual">—</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Monthly Est.</div>
+        <div class="val" id="rMonthly">—</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Effective Rate</div>
+        <div class="val" id="rEffRate">—</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Payoff In</div>
+        <div class="val" id="rPayoffYrs">—</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Total Repaid</div>
+        <div class="val" id="rTotalPaid">—</div>
+      </div>
+      <div class="result-box hl-pu">
+        <div class="lbl">Total Indexation</div>
+        <div class="val" id="rTotalIndex">—</div>
+      </div>
+    </div>
+
+    <!-- Repayment bracket info -->
+    <div class="section-title">2025–26 Repayment Bracket</div>
+    <table class="bracket-table" id="bracketTable">
+      <thead>
+        <tr><th>Repayment Income Range</th><th>Rate / Calculation</th></tr>
+      </thead>
+      <tbody id="bracketBody"></tbody>
+    </table>
+
+    <!-- Chart -->
+    <div class="chart-section">
+      <div class="chart-header">
+        <div class="section-title" style="margin:0">Loan Balance Over Time</div>
+        <span class="chart-hint" id="chartHint">Hover for year detail</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="balanceChart" height="220"></canvas>
+      </div>
+      <div class="chart-legend">
+        <div class="chart-legend-item"><div class="chart-swatch" style="background:#2a9d67"></div>Balance (compulsory only)</div>
+        <div class="chart-legend-item" id="legVoluntary" style="display:none"><div class="chart-swatch" style="background:#3f7fb5"></div>Balance (with voluntary)</div>
+        <div class="chart-legend-item"><div class="chart-swatch" style="background:#e8a838;opacity:.7"></div>Indexation added</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Year-by-year breakdown -->
+  <div class="card">
+    <button class="collapsible-header" id="amortToggle" aria-expanded="true">
+      <h2>Year-by-Year Schedule</h2>
+      <span class="collapse-icon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+      </span>
+    </button>
+    <div class="collapsible-body" id="amortBody">
+      <div class="amort-wrap">
+        <table class="amort-table">
+          <thead>
+            <tr>
+              <th style="text-align:left">Year</th>
+              <th>Opening Balance</th>
+              <th>Indexation</th>
+              <th>Compulsory</th>
+              <th>Voluntary</th>
+              <th>Closing Balance</th>
+            </tr>
+          </thead>
+          <tbody id="amortBody2"></tbody>
+        </table>
+      </div>
+
+      <div class="actions-bar">
+        <button class="btn btn-green" id="btnCSV" type="button">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5v-2z"/></svg>
+          Download CSV
+        </button>
+        <button class="btn btn-navy" id="btnPrint" type="button">
+          <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+          Print
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Repayment rates reference -->
+  <div class="card">
+    <button class="collapsible-header" id="ratesToggle" aria-expanded="false">
+      <h2>2025–26 ATO Repayment Thresholds</h2>
+      <span class="collapse-icon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+      </span>
+    </button>
+    <div class="collapsible-body collapsed" id="ratesBody">
+      <p style="font-size:.84rem;color:var(--txl);margin-bottom:10px">From 2025–26, HECS repayments use a <strong>marginal rate system</strong> — you only pay the rate on income <em>above</em> each threshold, not on your entire income.</p>
+      <table class="bracket-table">
+        <thead><tr><th>Repayment Income</th><th>Rate / Calculation</th></tr></thead>
+        <tbody>
+          <tr><td>$0 – $67,000</td><td style="text-align:right">Nil</td></tr>
+          <tr><td>$67,001 – $125,000</td><td style="text-align:right">15c per $1 over $67,000</td></tr>
+          <tr><td>$125,001 – $179,285</td><td style="text-align:right">$8,700 + 17c per $1 over $125,000</td></tr>
+          <tr><td>$179,286 and above</td><td style="text-align:right">10% of total repayment income</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.78rem;color:var(--txl);margin-top:10px">Indexation is applied on 1 June each year at the lower of CPI or WPI. The 2025 rate is 3.2%.</p>
+    </div>
+  </div>
+
+  <p class="note">Estimates only. Assumes constant indexation rate and steady income growth. Actual repayments are withheld by your employer via PAYG and reconciled at tax time. Voluntary repayments do not attract a bonus from 2017 onwards. Not financial advice — refer to <a href="https://www.ato.gov.au" target="_blank" rel="noopener">ato.gov.au</a> for official figures.</p>
+
+</div><!-- /right -->
+</div><!-- /layout -->
+</div><!-- /container -->
+</div><!-- /main-wrapper -->
+
+<div class="ft"><span>HECS-HELP Calculator &mdash; 2025&ndash;26 ATO Rates &mdash; Estimates Only</span></div>
+
+<script>
+// ─── ATO 2025-26 marginal brackets ───────────────────────────────────────────
+const BRACKETS_2526 = [
+  { min:0,       max:67000,   label:'$0 – $67,000',           calc:'Nil',                          rate:null,  base:0,    over:67000,   margRate:0    },
+  { min:67001,   max:125000,  label:'$67,001 – $125,000',      calc:'15c per $1 over $67,000',      rate:null,  base:0,    over:67000,   margRate:0.15 },
+  { min:125001,  max:179285,  label:'$125,001 – $179,285',     calc:'$8,700 + 17c per $1 over $125,000', rate:null, base:8700, over:125000, margRate:0.17 },
+  { min:179286,  max:Infinity,label:'$179,286 and above',      calc:'10% of total repayment income',rate:0.10,  base:0,    over:0,       margRate:null }
+];
+
+function calcAnnualRepayment(income){
+  if(income <= 67000) return 0;
+  if(income <= 125000) return (income - 67000) * 0.15;
+  if(income <= 179285) return 8700 + (income - 125000) * 0.17;
+  return income * 0.10;
+}
+
+function activeBracket(income){
+  for(let b of BRACKETS_2526){
+    if(income >= b.min && income <= b.max) return b;
+  }
+  return BRACKETS_2526[BRACKETS_2526.length-1];
+}
+
+// ─── DOM refs ────────────────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const inputs = ['loanBalance','grossIncome','incomeGrowth','indexRate','extraRepay'];
+
+// Sync range ↔ number inputs
+function syncRange(inputId, rangeId){
+  const inp = $(inputId), rng = $(rangeId);
+  inp.addEventListener('input', ()=>{ rng.value = inp.value; calc(); });
+  rng.addEventListener('input', ()=>{ inp.value = rng.value; calc(); });
+}
+syncRange('loanBalance','loanBalanceRange');
+syncRange('grossIncome','grossIncomeRange');
+
+inputs.forEach(id=>{
+  const el = $(id);
+  if(el) el.addEventListener('input', calc);
+});
+document.querySelectorAll('input[name=compare]').forEach(r=>r.addEventListener('change',calc));
+
+// Collapsible
+function setupCollapsible(btnId, bodyId){
+  const btn = $(btnId), body = $(bodyId);
+  btn.addEventListener('click',()=>{
+    const open = btn.getAttribute('aria-expanded')==='true';
+    btn.setAttribute('aria-expanded', String(!open));
+    body.classList.toggle('collapsed', open);
+  });
+}
+setupCollapsible('amortToggle','amortBody');
+setupCollapsible('ratesToggle','ratesBody');
+
+// ─── Chart setup ─────────────────────────────────────────────────────────────
+let balChart;
+function initChart(){
+  const ctx = $('balanceChart').getContext('2d');
+  balChart = new Chart(ctx, {
+    type:'bar',
+    data:{ labels:[], datasets:[
+      { label:'Balance (compulsory)',  data:[], backgroundColor:'rgba(42,157,103,.75)',  borderRadius:4, order:1 },
+      { label:'Balance (with voluntary)', data:[], backgroundColor:'rgba(63,127,181,.7)', borderRadius:4, order:2 },
+      { label:'Indexation Added', data:[], backgroundColor:'rgba(232,168,56,.55)', borderRadius:4, order:3 }
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      scales:{
+        x:{ stacked:false, grid:{display:false}, ticks:{font:{size:11}} },
+        y:{ ticks:{callback:v=>'$'+fmtK(v), font:{size:11}}, grid:{color:'rgba(0,0,0,.06)'} }
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)
+        }}
+      }
+    }
+  });
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+function fmt(v){ return '$'+Math.round(v).toLocaleString('en-AU'); }
+function fmtK(v){ return v>=1000?Math.round(v/1000)+'k':v; }
+function pct(v){ return v.toFixed(1)+'%'; }
+
+// ─── Build schedule ──────────────────────────────────────────────────────────
+function buildSchedule(balance, income, incGrowth, indexRate, extraAnnual){
+  const MAX_YRS = 60;
+  const rows = [];
+  let bal = balance;
+  let inc = income;
+  let yr = new Date().getFullYear();
+
+  for(let i=0; i<MAX_YRS; i++){
+    if(bal <= 0) break;
+    const opening = bal;
+    const indexation = opening * (indexRate/100);
+    const balAfterIndex = opening + indexation;
+    const compulsory = Math.min(calcAnnualRepayment(inc), balAfterIndex);
+    const balAfterComp = balAfterIndex - compulsory;
+    const voluntary = Math.min(extraAnnual, balAfterComp);
+    const closing = Math.max(0, balAfterComp - voluntary);
+    rows.push({ year: yr+i, opening, indexation, compulsory, voluntary, closing });
+    bal = closing;
+    inc *= (1 + incGrowth/100);
+  }
+  return rows;
+}
+
+// ─── Main calc ───────────────────────────────────────────────────────────────
+function calc(){
+  const balance   = Math.max(0, parseFloat($('loanBalance').value)||0);
+  const income    = Math.max(0, parseFloat($('grossIncome').value)||0);
+  const incGrowth = parseFloat($('incomeGrowth').value)||0;
+  const indexRate = parseFloat($('indexRate').value)||0;
+  const extra     = Math.max(0, parseFloat($('extraRepay').value)||0);
+  const compare   = document.querySelector('input[name=compare]:checked').value === 'on';
+
+  // Repayment
+  const annualRepay = calcAnnualRepayment(income);
+  const effRate = balance > 0 ? (annualRepay / balance)*100 : 0;
+
+  // Banners
+  $('belowThreshBanner').style.display = income <= 67000 ? '' : 'none';
+  $('aboveThreshBanner').style.display = income >  67000 ? '' : 'none';
+
+  // Threshold badge
+  const badge = $('threshBadge');
+  if(income <= 67000){ badge.textContent='Below threshold'; badge.className='threshold-badge'; badge.style.display=''; }
+  else if(income <= 125000){ badge.textContent='Bracket 2'; badge.className='threshold-badge above'; badge.style.display=''; }
+  else if(income <= 179285){ badge.textContent='Bracket 3'; badge.className='threshold-badge above'; badge.style.display=''; }
+  else { badge.textContent='Bracket 4'; badge.className='threshold-badge high'; badge.style.display=''; }
+
+  // Bracket table
+  const tbody = $('bracketBody');
+  tbody.innerHTML = '';
+  const active = activeBracket(income);
+  BRACKETS_2526.forEach(b=>{
+    const tr = document.createElement('tr');
+    if(b===active) tr.className='active-row';
+    tr.innerHTML=`<td>${b.label}</td><td style="text-align:right">${b.calc}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  // Schedule without voluntary
+  const sched = buildSchedule(balance, income, incGrowth, indexRate, 0);
+  // Schedule with voluntary
+  const schedV = extra>0 ? buildSchedule(balance, income, incGrowth, indexRate, extra) : [];
+
+  const payoffYrs = sched.length;
+  const totalPaid = sched.reduce((s,r)=>s+r.compulsory, 0);
+  const totalIndex= sched.reduce((s,r)=>s+r.indexation, 0);
+  const payoffYrsV = schedV.length;
+
+  // Summary
+  $('rAnnual').textContent   = annualRepay > 0 ? fmt(annualRepay) : '$0';
+  $('rMonthly').textContent  = annualRepay > 0 ? fmt(annualRepay/12) : '$0';
+  $('rEffRate').textContent  = balance>0 ? pct(effRate) : '—';
+  $('rPayoffYrs').textContent= payoffYrs > 0 ? payoffYrs+(compare&&extra>0?' / '+payoffYrsV:'')+ ' yr'+(payoffYrs!==1?'s':'') : (balance===0?'Paid Off':'—');
+  $('rTotalPaid').textContent= fmt(totalPaid);
+  $('rTotalIndex').textContent= fmt(totalIndex);
+
+  // Chart
+  const years = sched.map(r=>r.year);
+  const balData = sched.map(r=>r.closing);
+  const balDataV = schedV.map(r=>r.closing);
+  const idxData = sched.map(r=>r.indexation);
+
+  balChart.data.labels = years;
+  balChart.data.datasets[0].data = balData;
+  balChart.data.datasets[1].data = compare && extra>0 ? balDataV : [];
+  balChart.data.datasets[2].data = idxData;
+  $('legVoluntary').style.display = compare && extra>0 ? '' : 'none';
+  balChart.update();
+
+  // Amort table
+  const amortTbody = $('amortBody2');
+  amortTbody.innerHTML = '';
+  sched.forEach((r,i)=>{
+    const tr = document.createElement('tr');
+    const rv = schedV[i];
+    const closingExtra = rv ? fmt(rv.closing) : '—';
+    tr.innerHTML=`
+      <td>${r.year}</td>
+      <td>${fmt(r.opening)}</td>
+      <td style="color:var(--am)">${fmt(r.indexation)}</td>
+      <td>${fmt(r.compulsory)}</td>
+      <td>${r.voluntary>0||extra>0?fmt(compare?rv?rv.voluntary:extra:r.voluntary):'—'}</td>
+      <td>${compare&&extra>0?closingExtra:fmt(r.closing)}</td>`;
+    amortTbody.appendChild(tr);
+  });
+
+  // Store for CSV
+  window._schedData = { sched, schedV, compare, extra };
+}
+
+// ─── CSV ─────────────────────────────────────────────────────────────────────
+$('btnCSV').addEventListener('click',()=>{
+  const {sched,schedV,compare,extra} = window._schedData||{sched:[],schedV:[],compare:false,extra:0};
+  let csv = 'Year,Opening Balance,Indexation,Compulsory Repayment,Voluntary Repayment,Closing Balance\n';
+  sched.forEach((r,i)=>{
+    const rv = compare&&extra>0?schedV[i]:null;
+    const vol = rv?rv.voluntary:r.voluntary;
+    const cls = rv?rv.closing:r.closing;
+    csv+=`${r.year},${r.opening.toFixed(2)},${r.indexation.toFixed(2)},${r.compulsory.toFixed(2)},${vol.toFixed(2)},${cls.toFixed(2)}\n`;
+  });
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='hecs-repayment-schedule.csv';
+  a.click();
+});
+
+$('btnPrint').addEventListener('click',()=>window.print());
+$('btnReset').addEventListener('click',()=>{
+  $('loanBalance').value=35000; $('loanBalanceRange').value=35000;
+  $('grossIncome').value=75000; $('grossIncomeRange').value=75000;
+  $('incomeGrowth').value=3; $('indexRate').value=3.2;
+  $('extraRepay').value=0;
+  document.querySelector('input[name=compare][value=off]').checked=true;
+  calc();
+});
+
+// ─── Init ────────────────────────────────────────────────────────────────────
+initChart();
+calc();
+</script>
+</body>
+</html>

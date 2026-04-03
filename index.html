@@ -11,24 +11,22 @@
   --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
   --tx:#22313f;--txl:#6c7a89;--red:#e53935;
   --bl:#3f7fb5;--bll:#edf5fb;--am:#b6862c;--aml:#faf2df;
-  --help:#e67e22;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;display:flex;flex-direction:column}
 
-/* ── Header ── */
+/* Header */
 .hd{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 12px rgba(0,0,0,.18)}
 .hd-logo{width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hd-logo svg{width:22px;height:22px;fill:#fff}
 .hd-title{font-size:1.2rem;font-weight:700;color:#fff;letter-spacing:.01em}
 .hd-sub{font-size:.8rem;color:rgba(255,255,255,.7);margin-top:1px}
 
-/* ── Hero ── */
+/* Hero */
 .hero-section{background:linear-gradient(135deg,rgba(255,253,250,.98),rgba(248,244,236,.98));border-bottom:1px solid var(--bdr);padding:18px 32px 16px;text-align:center}
-.hero-section h1{font-size:1.9rem;font-weight:800;color:var(--dk);margin-bottom:8px;letter-spacing:-.02em}
 .hero-section p{font-size:1rem;color:var(--txl);max-width:520px;margin:0 auto;line-height:1.6}
 
-/* ── Page wrapper: ads on sides ── */
+/* Page wrapper */
 .page-wrapper{display:flex;justify-content:center;align-items:flex-start;gap:0;width:100%;flex:1}
 .side-rail{display:none;width:180px;min-width:180px;position:sticky;top:24px;padding:32px 0 24px;flex-shrink:0;align-items:flex-start;justify-content:center}
 .side-rail-inner{background:var(--card);border:1px solid var(--bdr);border-radius:16px;overflow:hidden;box-shadow:0 6px 20px rgba(45,50,40,.05)}
@@ -39,17 +37,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .main-content{flex:1;min-width:0}
 }
 
-/* ── Main content ── */
+/* Main content */
 .main-content{flex:1;min-width:0}
 .container{max-width:1280px;margin:0 auto;padding:36px 24px}
-.section-heading{font-size:.95rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--txl);margin-bottom:18px;padding-bottom:8px;border-bottom:2px solid var(--bdr)}
 
-/* ── Grid: 4 columns, 2 rows ── */
+/* Grid */
 .tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 
-/* ── Tool Card — landscape/wide ── */
+/* Tool Card */
 .tool-card{background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:18px 20px;box-shadow:0 4px 16px rgba(45,50,40,.05);transition:transform .18s,box-shadow .18s;text-decoration:none;color:inherit;display:flex;flex-direction:row;align-items:flex-start;gap:16px;position:relative;overflow:hidden}
-.tool-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(45,50,40,.11);border-color:var(--gr)}
+.tool-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(45,50,40,.11);border-color:var(--accent,var(--gr))}
 .tool-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--accent,var(--gr));border-radius:16px 0 0 16px}
 .tool-card.coming-soon{opacity:.65;cursor:default;pointer-events:none}
 .tool-card.coming-soon::after{content:'Coming Soon';position:absolute;top:12px;right:12px;font-size:.65rem;font-weight:700;background:#f1ede6;color:var(--txl);padding:2px 8px;border-radius:999px;border:1px solid var(--bdr)}
@@ -58,20 +55,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .card-body{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
 .card-title{font-size:.95rem;font-weight:700;color:var(--dk);line-height:1.3;padding-right:60px}
 .card-desc{font-size:.82rem;color:var(--txl);line-height:1.5}
-.card-cta{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;font-weight:700;color:var(--gr);margin-top:2px}
-.card-cta svg{width:13px;height:13px;fill:var(--gr);transition:transform .15s}
+.card-cta{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;font-weight:700;color:var(--accent,var(--gr));margin-top:2px}
+.card-cta svg{width:13px;height:13px;fill:var(--accent,var(--gr));transition:transform .15s}
 .tool-card:hover .card-cta svg{transform:translateX(3px)}
 
-/* ── Footer ── */
+/* Footer */
 .ft{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:16px 32px;text-align:center;font-size:.8rem;color:rgba(255,255,255,.7)}
 .ft a{color:rgba(255,255,255,.85);text-decoration:none}
 
-/* ── Responsive ── */
+/* Responsive */
 @media(max-width:1100px){.tools-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){
   .tools-grid{grid-template-columns:1fr}
   .hero-section{padding:14px 18px 12px}
-  .hero-section h1{font-size:1.5rem}
   .container{padding:24px 16px}
   .tool-card{flex-direction:column;gap:12px}
   .card-title{padding-right:72px}
@@ -119,7 +115,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="tools-grid">
 
         <!-- 1. Income Tax -->
-        <a class="tool-card available" href="income-tax-calculator.html" style="--accent:#2a9d67;--icon-bg:#e7f8ef;--icon-color:#2a9d67">
+        <a class="tool-card" href="income-tax-calculator.html" style="--accent:#2a9d67;--icon-bg:#e7f8ef;--icon-color:#2a9d67">
           <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zM9 13h6v2H9zm0-4h2v2H9zm4 0h2v2h-2zm-4 8h6v2H9z"/></svg></div>
           <div class="card-body">
             <div class="card-title">Australian Income Tax</div>
@@ -127,8 +123,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
             <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </a>
+
         <!-- 2. Home Loan Repayment -->
-        <a class="tool-card available" href="home-loan-calculator.html" style="--accent:#3f7fb5;--icon-bg:#edf5fb;--icon-color:#3f7fb5">
+        <a class="tool-card" href="home-loan-calculator.html" style="--accent:#3f7fb5;--icon-bg:#edf5fb;--icon-color:#3f7fb5">
           <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
           <div class="card-body">
             <div class="card-title">Home Loan Repayment</div>
@@ -136,6 +133,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
             <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </a>
+
         <!-- 3. Personal Loan -->
         <a class="tool-card" href="personal-loan-calculator.html" style="--accent:#b6862c;--icon-bg:#faf2df;--icon-color:#b6862c">
           <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div>
@@ -145,8 +143,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
             <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </a>
+
         <!-- 4. Rent or Buy -->
-        <a class="tool-card coming-soon" href="rent-or-buy-calculator.html" style="--accent:#e67e22;--icon-bg:#fef4e8;--icon-color:#e67e22">
+        <a class="tool-card coming-soon" href="rent-or-buy-calculator.html" style="--accent:#e05c97;--icon-bg:#fdeef6;--icon-color:#e05c97">
           <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div>
           <div class="card-body">
             <div class="card-title">Rent or Buy</div>
@@ -154,8 +153,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
             <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </a>
-        <!-- 7. HECS/HELP -->
-        <a class="tool-card coming-soon" href="hecs-calculator.html" style="--accent:#e67e22;--icon-bg:#fef4e8;--icon-color:#e67e22">
+
+        <!-- 5. HECS/HELP -->
+        <a class="tool-card" href="hecs-calculator.html" style="--accent:#7c5cbf;--icon-bg:#f0ebfa;--icon-color:#7c5cbf">
           <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg></div>
           <div class="card-body">
             <div class="card-title">HECS/HELP Repayment</div>
@@ -163,17 +163,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
             <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </a>
-        <!-- 8. Offset Account -->
-        <a class="tool-card coming-soon" href="offset-account-calculator.html" style="--accent:#b6862c;--icon-bg:#faf2df;--icon-color:#b6862c">
-          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+
+        <!-- 6. Offset Account -->
+        <a class="tool-card" href="offset-calculator.html" style="--accent:#0097a7;--icon-bg:#e0f7fa;--icon-color:#0097a7">
+          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M17 12c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.24-5 5-5 5 2.24 5 5zm-5-7A7 7 0 1 0 12 19 7 7 0 0 0 12 5zm-1 3v4l3.28 1.97.72-1.21-2.75-1.63V8H11zm9.78 2.61l-1.42-1.42-1.4 1.42 1.42 1.42 1.4-1.42zM3.64 10.19L2.22 11.61l1.4 1.42 1.42-1.42-1.4-1.42zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg></div>
           <div class="card-body">
             <div class="card-title">Offset Account Savings</div>
             <div class="card-desc">Interest and time saved with an offset account.</div>
             <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </a>
-        <!-- 6. Savings Goal -->
-        <a class="tool-card coming-soon" href="savings-goal-calculator.html" style="--accent:#3f7fb5;--icon-bg:#edf5fb;--icon-color:#3f7fb5">
+
+        <!-- 7. Savings Goal -->
+        <a class="tool-card" href="savings-goal-calculator.html" style="--accent:#00897b;--icon-bg:#e0f2f1;--icon-color:#00897b">
           <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg></div>
           <div class="card-body">
             <div class="card-title">Savings Goal</div>
@@ -181,8 +183,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
             <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </a>
-        <!-- 5. Rent or Invest -->
-        <a class="tool-card coming-soon" href="rent-or-invest-calculator.html" style="--accent:#2a9d67;--icon-bg:#e7f8ef;--icon-color:#2a9d67">
+
+        <!-- 8. Rent or Invest -->
+        <a class="tool-card coming-soon" href="rent-or-invest-calculator.html" style="--accent:#e67e22;--icon-bg:#fef4e8;--icon-color:#e67e22">
           <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg></div>
           <div class="card-body">
             <div class="card-title">Rent or Invest</div>
@@ -209,11 +212,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-</div><!-- /page-wrapper -->
+</div>
 
 <!-- Footer -->
 <div class="ft">
-  <span>Estimates only — general information, not personal financial advice. &nbsp;|&nbsp; <a href="#">Privacy Policy</a> &nbsp;|&nbsp; <a href="#">Disclaimer</a></span>
+  &copy; 2025 Australian Finance Tools &nbsp;&middot;&nbsp; <a href="#">Privacy</a>
 </div>
 
 </body>
