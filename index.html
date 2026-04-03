@@ -24,7 +24,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .hd-sub{font-size:.8rem;color:rgba(255,255,255,.7);margin-top:1px}
 
 /* ── Hero ── */
-.hero-section{background:linear-gradient(135deg,rgba(255,253,250,.98),rgba(248,244,236,.98));border-bottom:1px solid var(--bdr);padding:40px 32px 36px;text-align:center}
+.hero-section{background:linear-gradient(135deg,rgba(255,253,250,.98),rgba(248,244,236,.98));border-bottom:1px solid var(--bdr);padding:18px 32px 16px;text-align:center}
 .hero-section h1{font-size:1.9rem;font-weight:800;color:var(--dk);margin-bottom:8px;letter-spacing:-.02em}
 .hero-section p{font-size:1rem;color:var(--txl);max-width:520px;margin:0 auto;line-height:1.6}
 
@@ -51,7 +51,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tool-card{background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:18px 20px;box-shadow:0 4px 16px rgba(45,50,40,.05);transition:transform .18s,box-shadow .18s;text-decoration:none;color:inherit;display:flex;flex-direction:row;align-items:flex-start;gap:16px;position:relative;overflow:hidden}
 .tool-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(45,50,40,.11);border-color:var(--gr)}
 .tool-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--accent,var(--gr));border-radius:16px 0 0 16px}
-.tool-card.available::after{content:'Available';position:absolute;top:12px;right:12px;font-size:.65rem;font-weight:700;background:var(--grl);color:var(--gr);padding:2px 8px;border-radius:999px;border:1px solid var(--gr)}
 .tool-card.coming-soon{opacity:.65;cursor:default;pointer-events:none}
 .tool-card.coming-soon::after{content:'Coming Soon';position:absolute;top:12px;right:12px;font-size:.65rem;font-weight:700;background:#f1ede6;color:var(--txl);padding:2px 8px;border-radius:999px;border:1px solid var(--bdr)}
 .card-icon{width:42px;height:42px;min-width:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--icon-bg,var(--grl));margin-top:2px}
@@ -71,7 +70,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 @media(max-width:1100px){.tools-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){
   .tools-grid{grid-template-columns:1fr}
-  .hero-section{padding:28px 18px 24px}
+  .hero-section{padding:14px 18px 12px}
   .hero-section h1{font-size:1.5rem}
   .container{padding:24px 16px}
   .tool-card{flex-direction:column;gap:12px}
@@ -94,7 +93,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- Hero -->
 <div class="hero-section">
-  <h1>Financial Calculators</h1>
   <p>Simple, accurate tools to help you understand tax, loans, savings and more — built for Australians.</p>
 </div>
 
@@ -118,7 +116,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <!-- Main content -->
   <div class="main-content">
     <div class="container">
-      <div class="section-heading">All Calculators</div>
       <div class="tools-grid">
 
         <!-- 1. Income Tax -->
@@ -140,7 +137,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           </div>
         </a>
         <!-- 3. Personal Loan -->
-        <a class="tool-card coming-soon" href="personal-loan-calculator.html" style="--accent:#b6862c;--icon-bg:#faf2df;--icon-color:#b6862c">
+        <a class="tool-card" href="personal-loan-calculator.html" style="--accent:#b6862c;--icon-bg:#faf2df;--icon-color:#b6862c">
           <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div>
           <div class="card-body">
             <div class="card-title">Personal Loan Repayment</div>

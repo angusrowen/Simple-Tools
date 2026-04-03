@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Loan Repayment Calculator</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
+  --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
+  --tx:#22313f;--txl:#6c7a89;--red:#e53935;
+  --bl:#3f7fb5;--bll:#edf5fb;--am:#b6862c;--aml:#faf2df;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
+.topbar-logo a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;color:#fff;text-decoration:none}
+.topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
+.topbar-title{color:#fff;font-size:1rem;font-weight:700}
+.topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px}
+.main-wrapper{padding:24px 32px;flex:1;width:100%;box-sizing:border-box}
+.container{max-width:1500px;margin:0 auto;width:100%}
+.layout{display:grid;grid-template-columns:minmax(0,390px) 1fr;gap:24px;align-items:start;width:100%}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06);box-sizing:border-box}
+.card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
+.card-header-row h2{margin:0;padding:0;border:none;font-size:1rem;color:var(--dk)}
+.card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
+.section-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gr);margin-top:16px;margin-bottom:10px;padding-top:12px;border-top:1px solid var(--bdr)}
+.section-label.first{margin-top:0;padding-top:0;border-top:none}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.8rem;font-weight:600;margin-bottom:4px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
+.field-hint{font-size:.75rem;color:var(--txl);margin-top:3px}
+.field select{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8}
+.field select:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+.input-wrap{position:relative;display:flex;align-items:center}
+.input-wrap .prefix{position:absolute;left:10px;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;z-index:1}
+.input-wrap .suffix{position:absolute;right:10px;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;z-index:1}
+.input-wrap input{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s}
+.input-wrap input.has-prefix{padding-left:22px}
+.input-wrap input.has-suffix{padding-right:28px}
+.input-wrap input:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+input[type=month]{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8}
+input[type=month]:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+input[type=number]::placeholder{color:#c5bdb2}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:.4}
+.toggle-group{margin-bottom:14px}
+.toggle-switch{display:flex;border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+.toggle-switch input[type=radio]{display:none}
+.toggle-switch label{flex:1;text-align:center;padding:8px 10px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fffdf8;color:var(--txl);transition:all .15s;border-right:1px solid var(--bdr)}
+.toggle-switch label:last-of-type{border-right:none}
+.toggle-switch input[type=radio]:checked+label{background:var(--gr);color:#fff}
+.collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0 0 8px 0;border-bottom:2px solid var(--gr);margin-bottom:16px;text-align:left;gap:10px}
+.collapsible-header[aria-expanded="false"]{border-bottom-color:var(--bdr);margin-bottom:0}
+.collapsible-header h2{margin:0;padding:0;border:none;font-size:1rem;color:var(--dk)}
+.collapsible-header:hover h2{color:var(--gr)}
+.collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center;flex-shrink:0}
+.collapsible-header[aria-expanded="true"] .collapse-icon{transform:rotate(180deg)}
+.collapsible-body{overflow:hidden;transition:max-height .3s ease,opacity .25s ease;max-height:4000px;opacity:1}
+.collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.result-box{background:#f8f5ef;border:1px solid var(--bdr);border-radius:12px;padding:12px 14px}
+.result-box.hl{background:var(--grl);border-color:var(--gr)}
+.result-box .lbl{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);font-weight:600;margin-bottom:2px}
+.result-box .val{font-size:1.15rem;font-weight:700;color:var(--dk)}
+.result-box.hl .val{color:var(--gr);font-size:1.3rem}
+.banner{border-radius:8px;padding:10px 13px;margin-bottom:12px;font-size:.84rem;display:none}
+.bn-green{background:var(--grl);border:1px solid var(--gr);color:var(--tx)}
+.bn-amber{background:var(--aml);border:1px solid var(--am);color:var(--tx)}
+.section-title{font-size:.85rem;font-weight:700;margin:18px 0 8px;color:var(--dk)}
+.bd-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.bd-table th{text-align:left;padding:8px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
+.bd-table th:not(:first-child){text-align:right}
+.bd-table td{padding:8px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
+.bd-table td:not(:first-child){text-align:right}
+.bd-table tr:last-child td{border-bottom:none}
+.bd-table .total-row td{font-weight:700;border-top:2px solid var(--dk);border-bottom:none}
+.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
+.chart-header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chart-hint{font-size:.74rem;color:var(--txl);font-style:italic}
+.chart-wrap{background:#f8f5ef;border:1px solid var(--bdr);border-radius:14px;padding:14px 14px 10px}
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;justify-content:center}
+.chart-legend-item{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--tx)}
+.chart-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.pie-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--bdr)}
+.pie-card{display:grid;grid-template-columns:260px 1fr;gap:18px;align-items:center;background:#f8f5ef;border:1px solid var(--bdr);border-radius:16px;padding:18px}
+.pie-wrap{display:flex;justify-content:center}
+#payPie{width:240px;height:240px}
+.pie-legend{display:grid;gap:10px}
+.legend-row{display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;align-items:center;font-size:.88rem}
+.legend-swatch{width:14px;height:14px;border-radius:999px;flex-shrink:0}
+.legend-label{font-weight:600;color:var(--tx)}
+.legend-amount{font-weight:700;color:var(--dk);font-variant-numeric:tabular-nums;text-align:right}
+.legend-pct{font-size:.8rem;color:var(--txl);text-align:right;min-width:40px}
+.amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:6px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s}
+.amort-btn:hover{border-color:var(--gr);color:var(--gr)}
+.amort-wrap{overflow-x:auto;max-height:440px;overflow-y:auto;margin-top:14px}
+.amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
+.amort-table th:first-child,.amort-table th:nth-child(2){text-align:left}
+.amort-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums;text-align:right}
+.amort-table td:first-child,.amort-table td:nth-child(2){text-align:left}
+.amort-table .yr-row td{font-weight:700;background:var(--bg);font-size:.75rem;text-transform:uppercase;color:var(--txl);text-align:left}
+.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s}
+.btn svg{width:14px;height:14px;fill:currentColor}
+.btn-navy{background:var(--nv);color:#fff}.btn-navy:hover{background:#2d5268}
+.btn-green{background:var(--gr);color:#fff}.btn-green:hover{background:#228052}
+.note{font-size:.78rem;color:var(--txl);margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr);line-height:1.5}
+.ft{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);text-align:center;flex-shrink:0}
+.ft span{color:rgba(255,255,255,.75);font-size:.82rem}
+.hidden{display:none!important}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}.pie-card{grid-template-columns:1fr}.results-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.main-wrapper{padding:12px}.card{padding:14px 16px}.results-grid{grid-template-columns:1fr}.bd-table{font-size:.78rem}.bd-table th,.bd-table td{padding:6px 7px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">
+    <a href="index.html" title="Back to calculators">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </a>
+  </div>
+  <div class="topbar-divider"></div>
+  <div>
+    <div class="topbar-title">Personal Loan Repayment Calculator</div>
+    <div class="topbar-desc">Estimate repayments, interest costs &amp; full payment schedule for any personal loan</div>
+  </div>
+</div>
+
+<div class="main-wrapper">
+<div class="container">
+<div class="layout">
+
+<!-- LEFT INPUTS -->
+<div>
+  <div class="card">
+    <div class="card-header-row">
+      <h2>Loan Details</h2>
+      <button class="btn btn-navy" id="btnReset1" type="button">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Reset
+      </button>
+    </div>
+
+    <div class="section-label first">Loan Amount</div>
+    <div class="field">
+      <label for="fAmt">Loan Amount</label>
+      <div class="input-wrap">
+        <span class="prefix">$</span>
+        <input type="number" id="fAmt" class="has-prefix" placeholder="e.g. 20000" min="0" step="500" value="20000">
+      </div>
+    </div>
+
+    <div class="section-label">Interest Rate</div>
+    <div class="field">
+      <label for="fRate">Annual Interest Rate</label>
+      <div class="input-wrap">
+        <input type="number" id="fRate" class="has-suffix" placeholder="e.g. 9.99" min="0" max="60" step="0.05" value="15">
+        <span class="suffix">%</span>
+      </div>
+    </div>
+
+    <div class="section-label">Loan Term</div>
+    <div class="field">
+      <label for="fTerm">Loan Term</label>
+      <div class="input-wrap">
+        <input type="number" id="fTerm" class="has-suffix" placeholder="e.g. 5" min="1" max="10" step="1" value="5">
+        <span class="suffix">yrs</span>
+      </div>
+    </div>
+
+    <div class="section-label">Loan Purpose</div>
+    <div class="field">
+      <label for="fPurpose">Purpose (optional)</label>
+      <select id="fPurpose">
+        <option value="">Select a purpose&hellip;</option>
+        <option value="car">Car / Vehicle</option>
+        <option value="consolidation">Debt Consolidation</option>
+        <option value="home_improvement">Home Improvement / Renovation</option>
+        <option value="medical">Medical / Dental</option>
+        <option value="holiday">Holiday / Travel</option>
+        <option value="wedding">Wedding</option>
+        <option value="education">Education</option>
+        <option value="other">Other</option>
+      </select>
+      <div class="field-hint">For your records only &mdash; does not affect calculations.</div>
+    </div>
+
+    <div class="section-label">Repayment Frequency</div>
+    <div class="toggle-group">
+      <div class="toggle-switch">
+        <input type="radio" name="freq" id="rMonthly" value="monthly" checked>
+        <label for="rMonthly">Monthly</label>
+        <input type="radio" name="freq" id="rFortnightly" value="fortnightly">
+        <label for="rFortnightly">Fortnightly</label>
+        <input type="radio" name="freq" id="rWeekly" value="weekly">
+        <label for="rWeekly">Weekly</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <button class="collapsible-header" id="addlBtn" aria-expanded="true" aria-controls="addlBody" type="button">
+      <h2>Additional Options</h2>
+      <span class="collapse-icon">
+        <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 8 10 13 15 8"/></svg>
+      </span>
+    </button>
+    <div class="collapsible-body" id="addlBody">
+
+      <div class="section-label first">Establishment Fee</div>
+      <div class="field">
+        <label for="fEstFee">Upfront Establishment Fee</label>
+        <div class="input-wrap">
+          <span class="prefix">$</span>
+          <input type="number" id="fEstFee" class="has-prefix" placeholder="e.g. 250 (optional)" min="0" step="10">
+        </div>
+        <div class="field-hint">One-off fee at loan origination. Included in total cost &amp; comparison rate.</div>
+      </div>
+
+      <div class="section-label">Monthly Fee</div>
+      <div class="field">
+        <label for="fMFee">Ongoing Monthly Fee</label>
+        <div class="input-wrap">
+          <span class="prefix">$</span>
+          <input type="number" id="fMFee" class="has-prefix" placeholder="e.g. 10 (optional)" min="0" step="1">
+        </div>
+        <div class="field-hint">Recurring account-keeping fee. Included in total cost &amp; comparison rate.</div>
+      </div>
+
+      <div class="section-label">Balloon / Residual Payment</div>
+      <div class="field">
+        <label for="fBalloon">Balloon Amount</label>
+        <div class="input-wrap">
+          <span class="prefix">$</span>
+          <input type="number" id="fBalloon" class="has-prefix" placeholder="e.g. 5000 (optional)" min="0" step="500">
+        </div>
+        <div class="field-hint">Optional lump sum due at end of term. Reduces periodic repayments but leaves an amount owing at the end. Common on car loans.</div>
+      </div>
+
+      <div class="section-label">Extra Repayments</div>
+      <div class="field">
+        <label for="fExtra">Extra Repayment per Period</label>
+        <div class="input-wrap">
+          <span class="prefix">$</span>
+          <input type="number" id="fExtra" class="has-prefix" placeholder="e.g. 50 (optional)" min="0" step="10">
+        </div>
+        <div class="field-hint">Additional amount on top of your minimum repayment each period.</div>
+      </div>
+
+      <div class="section-label">Start Date</div>
+      <div class="field">
+        <label for="fStart">Loan Start Date</label>
+        <input type="month" id="fStart">
+        <div class="field-hint">Used to calculate your projected payoff date.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT RESULTS -->
+<div>
+  <div class="card">
+    <h2>Results</h2>
+
+    <div class="results-grid">
+      <div class="result-box hl">
+        <div class="lbl" id="rRepayLbl">Monthly Repayment</div>
+        <div class="val" id="rRepay">&#8212;</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Total Repayments</div>
+        <div class="val" id="rTotal">&#8212;</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Total Interest</div>
+        <div class="val" id="rInterest" style="color:var(--red)">&#8212;</div>
+      </div>
+      <div class="result-box" id="rFeeBox" style="display:none">
+        <div class="lbl">Total Fees</div>
+        <div class="val" id="rFees" style="color:var(--am)">&#8212;</div>
+      </div>
+      <div class="result-box" id="rCostBox" style="display:none">
+        <div class="lbl">Total Cost of Loan</div>
+        <div class="val" id="rCost">&#8212;</div>
+      </div>
+      <div class="result-box" id="rCmpBox" style="display:none">
+        <div class="lbl">Comparison Rate <span style="font-size:.65rem;font-weight:400;text-transform:none">(est.)</span></div>
+        <div class="val" id="rCmp" style="color:var(--bl)">&#8212;</div>
+      </div>
+    </div>
+
+    <div class="banner bn-green" id="bannerExtra">Extra repayments of <strong id="bnExtraAmt"></strong>/period saves <strong id="bnExtraSaved"></strong> in interest and pays off your loan <strong id="bnExtraTime"></strong> earlier.</div>
+    <div class="banner bn-amber" id="bannerBalloon">A balloon of <strong id="bnBalloon"></strong> is due at end of term. Your periodic repayments are calculated on the amortised portion only.</div>
+    <div class="banner bn-green" id="bannerPayoff">Based on your start date, your loan will be paid off by <strong id="bnPayoff"></strong>.</div>
+
+    <div class="section-title">Repayment Breakdown</div>
+    <table class="bd-table">
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Per Period</th>
+          <th>Monthly</th>
+          <th>Annual</th>
+          <th>Loan Life</th>
+          <th>% of Total</th>
+        </tr>
+      </thead>
+      <tbody id="tBody">
+        <tr><td colspan="6" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter loan details to see results</td></tr>
+      </tbody>
+    </table>
+
+    <div class="chart-section">
+      <div class="chart-header">
+        <div class="section-title" style="margin:0">Remaining Loan Balance Over Time</div>
+        <div class="chart-hint">&#9432; Hover to see interest / principal split by year</div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="myChart" height="140"></canvas>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(230,100,20,0.72)"></div>Interest Portion</div>
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(42,157,103,0.65)"></div>Principal Portion</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pie-section">
+      <div class="section-title">Cost Breakdown</div>
+      <div class="pie-card">
+        <div class="pie-wrap"><canvas id="payPie"></canvas></div>
+        <div class="pie-legend" id="pieLegend"><div style="color:var(--txl);font-style:italic;font-size:.88rem">Enter loan details to see breakdown</div></div>
+      </div>
+    </div>
+
+    <button class="amort-btn" id="amortBtn" type="button">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+      Show Repayment Schedule
+    </button>
+    <div id="amortSection" class="hidden">
+      <div class="amort-wrap">
+        <table class="amort-table">
+          <thead><tr><th>#</th><th>Period</th><th>Opening</th><th>Interest</th><th>Principal</th><th>Extra</th><th>Closing</th></tr></thead>
+          <tbody id="amortBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn btn-green" id="btnCSV" type="button">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
+        Export Summary CSV
+      </button>
+      <button class="btn btn-green" id="btnAmortCSV" type="button">
+        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+        Export Schedule CSV
+      </button>
+      <div style="flex:1"></div>
+      <button class="btn btn-navy" id="btnReset2" type="button">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Start Over
+      </button>
+    </div>
+
+    <div class="note">Estimates only. Assumes a constant interest rate and does not account for early repayment fees, rate changes, or lender-specific conditions. Comparison rate is an estimate and may differ from a lender's advertised rate. Not personal financial advice.</div>
+  </div>
+</div>
+
+</div></div></div>
+
+<div class="ft"><span>Estimates only &mdash; general information, not personal financial advice.</span></div>
+
+<script>
+(function(){
+'use strict';
+function g(id){return document.getElementById(id);}
+function fmt2(n){return '$'+Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmt0(n){return '$'+Math.round(Math.abs(n)).toLocaleString('en-AU');}
+function fmtP(n){return n.toFixed(2)+'%';}
+function getFreq(){return document.querySelector('input[name="freq"]:checked').value;}
+function ppy(f){return f==='weekly'?52:f==='fortnightly'?26:12;}
+function fLbl(f){return f==='weekly'?'Weekly':f==='fortnightly'?'Fortnightly':'Monthly';}
+function toMo(v,f){return f==='weekly'?v*52/12:f==='fortnightly'?v*26/12:v;}
+
+function buildSched(P,rate,yrs,freq,extra,balloon){
+  var n=ppy(freq),r=rate/100/n,tot=yrs*n,eff=P-balloon;
+  var pmt=r===0?eff/tot:eff*(r*Math.pow(1+r,tot))/(Math.pow(1+r,tot)-1);
+  var bal=P,rows=[],totInt=0;
+  for(var i=0;i<tot;i++){
+    if(bal<0.005)break;
+    var intr=bal*r;
+    var prin=i===tot-1?Math.max(bal-intr-balloon,0):Math.min(pmt-intr,bal-balloon);
+    if(prin<0)prin=0;
+    var ext=i<tot-1?Math.min(extra,Math.max(bal-prin-balloon,0)):0;
+    var close=Math.max(bal-prin-ext,0);
+    if(i===tot-1&&balloon>0)close=Math.max(close-balloon,0);
+    totInt+=intr;
+    rows.push({opening:bal,interest:intr,principal:prin,extra:ext,repay:pmt,closing:close});
+    bal=close;
+    if(bal<0.005&&extra>0)break;
+  }
+  return{rows:rows,totalInterest:totInt,pmt:pmt};
+}
+
+var lineChart=null,pieChart=null,lastCD=null;
+
+function chartData(rows,P,yrs,freq){
+  var n=ppy(freq),labels=[],debt=[],annInt=[null],cumPaid=[0];
+  for(var y=0;y<=yrs;y++){
+    labels.push('Yr '+y);
+    if(y===0){debt.push(P);continue;}
+    var ei=Math.min(y*n-1,rows.length-1);
+    debt.push(rows[ei]?Math.round(rows[ei].closing):0);
+    var yi=0,yp=0;
+    for(var k=(y-1)*n;k<=ei&&k<rows.length;k++){yi+=rows[k].interest;yp+=rows[k].repay+rows[k].extra;}
+    annInt.push(Math.round(yi));
+    cumPaid.push(Math.round(cumPaid[y-1]+yp));
+  }
+  return{labels:labels,debt:debt,annInt:annInt,cumPaid:cumPaid};
+}
+
+function mkGrad(ctx,ratio){
+  var h=ctx.canvas.clientHeight||120,gr=ctx.createLinearGradient(0,0,0,h);
+  var s=Math.max(0,Math.min(1,1-ratio));
+  gr.addColorStop(0,'rgba(230,100,20,0.72)');gr.addColorStop(s,'rgba(230,100,20,0.72)');
+  gr.addColorStop(s,'rgba(42,157,103,0.65)');gr.addColorStop(1,'rgba(42,157,103,0.65)');
+  return gr;
+}
+
+function drawLine(cd){
+  lastCD=cd;
+  var canvas=g('myChart'),ctx=canvas.getContext('2d');
+  if(lineChart){lineChart.destroy();lineChart=null;}
+  var P0=parseFloat(g('fAmt').value)||0,lastIdx=-1,rafBusy=false;
+  var sp={id:'split',afterEvent:function(chart,args){
+    var e=args.event;
+    if(e.type!=='mousemove'&&e.type!=='mouseout')return;
+    var act=chart.tooltip._active,ni=(act&&act.length)?act[0].index:-1;
+    if(ni===lastIdx)return;lastIdx=ni;
+    if(rafBusy)return;rafBusy=true;
+    requestAnimationFrame(function(){
+      rafBusy=false;
+      var ratio=0;
+      if(lastIdx>=0&&lastCD&&lastCD.debt[lastIdx]!=null)ratio=P0>0?(P0-lastCD.debt[lastIdx])/P0:0;
+      chart.data.datasets[0].backgroundColor=mkGrad(ctx,ratio);
+      chart.update('none');
+    });
+  }};
+  lineChart=new Chart(ctx,{
+    type:'line',
+    data:{labels:cd.labels,datasets:[
+      {label:'Balance',data:cd.debt,borderColor:'#e6641e',backgroundColor:mkGrad(ctx,0),fill:'origin',tension:0.4,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:'#e6641e',pointBorderColor:'#fff',pointBorderWidth:1.5,borderWidth:2.5},
+      {label:'_p',data:cd.debt,borderWidth:0,pointRadius:0,pointHoverRadius:0,backgroundColor:'transparent',borderColor:'transparent',fill:false},
+      {label:'_i',data:cd.annInt,borderWidth:0,pointRadius:0,pointHoverRadius:0,backgroundColor:'transparent',borderColor:'transparent',fill:false},
+      {label:'_c',data:cd.cumPaid,borderWidth:0,pointRadius:0,pointHoverRadius:0,backgroundColor:'transparent',borderColor:'transparent',fill:false}
+    ]},
+    options:{
+      responsive:true,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false},tooltip:{
+        backgroundColor:'rgba(30,20,50,0.92)',titleColor:'#fff',bodyColor:'rgba(255,255,255,0.88)',padding:11,cornerRadius:8,
+        callbacks:{
+          label:function(item){
+            var l=item.dataset.label,v='$'+Math.round(item.parsed.y).toLocaleString('en-AU');
+            var P2=parseFloat(g('fAmt').value)||0;
+            if(l==='Balance')return '  Remaining balance: '+v;
+            if(l==='_p')return '  Principal repaid: $'+Math.round(P2-item.parsed.y).toLocaleString('en-AU');
+            if(l==='_i'&&item.parsed.y)return '  Interest this year: '+v;
+            if(l==='_c')return '  Total paid to date: '+v;
+            return null;
+          },
+          labelColor:function(item){
+            var l=item.dataset.label;
+            if(l==='Balance')return{borderColor:'#e6641e',backgroundColor:'#e6641e',borderRadius:2};
+            if(l==='_p')return{borderColor:'#2a9d67',backgroundColor:'#2a9d67',borderRadius:2};
+            if(l==='_i')return{borderColor:'#e53935',backgroundColor:'#e53935',borderRadius:2};
+            if(l==='_c')return{borderColor:'#888',backgroundColor:'#888',borderRadius:2};
+            return{borderColor:'transparent',backgroundColor:'transparent'};
+          }
+        }
+      }},
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:11},color:'#6c7a89'}},
+        y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#6c7a89',callback:function(v){return '$'+v.toLocaleString('en-AU');}}}
+      }
+    },
+    plugins:[sp]
+  });
+}
+
+function drawPie(principal,totalInt,totalFees){
+  var canvas=g('payPie'),ctx=canvas.getContext('2d');
+  if(pieChart){pieChart.destroy();pieChart=null;}
+  var total=principal+totalInt+totalFees;
+  var data=[Math.round(principal),Math.round(totalInt)];
+  var lbls=['Principal','Interest'],cols=['#2a9d67','#e53935'];
+  if(totalFees>0){data.push(Math.round(totalFees));lbls.push('Fees');cols.push('#b6862c');}
+  pieChart=new Chart(ctx,{
+    type:'doughnut',
+    data:{labels:lbls,datasets:[{data:data,backgroundColor:cols,borderWidth:2,borderColor:'#fffdfa',hoverOffset:8}]},
+    options:{responsive:true,cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(item){return ' '+item.label+': '+fmt0(item.parsed)+' ('+(item.parsed/total*100).toFixed(1)+'%)';}}}}}
+  });
+  var leg=g('pieLegend'),h='';
+  for(var i=0;i<data.length;i++){
+    h+='<div class="legend-row"><div class="legend-swatch" style="background:'+cols[i]+'"></div><span class="legend-label">'+lbls[i]+'</span><span class="legend-amount">'+fmt0(data[i])+'</span><span class="legend-pct">'+(data[i]/total*100).toFixed(1)+'%</span></div>';
+  }
+  h+='<div class="legend-row" style="border-top:1px solid var(--bdr);padding-top:8px;margin-top:4px"><div class="legend-swatch" style="background:var(--dk)"></div><span class="legend-label" style="font-weight:700">Total Cost</span><span class="legend-amount">'+fmt0(total)+'</span><span class="legend-pct">100%</span></div>';
+  leg.innerHTML=h;
+}
+
+function calculate(){
+  var P      = parseFloat(g('fAmt').value)||0;
+  var rate   = parseFloat(g('fRate').value)||0;
+  var yrs    = parseFloat(g('fTerm').value)||0;
+  var extra  = parseFloat(g('fExtra').value)||0;
+  var estFee = parseFloat(g('fEstFee').value)||0;
+  var mFee   = parseFloat(g('fMFee').value)||0;
+  var balloon= Math.min(parseFloat(g('fBalloon').value)||0,P*0.9);
+  var freq   = getFreq();
+  var n      = ppy(freq);
+  var sv     = g('fStart').value;
+
+  if(P<=0||rate<=0||yrs<=0){
+    g('rRepay').innerHTML='&#8212;';g('rTotal').innerHTML='&#8212;';g('rInterest').innerHTML='&#8212;';
+    g('rFeeBox').style.display='none';g('rCostBox').style.display='none';g('rCmpBox').style.display='none';
+    g('bannerExtra').style.display='none';g('bannerBalloon').style.display='none';g('bannerPayoff').style.display='none';
+    g('tBody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
+    g('amortBody').innerHTML='';
+    return;
+  }
+
+  var sc=buildSched(P,rate,yrs,freq,extra,balloon);
+  var rows=sc.rows,pmt=sc.pmt;
+  var totInt=rows.reduce(function(a,r){return a+r.interest;},0);
+  var nPers=rows.length;
+  var mFeePerPer=freq==='monthly'?mFee:freq==='fortnightly'?mFee*12/26:mFee*12/52;
+  var totMFees=mFee*(yrs*12);
+  var totFees=estFee+totMFees;
+  var totRepay=(pmt*nPers)+rows.reduce(function(a,r){return a+r.extra;},0)+balloon;
+  var totCost=totRepay+totFees;
+
+  function compRate(){
+    var pmtAdj=pmt+mFeePerPer,cf=[-P+estFee];
+    for(var i=0;i<nPers;i++)cf.push(pmtAdj);
+    if(balloon>0)cf[cf.length-1]+=balloon;
+    var r=rate/100/n;
+    for(var it=0;it<80;it++){
+      var f=cf[0],df=0;
+      for(var j=1;j<cf.length;j++){f+=cf[j]/Math.pow(1+r,j);df-=j*cf[j]/Math.pow(1+r,j+1);}
+      if(Math.abs(df)<1e-15)break;
+      var rn=r-f/df;if(Math.abs(rn-r)<1e-9){r=rn;break;}r=rn;
+    }
+    return r*n*100;
+  }
+
+  g('rRepayLbl').textContent=fLbl(freq)+' Repayment';
+  g('rRepay').textContent=fmt2(pmt);
+  g('rTotal').textContent=fmt0(totRepay);
+  g('rInterest').textContent=fmt0(totInt);
+
+  if(totFees>0){
+    g('rFeeBox').style.display='';g('rFees').textContent=fmt0(totFees);
+    g('rCostBox').style.display='';g('rCost').textContent=fmt0(totCost);
+    g('rCmpBox').style.display='';g('rCmp').textContent=fmtP(compRate());
+  }else{
+    g('rFeeBox').style.display='none';g('rCostBox').style.display='none';g('rCmpBox').style.display='none';
+  }
+
+  if(extra>0){
+    var noEx=buildSched(P,rate,yrs,freq,0,balloon);
+    var saved=noEx.totalInterest-totInt;
+    var ms=Math.round((noEx.rows.length-nPers)*12/n);
+    var ts=ms>=12?Math.floor(ms/12)+'yr '+(ms%12)+'m':ms+' months';
+    g('bnExtraAmt').textContent=fmt2(extra);g('bnExtraSaved').textContent=fmt0(saved);g('bnExtraTime').textContent=ts;
+    g('bannerExtra').style.display='';
+  }else{g('bannerExtra').style.display='none';}
+
+  if(balloon>0){g('bnBalloon').textContent=fmt0(balloon);g('bannerBalloon').style.display='';}
+  else{g('bannerBalloon').style.display='none';}
+
+  if(sv){
+    var pts=sv.split('-'),sd=new Date(parseInt(pts[0]),parseInt(pts[1])-1,1);
+    sd.setMonth(sd.getMonth()+Math.round(nPers*12/n));
+    var mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    g('bnPayoff').textContent=mn[sd.getMonth()]+' '+sd.getFullYear();
+    g('bannerPayoff').style.display='';
+  }else{g('bannerPayoff').style.display='none';}
+
+  function trow(lbl,pp,life){
+    var mo=toMo(pp,freq),ann=mo*12,pct=totCost>0?(life/totCost*100):0;
+    return '<tr><td>'+lbl+'</td><td>'+fmt2(pp)+'</td><td>'+fmt2(mo)+'</td><td>'+fmt0(ann)+'</td><td>'+fmt0(life)+'</td><td>'+pct.toFixed(1)+'%</td></tr>';
+  }
+  var t=trow('Principal Repayment',rows[0].principal,P);
+  t+=trow('Interest',rows[0].interest,totInt);
+  if(mFee>0)t+=trow('Monthly Fee',mFeePerPer,totMFees);
+  if(estFee>0)t+='<tr><td>Establishment Fee (upfront)</td><td>&#8212;</td><td>&#8212;</td><td>&#8212;</td><td>'+fmt0(estFee)+'</td><td>'+(estFee/totCost*100).toFixed(1)+'%</td></tr>';
+  if(balloon>0)t+='<tr><td>Balloon / Residual (at end)</td><td>&#8212;</td><td>&#8212;</td><td>&#8212;</td><td>'+fmt0(balloon)+'</td><td>'+(balloon/totCost*100).toFixed(1)+'%</td></tr>';
+  t+='<tr class="total-row"><td>Total Cost of Loan</td><td>&#8212;</td><td>&#8212;</td><td>&#8212;</td><td>'+fmt0(totCost)+'</td><td>100%</td></tr>';
+  g('tBody').innerHTML=t;
+
+  drawLine(chartData(rows,P,yrs,freq));
+  drawPie(P,totInt,totFees);
+
+  var mn2=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var sd2=null;
+  if(sv){var p2=sv.split('-');sd2=new Date(parseInt(p2[0]),parseInt(p2[1])-1,1);}
+  var ah='',lastYr=-1;
+  for(var i=0;i<rows.length;i++){
+    var row=rows[i],yr=Math.floor(i/n)+1;
+    if(yr!==lastYr){ah+='<tr class="yr-row"><td colspan="7">Year '+yr+'</td></tr>';lastYr=yr;}
+    var pl='';
+    if(sd2){
+      var step=freq==='monthly'?i:freq==='fortnightly'?Math.round(i*6/13):Math.round(i*3/13);
+      var pd=new Date(sd2.getFullYear(),sd2.getMonth()+step,1);
+      pl=mn2[pd.getMonth()]+' '+pd.getFullYear();
+    }else{pl=fLbl(freq)+' '+(i+1);}
+    ah+='<tr><td>'+(i+1)+'</td><td>'+pl+'</td><td>'+fmt0(row.opening)+'</td><td>'+fmt2(row.interest)+'</td><td>'+fmt2(row.principal)+'</td><td>'+(row.extra>0?fmt2(row.extra):'&#8212;')+'</td><td>'+fmt0(row.closing)+'</td></tr>';
+  }
+  g('amortBody').innerHTML=ah;
+}
+
+g('addlBtn').addEventListener('click',function(){
+  var b=g('addlBody'),exp=this.getAttribute('aria-expanded')==='true';
+  this.setAttribute('aria-expanded',String(!exp));
+  b.classList.toggle('collapsed',exp);
+});
+
+g('amortBtn').addEventListener('click',function(){
+  var s=g('amortSection'),hidden=s.classList.toggle('hidden');
+  var ico='<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> ';
+  this.innerHTML=ico+(hidden?'Show Repayment Schedule':'Hide Repayment Schedule');
+});
+
+function doReset(){
+  ['fAmt','fRate','fTerm','fExtra','fEstFee','fMFee','fBalloon'].forEach(function(id){g(id).value='';});
+  g('fPurpose').value='';
+  var now=new Date();
+  g('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  g('rMonthly').checked=true;
+  g('rRepay').innerHTML='&#8212;';g('rTotal').innerHTML='&#8212;';g('rInterest').innerHTML='&#8212;';
+  g('rFeeBox').style.display='none';g('rCostBox').style.display='none';g('rCmpBox').style.display='none';
+  g('bannerExtra').style.display='none';g('bannerBalloon').style.display='none';g('bannerPayoff').style.display='none';
+  g('tBody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
+  g('amortBody').innerHTML='';
+  g('pieLegend').innerHTML='<div style="color:var(--txl);font-style:italic;font-size:.88rem">Enter loan details to see breakdown</div>';
+  if(lineChart){lineChart.destroy();lineChart=null;}
+  if(pieChart){pieChart.destroy();pieChart=null;}
+}
+g('btnReset1').addEventListener('click',doReset);
+g('btnReset2').addEventListener('click',doReset);
+
+function dlCSV(name,content){
+  var blob=new Blob([content],{type:'text/csv'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=name;a.click();
+}
+
+g('btnCSV').addEventListener('click',function(){
+  var P=g('fAmt').value,R=g('fRate').value,T=g('fTerm').value;
+  if(!P||!R||!T)return;
+  var purpose=g('fPurpose').options[g('fPurpose').selectedIndex].text;
+  var rows=[
+    ['Personal Loan Repayment Calculator - Summary',''],
+    ['Loan Purpose',purpose],
+    ['Loan Amount','$'+P],
+    ['Annual Rate',R+'%'],
+    ['Term',T+' years'],
+    ['Frequency',fLbl(getFreq())],
+    ['Repayment',g('rRepay').textContent],
+    ['Total Repayments',g('rTotal').textContent],
+    ['Total Interest',g('rInterest').textContent]
+  ];
+  if(g('rFeeBox').style.display!=='none')rows.push(['Total Fees',g('rFees').textContent]);
+  if(g('rCostBox').style.display!=='none')rows.push(['Total Cost',g('rCost').textContent]);
+  if(g('rCmpBox').style.display!=='none')rows.push(['Comparison Rate (est.)',g('rCmp').textContent]);
+  dlCSV('personal-loan-summary.csv',rows.map(function(r){return r.join(',');}).join('\n'));
+});
+
+g('btnAmortCSV').addEventListener('click',function(){
+  var trs=g('amortBody').querySelectorAll('tr:not(.yr-row)');
+  if(!trs.length)return;
+  var lines=['#,Period,Opening Balance,Interest,Principal,Extra,Closing Balance'];
+  trs.forEach(function(tr){
+    lines.push(Array.from(tr.querySelectorAll('td')).map(function(td){return td.textContent.replace(/,/g,'');}).join(','));
+  });
+  dlCSV('personal-loan-schedule.csv',lines.join('\n'));
+});
+
+['fAmt','fRate','fTerm','fExtra','fEstFee','fMFee','fBalloon','fStart','fPurpose'].forEach(function(id){
+  g(id).addEventListener('input',calculate);
+  g(id).addEventListener('change',calculate);
+});
+document.querySelectorAll('input[name="freq"]').forEach(function(r){r.addEventListener('change',calculate);});
+
+var _now=new Date();
+g('fStart').value=_now.getFullYear()+'-'+String(_now.getMonth()+1).padStart(2,'0');
+calculate();
+
+})();
+</script>
+</body>
+</html>
