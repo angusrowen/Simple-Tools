@@ -286,23 +286,18 @@ html, body { overflow-x:hidden; }
 <style id="dbg-style">
 #dbg-panel {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
-  background: rgba(20,20,30,0.95); color: #7fff7f; font-family: monospace;
-  font-size: 11px; padding: 8px 10px; max-height: 45vh; overflow-y: auto;
-  border-top: 2px solid #0f0; box-shadow: 0 -4px 20px rgba(0,0,0,.5);
-  display: none;
+  background: rgba(20,20,30,0.96); color: #7fff7f; font-family: monospace;
+  font-size: 11px; line-height:1.6; padding: 10px 12px;
+  max-height: 50vh; overflow-y: auto;
+  border-top: 2px solid #0f0; box-shadow: 0 -4px 20px rgba(0,0,0,.6);
 }
-#dbg-panel h3 { color:#fff; font-size:12px; margin:0 0 6px; letter-spacing:1px; }
-#dbg-panel .dbg-row { padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
-#dbg-panel .dbg-bad { color: #ff5555; font-weight:bold; }
-#dbg-panel .dbg-ok  { color: #7fff7f; }
-#dbg-panel .dbg-warn{ color: #ffaa00; }
-#dbg-toggle {
-  position: fixed; bottom: 10px; right: 10px; z-index: 100000;
-  background: #222; color: #0f0; border: 1px solid #0f0;
-  border-radius: 6px; padding: 6px 10px; font-size: 11px;
-  font-family: monospace; cursor: pointer; font-weight: bold;
-  box-shadow: 0 2px 10px rgba(0,0,0,.4);
-}
+#dbg-panel h3 { color:#fff; font-size:11px; margin:8px 0 4px; letter-spacing:1px; text-transform:uppercase; }
+#dbg-panel h3:first-child { margin-top:0; }
+#dbg-panel .row { padding: 1px 0; border-bottom: 1px solid rgba(255,255,255,.06); word-break:break-all; }
+#dbg-panel .bad  { color: #ff5555; font-weight:bold; }
+#dbg-panel .ok   { color: #7fff7f; }
+#dbg-panel .warn { color: #ffaa00; }
+#dbg-panel .dim  { color: #aaa; }
 </style>
 </head>
 <body>
@@ -854,101 +849,67 @@ html, body { overflow-x:hidden; }
 </script>
 
 <script id="dbg-script">
-(function() {
-  // Create toggle button
-  var btn = document.createElement('button');
-  btn.id = 'dbg-toggle';
-  btn.textContent = '🐛 Debug';
-  document.body.appendChild(btn);
-
-  // Create panel
+document.addEventListener('DOMContentLoaded', function() {
   var panel = document.createElement('div');
   panel.id = 'dbg-panel';
   document.body.appendChild(panel);
 
-  btn.onclick = function() {
-    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-    if (panel.style.display === 'block') runDebug();
-  };
-
-  function cls(ok) { return ok ? 'dbg-ok' : 'dbg-bad'; }
-
-  function runDebug() {
-    var vw = window.innerWidth;
-    var bw = document.body.scrollWidth;
-    var dw = document.documentElement.scrollWidth;
-    var lines = [];
-
-    lines.push('<h3>📐 VIEWPORT & SCROLL</h3>');
-    lines.push('<div class="dbg-row ' + cls(bw <= vw) + '">window.innerWidth: ' + vw + 'px</div>');
-    lines.push('<div class="dbg-row ' + cls(bw <= vw) + '">body.scrollWidth: ' + bw + 'px ' + (bw > vw ? '⚠ OVERFLOW by '+(bw-vw)+'px' : '✓') + '</div>');
-    lines.push('<div class="dbg-row ' + cls(dw <= vw) + '">html.scrollWidth: ' + dw + 'px ' + (dw > vw ? '⚠ OVERFLOW by '+(dw-vw)+'px' : '✓') + '</div>');
-
-    lines.push('<h3>🔍 ELEMENTS WIDER THAN VIEWPORT (>' + vw + 'px)</h3>');
-    var all = document.querySelectorAll('*');
-    var offenders = [];
-    all.forEach(function(el) {
-      var r = el.getBoundingClientRect();
-      var sw = el.scrollWidth;
-      if (r.right > vw + 2 || sw > vw + 2) {
-        var tag = el.tagName.toLowerCase();
-        var id  = el.id ? '#'+el.id : '';
-        var cl  = el.className && typeof el.className === 'string'
-                    ? '.'+el.className.trim().split(/\s+/).slice(0,2).join('.') : '';
-        offenders.push({
-          label: tag + id + cl,
-          right: Math.round(r.right),
-          sw: sw,
-          w: Math.round(r.width)
-        });
-      }
-    });
-
-    if (offenders.length === 0) {
-      lines.push('<div class="dbg-row dbg-ok">✓ No elements overflow viewport</div>');
-    } else {
-      offenders.slice(0, 30).forEach(function(o) {
-        lines.push('<div class="dbg-row dbg-bad">'
-          + o.label
-          + ' | right=' + o.right + 'px'
-          + ' | scrollW=' + o.sw + 'px'
-          + ' | width=' + o.w + 'px'
-          + '</div>');
-      });
-      if (offenders.length > 30) {
-        lines.push('<div class="dbg-row dbg-warn">... and ' + (offenders.length-30) + ' more</div>');
-      }
-    }
-
-    lines.push('<h3>📋 KEY ELEMENT WIDTHS</h3>');
-    var targets = [
-      'body', '.page-wrapper', '.main-wrapper', '.container',
-      '.layout', '.card', '.res-grid', '.tog', '.chart-box', 'canvas'
-    ];
-    targets.forEach(function(sel) {
-      var el = document.querySelector(sel);
-      if (!el) { lines.push('<div class="dbg-row dbg-warn">' + sel + ': not found</div>'); return; }
-      var r  = el.getBoundingClientRect();
-      var sw = el.scrollWidth;
-      var ok = Math.round(r.width) <= vw && sw <= vw + 2;
-      lines.push('<div class="dbg-row ' + (ok?'dbg-ok':'dbg-bad') + '">'
-        + sel + ' → width=' + Math.round(r.width) + 'px'
-        + ' scrollW=' + sw + 'px'
-        + (ok ? ' ✓' : ' ⚠')
-        + '</div>');
-    });
-
-    lines.push('<h3>📱 COMPUTED STYLES ON BODY/HTML</h3>');
-    ['overflow-x','max-width','width'].forEach(function(prop) {
-      var bv = getComputedStyle(document.body).getPropertyValue(prop);
-      var hv = getComputedStyle(document.documentElement).getPropertyValue(prop);
-      lines.push('<div class="dbg-row">body.' + prop + ': ' + bv.trim() + ' | html.' + prop + ': ' + hv.trim() + '</div>');
-    });
-
-    lines.push('<div class="dbg-row dbg-warn" style="margin-top:6px;cursor:pointer" onclick="(function(){var d=document.getElementById('dbg-panel');d.innerHTML='';})()">[ clear ]</div>');
-    panel.innerHTML = lines.join('');
+  function r(cls, txt) {
+    return '<div class="row ' + cls + '">' + txt + '</div>';
   }
-})();
+
+  var vw  = window.innerWidth;
+  var bsw = document.body.scrollWidth;
+  var hsw = document.documentElement.scrollWidth;
+  var lines = [];
+
+  lines.push('<h3>Viewport &amp; Scroll</h3>');
+  lines.push(r(bsw<=vw?'ok':'bad', 'viewport: ' + vw + 'px &nbsp;|&nbsp; body.scrollWidth: ' + bsw + 'px' + (bsw>vw ? '  ⚠ OVERFLOW +' + (bsw-vw) + 'px' : '  ✓')));
+  lines.push(r(hsw<=vw?'ok':'bad', 'html.scrollWidth: ' + hsw + 'px' + (hsw>vw ? '  ⚠ OVERFLOW +' + (hsw-vw) + 'px' : '  ✓')));
+
+  lines.push('<h3>Elements wider than viewport (' + vw + 'px)</h3>');
+  var offenders = [];
+  document.querySelectorAll('*').forEach(function(el) {
+    var rect = el.getBoundingClientRect();
+    if (rect.right > vw + 1 || el.scrollWidth > vw + 1) {
+      var tag = el.tagName.toLowerCase();
+      var id  = el.id ? '#' + el.id : '';
+      var cls = (typeof el.className === 'string' && el.className)
+                ? '.' + el.className.trim().split(/\s+/).slice(0,2).join('.') : '';
+      offenders.push(tag + id + cls
+        + ' | right=' + Math.round(rect.right)
+        + ' scrollW=' + el.scrollWidth
+        + ' w=' + Math.round(rect.width));
+    }
+  });
+  if (offenders.length === 0) {
+    lines.push(r('ok', '✓ No overflow elements found'));
+  } else {
+    offenders.slice(0, 25).forEach(function(o) { lines.push(r('bad', o)); });
+    if (offenders.length > 25) lines.push(r('warn', '... +' + (offenders.length-25) + ' more'));
+  }
+
+  lines.push('<h3>Key element widths</h3>');
+  ['.page-wrapper','.main-wrapper','.container','.layout',
+   '.card','.res-grid','.tog','.chart-box','canvas'].forEach(function(sel) {
+    var el = document.querySelector(sel);
+    if (!el) { lines.push(r('warn', sel + ': not found')); return; }
+    var w  = Math.round(el.getBoundingClientRect().width);
+    var sw = el.scrollWidth;
+    var ok = w <= vw && sw <= vw + 1;
+    lines.push(r(ok?'ok':'bad', sel + ' → w=' + w + ' scrollW=' + sw + (ok?' ✓':' ⚠')));
+  });
+
+  lines.push('<h3>Computed overflow-x / max-width</h3>');
+  ['body','html'].forEach(function(tag) {
+    var el = tag === 'body' ? document.body : document.documentElement;
+    var ox = getComputedStyle(el).overflowX;
+    var mw = getComputedStyle(el).maxWidth;
+    lines.push(r('dim', tag + ' → overflow-x:' + ox + '  max-width:' + mw));
+  });
+
+  panel.innerHTML = lines.join('');
+});
 </script>
 </body>
 </html>
