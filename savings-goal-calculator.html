@@ -282,6 +282,28 @@ html, body { overflow-x:hidden; }
       document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"><\/scr'+'ipt>');
     }
   </script>
+
+<style id="dbg-style">
+#dbg-panel {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
+  background: rgba(20,20,30,0.95); color: #7fff7f; font-family: monospace;
+  font-size: 11px; padding: 8px 10px; max-height: 45vh; overflow-y: auto;
+  border-top: 2px solid #0f0; box-shadow: 0 -4px 20px rgba(0,0,0,.5);
+  display: none;
+}
+#dbg-panel h3 { color:#fff; font-size:12px; margin:0 0 6px; letter-spacing:1px; }
+#dbg-panel .dbg-row { padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+#dbg-panel .dbg-bad { color: #ff5555; font-weight:bold; }
+#dbg-panel .dbg-ok  { color: #7fff7f; }
+#dbg-panel .dbg-warn{ color: #ffaa00; }
+#dbg-toggle {
+  position: fixed; bottom: 10px; right: 10px; z-index: 100000;
+  background: #222; color: #0f0; border: 1px solid #0f0;
+  border-radius: 6px; padding: 6px 10px; font-size: 11px;
+  font-family: monospace; cursor: pointer; font-weight: bold;
+  box-shadow: 0 2px 10px rgba(0,0,0,.4);
+}
+</style>
 </head>
 <body>
 
@@ -828,6 +850,104 @@ html, body { overflow-x:hidden; }
   // ── run on startup ────────────────────────────────────────────────────────
   calculate();
 
+})();
+</script>
+
+<script id="dbg-script">
+(function() {
+  // Create toggle button
+  var btn = document.createElement('button');
+  btn.id = 'dbg-toggle';
+  btn.textContent = '🐛 Debug';
+  document.body.appendChild(btn);
+
+  // Create panel
+  var panel = document.createElement('div');
+  panel.id = 'dbg-panel';
+  document.body.appendChild(panel);
+
+  btn.onclick = function() {
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    if (panel.style.display === 'block') runDebug();
+  };
+
+  function cls(ok) { return ok ? 'dbg-ok' : 'dbg-bad'; }
+
+  function runDebug() {
+    var vw = window.innerWidth;
+    var bw = document.body.scrollWidth;
+    var dw = document.documentElement.scrollWidth;
+    var lines = [];
+
+    lines.push('<h3>📐 VIEWPORT & SCROLL</h3>');
+    lines.push('<div class="dbg-row ' + cls(bw <= vw) + '">window.innerWidth: ' + vw + 'px</div>');
+    lines.push('<div class="dbg-row ' + cls(bw <= vw) + '">body.scrollWidth: ' + bw + 'px ' + (bw > vw ? '⚠ OVERFLOW by '+(bw-vw)+'px' : '✓') + '</div>');
+    lines.push('<div class="dbg-row ' + cls(dw <= vw) + '">html.scrollWidth: ' + dw + 'px ' + (dw > vw ? '⚠ OVERFLOW by '+(dw-vw)+'px' : '✓') + '</div>');
+
+    lines.push('<h3>🔍 ELEMENTS WIDER THAN VIEWPORT (>' + vw + 'px)</h3>');
+    var all = document.querySelectorAll('*');
+    var offenders = [];
+    all.forEach(function(el) {
+      var r = el.getBoundingClientRect();
+      var sw = el.scrollWidth;
+      if (r.right > vw + 2 || sw > vw + 2) {
+        var tag = el.tagName.toLowerCase();
+        var id  = el.id ? '#'+el.id : '';
+        var cl  = el.className && typeof el.className === 'string'
+                    ? '.'+el.className.trim().split(/\s+/).slice(0,2).join('.') : '';
+        offenders.push({
+          label: tag + id + cl,
+          right: Math.round(r.right),
+          sw: sw,
+          w: Math.round(r.width)
+        });
+      }
+    });
+
+    if (offenders.length === 0) {
+      lines.push('<div class="dbg-row dbg-ok">✓ No elements overflow viewport</div>');
+    } else {
+      offenders.slice(0, 30).forEach(function(o) {
+        lines.push('<div class="dbg-row dbg-bad">'
+          + o.label
+          + ' | right=' + o.right + 'px'
+          + ' | scrollW=' + o.sw + 'px'
+          + ' | width=' + o.w + 'px'
+          + '</div>');
+      });
+      if (offenders.length > 30) {
+        lines.push('<div class="dbg-row dbg-warn">... and ' + (offenders.length-30) + ' more</div>');
+      }
+    }
+
+    lines.push('<h3>📋 KEY ELEMENT WIDTHS</h3>');
+    var targets = [
+      'body', '.page-wrapper', '.main-wrapper', '.container',
+      '.layout', '.card', '.res-grid', '.tog', '.chart-box', 'canvas'
+    ];
+    targets.forEach(function(sel) {
+      var el = document.querySelector(sel);
+      if (!el) { lines.push('<div class="dbg-row dbg-warn">' + sel + ': not found</div>'); return; }
+      var r  = el.getBoundingClientRect();
+      var sw = el.scrollWidth;
+      var ok = Math.round(r.width) <= vw && sw <= vw + 2;
+      lines.push('<div class="dbg-row ' + (ok?'dbg-ok':'dbg-bad') + '">'
+        + sel + ' → width=' + Math.round(r.width) + 'px'
+        + ' scrollW=' + sw + 'px'
+        + (ok ? ' ✓' : ' ⚠')
+        + '</div>');
+    });
+
+    lines.push('<h3>📱 COMPUTED STYLES ON BODY/HTML</h3>');
+    ['overflow-x','max-width','width'].forEach(function(prop) {
+      var bv = getComputedStyle(document.body).getPropertyValue(prop);
+      var hv = getComputedStyle(document.documentElement).getPropertyValue(prop);
+      lines.push('<div class="dbg-row">body.' + prop + ': ' + bv.trim() + ' | html.' + prop + ': ' + hv.trim() + '</div>');
+    });
+
+    lines.push('<div class="dbg-row dbg-warn" style="margin-top:6px;cursor:pointer" onclick="(function(){var d=document.getElementById('dbg-panel');d.innerHTML='';})()">[ clear ]</div>');
+    panel.innerHTML = lines.join('');
+  }
 })();
 </script>
 </body>
