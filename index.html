@@ -48,12 +48,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tool-card{background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:18px 20px;box-shadow:0 4px 16px rgba(45,50,40,.05);transition:transform .18s,box-shadow .18s;text-decoration:none;color:inherit;display:flex;flex-direction:row;align-items:flex-start;gap:16px;position:relative;overflow:hidden}
 .tool-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(45,50,40,.11);border-color:var(--accent,var(--gr))}
 .tool-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--accent,var(--gr));border-radius:16px 0 0 16px}
-.tool-card.coming-soon{opacity:.65;cursor:default;pointer-events:none}
-.tool-card.coming-soon::after{content:'Coming Soon';position:absolute;top:12px;right:12px;font-size:.65rem;font-weight:700;background:#f1ede6;color:var(--txl);padding:2px 8px;border-radius:999px;border:1px solid var(--bdr)}
 .card-icon{width:42px;height:42px;min-width:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--icon-bg,var(--grl));margin-top:2px}
 .card-icon svg{width:21px;height:21px;fill:var(--icon-color,var(--gr))}
 .card-body{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
-.card-title{font-size:.95rem;font-weight:700;color:var(--dk);line-height:1.3;padding-right:60px}
+.card-title{font-size:.95rem;font-weight:700;color:var(--dk);line-height:1.3}
 .card-desc{font-size:.82rem;color:var(--txl);line-height:1.5}
 .card-cta{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;font-weight:700;color:var(--accent,var(--gr));margin-top:2px}
 .card-cta svg{width:13px;height:13px;fill:var(--accent,var(--gr));transition:transform .15s}
@@ -70,7 +68,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .hero-section{padding:14px 18px 12px}
   .container{padding:24px 16px}
   .tool-card{flex-direction:column;gap:12px}
-  .card-title{padding-right:72px}
 }
 </style>
 </head>
@@ -144,18 +141,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           </div>
         </a>
 
-        <!-- 4. Rent or Buy -->
-        <a class="tool-card coming-soon" href="rent-or-buy-calculator.html" style="--accent:#e05c97;--icon-bg:#fdeef6;--icon-color:#e05c97">
-          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div>
-          <div class="card-body">
-            <div class="card-title">Rent or Buy</div>
-            <div class="card-desc">True long-term cost of renting vs. buying.</div>
-            <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
-          </div>
-        </a>
-
-        <!-- 5. HECS/HELP -->
-        <a class="tool-card" href="hecs-calculator.html" style="--accent:#7c5cbf;--icon-bg:#f0ebfa;--icon-color:#7c5cbf">
+        <!-- 4. HECS/HELP -->
+        <a class="tool-card" href="hecs-calculator.html" style="--accent:#6d4c9e;--icon-bg:#f0ebfa;--icon-color:#6d4c9e">
           <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg></div>
           <div class="card-body">
             <div class="card-title">HECS/HELP Repayment</div>
@@ -164,18 +151,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           </div>
         </a>
 
-        <!-- 6. Offset Account -->
-        <a class="tool-card" href="offset-calculator.html" style="--accent:#0097a7;--icon-bg:#e0f7fa;--icon-color:#0097a7">
-          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M17 12c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.24-5 5-5 5 2.24 5 5zm-5-7A7 7 0 1 0 12 19 7 7 0 0 0 12 5zm-1 3v4l3.28 1.97.72-1.21-2.75-1.63V8H11zm9.78 2.61l-1.42-1.42-1.4 1.42 1.42 1.42 1.4-1.42zM3.64 10.19L2.22 11.61l1.4 1.42 1.42-1.42-1.4-1.42zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg></div>
-          <div class="card-body">
-            <div class="card-title">Offset Account Savings</div>
-            <div class="card-desc">Interest and time saved with an offset account.</div>
-            <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
-          </div>
-        </a>
-
-        <!-- 7. Savings Goal -->
-        <a class="tool-card" href="savings-goal-calculator.html" style="--accent:#00897b;--icon-bg:#e0f2f1;--icon-color:#00897b">
+        <!-- 5. Savings Goal -->
+        <a class="tool-card" href="savings-goal-calculator.html" style="--accent:#4a7c59;--icon-bg:#eaf2ec;--icon-color:#4a7c59">
           <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg></div>
           <div class="card-body">
             <div class="card-title">Savings Goal</div>
@@ -184,11 +161,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           </div>
         </a>
 
+        <!-- 6. Offset Account -->
+        <a class="tool-card" href="offset-calculator.html" style="--accent:#546e7a;--icon-bg:#eceff1;--icon-color:#546e7a">
+          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M17 12c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.24-5 5-5 5 2.24 5 5zm-5-7A7 7 0 1 0 12 19 7 7 0 0 0 12 5zm-1 3v4l3.28 1.97.72-1.21-2.75-1.63V8H11zm9.78 2.61l-1.42-1.42-1.4 1.42 1.42 1.42 1.4-1.42zM3.64 10.19L2.22 11.61l1.4 1.42 1.42-1.42-1.4-1.42zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg></div>
+          <div class="card-body">
+            <div class="card-title">Offset Account Savings</div>
+            <div class="card-desc">Interest and time saved with an offset account.</div>
+            <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </a>
+
+        <!-- 7. Rent or Buy -->
+        <a class="tool-card" href="rent-or-buy-calculator.html" style="--accent:#e8650a;--icon-bg:#fdeee4;--icon-color:#e8650a">
+          <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div>
+          <div class="card-body">
+            <div class="card-title">Buy vs Rent</div>
+            <div class="card-desc">True long-term cost of renting vs. buying.</div>
+            <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </a>
+
         <!-- 8. Rent or Invest -->
-        <a class="tool-card coming-soon" href="rent-or-invest-calculator.html" style="--accent:#e67e22;--icon-bg:#fef4e8;--icon-color:#e67e22">
+        <a class="tool-card" href="rent-or-invest-calculator.html" style="--accent:#c0392b;--icon-bg:#fdecea;--icon-color:#c0392b">
           <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg></div>
           <div class="card-body">
-            <div class="card-title">Rent or Invest</div>
+            <div class="card-title">Buy vs Invest</div>
             <div class="card-desc">Does renting and investing outperform buying?</div>
             <div class="card-cta">Open <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
