@@ -35,13 +35,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .field-hint{font-size:.75rem;color:var(--txl);margin-top:2px}
 .field select{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s}
 .field select:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
-.toggle-group{margin-bottom:14px}
-.toggle-label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
-.toggle-switch{display:flex;border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
-.toggle-switch input[type=radio]{display:none}
-.toggle-switch label{flex:1;text-align:center;padding:8px 10px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fffdf8;color:var(--txl);transition:all .15s;border-right:1px solid var(--bdr)}
-.toggle-switch label:last-of-type{border-right:none}
-.toggle-switch input[type=radio]:checked+label{background:var(--gr);color:#fff}
 .input-wrap{position:relative;display:flex;align-items:center}
 .input-wrap .prefix,.input-wrap .suffix{position:absolute;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;user-select:none;z-index:1}
 .input-wrap .prefix{left:10px}
@@ -55,6 +48,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .range-wrap{margin-top:4px}
 input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
 .range-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--txl);margin-top:2px}
+/* Results grid */
 .results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
 .result-box{background:#f8f5ef;border:1px solid var(--bdr);border-radius:12px;padding:12px 14px}
 .result-box.hl{background:var(--grl);border-color:var(--gr)}
@@ -63,12 +57,13 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
 .result-box .val{font-size:1.15rem;font-weight:700;color:var(--dk)}
 .result-box.hl .val{color:var(--gr);font-size:1.3rem}
 .result-box.hl-pu .val{color:var(--pu);font-size:1.3rem}
+/* Banners */
 .banner{border-radius:8px;padding:10px 13px;margin-bottom:12px;font-size:.84rem}
 .bn-green{background:var(--grl);border:1px solid var(--gr);color:var(--tx)}
 .bn-amber{background:var(--aml);border:1px solid var(--am);color:var(--tx)}
-.bn-red{background:#fdecea;border:1px solid var(--red);color:var(--tx)}
-.bn-blue{background:var(--bll);border:1px solid var(--bl);color:var(--tx)}
+/* Section title */
 .section-title{font-size:.85rem;font-weight:700;margin:18px 0 8px;color:var(--dk)}
+/* Breakdown table */
 .bd-table{width:100%;border-collapse:collapse;font-size:.88rem}
 .bd-table th{text-align:left;padding:8px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
 .bd-table th:not(:first-child){text-align:right}
@@ -76,6 +71,7 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
 .bd-table td:not(:first-child){text-align:right}
 .bd-table tr:last-child td{border-bottom:none}
 .bd-table .total-row td{font-weight:700;border-top:2px solid var(--dk);border-bottom:none}
+/* Chart */
 .chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
 .chart-header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .chart-hint{font-size:.74rem;color:var(--txl);font-style:italic}
@@ -83,15 +79,18 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
 .chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;justify-content:center}
 .chart-legend-item{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--tx)}
 .chart-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+/* Amort button — identical to personal loan */
 .amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:6px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s}
 .amort-btn:hover{border-color:var(--gr);color:var(--gr)}
+/* Amort table — identical to personal loan */
 .amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
 .amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
 .amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
-.amort-table th:first-child{text-align:left}
+.amort-table th:first-child,.amort-table th:nth-child(2){text-align:left}
 .amort-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums;text-align:right}
-.amort-table td:first-child{text-align:left}
-.amort-table .yr-row td{font-weight:700;background:#edf5fb;color:var(--bl);font-size:.75rem;text-transform:uppercase}
+.amort-table td:first-child,.amort-table td:nth-child(2){text-align:left}
+.amort-table .yr-row td{font-weight:700;background:var(--bg);font-size:.75rem;text-transform:uppercase;color:var(--txl);text-align:left}
+/* Actions bar */
 .actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;letter-spacing:.3px}
 .btn svg{width:14px;height:14px;fill:currentColor}
@@ -100,20 +99,11 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
 .note{font-size:.78rem;color:var(--txl);margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr);line-height:1.5}
 .ft{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ft span{color:rgba(255,255,255,.75);font-size:.82rem}
+.hidden{display:none!important}
+/* Threshold badge */
 .threshold-badge{display:inline-block;background:var(--grl);border:1px solid var(--gr);border-radius:6px;padding:2px 8px;font-size:.8rem;font-weight:700;color:var(--gr);margin-left:6px}
 .threshold-badge.above{background:var(--aml);border-color:var(--am);color:var(--am)}
 .threshold-badge.high{background:#fdecea;border-color:var(--red);color:var(--red)}
-.inline-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.volunteer-note{font-size:.8rem;color:var(--txl);background:var(--bll);border:1px solid var(--bl);border-radius:8px;padding:8px 12px;margin-top:8px}
-/* Collapsible */
-.collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0 0 8px 0;border-bottom:2px solid var(--gr);margin-bottom:16px;text-align:left;gap:10px}
-.collapsible-header[aria-expanded="false"]{border-bottom-color:var(--bdr);margin-bottom:0}
-.collapsible-header h2{margin:0;padding:0;border:none;font-size:1rem;color:var(--dk)}
-.collapsible-header:hover h2{color:var(--gr)}
-.collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center}
-.collapsible-header[aria-expanded="true"] .collapse-icon{transform:rotate(180deg)}
-.collapsible-body{overflow:hidden;transition:max-height .3s ease,opacity .25s ease;max-height:4000px;opacity:1}
-.collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
 /* Bracket table */
 .bracket-table{width:100%;border-collapse:collapse;font-size:.83rem;margin-top:8px}
 .bracket-table th{padding:7px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);text-align:left}
@@ -122,15 +112,55 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
 .bracket-table td:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 .bracket-table tr.active-row td{background:var(--grl);font-weight:700;color:var(--gr)}
 .bracket-table tr:last-child td{border-bottom:none}
+/* Collapsible for ATO rates panel */
+.collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0 0 8px 0;border-bottom:2px solid var(--gr);margin-bottom:16px;text-align:left;gap:10px}
+.collapsible-header[aria-expanded="false"]{border-bottom-color:var(--bdr);margin-bottom:0}
+.collapsible-header h2{margin:0;padding:0;border:none;font-size:1rem;color:var(--dk)}
+.collapsible-header:hover h2{color:var(--gr)}
+.collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center}
+.collapsible-header[aria-expanded="true"] .collapse-icon{transform:rotate(180deg)}
+.collapsible-body{overflow:hidden;transition:max-height .3s ease,opacity .25s ease;max-height:4000px;opacity:1}
+.collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
+/* Side rails */
+.page-wrapper{display:flex;justify-content:center;align-items:stretch;gap:0;width:100%;padding-top:0;overflow:hidden;position:relative;min-height:100vh}
+.side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;position:absolute;top:120px;z-index:10}
+.side-rail.left{left:0}
+.side-rail.right{right:0}
+.side-rail-inner{position:sticky;top:80px;padding:8px;display:flex;flex-direction:column;align-items:center}
+.rail-ad-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:8px 0 4px;border-bottom:1px solid var(--bdr);margin-bottom:8px;width:100%}
+.rail-ad-unit{background:var(--card);border:1px solid var(--bdr);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(45,50,40,.06)}
+.rail-ad-inner{padding:8px;display:flex;justify-content:center;align-items:center;min-height:620px}
+@media(min-width:1400px){.side-rail{display:flex;flex-direction:column}.main-wrapper{padding-left:200px;padding-right:200px}}
 /* Responsive */
 @media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
-@media(max-width:768px){.results-grid{grid-template-columns:1fr 1fr!important}.inline-fields{grid-template-columns:1fr}}
-@media(max-width:480px){.main-wrapper{padding:12px!important}.layout{gap:10px!important}.card{padding:12px!important}.topbar{padding:8px 14px!important}.results-grid{grid-template-columns:1fr 1fr!important}}
+@media(max-width:768px){
+  ins.adsbygoogle,script[src*="googlesyndication"],
+  .ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,
+  [data-ad-client],[data-ad-slot]{display:none!important;width:0!important;height:0!important;max-width:0!important;overflow:hidden!important;visibility:hidden!important;position:absolute!important;pointer-events:none!important;}
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .bracket-table,.bd-table,.amort-table{display:block!important;overflow-x:auto!important;font-size:.78rem!important}
+}
+@media(max-width:480px){
+  .main-wrapper{padding:12px!important;box-sizing:border-box!important}
+  .layout{grid-template-columns:1fr!important;gap:10px!important}
+  .card{padding:12px!important}
+  .topbar{padding:8px 14px!important}
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:6px!important}
+  .bd-table,.amort-table{display:block!important;overflow-x:auto!important;font-size:.74rem!important}
+  .actions-bar{flex-wrap:wrap}
+  .ft{padding:10px 14px!important}
+}
+@media(max-width:1024px) and (pointer:coarse){
+  ins.adsbygoogle,.ad-slot,.side-rail,[data-ad-client],[data-ad-slot]{display:none!important;width:0!important;height:0!important;max-width:0!important;overflow:hidden!important;visibility:hidden!important;position:absolute!important;pointer-events:none!important;}
+}
 html{overflow-x:hidden}
-html,body{width:100%;max-width:100%}
+html,body,
+.layout>*,.card,.main-wrapper,.container{width:100%;max-width:100%;box-sizing:border-box}
 .layout>*{min-width:0;overflow-x:hidden}
-.card{box-sizing:border-box;width:100%;max-width:100%}
+ins.adsbygoogle,ins.adsbygoogle iframe{max-width:100%!important;overflow:hidden!important}
 </style>
+<!-- Google AdSense -->
+<script>if(window.innerWidth>768 && navigator.maxTouchPoints===0){document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></scr'+'ipt>');}</script>
 </head>
 <body>
 
@@ -147,17 +177,32 @@ html,body{width:100%;max-width:100%}
   </div>
 </div>
 
+<div class="page-wrapper">
+
+  <div class="side-rail left">
+    <div class="side-rail-inner">
+      <div class="rail-ad-unit">
+        <div class="rail-ad-label">Advertisement</div>
+        <div class="rail-ad-inner">
+          <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <div class="main-wrapper">
 <div class="container">
 <div class="layout">
 
-<!-- ═══════════════ LEFT — INPUTS ═══════════════ -->
+<!-- ═══ LEFT — INPUTS ═══ -->
 <div>
   <div class="card">
     <div class="card-header-row">
       <h2>Your Details</h2>
       <button class="btn btn-navy" id="btnReset" type="button">
-        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.96 7.96 0 0 0 12 4a8 8 0 1 0 8 8h-2a6 6 0 1 1-1.76-4.24L13 11h7V4l-2.35 2.35z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
         Reset
       </button>
     </div>
@@ -166,7 +211,7 @@ html,body{width:100%;max-width:100%}
     <div class="field">
       <label for="loanBalance">Current HECS-HELP Debt</label>
       <div class="input-wrap"><span class="prefix">$</span>
-        <input type="number" id="loanBalance" class="has-prefix" value="35000" min="0" max="999999" step="500" placeholder="e.g. 35000">
+        <input type="number" id="loanBalance" class="has-prefix" value="35000" min="0" max="999999" step="500">
       </div>
       <div class="range-wrap">
         <input type="range" id="loanBalanceRange" min="0" max="200000" step="500" value="35000">
@@ -178,18 +223,18 @@ html,body{width:100%;max-width:100%}
     <div class="field">
       <label for="grossIncome">Annual Taxable Income</label>
       <div class="input-wrap"><span class="prefix">$</span>
-        <input type="number" id="grossIncome" class="has-prefix" value="75000" min="0" max="999999" step="1000" placeholder="e.g. 75000">
+        <input type="number" id="grossIncome" class="has-prefix" value="75000" min="0" max="999999" step="1000">
       </div>
       <div class="range-wrap">
         <input type="range" id="grossIncomeRange" min="0" max="300000" step="1000" value="75000">
         <div class="range-labels"><span>$0</span><span>$300k</span></div>
       </div>
-      <div class="field-hint">Use your repayment income (taxable income + reportable fringe benefits + net investment losses + reportable super contributions).</div>
+      <div class="field-hint">Use your repayment income — taxable income plus reportable fringe benefits, net investment losses and reportable super contributions.</div>
     </div>
     <div class="field">
       <label for="incomeGrowth">Expected Annual Income Growth</label>
       <div class="input-wrap">
-        <input type="number" id="incomeGrowth" class="has-suffix" value="3" min="0" max="20" step="0.5" placeholder="3">
+        <input type="number" id="incomeGrowth" class="has-suffix" value="3" min="0" max="20" step="0.5">
         <span class="suffix">%</span>
       </div>
     </div>
@@ -198,40 +243,27 @@ html,body{width:100%;max-width:100%}
     <div class="field">
       <label for="indexRate">Annual Indexation Rate</label>
       <div class="input-wrap">
-        <input type="number" id="indexRate" class="has-suffix" value="3.2" min="0" max="15" step="0.1" placeholder="3.2">
+        <input type="number" id="indexRate" class="has-suffix" value="3.2" min="0" max="15" step="0.1">
         <span class="suffix">%</span>
       </div>
       <div class="field-hint">2025 ATO rate: 3.2% (lower of CPI or WPI). Adjust for your own projection.</div>
     </div>
 
-    <div class="section-label">Optional: Voluntary Repayments</div>
+    <div class="section-label">Voluntary Repayments</div>
     <div class="field">
       <label for="extraRepay">Additional Voluntary Repayment</label>
       <div class="input-wrap"><span class="prefix">$</span>
-        <input type="number" id="extraRepay" class="has-prefix" value="0" min="0" max="999999" step="100" placeholder="0">
+        <input type="number" id="extraRepay" class="has-prefix" value="0" min="0" max="999999" step="100">
       </div>
-      <div class="field-hint">Per year, on top of compulsory repayment.</div>
+      <div class="field-hint">Per year, on top of your compulsory repayment.</div>
     </div>
 
-    <div class="section-label">Scenario Comparison</div>
-    <div class="toggle-group">
-      <span class="toggle-label">Compare With / Without Voluntary</span>
-      <div class="toggle-switch">
-        <input type="radio" name="compare" id="cmpOff" value="off" checked>
-        <label for="cmpOff">Off</label>
-        <input type="radio" name="compare" id="cmpOn" value="on">
-        <label for="cmpOn">On</label>
-      </div>
-    </div>
-
-  </div><!-- /card -->
+  </div>
 </div><!-- /left -->
 
-<!-- ═══════════════ RIGHT — RESULTS ═══════════════ -->
+<!-- ═══ RIGHT — RESULTS ═══ -->
 <div>
-
-  <!-- Summary cards -->
-  <div class="card" id="resultsCard">
+  <div class="card">
     <h2>Results <span id="threshBadge" class="threshold-badge" style="display:none"></span></h2>
 
     <div id="belowThreshBanner" class="banner bn-amber" style="display:none">
@@ -241,6 +273,7 @@ html,body{width:100%;max-width:100%}
       ✅ Your income is above the repayment threshold. Compulsory repayments will be withheld by your employer via PAYG.
     </div>
 
+    <!-- Summary boxes -->
     <div class="results-grid">
       <div class="result-box hl">
         <div class="lbl">Annual Repayment</div>
@@ -268,72 +301,92 @@ html,body{width:100%;max-width:100%}
       </div>
     </div>
 
-    <!-- Repayment bracket info -->
-    <div class="section-title">2025–26 Repayment Bracket</div>
-    <table class="bracket-table" id="bracketTable">
+    <!-- Repayment Breakdown (personal-loan style) -->
+    <div class="section-title">Repayment Breakdown</div>
+    <table class="bd-table">
       <thead>
-        <tr><th>Repayment Income Range</th><th>Rate / Calculation</th></tr>
+        <tr>
+          <th>Component</th>
+          <th>Annual</th>
+          <th>Monthly</th>
+          <th>Loan Life</th>
+          <th>% of Total</th>
+        </tr>
       </thead>
+      <tbody id="breakdownBody">
+        <tr><td colspan="5" style="color:var(--txl);font-size:.85rem">Enter your details to see results</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Active ATO bracket -->
+    <div class="section-title">2025–26 Repayment Bracket</div>
+    <table class="bracket-table">
+      <thead><tr><th>Repayment Income Range</th><th>Rate / Calculation</th></tr></thead>
       <tbody id="bracketBody"></tbody>
     </table>
 
     <!-- Chart -->
     <div class="chart-section">
       <div class="chart-header">
-        <div class="section-title" style="margin:0">Loan Balance Over Time</div>
-        <span class="chart-hint" id="chartHint">Hover for year detail</span>
+        <div class="section-title" style="margin:0">Remaining Loan Balance Over Time</div>
+        <span class="chart-hint">ⓘ Hover to see detail by year</span>
       </div>
       <div class="chart-wrap">
         <canvas id="balanceChart" height="220"></canvas>
       </div>
       <div class="chart-legend">
-        <div class="chart-legend-item"><div class="chart-swatch" style="background:#2a9d67"></div>Balance (compulsory only)</div>
-        <div class="chart-legend-item" id="legVoluntary" style="display:none"><div class="chart-swatch" style="background:#3f7fb5"></div>Balance (with voluntary)</div>
-        <div class="chart-legend-item"><div class="chart-swatch" style="background:#e8a838;opacity:.7"></div>Indexation added</div>
+        <div class="chart-legend-item"><div class="chart-swatch" style="background:#2a9d67"></div>Closing Balance</div>
+        <div class="chart-legend-item"><div class="chart-swatch" style="background:#e8a838"></div>Indexation Added</div>
+        <div class="chart-legend-item" id="legVoluntary" style="display:none"><div class="chart-swatch" style="background:#3f7fb5"></div>Voluntary Repayment</div>
       </div>
     </div>
 
-  </div>
-
-  <!-- Year-by-year breakdown -->
-  <div class="card">
-    <button class="collapsible-header" id="amortToggle" aria-expanded="true">
-      <h2>Year-by-Year Schedule</h2>
-      <span class="collapse-icon">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
-      </span>
+    <!-- Show Schedule button — same pattern as personal loan -->
+    <button class="amort-btn" id="amortToggle" type="button">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+      Show Year-by-Year Schedule
     </button>
-    <div class="collapsible-body" id="amortBody">
+
+    <div id="amortSection" class="hidden">
       <div class="amort-wrap">
         <table class="amort-table">
           <thead>
             <tr>
-              <th style="text-align:left">Year</th>
-              <th>Opening Balance</th>
+              <th>#</th>
+              <th>Year</th>
+              <th>Opening</th>
               <th>Indexation</th>
               <th>Compulsory</th>
-              <th>Voluntary</th>
-              <th>Closing Balance</th>
+              <th id="thVoluntary" style="display:none">Voluntary</th>
+              <th>Closing</th>
             </tr>
           </thead>
-          <tbody id="amortBody2"></tbody>
+          <tbody id="amortBody"></tbody>
         </table>
       </div>
-
-      <div class="actions-bar">
-        <button class="btn btn-green" id="btnCSV" type="button">
-          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5v-2z"/></svg>
-          Download CSV
-        </button>
-        <button class="btn btn-navy" id="btnPrint" type="button">
-          <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
-          Print
-        </button>
-      </div>
     </div>
-  </div>
 
-  <!-- Repayment rates reference -->
+    <!-- Actions bar — inside same card, below schedule -->
+    <div class="actions-bar">
+      <button class="btn btn-green" id="btnCSV" type="button">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
+        Export Summary CSV
+      </button>
+      <button class="btn btn-green" id="btnAmortCSV" type="button">
+        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+        Export Schedule CSV
+      </button>
+      <div style="flex:1"></div>
+      <button class="btn btn-navy" id="btnPrint" type="button">
+        <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+        Print
+      </button>
+    </div>
+
+    <div class="note">Estimates only. Assumes constant indexation rate and steady income growth. Actual repayments are withheld by your employer via PAYG and reconciled at tax time. Not financial advice — refer to <a href="https://www.ato.gov.au" target="_blank" rel="noopener">ato.gov.au</a> for official figures.</div>
+  </div><!-- /results card -->
+
+  <!-- ATO rates reference -->
   <div class="card">
     <button class="collapsible-header" id="ratesToggle" aria-expanded="false">
       <h2>2025–26 ATO Repayment Thresholds</h2>
@@ -352,243 +405,278 @@ html,body{width:100%;max-width:100%}
           <tr><td>$179,286 and above</td><td style="text-align:right">10% of total repayment income</td></tr>
         </tbody>
       </table>
-      <p style="font-size:.78rem;color:var(--txl);margin-top:10px">Indexation is applied on 1 June each year at the lower of CPI or WPI. The 2025 rate is 3.2%.</p>
+      <p style="font-size:.78rem;color:var(--txl);margin-top:10px">Indexation applied on 1 June each year at the lower of CPI or WPI. The 2025 rate is 3.2%. Voluntary repayments no longer attract a bonus (removed 2017).</p>
     </div>
   </div>
-
-  <p class="note">Estimates only. Assumes constant indexation rate and steady income growth. Actual repayments are withheld by your employer via PAYG and reconciled at tax time. Voluntary repayments do not attract a bonus from 2017 onwards. Not financial advice — refer to <a href="https://www.ato.gov.au" target="_blank" rel="noopener">ato.gov.au</a> for official figures.</p>
 
 </div><!-- /right -->
 </div><!-- /layout -->
 </div><!-- /container -->
 </div><!-- /main-wrapper -->
 
+  <div class="side-rail right">
+    <div class="side-rail-inner">
+      <div class="rail-ad-unit">
+        <div class="rail-ad-label">Advertisement</div>
+        <div class="rail-ad-inner">
+          <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-wrapper -->
+
 <div class="ft"><span>HECS-HELP Calculator &mdash; 2025&ndash;26 ATO Rates &mdash; Estimates Only</span></div>
 
 <script>
-// ─── ATO 2025-26 marginal brackets ───────────────────────────────────────────
-const BRACKETS_2526 = [
-  { min:0,       max:67000,   label:'$0 – $67,000',           calc:'Nil',                          rate:null,  base:0,    over:67000,   margRate:0    },
-  { min:67001,   max:125000,  label:'$67,001 – $125,000',      calc:'15c per $1 over $67,000',      rate:null,  base:0,    over:67000,   margRate:0.15 },
-  { min:125001,  max:179285,  label:'$125,001 – $179,285',     calc:'$8,700 + 17c per $1 over $125,000', rate:null, base:8700, over:125000, margRate:0.17 },
-  { min:179286,  max:Infinity,label:'$179,286 and above',      calc:'10% of total repayment income',rate:0.10,  base:0,    over:0,       margRate:null }
+// ─── ATO 2025-26 brackets ────────────────────────────────────────────────────
+const BRACKETS = [
+  { min:0,       max:67000,   label:'$0 – $67,000',        calc:'Nil'                               },
+  { min:67001,   max:125000,  label:'$67,001 – $125,000',   calc:'15c per $1 over $67,000'           },
+  { min:125001,  max:179285,  label:'$125,001 – $179,285',  calc:'$8,700 + 17c per $1 over $125,000' },
+  { min:179286,  max:Infinity,label:'$179,286 and above',   calc:'10% of total repayment income'     }
 ];
 
 function calcAnnualRepayment(income){
-  if(income <= 67000) return 0;
+  if(income <= 67000)  return 0;
   if(income <= 125000) return (income - 67000) * 0.15;
   if(income <= 179285) return 8700 + (income - 125000) * 0.17;
   return income * 0.10;
 }
 
-function activeBracket(income){
-  for(let b of BRACKETS_2526){
-    if(income >= b.min && income <= b.max) return b;
-  }
-  return BRACKETS_2526[BRACKETS_2526.length-1];
-}
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+const $  = id => document.getElementById(id);
+const fmt  = v => '$' + Math.round(v).toLocaleString('en-AU');
+const fmt2 = v => '$' + Math.abs(v).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct  = v => v.toFixed(2) + '%';
 
-// ─── DOM refs ────────────────────────────────────────────────────────────────
-const $ = id => document.getElementById(id);
-const inputs = ['loanBalance','grossIncome','incomeGrowth','indexRate','extraRepay'];
-
-// Sync range ↔ number inputs
+// ─── Range sync ──────────────────────────────────────────────────────────────
 function syncRange(inputId, rangeId){
   const inp = $(inputId), rng = $(rangeId);
-  inp.addEventListener('input', ()=>{ rng.value = inp.value; calc(); });
-  rng.addEventListener('input', ()=>{ inp.value = rng.value; calc(); });
+  inp.addEventListener('input', () => { rng.value = inp.value; calc(); });
+  rng.addEventListener('input', () => { inp.value = rng.value; calc(); });
 }
 syncRange('loanBalance','loanBalanceRange');
 syncRange('grossIncome','grossIncomeRange');
+['incomeGrowth','indexRate','extraRepay'].forEach(id => $(id).addEventListener('input', calc));
 
-inputs.forEach(id=>{
-  const el = $(id);
-  if(el) el.addEventListener('input', calc);
+// ─── Collapsible ATO rates panel ─────────────────────────────────────────────
+const ratesBtn = $('ratesToggle'), ratesBody = $('ratesBody');
+ratesBtn.addEventListener('click', () => {
+  const open = ratesBtn.getAttribute('aria-expanded') === 'true';
+  ratesBtn.setAttribute('aria-expanded', String(!open));
+  ratesBody.classList.toggle('collapsed', open);
 });
-document.querySelectorAll('input[name=compare]').forEach(r=>r.addEventListener('change',calc));
 
-// Collapsible
-function setupCollapsible(btnId, bodyId){
-  const btn = $(btnId), body = $(bodyId);
-  btn.addEventListener('click',()=>{
-    const open = btn.getAttribute('aria-expanded')==='true';
-    btn.setAttribute('aria-expanded', String(!open));
-    body.classList.toggle('collapsed', open);
-  });
-}
-setupCollapsible('amortToggle','amortBody');
-setupCollapsible('ratesToggle','ratesBody');
+// ─── Show/hide schedule toggle (amort-btn style) ─────────────────────────────
+const amortToggle = $('amortToggle'), amortSection = $('amortSection');
+let schedVisible = false;
+amortToggle.addEventListener('click', () => {
+  schedVisible = !schedVisible;
+  amortSection.classList.toggle('hidden', !schedVisible);
+  amortToggle.innerHTML = schedVisible
+    ? '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> Hide Year-by-Year Schedule'
+    : '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> Show Year-by-Year Schedule';
+});
 
-// ─── Chart setup ─────────────────────────────────────────────────────────────
+// ─── Chart init ──────────────────────────────────────────────────────────────
 let balChart;
 function initChart(){
-  const ctx = $('balanceChart').getContext('2d');
-  balChart = new Chart(ctx, {
-    type:'bar',
-    data:{ labels:[], datasets:[
-      { label:'Balance (compulsory)',  data:[], backgroundColor:'rgba(42,157,103,.75)',  borderRadius:4, order:1 },
-      { label:'Balance (with voluntary)', data:[], backgroundColor:'rgba(63,127,181,.7)', borderRadius:4, order:2 },
-      { label:'Indexation Added', data:[], backgroundColor:'rgba(232,168,56,.55)', borderRadius:4, order:3 }
+  balChart = new Chart($('balanceChart').getContext('2d'), {
+    type: 'bar',
+    data: { labels:[], datasets:[
+      { label:'Closing Balance',    data:[], backgroundColor:'rgba(42,157,103,.75)', borderRadius:4, order:1 },
+      { label:'Indexation Added',   data:[], backgroundColor:'rgba(232,168,56,.75)', borderRadius:4, order:2 },
+      { label:'Voluntary Repayment',data:[], backgroundColor:'rgba(63,127,181,.7)',  borderRadius:4, order:3 }
     ]},
     options:{
       responsive:true, maintainAspectRatio:false,
       scales:{
-        x:{ stacked:false, grid:{display:false}, ticks:{font:{size:11}} },
-        y:{ ticks:{callback:v=>'$'+fmtK(v), font:{size:11}}, grid:{color:'rgba(0,0,0,.06)'} }
+        x:{ grid:{display:false}, ticks:{font:{size:11}} },
+        y:{ ticks:{ callback: v => '$'+(v>=1000 ? Math.round(v/1000)+'k' : v), font:{size:11} }, grid:{color:'rgba(0,0,0,.06)'} }
       },
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{
-          label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)
-        }}
+        tooltip:{ callbacks:{ label: c => ' '+c.dataset.label+': '+fmt(c.parsed.y) } }
       }
     }
   });
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-function fmt(v){ return '$'+Math.round(v).toLocaleString('en-AU'); }
-function fmtK(v){ return v>=1000?Math.round(v/1000)+'k':v; }
-function pct(v){ return v.toFixed(1)+'%'; }
-
-// ─── Build schedule ──────────────────────────────────────────────────────────
+// ─── Schedule builder ────────────────────────────────────────────────────────
 function buildSchedule(balance, income, incGrowth, indexRate, extraAnnual){
-  const MAX_YRS = 60;
   const rows = [];
-  let bal = balance;
-  let inc = income;
-  let yr = new Date().getFullYear();
-
-  for(let i=0; i<MAX_YRS; i++){
-    if(bal <= 0) break;
-    const opening = bal;
-    const indexation = opening * (indexRate/100);
-    const balAfterIndex = opening + indexation;
-    const compulsory = Math.min(calcAnnualRepayment(inc), balAfterIndex);
-    const balAfterComp = balAfterIndex - compulsory;
-    const voluntary = Math.min(extraAnnual, balAfterComp);
-    const closing = Math.max(0, balAfterComp - voluntary);
-    rows.push({ year: yr+i, opening, indexation, compulsory, voluntary, closing });
+  let bal = balance, inc = income, yr = new Date().getFullYear();
+  for(let i = 0; i < 60; i++){
+    if(bal < 0.005) break;
+    const opening    = bal;
+    const indexation = opening * (indexRate / 100);
+    const balAfterIdx  = opening + indexation;
+    const compulsory   = Math.min(calcAnnualRepayment(inc), balAfterIdx);
+    const balAfterComp = balAfterIdx - compulsory;
+    const voluntary    = Math.min(extraAnnual, balAfterComp);
+    const closing      = Math.max(0, balAfterComp - voluntary);
+    rows.push({ n:i+1, year:yr+i, opening, indexation, compulsory, voluntary, closing });
     bal = closing;
-    inc *= (1 + incGrowth/100);
+    inc *= (1 + incGrowth / 100);
   }
   return rows;
 }
 
 // ─── Main calc ───────────────────────────────────────────────────────────────
 function calc(){
-  const balance   = Math.max(0, parseFloat($('loanBalance').value)||0);
-  const income    = Math.max(0, parseFloat($('grossIncome').value)||0);
-  const incGrowth = parseFloat($('incomeGrowth').value)||0;
-  const indexRate = parseFloat($('indexRate').value)||0;
-  const extra     = Math.max(0, parseFloat($('extraRepay').value)||0);
-  const compare   = document.querySelector('input[name=compare]:checked').value === 'on';
+  const balance   = Math.max(0, parseFloat($('loanBalance').value)  || 0);
+  const income    = Math.max(0, parseFloat($('grossIncome').value)   || 0);
+  const incGrowth = parseFloat($('incomeGrowth').value) || 0;
+  const indexRate = parseFloat($('indexRate').value)    || 0;
+  const extra     = Math.max(0, parseFloat($('extraRepay').value)    || 0);
+  const showVol   = extra > 0;
 
-  // Repayment
   const annualRepay = calcAnnualRepayment(income);
-  const effRate = balance > 0 ? (annualRepay / balance)*100 : 0;
 
   // Banners
   $('belowThreshBanner').style.display = income <= 67000 ? '' : 'none';
   $('aboveThreshBanner').style.display = income >  67000 ? '' : 'none';
 
-  // Threshold badge
+  // Badge
   const badge = $('threshBadge');
-  if(income <= 67000){ badge.textContent='Below threshold'; badge.className='threshold-badge'; badge.style.display=''; }
-  else if(income <= 125000){ badge.textContent='Bracket 2'; badge.className='threshold-badge above'; badge.style.display=''; }
-  else if(income <= 179285){ badge.textContent='Bracket 3'; badge.className='threshold-badge above'; badge.style.display=''; }
-  else { badge.textContent='Bracket 4'; badge.className='threshold-badge high'; badge.style.display=''; }
+  if(income <= 67000)      { badge.textContent='Below threshold'; badge.className='threshold-badge';       badge.style.display=''; }
+  else if(income <= 125000){ badge.textContent='Bracket 2';       badge.className='threshold-badge above'; badge.style.display=''; }
+  else if(income <= 179285){ badge.textContent='Bracket 3';       badge.className='threshold-badge above'; badge.style.display=''; }
+  else                      { badge.textContent='Bracket 4';       badge.className='threshold-badge high';  badge.style.display=''; }
 
   // Bracket table
-  const tbody = $('bracketBody');
-  tbody.innerHTML = '';
-  const active = activeBracket(income);
-  BRACKETS_2526.forEach(b=>{
+  const bTbody = $('bracketBody'); bTbody.innerHTML = '';
+  BRACKETS.forEach(b => {
+    const active = income >= b.min && income <= b.max;
     const tr = document.createElement('tr');
-    if(b===active) tr.className='active-row';
-    tr.innerHTML=`<td>${b.label}</td><td style="text-align:right">${b.calc}</td>`;
-    tbody.appendChild(tr);
+    if(active) tr.className = 'active-row';
+    tr.innerHTML = `<td>${b.label}</td><td style="text-align:right">${b.calc}</td>`;
+    bTbody.appendChild(tr);
   });
 
-  // Schedule without voluntary
-  const sched = buildSchedule(balance, income, incGrowth, indexRate, 0);
-  // Schedule with voluntary
-  const schedV = extra>0 ? buildSchedule(balance, income, incGrowth, indexRate, extra) : [];
+  // Schedule
+  const sched      = buildSchedule(balance, income, incGrowth, indexRate, extra);
+  const totalComp  = sched.reduce((s,r) => s + r.compulsory,  0);
+  const totalVol   = sched.reduce((s,r) => s + r.voluntary,   0);
+  const totalIndex = sched.reduce((s,r) => s + r.indexation,  0);
+  const totalRepaid= totalComp + totalVol;
+  const totalAll   = totalRepaid + totalIndex;
 
-  const payoffYrs = sched.length;
-  const totalPaid = sched.reduce((s,r)=>s+r.compulsory, 0);
-  const totalIndex= sched.reduce((s,r)=>s+r.indexation, 0);
-  const payoffYrsV = schedV.length;
+  // Summary boxes
+  $('rAnnual').textContent     = annualRepay > 0 ? fmt(annualRepay) : '$0';
+  $('rMonthly').textContent    = annualRepay > 0 ? fmt(annualRepay / 12) : '$0';
+  $('rEffRate').textContent    = balance > 0 ? pct((annualRepay / balance) * 100) : '—';
+  $('rPayoffYrs').textContent  = balance === 0 ? 'Paid Off' : sched.length + ' yr' + (sched.length !== 1 ? 's' : '');
+  $('rTotalPaid').textContent  = fmt(totalRepaid);
+  $('rTotalIndex').textContent = fmt(totalIndex);
 
-  // Summary
-  $('rAnnual').textContent   = annualRepay > 0 ? fmt(annualRepay) : '$0';
-  $('rMonthly').textContent  = annualRepay > 0 ? fmt(annualRepay/12) : '$0';
-  $('rEffRate').textContent  = balance>0 ? pct(effRate) : '—';
-  $('rPayoffYrs').textContent= payoffYrs > 0 ? payoffYrs+(compare&&extra>0?' / '+payoffYrsV:'')+ ' yr'+(payoffYrs!==1?'s':'') : (balance===0?'Paid Off':'—');
-  $('rTotalPaid').textContent= fmt(totalPaid);
-  $('rTotalIndex').textContent= fmt(totalIndex);
+  // Breakdown table
+  const bdbody = $('breakdownBody'); bdbody.innerHTML = '';
+  const bdRows = [
+    { label:'Compulsory Repayment', annual:annualRepay,         monthly:annualRepay/12,  life:totalComp,  share:totalAll>0?totalComp/totalAll*100:0  },
+    showVol ? { label:'Voluntary Repayment', annual:extra, monthly:extra/12, life:totalVol, share:totalAll>0?totalVol/totalAll*100:0 } : null,
+    { label:'Indexation (est.)',    annual:balance*indexRate/100, monthly:balance*indexRate/100/12, life:totalIndex, share:totalAll>0?totalIndex/totalAll*100:0 }
+  ].filter(Boolean);
+  bdRows.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r.label}</td><td>${fmt(r.annual)}</td><td>${fmt(r.monthly)}</td><td>${fmt(r.life)}</td><td>${r.share.toFixed(1)}%</td>`;
+    bdbody.appendChild(tr);
+  });
+  const trTot = document.createElement('tr'); trTot.className = 'total-row';
+  trTot.innerHTML = `<td>Total</td><td>—</td><td>—</td><td>${fmt(totalAll)}</td><td>100%</td>`;
+  bdbody.appendChild(trTot);
 
   // Chart
-  const years = sched.map(r=>r.year);
-  const balData = sched.map(r=>r.closing);
-  const balDataV = schedV.map(r=>r.closing);
-  const idxData = sched.map(r=>r.indexation);
-
-  balChart.data.labels = years;
-  balChart.data.datasets[0].data = balData;
-  balChart.data.datasets[1].data = compare && extra>0 ? balDataV : [];
-  balChart.data.datasets[2].data = idxData;
-  $('legVoluntary').style.display = compare && extra>0 ? '' : 'none';
+  balChart.data.labels             = sched.map(r => r.year);
+  balChart.data.datasets[0].data   = sched.map(r => r.closing);
+  balChart.data.datasets[1].data   = sched.map(r => r.indexation);
+  balChart.data.datasets[2].data   = showVol ? sched.map(r => r.voluntary) : [];
+  $('legVoluntary').style.display  = showVol ? '' : 'none';
   balChart.update();
 
-  // Amort table
-  const amortTbody = $('amortBody2');
-  amortTbody.innerHTML = '';
-  sched.forEach((r,i)=>{
+  // Year-by-year schedule table
+  // Show/hide voluntary column header
+  $('thVoluntary').style.display = showVol ? '' : 'none';
+
+  const amortBody = $('amortBody'); amortBody.innerHTML = '';
+
+  sched.forEach(r => {
+    // Year header row (yr-row) — same as personal loan
+    const yrTr = document.createElement('tr');
+    yrTr.className = 'yr-row';
+    const colspan = showVol ? 7 : 6;
+    yrTr.innerHTML = `<td colspan="${colspan}">${r.year}</td>`;
+    amortBody.appendChild(yrTr);
+
+    // Data row
     const tr = document.createElement('tr');
-    const rv = schedV[i];
-    const closingExtra = rv ? fmt(rv.closing) : '—';
-    tr.innerHTML=`
+    const volCell = showVol ? `<td style="color:var(--bl)">${fmt2(r.voluntary)}</td>` : '';
+    const closingVal = r.closing < 0.01
+      ? `<td style="color:var(--gr);font-weight:700">Paid Off</td>`
+      : `<td>${fmt2(r.closing)}</td>`;
+    tr.innerHTML = `
+      <td>${r.n}</td>
       <td>${r.year}</td>
-      <td>${fmt(r.opening)}</td>
-      <td style="color:var(--am)">${fmt(r.indexation)}</td>
-      <td>${fmt(r.compulsory)}</td>
-      <td>${r.voluntary>0||extra>0?fmt(compare?rv?rv.voluntary:extra:r.voluntary):'—'}</td>
-      <td>${compare&&extra>0?closingExtra:fmt(r.closing)}</td>`;
-    amortTbody.appendChild(tr);
+      <td>${fmt2(r.opening)}</td>
+      <td style="color:var(--am)">${fmt2(r.indexation)}</td>
+      <td>${fmt2(r.compulsory)}</td>
+      ${volCell}
+      ${closingVal}`;
+    amortBody.appendChild(tr);
   });
 
-  // Store for CSV
-  window._schedData = { sched, schedV, compare, extra };
+  // Store for CSV export
+  window._schedData = { sched, showVol, annualRepay, totalComp, totalVol, totalIndex, totalAll };
 }
 
-// ─── CSV ─────────────────────────────────────────────────────────────────────
-$('btnCSV').addEventListener('click',()=>{
-  const {sched,schedV,compare,extra} = window._schedData||{sched:[],schedV:[],compare:false,extra:0};
-  let csv = 'Year,Opening Balance,Indexation,Compulsory Repayment,Voluntary Repayment,Closing Balance\n';
-  sched.forEach((r,i)=>{
-    const rv = compare&&extra>0?schedV[i]:null;
-    const vol = rv?rv.voluntary:r.voluntary;
-    const cls = rv?rv.closing:r.closing;
-    csv+=`${r.year},${r.opening.toFixed(2)},${r.indexation.toFixed(2)},${r.compulsory.toFixed(2)},${vol.toFixed(2)},${cls.toFixed(2)}\n`;
-  });
-  const a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  a.download='hecs-repayment-schedule.csv';
+// ─── Export Summary CSV ──────────────────────────────────────────────────────
+$('btnCSV').addEventListener('click', () => {
+  const d = window._schedData || {};
+  const balance = parseFloat($('loanBalance').value)||0;
+  const income  = parseFloat($('grossIncome').value)||0;
+  let csv = 'HECS-HELP Summary\n';
+  csv += `Current Balance,$${balance.toLocaleString('en-AU')}\n`;
+  csv += `Annual Income,$${income.toLocaleString('en-AU')}\n`;
+  csv += `Annual Compulsory Repayment,${fmt(d.annualRepay||0)}\n`;
+  csv += `Total Compulsory Repaid,${fmt(d.totalComp||0)}\n`;
+  csv += `Total Voluntary Repaid,${fmt(d.totalVol||0)}\n`;
+  csv += `Total Indexation Added,${fmt(d.totalIndex||0)}\n`;
+  csv += `Total Cost,${fmt(d.totalAll||0)}\n`;
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'hecs-summary.csv';
   a.click();
 });
 
-$('btnPrint').addEventListener('click',()=>window.print());
-$('btnReset').addEventListener('click',()=>{
-  $('loanBalance').value=35000; $('loanBalanceRange').value=35000;
-  $('grossIncome').value=75000; $('grossIncomeRange').value=75000;
-  $('incomeGrowth').value=3; $('indexRate').value=3.2;
-  $('extraRepay').value=0;
-  document.querySelector('input[name=compare][value=off]').checked=true;
+// ─── Export Schedule CSV ─────────────────────────────────────────────────────
+$('btnAmortCSV').addEventListener('click', () => {
+  const { sched = [], showVol = false } = window._schedData || {};
+  const volHdr = showVol ? ',Voluntary Repayment' : '';
+  let csv = `#,Year,Opening Balance,Indexation,Compulsory Repayment${volHdr},Closing Balance\n`;
+  sched.forEach(r => {
+    const volCell = showVol ? `,${r.voluntary.toFixed(2)}` : '';
+    csv += `${r.n},${r.year},${r.opening.toFixed(2)},${r.indexation.toFixed(2)},${r.compulsory.toFixed(2)}${volCell},${r.closing.toFixed(2)}\n`;
+  });
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'hecs-schedule.csv';
+  a.click();
+});
+
+$('btnPrint').addEventListener('click', () => window.print());
+
+$('btnReset').addEventListener('click', () => {
+  $('loanBalance').value = 35000; $('loanBalanceRange').value = 35000;
+  $('grossIncome').value = 75000; $('grossIncomeRange').value = 75000;
+  $('incomeGrowth').value = 3;
+  $('indexRate').value = 3.2;
+  $('extraRepay').value = 0;
   calc();
 });
 
-// ─── Init ────────────────────────────────────────────────────────────────────
 initChart();
 calc();
 </script>
