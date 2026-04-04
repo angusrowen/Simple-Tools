@@ -323,7 +323,6 @@ ins.adsbygoogle iframe,
   </div>
   <div class="topbar-right">
     <span class="badge pt hidden" id="ptBadge">Part-Time</span>
-    <span class="badge" id="fyBadge">FY 2025-26</span>
   </div>
 </div>
 
@@ -1079,7 +1078,7 @@ function updatePie(takeHome,tax,helpAmt,superAmt){
 // ─── FY Change ───────────────────────────────────────────────────────────────
 function onFYChange(){
   var fy=getFY();
-  document.getElementById('fyBadge').textContent=fy.label;
+  
   
   document.getElementById('superRate').value=fy.superDefault;
   document.getElementById('sjSuperRate').value=fy.superDefault;
@@ -1168,7 +1167,7 @@ function saveHTML(){
   var freqLabel=document.getElementById('frequency').selectedOptions[0].text;
   var h='<!DOCTYPE html><html lang="en-AU"><head><meta charset="UTF-8"><title>Tax Calculation - '+fy.label+' - '+dateStr+'</title>';
   h+='<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f8fb;color:#22313f;line-height:1.5}';
-  h+='.hd{background:#3e5f75;padding:16px 32px;border-bottom:1px solid #6a92ad;display:flex;align-items:center;gap:16px}.hd-t{color:#fff;font-size:1rem;font-weight:700}.hd-b{background:#e7f8ef;color:#2a9d67;font-size:.72rem;font-weight:700;padding:5px 10px;border-radius:999px;text-transform:uppercase;margin-left:auto}.hd-d{color:rgba(255,255,255,.7);font-size:.8rem}';
+  h+='.hd{background:#3e5f75;padding:16px 32px;border-bottom:1px solid #6a92ad;display:flex;align-items:center;gap:16px}.hd-t{color:#fff;font-size:1rem;font-weight:700}.hd-d{color:rgba(255,255,255,.7);font-size:.8rem}';
   h+='.ct{max-width:1200px;margin:0 auto;padding:24px}.cd{background:#fff;border:1px solid #d7e1ea;border-radius:16px;padding:20px 24px;margin-bottom:16px}.cd h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #2a9d67;color:#2d465b}';
   h+='.sg{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}.sb{background:#f4f8fb;border:1px solid #d7e1ea;border-radius:12px;padding:12px 14px}.sb.hl{background:#e7f8ef;border-color:#2a9d67}.sb .lb{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:#6c7a89;font-weight:600;margin-bottom:2px}.sb .vl{font-size:1.15rem;font-weight:700;color:#2d465b}.sb.hl .vl{color:#2a9d67;font-size:1.3rem}';
   h+='table{width:100%;border-collapse:collapse;font-size:.88rem}th{text-align:left;padding:8px 10px;background:#f4f8fb;font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:#6c7a89;border-bottom:2px solid #d7e1ea}th:not(:first-child){text-align:right}td{padding:8px 10px;border-bottom:1px solid #d7e1ea;font-variant-numeric:tabular-nums}td:not(:first-child){text-align:right}';
@@ -1176,8 +1175,8 @@ function saveHTML(){
   h+='.bracket-active td{color:#22313f}.bracket-inactive td{color:#6c7a89}.lw{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}.st{font-size:.85rem;font-weight:700;margin:0 0 8px;color:#2d465b}';
   h+='.stamp{font-size:.78rem;color:#6c7a89;margin-top:16px;padding-top:12px;border-top:1px solid #d7e1ea;line-height:1.5}';
   h+='@media print{body{background:#fff}.ct{padding:16px}.cd{box-shadow:none;break-inside:avoid}}@media(max-width:800px){.sg{grid-template-columns:1fr 1fr}.lw{grid-template-columns:1fr}}';
-  h+='</style></head><body>';
-  h+='<div class="hd"><div class="hd-t">Income Tax Calculation Record</div><div class="hd-b">'+fy.label+'</div><div class="hd-d">Generated: '+dateStr+'</div></div>';
+  h+='<\/style>e></head><body>';
+  h+='<div class="hd"><div class="hd-t">Income Tax Calculation Record</div><div class="hd-d">Generated: '+dateStr+'</div></div>';
   h+='<div class="ct"><div class="cd"><h2>Results Summary</h2><div class="sg">';
   h+='<div class="sb hl"><div class="lb">Take-Home Pay ('+freqLabel+')</div><div class="vl">'+takeHome+'</div></div>';
   h+='<div class="sb"><div class="lb">Gross Taxable Income</div><div class="vl">'+gross+'</div></div>';
