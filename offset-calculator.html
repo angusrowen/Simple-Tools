@@ -34,13 +34,44 @@ body{
 .topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
 .topbar-title{color:#fff;font-size:1rem;font-weight:700}
 .topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px}
+.page-wrapper{
+  display:flex;justify-content:center;align-items:stretch;
+  gap:0;width:100%;padding-top:0;overflow:hidden;
+  position:relative;min-height:100vh;
+}
+.side-rail{
+  display:none;width:180px;min-width:180px;flex-shrink:0;
+  position:absolute;top:120px;z-index:10;
+}
+.side-rail.left{left:0}
+.side-rail.right{right:0}
+.side-rail-inner{position:sticky;top:80px}
+.side-rail-inner{padding:8px;display:flex;flex-direction:column;align-items:center}
+.rail-ad-label{
+  font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;
+  color:var(--txl);text-align:center;padding:7px 0 4px;
+  border-bottom:1px solid var(--bdr);margin-bottom:8px;width:100%;
+}
+.rail-ad-inner{display:flex;justify-content:center;align-items:center}
+.rail-ad-unit{
+  background:var(--card);border:1px solid var(--bdr);border-radius:18px;
+  overflow:hidden;box-shadow:0 8px 24px rgba(45,50,40,.06);
+}
+.rail-ad-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:8px 0 4px;border-bottom:1px solid var(--bdr)}
+.rail-ad-inner{padding:8px;display:flex;justify-content:center;align-items:center;min-height:620px}
 .main-wrapper{
   background:transparent;padding:24px 32px;flex:1;
-  min-width:0;overflow-x:hidden;max-width:100%;box-sizing:border-box;width:100%;
+  min-width:0;overflow-x:hidden;max-width:1400px;box-sizing:border-box;width:100%;margin:0 auto;
 }
-.container{max-width:1100px;margin:0 auto;width:100%;min-width:0;overflow-x:hidden}
+.container{max-width:860px;margin:0 auto;width:100%;min-width:0;overflow-x:hidden}
+/* Show rail only on very wide screens */
+@media(min-width:1400px){
+  .side-rail{display:flex;flex-direction:column}
+  .main-wrapper{padding-left:200px;padding-right:200px;max-width:100%}
+  .container{max-width:100%;margin:0}
+}
 .layout{
-  display:grid;grid-template-columns:minmax(0,390px) 1fr;gap:24px;
+  display:grid;grid-template-columns:minmax(0,360px) 1fr;gap:24px;
   align-items:start;min-width:0;overflow-x:hidden;
 }
 .card{
@@ -62,57 +93,27 @@ body{
 }
 .section-label.first{margin-top:0;padding-top:0;border-top:none}
 .field{margin-bottom:14px}
-.field label{
-  display:block;font-size:.8rem;font-weight:600;margin-bottom:4px;
-  color:var(--txl);text-transform:uppercase;letter-spacing:.3px;
-}
+.field label{display:block;font-size:.8rem;font-weight:600;margin-bottom:4px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
 .field-hint{font-size:.75rem;color:var(--txl);margin-top:2px}
-.field select{
-  width:100%;padding:9px 12px;border:1px solid var(--bdr);
-  border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s;
-}
-.field select:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
 .input-wrap{position:relative;display:flex;align-items:center}
-.input-wrap .prefix,.input-wrap .suffix{
-  position:absolute;font-size:.9rem;font-weight:600;color:var(--txl);
-  pointer-events:none;user-select:none;z-index:1;
-}
+.input-wrap .prefix,.input-wrap .suffix{position:absolute;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;user-select:none;z-index:1}
 .input-wrap .prefix{left:10px}
 .input-wrap .suffix{right:10px}
-.input-wrap input{
-  width:100%;padding:9px 12px;border:1px solid var(--bdr);
-  border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s;
-}
+.input-wrap input{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s}
 .input-wrap input.has-prefix{padding-left:22px}
 .input-wrap input.has-suffix{padding-right:28px}
 .input-wrap input:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
-input[type=month]{
-  width:100%;padding:9px 12px;border:1px solid var(--bdr);
-  border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s;
-}
+input[type=month]{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s}
 input[type=month]:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
 input[type=number]::placeholder{color:#c5bdb2;font-style:normal}
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button{opacity:.4}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:.4}
 .toggle-group{margin-bottom:14px}
-.toggle-label{
-  display:block;font-size:.8rem;font-weight:600;margin-bottom:6px;
-  color:var(--txl);text-transform:uppercase;letter-spacing:.3px;
-}
 .toggle-switch{display:flex;border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
 .toggle-switch input[type=radio]{display:none}
-.toggle-switch label{
-  flex:1;text-align:center;padding:8px 10px;font-size:.8rem;font-weight:600;
-  cursor:pointer;background:#fffdf8;color:var(--txl);transition:all .15s;
-  border-right:1px solid var(--bdr);
-}
+.toggle-switch label{flex:1;text-align:center;padding:8px 10px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fffdf8;color:var(--txl);transition:all .15s;border-right:1px solid var(--bdr)}
 .toggle-switch label:last-of-type{border-right:none}
 .toggle-switch input[type=radio]:checked + label{background:var(--gr);color:#fff}
-.collapsible-header{
-  width:100%;display:flex;align-items:center;justify-content:space-between;
-  background:none;border:none;cursor:pointer;padding:0 0 8px 0;
-  border-bottom:2px solid var(--gr);margin-bottom:16px;text-align:left;gap:10px;
-}
+.collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0 0 8px 0;border-bottom:2px solid var(--gr);margin-bottom:16px;text-align:left;gap:10px}
 .collapsible-header[aria-expanded=false]{border-bottom-color:var(--bdr);margin-bottom:0}
 .collapsible-header h2{margin:0;padding:0;border:none;font-size:1rem;color:var(--dk)}
 .collapsible-header:hover h2{color:var(--gr)}
@@ -136,56 +137,30 @@ input[type=number]::-webkit-outer-spin-button{opacity:.4}
 .bn-blue{background:var(--bll);border:1px solid var(--bl);color:var(--tx)}
 .section-title{font-size:.85rem;font-weight:700;margin:18px 0 8px;color:var(--dk)}
 .bd-table{width:100%;border-collapse:collapse;font-size:.88rem}
-.bd-table th{
-  text-align:left;padding:8px 10px;background:var(--bg);font-weight:600;
-  font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);
-  border-bottom:2px solid var(--bdr);
-}
+.bd-table th{text-align:left;padding:8px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
 .bd-table th:not(:first-child){text-align:right}
 .bd-table td{padding:8px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
 .bd-table td:not(:first-child){text-align:right}
 .bd-table tr:last-child td{border-bottom:none}
 .bd-table .total-row td{font-weight:700;border-top:2px solid var(--dk);border-bottom:none}
 .chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
-.chart-header{
-  display:flex;align-items:baseline;justify-content:space-between;
-  flex-wrap:wrap;gap:6px;margin-bottom:10px;
-}
+.chart-header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .chart-hint{font-size:.74rem;color:var(--txl);font-style:italic}
 .chart-wrap{background:#f8f5ef;border:1px solid var(--bdr);border-radius:14px;padding:14px 14px 10px}
 .chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;justify-content:center}
 .chart-legend-item{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--tx)}
 .chart-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0}
-.amort-btn{
-  display:inline-flex;align-items:center;gap:6px;background:none;
-  border:1px solid var(--bdr);border-radius:8px;padding:6px 14px;font-size:.8rem;
-  font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;
-  transition:border-color .15s,color .15s;
-}
+.amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:6px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s}
 .amort-btn:hover{border-color:var(--gr);color:var(--gr)}
 .amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
 .amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
-.amort-table th{
-  text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;
-  font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);
-  border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2;
-}
+.amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
 .amort-table th:first-child,.amort-table th:nth-child(2){text-align:left}
 .amort-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums;text-align:right}
 .amort-table td:first-child,.amort-table td:nth-child(2){text-align:left}
-.amort-table .yr-row td{
-  font-weight:700;background:var(--bg);font-size:.75rem;
-  text-transform:uppercase;color:var(--txl);text-align:left;
-}
-.actions-bar{
-  display:flex;align-items:center;gap:10px;margin-top:20px;
-  padding-top:16px;border-top:1px solid var(--bdr);flex-wrap:wrap;
-}
-.btn{
-  display:inline-flex;align-items:center;gap:6px;padding:8px 18px;
-  border:none;border-radius:8px;font-size:.82rem;font-weight:600;
-  cursor:pointer;transition:background .15s;letter-spacing:.3px;
-}
+.amort-table .yr-row td{font-weight:700;background:var(--bg);font-size:.75rem;text-transform:uppercase;color:var(--txl);text-align:left}
+.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;letter-spacing:.3px}
 .btn svg{width:14px;height:14px;fill:currentColor}
 .btn-navy{background:var(--nv);color:#fff}
 .btn-navy:hover{background:#2d5268}
@@ -193,11 +168,7 @@ input[type=number]::-webkit-outer-spin-button{opacity:.4}
 .btn-green:hover{background:#228052}
 .note{font-size:.78rem;color:var(--txl);margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr);line-height:1.5}
 .hidden{display:none!important}
-.ft{
-  background:linear-gradient(180deg,#4d7289 0,var(--nv) 100%);
-  padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
+.ft{background:linear-gradient(180deg,#4d7289 0,var(--nv) 100%);padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ft span{color:rgba(255,255,255,.75);font-size:.82rem}
 @media(max-width:1000px){
   .layout{grid-template-columns:1fr}
@@ -206,8 +177,14 @@ input[type=number]::-webkit-outer-spin-button{opacity:.4}
   .results-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:768px){
+  ins.adsbygoogle,[data-ad-client],[data-ad-slot],
+  .ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail{
+    display:none!important;width:0!important;height:0!important;
+    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
+    position:absolute!important;pointer-events:none!important;
+  }
   .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}
-  .bd-table,.amort-table{display:block!important;overflow-x:auto!important;font-size:.78rem!important;max-width:100%!important}
+  .bd-table,.amort-table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;font-size:.78rem!important;max-width:100%!important}
 }
 @media(max-width:480px){
   .main-wrapper{padding:12px!important;box-sizing:border-box!important}
@@ -215,13 +192,25 @@ input[type=number]::-webkit-outer-spin-button{opacity:.4}
   .card{padding:12px!important}
   .topbar{padding:8px 14px!important}
   .toggle-switch label{font-size:.72rem!important;padding:6px 4px!important}
-  .field input,.field select{font-size:.88rem!important;padding:7px 8px!important}
+  .field input{font-size:.88rem!important;padding:7px 8px!important}
+  .input-wrap input.has-prefix{padding-left:24px!important}
+  .input-wrap input.has-suffix{padding-right:30px!important}
   .results-grid{grid-template-columns:1fr 1fr!important;gap:6px!important}
+  .bd-table,.amort-table{display:block!important;overflow-x:auto!important;font-size:.74rem!important}
   .ft{padding:10px 14px!important;font-size:.7rem!important}
 }
-html,body{width:100%;max-width:100%}
+@media(max-width:1024px) and (pointer:coarse){
+  ins.adsbygoogle,[data-ad-client],[data-ad-slot],
+  .ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail{
+    display:none!important;width:0!important;height:0!important;
+    max-width:0!important;overflow:hidden!important;visibility:hidden!important;
+    position:absolute!important;pointer-events:none!important;
+  }
+}
+html,body{overflow-x:hidden;width:100%;max-width:100%}
 .layout,.card,.main-wrapper,.container{min-width:0;box-sizing:border-box;width:100%;max-width:100%}
 </style>
+<script>if(window.innerWidth>768&&navigator.maxTouchPoints===0){document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"><\/scr'+'ipt>')}</script>
 </head>
 <body>
 
@@ -229,7 +218,7 @@ html,body{width:100%;max-width:100%}
   <div class="topbar-logo">
     <a href="index.html" title="Back to calculators">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        <path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
       </svg>
     </a>
   </div>
@@ -240,241 +229,242 @@ html,body{width:100%;max-width:100%}
   </div>
 </div>
 
-<div class="main-wrapper">
-  <div class="container">
-    <div class="layout">
+<div class="page-wrapper">
 
-      <!-- LEFT INPUTS -->
-      <div>
-        <div class="card">
-          <div class="card-header-row">
-            <h2>Loan &amp; Offset Details</h2>
-            <button class="btn btn-navy" id="btnReset1" type="button">
-              <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-              Reset
-            </button>
-          </div>
-
-          <div class="section-label first">Loan Balance</div>
-          <div class="field">
-            <label for="fLoan">Home Loan Balance</label>
-            <div class="input-wrap">
-              <span class="prefix">$</span>
-              <input type="number" id="fLoan" class="has-prefix" placeholder="e.g. 500000" min="0" step="10000" value="500000">
-            </div>
-          </div>
-
-          <div class="section-label">Interest Rate</div>
-          <div class="field">
-            <label for="fRate">Annual Interest Rate</label>
-            <div class="input-wrap">
-              <input type="number" id="fRate" class="has-suffix" placeholder="e.g. 6.00" min="0" max="30" step="0.05" value="6.00">
-              <span class="suffix">%</span>
-            </div>
-          </div>
-
-          <div class="section-label">Loan Term</div>
-          <div class="field">
-            <label for="fTerm">Remaining Loan Term</label>
-            <div class="input-wrap">
-              <input type="number" id="fTerm" class="has-suffix" placeholder="e.g. 30" min="1" max="40" step="1" value="30">
-              <span class="suffix">yrs</span>
-            </div>
-          </div>
-
-          <div class="section-label">Repayment Frequency</div>
-          <div class="toggle-group">
-            <div class="toggle-switch">
-              <input type="radio" name="freq" id="rMonthly" value="monthly" checked>
-              <label for="rMonthly">Monthly</label>
-              <input type="radio" name="freq" id="rFortnightly" value="fortnightly">
-              <label for="rFortnightly">Fortnightly</label>
-              <input type="radio" name="freq" id="rWeekly" value="weekly">
-              <label for="rWeekly">Weekly</label>
-            </div>
-          </div>
-
-          <div class="section-label">Offset Balance</div>
-          <div class="field">
-            <label for="fOffset">Current Offset Account Balance</label>
-            <div class="input-wrap">
-              <span class="prefix">$</span>
-              <input type="number" id="fOffset" class="has-prefix" placeholder="e.g. 50000" min="0" step="1000" value="50000">
-            </div>
-            <div class="field-hint">Reduces the interest-bearing principal each period. Cannot exceed loan balance.</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <button class="collapsible-header" id="addlBtn" aria-expanded="true" aria-controls="addlBody" type="button">
-            <h2>Additional Options</h2>
-            <span class="collapse-icon">
-              <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="5 8 10 13 15 8"/>
-              </svg>
-            </span>
-          </button>
-          <div class="collapsible-body" id="addlBody">
-
-            <div class="section-label first">Offset Growth</div>
-            <div class="toggle-group">
-              <div class="toggle-label">Offset Balance Over Time</div>
-              <div class="toggle-switch">
-                <input type="radio" name="grow" id="gStatic" value="static" checked>
-                <label for="gStatic">Static</label>
-                <input type="radio" name="grow" id="gGrowing" value="growing">
-                <label for="gGrowing">Growing</label>
-              </div>
-            </div>
-            <div class="field-hint" style="margin-top:-8px;margin-bottom:14px;">
-              Static = same offset balance throughout. Growing = offset increases each month by your contribution below.
-            </div>
-
-            <div class="section-label">Monthly Contribution</div>
-            <div class="field">
-              <label for="fContrib">Monthly Amount Added to Offset</label>
-              <div class="input-wrap">
-                <span class="prefix">$</span>
-                <input type="number" id="fContrib" class="has-prefix" placeholder="e.g. 500 optional" min="0" step="100">
-              </div>
-              <div class="field-hint">Only applies when "Growing" offset mode is selected above.</div>
-            </div>
-
-            <div class="section-label">Start Date</div>
-            <div class="field">
-              <label for="fStart">Loan Start / Calculation Date</label>
-              <input type="month" id="fStart">
-              <div class="field-hint">Used to calculate your projected payoff date.</div>
-            </div>
-
-          </div>
+  <div class="side-rail left">
+    <div class="side-rail-inner">
+      <div class="rail-ad-unit">
+        <div class="rail-ad-label">Advertisement</div>
+        <div class="rail-ad-inner">
+          <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+          <script>(adsbygoogle=window.adsbygoogle||[]).push({})</script>
         </div>
       </div>
-
-      <!-- RIGHT RESULTS -->
-      <div>
-        <div class="card">
-          <h2>Results</h2>
-
-          <div id="bannerSaving" class="banner bn-blue">
-            Your <strong id="bnOffsetAmt"></strong> offset balance saves <strong id="bnSaved"></strong> in interest and cuts <strong id="bnTime"></strong> from your loan term.
-          </div>
-          <div id="bannerPayoff" class="banner bn-green">
-            With your offset account, your loan will be paid off by <strong id="bnPayoff"></strong>.
-          </div>
-          <div id="bannerNoOffset" class="banner bn-amber">
-            Without an offset account, your loan would be paid off by <strong id="bnPayoffNo"></strong>.
-          </div>
-
-          <div class="results-grid">
-            <div class="result-box hl">
-              <div class="lbl" id="rRepayLbl">Monthly Repayment</div>
-              <div class="val" id="rRepay">&mdash;</div>
-            </div>
-            <div class="result-box">
-              <div class="lbl">Effective Balance</div>
-              <div class="val" id="rEffective">&mdash;</div>
-            </div>
-            <div class="result-box">
-              <div class="lbl">Interest Saving / Period</div>
-              <div class="val" id="rPeriodSaving" style="color:var(--gr)">&mdash;</div>
-            </div>
-            <div class="result-box hl-red">
-              <div class="lbl">Total Interest (With Offset)</div>
-              <div class="val" id="rIntWith">&mdash;</div>
-            </div>
-            <div class="result-box">
-              <div class="lbl">Total Interest (No Offset)</div>
-              <div class="val" id="rIntNo">&mdash;</div>
-            </div>
-            <div class="result-box hl-blue">
-              <div class="lbl">Total Interest Saved</div>
-              <div class="val" id="rSaved">&mdash;</div>
-            </div>
-          </div>
-
-          <div class="section-title">With Offset vs. Without Offset</div>
-          <table class="bd-table">
-            <thead>
-              <tr>
-                <th>Metric</th>
-                <th>With Offset</th>
-                <th>Without Offset</th>
-                <th>You Save</th>
-              </tr>
-            </thead>
-            <tbody id="cmpBody">
-              <tr><td colspan="4" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter loan details to see results</td></tr>
-            </tbody>
-          </table>
-
-          <div class="chart-section">
-            <div class="chart-header">
-              <div class="section-title" style="margin:0">Loan Balance Over Time</div>
-              <div class="chart-hint">&#9432; Hover to compare balances by year</div>
-            </div>
-            <div class="chart-wrap">
-              <canvas id="myChart" height="140"></canvas>
-            </div>
-            <div class="chart-legend">
-              <div class="chart-legend-item">
-                <div class="chart-swatch" style="background:rgba(42,157,103,0.8)"></div>
-                With Offset
-              </div>
-              <div class="chart-legend-item">
-                <div class="chart-swatch" style="background:rgba(230,100,20,0.7)"></div>
-                Without Offset
-              </div>
-            </div>
-          </div>
-
-          <button class="amort-btn" id="amortBtn" type="button">
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
-            Show Year-by-Year Schedule
-          </button>
-          <div id="amortSection" class="hidden">
-            <div class="amort-wrap">
-              <table class="amort-table">
-                <thead>
-                  <tr>
-                    <th style="text-align:left">Period</th>
-                    <th style="text-align:left">Offset Bal</th>
-                    <th>Eff. Principal</th>
-                    <th>Interest</th>
-                    <th>Int. Saved</th>
-                    <th>Closing Bal</th>
-                  </tr>
-                </thead>
-                <tbody id="amortBody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="actions-bar">
-            <button class="btn btn-green" id="btnCSV" type="button">
-              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
-              Export Summary CSV
-            </button>
-            <button class="btn btn-green" id="btnSchedCSV" type="button">
-              <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
-              Export Schedule CSV
-            </button>
-            <div style="flex:1"></div>
-            <button class="btn btn-navy" id="btnReset2" type="button">
-              <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-              Start Over
-            </button>
-          </div>
-
-          <div class="note">
-            Estimates only. Assumes a constant interest rate throughout the loan term. The offset balance reduces the interest-charged principal each period; the minimum repayment is always calculated on the full loan (no offset). Does not account for rate changes, offset account fees, or lender-specific conditions. Not personal financial advice.
-          </div>
-
-        </div>
-      </div>
-
     </div>
   </div>
+
+  <div class="main-wrapper">
+    <div class="container">
+      <div class="layout">
+
+        <!-- LEFT INPUTS -->
+        <div>
+          <div class="card">
+            <div class="card-header-row">
+              <h2>Loan &amp; Offset Details</h2>
+              <button class="btn btn-navy" id="btnReset1" type="button">
+                <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                Reset
+              </button>
+            </div>
+
+            <div class="section-label first">Loan Balance</div>
+            <div class="field">
+              <label for="fLoan">Home Loan Balance</label>
+              <div class="input-wrap">
+                <span class="prefix">$</span>
+                <input type="number" id="fLoan" class="has-prefix" placeholder="e.g. 500000" min="0" step="10000" value="500000">
+              </div>
+            </div>
+
+            <div class="section-label">Interest Rate</div>
+            <div class="field">
+              <label for="fRate">Annual Interest Rate</label>
+              <div class="input-wrap">
+                <input type="number" id="fRate" class="has-suffix" placeholder="e.g. 6.00" min="0" max="30" step="0.05" value="6.00">
+                <span class="suffix">%</span>
+              </div>
+            </div>
+
+            <div class="section-label">Loan Term</div>
+            <div class="field">
+              <label for="fTerm">Remaining Loan Term</label>
+              <div class="input-wrap">
+                <input type="number" id="fTerm" class="has-suffix" placeholder="e.g. 30" min="1" max="40" step="1" value="30">
+                <span class="suffix">yrs</span>
+              </div>
+            </div>
+
+            <div class="section-label">Repayment Frequency</div>
+            <div class="toggle-group">
+              <div class="toggle-switch">
+                <input type="radio" name="freq" id="rMonthly" value="monthly" checked>
+                <label for="rMonthly">Monthly</label>
+                <input type="radio" name="freq" id="rFortnightly" value="fortnightly">
+                <label for="rFortnightly">Fortnightly</label>
+                <input type="radio" name="freq" id="rWeekly" value="weekly">
+                <label for="rWeekly">Weekly</label>
+              </div>
+            </div>
+
+            <div class="section-label">Offset Balance</div>
+            <div class="field">
+              <label for="fOffset">Current Offset Account Balance</label>
+              <div class="input-wrap">
+                <span class="prefix">$</span>
+                <input type="number" id="fOffset" class="has-prefix" placeholder="e.g. 50000" min="0" step="1000" value="50000">
+              </div>
+              <div class="field-hint">Reduces the interest-charged principal every period.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <button class="collapsible-header" id="addlBtn" aria-expanded="true" aria-controls="addlBody" type="button">
+              <h2>Additional Options</h2>
+              <span class="collapse-icon">
+                <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="5 8 10 13 15 8"/>
+                </svg>
+              </span>
+            </button>
+            <div class="collapsible-body" id="addlBody">
+              <div class="section-label first">Monthly Offset Contribution</div>
+              <div class="field">
+                <label for="fContrib">Extra Added to Offset Each Month</label>
+                <div class="input-wrap">
+                  <span class="prefix">$</span>
+                  <input type="number" id="fContrib" class="has-prefix" placeholder="e.g. 500 optional" min="0" step="100">
+                </div>
+                <div class="field-hint">If entered, the offset grows by this amount monthly. Leave blank for a static balance.</div>
+              </div>
+              <div class="section-label">Start Date</div>
+              <div class="field">
+                <label for="fStart">Loan Start / Calculation Date</label>
+                <input type="month" id="fStart">
+                <div class="field-hint">Used to calculate your projected payoff date.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT RESULTS -->
+        <div>
+          <div class="card">
+            <h2>Results</h2>
+
+            <div id="bannerSaving" class="banner bn-blue">
+              Your <strong id="bnOffsetAmt"></strong> offset balance saves <strong id="bnSaved"></strong> in interest and cuts <strong id="bnTime"></strong> from your loan term.
+            </div>
+            <div id="bannerContrib" class="banner bn-amber">
+              Growing offset: adding <strong id="bnContrib"></strong>/month to your offset accelerates your savings over time.
+            </div>
+            <div id="bannerPayoff" class="banner bn-green">
+              With your offset, your loan will be paid off by <strong id="bnPayoff"></strong> &mdash; <strong id="bnPayoffDiff"></strong> earlier.
+            </div>
+
+            <div class="results-grid">
+              <div class="result-box hl">
+                <div class="lbl" id="rRepayLbl">Monthly Repayment</div>
+                <div class="val" id="rRepay">&mdash;</div>
+              </div>
+              <div class="result-box">
+                <div class="lbl">Effective Balance</div>
+                <div class="val" id="rEffective">&mdash;</div>
+              </div>
+              <div class="result-box">
+                <div class="lbl" id="rSavingLbl">Interest Saving / Month</div>
+                <div class="val" id="rPeriodSaving" style="color:var(--gr)">&mdash;</div>
+              </div>
+              <div class="result-box hl-red">
+                <div class="lbl">Total Interest (With Offset)</div>
+                <div class="val" id="rIntWith">&mdash;</div>
+              </div>
+              <div class="result-box">
+                <div class="lbl">Total Interest (No Offset)</div>
+                <div class="val" id="rIntNo">&mdash;</div>
+              </div>
+              <div class="result-box hl-blue">
+                <div class="lbl">Total Interest Saved</div>
+                <div class="val" id="rSaved">&mdash;</div>
+              </div>
+            </div>
+
+            <div class="section-title">With Offset vs. Without Offset</div>
+            <table class="bd-table">
+              <thead>
+                <tr>
+                  <th>Metric</th><th>With Offset</th><th>Without Offset</th><th>You Save</th>
+                </tr>
+              </thead>
+              <tbody id="cmpBody">
+                <tr><td colspan="4" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter loan details to see results</td></tr>
+              </tbody>
+            </table>
+
+            <div class="chart-section">
+              <div class="chart-header">
+                <div class="section-title" style="margin:0">Loan Balance Over Time</div>
+                <div class="chart-hint">&#9432; Hover to compare balances by year</div>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="myChart" height="140"></canvas>
+              </div>
+              <div class="chart-legend">
+                <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(42,157,103,0.8)"></div>With Offset</div>
+                <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(230,100,20,0.7)"></div>Without Offset</div>
+              </div>
+            </div>
+
+            <button class="amort-btn" id="amortBtn" type="button">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+              Show Year-by-Year Schedule
+            </button>
+            <div id="amortSection" class="hidden">
+              <div class="amort-wrap">
+                <table class="amort-table">
+                  <thead>
+                    <tr>
+                      <th style="text-align:left">Period</th>
+                      <th style="text-align:left">Offset Bal</th>
+                      <th>Eff. Principal</th>
+                      <th>Interest</th>
+                      <th>Int. Saved</th>
+                      <th>Closing Bal</th>
+                    </tr>
+                  </thead>
+                  <tbody id="amortBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="actions-bar">
+              <button class="btn btn-green" id="btnCSV" type="button">
+                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
+                Export Summary CSV
+              </button>
+              <button class="btn btn-green" id="btnSchedCSV" type="button">
+                <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+                Export Schedule CSV
+              </button>
+              <div style="flex:1"></div>
+              <button class="btn btn-navy" id="btnReset2" type="button">
+                <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                Start Over
+              </button>
+            </div>
+
+            <div class="note">Estimates only. Assumes a constant interest rate. The offset balance reduces the interest-charged principal each period; repayments are calculated on the full loan amount. Does not account for rate changes, offset fees, or lender-specific conditions. Not personal financial advice.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="side-rail right">
+    <div class="side-rail-inner">
+      <div class="rail-ad-unit">
+        <div class="rail-ad-label">Advertisement</div>
+        <div class="rail-ad-inner">
+          <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+          <script>(adsbygoogle=window.adsbygoogle||[]).push({})</script>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <div class="ft">
@@ -496,7 +486,7 @@ function calcPMT(P,annRate,yrs,freq){
   return P*r*Math.pow(1+r,tot)/(Math.pow(1+r,tot)-1);
 }
 
-function buildWith(P,annRate,yrs,freq,offsetStart,contrib,growing){
+function buildWith(P,annRate,yrs,freq,offsetStart,contrib){
   var n=ppy(freq),r=annRate/100/n,tot=yrs*n;
   var pmt=calcPMT(P,annRate,yrs,freq);
   var moPerPeriod=12/n;
@@ -511,9 +501,7 @@ function buildWith(P,annRate,yrs,freq,offsetStart,contrib,growing){
     totInt+=intr;
     rows.push({period:i+1,offsetBal:offsetBal,effectivePrin:effP,interest:intr,principal:prin,closing:close,opening:bal});
     bal=close;
-    if(growing&&contrib>0){
-      offsetBal=Math.min(offsetBal+contrib*moPerPeriod,bal>0?bal:offsetBal);
-    }
+    if(contrib>0) offsetBal=Math.min(offsetBal+contrib*moPerPeriod,bal>0?bal:offsetBal);
     if(bal<0.005) break;
   }
   return{rows:rows,totalInterest:totInt,pmt:pmt};
@@ -530,7 +518,7 @@ function buildNo(P,annRate,yrs,freq){
     if(prin<0) prin=0;
     var close=Math.max(bal-prin,0);
     totInt+=intr;
-    rows.push({interest:intr,principal:prin,closing:close,opening:bal});
+    rows.push({interest:intr,closing:close});
     bal=close;
     if(bal<0.005) break;
   }
@@ -538,9 +526,7 @@ function buildNo(P,annRate,yrs,freq){
 }
 
 function termStr(periods,freq){
-  var n=ppy(freq);
-  var y=Math.floor(periods/n);
-  var m=Math.round((periods/n-y)*12);
+  var n=ppy(freq),y=Math.floor(periods/n),m=Math.round((periods/n-y)*12);
   if(m===12){y++;m=0;}
   var s='';
   if(y>0) s+=y+' yr'+(y!==1?'s':'');
@@ -559,29 +545,18 @@ function drawChart(withRows,noRows,P,yrs,freq){
     withDebt.push(withRows[eiW]?Math.round(withRows[eiW].closing):0);
     noDebt.push(noRows[eiN]?Math.round(noRows[eiN].closing):0);
   }
-  var canvas=g('myChart'),ctx=canvas.getContext('2d');
+  var ctx=g('myChart').getContext('2d');
   if(lineChart){lineChart.destroy();lineChart=null;}
   lineChart=new Chart(ctx,{
     type:'line',
-    data:{
-      labels:labels,
-      datasets:[
-        {label:'With Offset',data:withDebt,borderColor:'rgba(42,157,103,0.9)',backgroundColor:'rgba(42,157,103,0.12)',fill:'origin',tension:0.4,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:'rgba(42,157,103,0.9)',pointBorderColor:'#fff',pointBorderWidth:1.5,borderWidth:2.5},
-        {label:'Without Offset',data:noDebt,borderColor:'rgba(230,100,20,0.8)',backgroundColor:'rgba(230,100,20,0.07)',fill:'origin',tension:0.4,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:'rgba(230,100,20,0.8)',pointBorderColor:'#fff',pointBorderWidth:1.5,borderWidth:2,borderDash:[5,3]}
-      ]
-    },
+    data:{labels:labels,datasets:[
+      {label:'With Offset',data:withDebt,borderColor:'rgba(42,157,103,0.9)',backgroundColor:'rgba(42,157,103,0.12)',fill:'origin',tension:0.4,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:'rgba(42,157,103,0.9)',pointBorderColor:'#fff',pointBorderWidth:1.5,borderWidth:2.5},
+      {label:'Without Offset',data:noDebt,borderColor:'rgba(230,100,20,0.8)',backgroundColor:'rgba(230,100,20,0.07)',fill:'origin',tension:0.4,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:'rgba(230,100,20,0.8)',pointBorderColor:'#fff',pointBorderWidth:1.5,borderWidth:2,borderDash:[5,3]}
+    ]},
     options:{
-      responsive:true,
-      interaction:{mode:'index',intersect:false},
-      plugins:{
-        legend:{display:false},
-        tooltip:{
-          backgroundColor:'rgba(30,20,50,0.92)',titleColor:'#fff',bodyColor:'rgba(255,255,255,0.88)',padding:11,cornerRadius:8,
-          callbacks:{
-            label:function(item){return ' '+item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');}
-          }
-        }
-      },
+      responsive:true,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(30,20,50,0.92)',titleColor:'#fff',bodyColor:'rgba(255,255,255,0.88)',padding:11,cornerRadius:8,
+        callbacks:{label:function(item){return ' '+item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');}}}},
       scales:{
         x:{grid:{display:false},ticks:{font:{size:10},color:'#6c7a89',maxTicksLimit:16}},
         y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#6c7a89',callback:function(v){return '$'+(v/1000).toFixed(0)+'k';}}}
@@ -596,7 +571,6 @@ function calculate(){
   var yrs=parseFloat(g('fTerm').value)||0;
   var offset=parseFloat(g('fOffset').value)||0;
   var contrib=parseFloat(g('fContrib').value)||0;
-  var growing=document.querySelector('input[name=grow]:checked').value==='growing';
   var freq=getFreq();
   var sv=g('fStart').value;
   var mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -604,29 +578,26 @@ function calculate(){
   if(P<=0||rate<=0||yrs<=0){
     ['rRepay','rEffective','rPeriodSaving','rIntWith','rIntNo','rSaved'].forEach(function(id){g(id).innerHTML='&mdash;';});
     g('rRepayLbl').textContent='Monthly Repayment';
+    g('rSavingLbl').textContent='Interest Saving / Month';
     g('cmpBody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
-    g('bannerSaving').style.display='none';
-    g('bannerPayoff').style.display='none';
-    g('bannerNoOffset').style.display='none';
+    ['bannerSaving','bannerContrib','bannerPayoff'].forEach(function(id){g(id).style.display='none';});
     g('amortBody').innerHTML='';
     if(lineChart){lineChart.destroy();lineChart=null;}
     return;
   }
 
-  var scW=buildWith(P,rate,yrs,freq,offset,contrib,growing);
+  var scW=buildWith(P,rate,yrs,freq,offset,contrib);
   var scNo=buildNo(P,rate,yrs,freq);
-  var withRows=scW.rows,noRows=scNo.rows;
-  var pmt=scW.pmt;
-  var totIntW=scW.totalInterest;
-  var totIntNo=scNo.totalInterest;
+  var withRows=scW.rows,noRows=scNo.rows,pmt=scW.pmt;
+  var totIntW=scW.totalInterest,totIntNo=scNo.totalInterest;
   var saved=totIntNo-totIntW;
   var effOff=Math.min(offset,P);
-  var r0=rate/100/ppy(freq);
-  var saving0=effOff*r0;
+  var saving0=effOff*(rate/100/ppy(freq));
   var diff=noRows.length-withRows.length;
   var tsDiff=diff>0?termStr(diff,freq):'0';
 
   g('rRepayLbl').textContent=fLbl(freq)+' Repayment';
+  g('rSavingLbl').textContent='Interest Saving / '+fLbl(freq).slice(0,-2);
   g('rRepay').textContent=fmt2(pmt);
   g('rEffective').textContent=fmt0(Math.max(P-effOff,0));
   g('rPeriodSaving').textContent=fmt2(saving0);
@@ -634,32 +605,22 @@ function calculate(){
   g('rIntNo').textContent=fmt0(totIntNo);
   g('rSaved').textContent=fmt0(saved);
 
-  if(offset>0){
-    g('bnOffsetAmt').textContent=fmt0(offset);
-    g('bnSaved').textContent=fmt0(saved);
-    g('bnTime').textContent=tsDiff;
-    g('bannerSaving').style.display='';
-  } else {
-    g('bannerSaving').style.display='none';
-  }
+  if(offset>0){g('bnOffsetAmt').textContent=fmt0(offset);g('bnSaved').textContent=fmt0(saved);g('bnTime').textContent=tsDiff;g('bannerSaving').style.display='';}
+  else g('bannerSaving').style.display='none';
+
+  if(contrib>0){g('bnContrib').textContent=fmt0(contrib);g('bannerContrib').style.display='';}
+  else g('bannerContrib').style.display='none';
 
   if(sv){
     var pts=sv.split('-');
     var sdW=new Date(parseInt(pts[0]),parseInt(pts[1])-1,1);
     sdW.setMonth(sdW.getMonth()+Math.round(withRows.length/ppy(freq)*12));
     g('bnPayoff').textContent=mn[sdW.getMonth()]+' '+sdW.getFullYear();
-    g('bannerPayoff').style.display='';
-    var sdN=new Date(parseInt(pts[0]),parseInt(pts[1])-1,1);
-    sdN.setMonth(sdN.getMonth()+Math.round(noRows.length/ppy(freq)*12));
-    g('bnPayoffNo').textContent=mn[sdN.getMonth()]+' '+sdN.getFullYear();
-    g('bannerNoOffset').style.display='';
-  } else {
-    g('bannerPayoff').style.display='none';
-    g('bannerNoOffset').style.display='none';
-  }
+    g('bnPayoffDiff').textContent=tsDiff;
+    g('bannerPayoff').style.display=diff>0?'':'none';
+  } else g('bannerPayoff').style.display='none';
 
-  var totalRepW=pmt*withRows.length;
-  var totalRepNo=pmt*noRows.length;
+  var totalRepW=pmt*withRows.length,totalRepNo=pmt*noRows.length;
   g('cmpBody').innerHTML=
     '<tr><td>Loan Term</td><td>'+termStr(withRows.length,freq)+'</td><td>'+termStr(noRows.length,freq)+'</td><td style="color:var(--gr);font-weight:700">'+(diff>0?'&minus;'+tsDiff:'&mdash;')+'</td></tr>'+
     '<tr><td>Repayment ('+fLbl(freq)+')</td><td>'+fmt2(pmt)+'</td><td>'+fmt2(pmt)+'</td><td>&mdash;</td></tr>'+
@@ -669,35 +630,22 @@ function calculate(){
 
   drawChart(withRows,noRows,P,yrs,freq);
 
-  var n2=ppy(freq);
-  var mn2=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var n2=ppy(freq),mn2=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var sd2=null;
   if(sv){var p2=sv.split('-');sd2=new Date(parseInt(p2[0]),parseInt(p2[1])-1,1);}
   var noIntMap={};
   for(var k=0;k<noRows.length;k++) noIntMap[k]=noRows[k].interest;
   var ah='',lastYr=-1;
   for(var i=0;i<withRows.length;i++){
-    var row=withRows[i];
-    var yr=Math.floor(i/n2)+1;
+    var row=withRows[i],yr=Math.floor(i/n2)+1;
     if(yr!==lastYr){ah+='<tr class="yr-row"><td colspan="6">Year '+yr+'</td></tr>';lastYr=yr;}
-    var noIntr=(noIntMap[i]!==undefined)?noIntMap[i]:0;
-    var savingI=noIntr-row.interest;
-    var pl='';
-    if(sd2){
+    var savingI=(noIntMap[i]||0)-row.interest;
+    var pl=sd2?(function(){
       var step=freq==='monthly'?i:freq==='fortnightly'?Math.round(i*26/12):Math.round(i*52/12);
       var pd=new Date(sd2.getFullYear(),sd2.getMonth()+step,1);
-      pl=mn2[pd.getMonth()]+' '+pd.getFullYear();
-    } else {
-      pl=fLbl(freq)+' '+(i+1);
-    }
-    ah+='<tr>'+
-      '<td>'+pl+'</td>'+
-      '<td>'+fmt0(row.offsetBal)+'</td>'+
-      '<td>'+fmt0(row.effectivePrin)+'</td>'+
-      '<td>'+fmt2(row.interest)+'</td>'+
-      '<td style="color:var(--gr)">'+(savingI>0.005?fmt2(savingI):'&mdash;')+'</td>'+
-      '<td>'+fmt0(row.closing)+'</td>'+
-    '</tr>';
+      return mn2[pd.getMonth()]+' '+pd.getFullYear();
+    })():fLbl(freq)+' '+(i+1);
+    ah+='<tr><td>'+pl+'</td><td>'+fmt0(row.offsetBal)+'</td><td>'+fmt0(row.effectivePrin)+'</td><td>'+fmt2(row.interest)+'</td><td style="color:var(--gr)">'+(savingI>0.005?fmt2(savingI):'&mdash;')+'</td><td>'+fmt0(row.closing)+'</td></tr>';
   }
   g('amortBody').innerHTML=ah;
 }
@@ -707,7 +655,6 @@ g('addlBtn').addEventListener('click',function(){
   this.setAttribute('aria-expanded',String(!exp));
   b.classList.toggle('collapsed',exp);
 });
-
 g('amortBtn').addEventListener('click',function(){
   var s=g('amortSection'),hidden=s.classList.toggle('hidden');
   var ico='<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>';
@@ -715,13 +662,8 @@ g('amortBtn').addEventListener('click',function(){
 });
 
 function doReset(){
-  g('fLoan').value=500000;
-  g('fRate').value=6.00;
-  g('fTerm').value=30;
-  g('fOffset').value=50000;
-  g('fContrib').value='';
-  g('rMonthly').checked=true;
-  g('gStatic').checked=true;
+  g('fLoan').value=500000;g('fRate').value=6.00;g('fTerm').value=30;
+  g('fOffset').value=50000;g('fContrib').value='';g('rMonthly').checked=true;
   var now=new Date();
   g('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
   calculate();
@@ -729,49 +671,25 @@ function doReset(){
 g('btnReset1').addEventListener('click',doReset);
 g('btnReset2').addEventListener('click',doReset);
 
-function dlCSV(name,content){
-  var blob=new Blob([content],{type:'text/csv'});
-  var a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);a.download=name;a.click();
-}
-
+function dlCSV(name,content){var blob=new Blob([content],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();}
 g('btnCSV').addEventListener('click',function(){
   var P=g('fLoan').value,R=g('fRate').value,T=g('fTerm').value;
   if(!P||!R||!T) return;
-  var freq=getFreq();
-  var lines=[
-    'Offset Account Savings Calculator - Summary',
-    'Loan Balance,$'+P,
-    'Annual Interest Rate,'+R+'%',
-    'Remaining Term,'+T+' years',
-    'Offset Balance,$'+(g('fOffset').value||0),
-    'Repayment Frequency,'+fLbl(freq),
-    '',
-    'Metric,With Offset,Without Offset,Saving',
-    fLbl(freq)+' Repayment,'+g('rRepay').textContent+',,',
-    'Effective Principal,'+g('rEffective').textContent+',,',
-    'Total Interest,'+g('rIntWith').textContent+','+g('rIntNo').textContent+','+g('rSaved').textContent,
-    'Interest Saving per Period,'+g('rPeriodSaving').textContent+',,'
-  ];
+  var lines=['Offset Account Savings Calculator - Summary','Loan Balance,$'+P,'Annual Interest Rate,'+R+'%','Remaining Term,'+T+' years','Offset Balance,$'+(g('fOffset').value||0),'Monthly Contribution,$'+(g('fContrib').value||0),'Repayment Frequency,'+fLbl(getFreq()),'','Metric,With Offset,Without Offset,Saving',fLbl(getFreq())+' Repayment,'+g('rRepay').textContent+',,','Effective Principal,'+g('rEffective').textContent+',,','Total Interest,'+g('rIntWith').textContent+','+g('rIntNo').textContent+','+g('rSaved').textContent,'Interest Saving per Period,'+g('rPeriodSaving').textContent+',,'];
   dlCSV('offset-account-summary.csv',lines.join('\n'));
 });
-
 g('btnSchedCSV').addEventListener('click',function(){
   var trs=g('amortBody').querySelectorAll('tr:not(.yr-row)');
   if(!trs.length) return;
   var lines=['Period,Offset Balance,Effective Principal,Interest,Interest Saved,Closing Balance'];
-  trs.forEach(function(tr){
-    lines.push(Array.from(tr.querySelectorAll('td')).map(function(td){return td.textContent.replace(/,/g,'');}).join(','));
-  });
+  trs.forEach(function(tr){lines.push(Array.from(tr.querySelectorAll('td')).map(function(td){return td.textContent.replace(/,/g,'');}).join(','));});
   dlCSV('offset-account-schedule.csv',lines.join('\n'));
 });
 
 ['fLoan','fRate','fTerm','fOffset','fContrib','fStart'].forEach(function(id){
-  g(id).addEventListener('input',calculate);
-  g(id).addEventListener('change',calculate);
+  g(id).addEventListener('input',calculate);g(id).addEventListener('change',calculate);
 });
 document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventListener('change',calculate);});
-document.querySelectorAll('input[name=grow]').forEach(function(r){r.addEventListener('change',calculate);});
 
 document.addEventListener('DOMContentLoaded',function(){
   var now=new Date();
