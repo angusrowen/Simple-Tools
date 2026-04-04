@@ -256,20 +256,50 @@ canvas { display:block; }
 @media (max-width:480px) {
   .main-wrapper { padding:12px !important; box-sizing:border-box !important; }
   .layout { grid-template-columns:1fr !important; gap:10px !important; }
-  .card { padding:12px !important; box-sizing:border-box !important; width:100% !important; max-width:100% !important; }
-  .topbar { padding:8px 14px !important; }
-  .tog label { font-size:.72rem !important; padding:6px 4px !important; }
+  .card { padding:14px !important; box-sizing:border-box !important; width:100% !important; max-width:100% !important; }
+
+  /* Topbar */
+  .topbar { padding:10px 14px !important; gap:10px !important; }
+  .topbar-desc { display:none !important; }
+  .topbar-title { font-size:.95rem !important; }
+
+  /* Card header: keep on one line but shrink btn */
+  .card-hdr { flex-wrap:wrap !important; gap:6px !important; }
+  .card-hdr h2 { flex:1 !important; min-width:0 !important; font-size:.9rem !important; }
+  .card-hdr .btn { font-size:.72rem !important; padding:5px 10px !important; white-space:nowrap !important; }
+
+  /* Toggles */
+  .tog label { font-size:.68rem !important; padding:6px 3px !important; }
+
+  /* Inputs */
   input[type=number], input[type=text], input[type=month] { font-size:.88rem !important; padding:7px 8px !important; }
   .iw input.pl { padding-left:20px !important; }
   .iw input.pr { padding-right:24px !important; }
-  .res-grid { grid-template-columns:1fr 1fr !important; gap:6px !important; }
-  .stbl { display:block !important; overflow-x:auto !important; font-size:.74rem !important; }
+
+  /* Results */
+  .res-grid { grid-template-columns:1fr 1fr !important; gap:8px !important; }
+  .res-box .val { font-size:1rem !important; }
+  .res-box.hl .val { font-size:1.1rem !important; }
+  .res-box .lbl { font-size:.68rem !important; }
+
+  /* Tables */
+  .tbl { display:block !important; overflow-x:auto !important; font-size:.78rem !important; }
+  .stbl { display:block !important; overflow-x:auto !important; font-size:.72rem !important; }
+
+  /* Misc */
   .actions { flex-wrap:wrap !important; }
+  .btn { font-size:.78rem !important; padding:7px 12px !important; }
   .ft { padding:10px 14px !important; }
+  .sec-ttl { font-size:.82rem !important; }
+  .note { font-size:.74rem !important; }
+  .hint { font-size:.72rem !important; }
 }
 @media (min-width:481px) and (max-width:768px) {
   .main-wrapper { padding:14px 18px !important; box-sizing:border-box !important; }
   .layout { grid-template-columns:1fr !important; }
+  .topbar-desc { font-size:.72rem !important; }
+  .card-hdr { flex-wrap:wrap !important; gap:6px !important; }
+  .card-hdr h2 { flex:1 !important; font-size:.92rem !important; }
 }
 
 /* ── Mobile overflow safety net ── */
@@ -282,23 +312,6 @@ html, body { overflow-x:hidden; }
       document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"><\/scr'+'ipt>');
     }
   </script>
-
-<style id="dbg-style">
-#dbg-panel {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
-  background: rgba(20,20,30,0.96); color: #7fff7f; font-family: monospace;
-  font-size: 11px; line-height:1.6; padding: 10px 12px;
-  max-height: 50vh; overflow-y: auto;
-  border-top: 2px solid #0f0; box-shadow: 0 -4px 20px rgba(0,0,0,.6);
-}
-#dbg-panel h3 { color:#fff; font-size:11px; margin:8px 0 4px; letter-spacing:1px; text-transform:uppercase; }
-#dbg-panel h3:first-child { margin-top:0; }
-#dbg-panel .row { padding: 1px 0; border-bottom: 1px solid rgba(255,255,255,.06); word-break:break-all; }
-#dbg-panel .bad  { color: #ff5555; font-weight:bold; }
-#dbg-panel .ok   { color: #7fff7f; }
-#dbg-panel .warn { color: #ffaa00; }
-#dbg-panel .dim  { color: #aaa; }
-</style>
 </head>
 <body>
 
@@ -846,70 +859,6 @@ html, body { overflow-x:hidden; }
   calculate();
 
 })();
-</script>
-
-<script id="dbg-script">
-document.addEventListener('DOMContentLoaded', function() {
-  var panel = document.createElement('div');
-  panel.id = 'dbg-panel';
-  document.body.appendChild(panel);
-
-  function r(cls, txt) {
-    return '<div class="row ' + cls + '">' + txt + '</div>';
-  }
-
-  var vw  = window.innerWidth;
-  var bsw = document.body.scrollWidth;
-  var hsw = document.documentElement.scrollWidth;
-  var lines = [];
-
-  lines.push('<h3>Viewport &amp; Scroll</h3>');
-  lines.push(r(bsw<=vw?'ok':'bad', 'viewport: ' + vw + 'px &nbsp;|&nbsp; body.scrollWidth: ' + bsw + 'px' + (bsw>vw ? '  ⚠ OVERFLOW +' + (bsw-vw) + 'px' : '  ✓')));
-  lines.push(r(hsw<=vw?'ok':'bad', 'html.scrollWidth: ' + hsw + 'px' + (hsw>vw ? '  ⚠ OVERFLOW +' + (hsw-vw) + 'px' : '  ✓')));
-
-  lines.push('<h3>Elements wider than viewport (' + vw + 'px)</h3>');
-  var offenders = [];
-  document.querySelectorAll('*').forEach(function(el) {
-    var rect = el.getBoundingClientRect();
-    if (rect.right > vw + 1 || el.scrollWidth > vw + 1) {
-      var tag = el.tagName.toLowerCase();
-      var id  = el.id ? '#' + el.id : '';
-      var cls = (typeof el.className === 'string' && el.className)
-                ? '.' + el.className.trim().split(/\s+/).slice(0,2).join('.') : '';
-      offenders.push(tag + id + cls
-        + ' | right=' + Math.round(rect.right)
-        + ' scrollW=' + el.scrollWidth
-        + ' w=' + Math.round(rect.width));
-    }
-  });
-  if (offenders.length === 0) {
-    lines.push(r('ok', '✓ No overflow elements found'));
-  } else {
-    offenders.slice(0, 25).forEach(function(o) { lines.push(r('bad', o)); });
-    if (offenders.length > 25) lines.push(r('warn', '... +' + (offenders.length-25) + ' more'));
-  }
-
-  lines.push('<h3>Key element widths</h3>');
-  ['.page-wrapper','.main-wrapper','.container','.layout',
-   '.card','.res-grid','.tog','.chart-box','canvas'].forEach(function(sel) {
-    var el = document.querySelector(sel);
-    if (!el) { lines.push(r('warn', sel + ': not found')); return; }
-    var w  = Math.round(el.getBoundingClientRect().width);
-    var sw = el.scrollWidth;
-    var ok = w <= vw && sw <= vw + 1;
-    lines.push(r(ok?'ok':'bad', sel + ' → w=' + w + ' scrollW=' + sw + (ok?' ✓':' ⚠')));
-  });
-
-  lines.push('<h3>Computed overflow-x / max-width</h3>');
-  ['body','html'].forEach(function(tag) {
-    var el = tag === 'body' ? document.body : document.documentElement;
-    var ox = getComputedStyle(el).overflowX;
-    var mw = getComputedStyle(el).maxWidth;
-    lines.push(r('dim', tag + ' → overflow-x:' + ox + '  max-width:' + mw));
-  });
-
-  panel.innerHTML = lines.join('');
-});
 </script>
 </body>
 </html>
