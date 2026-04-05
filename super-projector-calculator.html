@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>Superannuation Projector - Australian Finance Tools</title>
+<style>
+:root{--dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;--bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;--tx:#22313f;--txl:#6c7a89;--bl:#3f7fb5;--bll:#edf5fb;--amb:#b6862c;--aml:#faf2df;--super:#7a5230}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:linear-gradient(180deg,#4d7289 0,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
+.topbar-logo a{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:var(--super);color:#fff;text-decoration:none;box-shadow:0 8px 20px rgba(122,82,48,.35);flex-shrink:0}
+.topbar-logo a svg{width:22px;height:22px;fill:#fff}
+.topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
+.topbar-title{color:#fff;font-size:1rem;font-weight:700}
+.topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px}
+.page-wrapper{display:flex;justify-content:center;width:100%;overflow:hidden;position:relative;min-height:100vh}
+.side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;position:absolute;top:120px;z-index:10}
+.side-rail.left{left:0}.side-rail.right{right:0}
+.side-rail-inner{position:sticky;top:80px;padding:8px}
+.rail-ad-unit{background:var(--card);border:1px solid var(--bdr);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(45,50,40,.06)}
+.rail-ad-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:7px 0 4px;border-bottom:1px solid var(--bdr)}
+@media(min-width:1400px){.side-rail{display:flex;flex-direction:column}.main-wrapper{padding-left:200px;padding-right:200px}}
+.main-wrapper{padding:24px 32px;flex:1;min-width:0;overflow-x:hidden;width:100%;box-sizing:border-box}
+.container{max-width:1500px;margin:0 auto;width:100%}
+.layout{display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:24px;align-items:start}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
+@media(min-width:1001px){
+  .field label{font-size:.72rem}
+  .field-hint{font-size:.72rem}
+}
+
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06);box-sizing:border-box}
+.card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
+.card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
+.card-header-row h2{margin:0;padding:0;border:none}
+.section-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gr);margin-top:16px;margin-bottom:10px;padding-top:12px;border-top:1px solid var(--bdr)}
+.section-label.first{margin-top:0;padding-top:0;border-top:none}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.76rem;font-weight:600;margin-bottom:4px;color:var(--txl);text-transform:uppercase;letter-spacing:.05px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;line-height:1.1}
+.field-hint{font-size:.75rem;color:var(--txl);margin-top:2px}
+.field input,.field select{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s;font-family:inherit}
+.field input:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+.inline-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.input-wrap{position:relative;display:flex;align-items:center}
+.input-wrap .prefix,.input-wrap .suffix{position:absolute;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;z-index:1}
+.input-wrap .prefix{left:10px}.input-wrap .suffix{right:10px}
+.input-wrap input{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s;font-family:inherit}
+.input-wrap input.has-prefix{padding-left:22px}.input-wrap input.has-suffix{padding-right:28px}
+.input-wrap input:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:.4}
+.toggle-group{margin-bottom:14px}
+.toggle-label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
+.toggle-switch{display:flex;border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+.toggle-switch input[type=radio]{display:none}
+.toggle-switch label{flex:1;text-align:center;padding:8px 10px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fffdf8;color:var(--txl);transition:all .15s;border-right:1px solid var(--bdr)}
+.toggle-switch label:last-of-type{border-right:none}
+.toggle-switch input[type=radio]:checked + label{background:var(--gr);color:#fff}
+.info-banner{background:var(--grl);border:1px solid var(--gr);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.84rem;color:var(--tx)}
+.collapsible-card .collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0;text-align:left;gap:10px;font-family:inherit}
+.collapsible-header h2{color:var(--dk);margin:0;padding:0;border:none}
+.collapsible-header:hover h2{color:var(--gr)}
+.collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center}
+.collapsible-header[aria-expanded="true"] .collapse-icon{transform:rotate(180deg)}
+.collapsible-body{overflow:hidden;transition:max-height .35s ease,opacity .25s ease;max-height:4000px;opacity:1}
+.collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
+.collapsible-header{padding-bottom:8px;border-bottom:2px solid var(--gr);margin-bottom:16px}
+.collapsible-header[aria-expanded="false"]{border-bottom-color:var(--bdr);margin-bottom:0}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.results-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+.result-box{background:#f8f5ef;border:1px solid var(--bdr);border-radius:12px;padding:12px 14px}
+.result-box.hl-green{background:var(--grl);border-color:var(--gr)}
+.result-box.hl-blue{background:var(--bll);border-color:var(--bl)}
+.result-box .lbl{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);font-weight:600;margin-bottom:2px}
+.result-box .val{font-size:1.15rem;font-weight:700;color:var(--dk)}
+.result-box.hl-green .val{color:var(--gr);font-size:1.3rem}
+.result-box.hl-blue .val{color:var(--bl);font-size:1.3rem}
+.result-box .sub{font-size:.72rem;color:var(--txl);margin-top:2px}
+.retire-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:.78rem;font-weight:700;background:var(--grl);color:var(--gr);border:1px solid var(--gr);margin-bottom:14px}
+.section-title{font-size:.85rem;font-weight:700;margin:0 0 10px;color:var(--dk)}
+.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
+.chart-legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--txl)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.chart-wrap{position:relative;width:100%;height:300px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .15s;font-family:inherit}
+.btn svg{width:14px;height:14px;fill:currentColor}
+.btn-green{background:var(--gr);color:#fff}.btn-green:hover{background:#228052}
+.btn-navy{background:var(--nv);color:#fff}.btn-navy:hover{background:#2d5268}
+.amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:7px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s;font-family:inherit}
+.amort-btn:hover{border-color:var(--gr);color:var(--gr)}
+.amort-btn svg{width:13px;height:13px;fill:currentColor}
+.amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
+.amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
+.amort-table th:first-child{text-align:left}
+.amort-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums;text-align:right}
+.amort-table td:first-child{text-align:left;font-weight:600}
+.amort-table tr:last-child td{border-bottom:none}
+.amort-table .phase-row td{background:var(--grl);color:var(--gr);font-weight:700;font-size:.73rem;text-transform:uppercase;letter-spacing:.4px;text-align:center}
+.amort-table .milestone-row td{background:var(--grl)}
+.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);flex-wrap:wrap}
+.disclaimer{font-size:.75rem;color:var(--txl);line-height:1.6;padding:10px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--bdr);margin-top:16px}
+.ft{background:linear-gradient(180deg,#4d7289 0,var(--nv) 100%);padding:16px 32px;text-align:center;margin-top:auto}
+.ft span,.ft a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem}
+.ft a:hover{color:#fff}
+@media(max-width:768px){ins.adsbygoogle,.side-rail{display:none!important}.results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}}
+@media(max-width:480px){.main-wrapper{padding:12px!important}.layout{grid-template-columns:1fr!important;gap:10px!important}.card{padding:14px!important}.topbar{padding:8px 14px!important}.inline-fields{grid-template-columns:1fr!important}.results-grid,.results-grid-2{grid-template-columns:1fr 1fr!important;gap:6px!important}}
+@media(min-width:481px) and (max-width:1000px){.main-wrapper{padding:14px 18px!important}.layout{grid-template-columns:1fr!important}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">
+    <a href="index.html" title="Back to calculators">
+      <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+    </a>
+  </div>
+  <div class="topbar-divider"></div>
+  <div>
+    <div class="topbar-title">Superannuation Projector</div>
+    <div class="topbar-desc">Project your super balance and estimated income at retirement.</div>
+  </div>
+</div>
+
+<div class="page-wrapper">
+<div class="side-rail left"><div class="side-rail-inner"><div class="rail-ad-unit"><div class="rail-ad-label">Advertisement</div><div style="padding:8px;display:flex;justify-content:center;min-height:620px"><ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins></div></div></div></div>
+
+<div class="main-wrapper"><div class="container"><div class="layout">
+
+<div>
+  <div class="card">
+    <div class="card-header-row">
+      <h2>Personal Details</h2>
+      <button type="button" class="btn btn-navy" id="btnReset">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Reset
+      </button>
+    </div>
+    <div class="section-label first">Your Age</div>
+    <div class="inline-fields">
+      <div class="field"><label for="fCurrentAge">Current Age</label><div class="input-wrap"><input type="number" id="fCurrentAge" class="has-suffix" value="35" min="15" max="74" step="1"><span class="suffix">yrs</span></div></div>
+      <div class="field"><label for="fRetireAge">Retirement Age</label><div class="input-wrap"><input type="number" id="fRetireAge" class="has-suffix" value="67" min="50" max="80" step="1"><span class="suffix">yrs</span></div></div>
+    </div>
+    <div class="section-label">Income &amp; Contributions</div>
+    <div class="field"><label for="fSalary">Annual Salary (Before Tax)</label><div class="input-wrap"><span class="prefix">$</span><input type="number" id="fSalary" class="has-prefix" value="90000" min="0" step="1000"></div></div>
+    <div class="inline-fields">
+      <div class="field"><label for="fSuperRate">Employer SGC Rate</label><div class="input-wrap"><input type="number" id="fSuperRate" class="has-suffix" value="12" min="0" max="30" step="0.5"><span class="suffix">%</span></div></div>
+      <div class="field"><label for="fSalGrowth">Salary Growth Rate Rate</label><div class="input-wrap"><input type="number" id="fSalGrowth" class="has-suffix" value="2.5" min="0" max="20" step="0.1"><span class="suffix">%</span></div></div>
+    </div>
+    <div class="field"><label for="fCurrentBalance">Current Super Balance</label><div class="input-wrap"><span class="prefix">$</span><input type="number" id="fCurrentBalance" class="has-prefix" value="75000" min="0" step="1000"></div></div>
+    <div class="section-label">Voluntary Contributions</div>
+    <div class="toggle-group">
+      <div class="toggle-label">Frequency</div>
+      <div class="toggle-switch">
+        <input type="radio" name="volFreq" id="volNone" value="none" checked><label for="volNone">None</label>
+        <input type="radio" name="volFreq" id="volMonthly" value="monthly"><label for="volMonthly">Monthly</label>
+        <input type="radio" name="volFreq" id="volAnnual" value="annual"><label for="volAnnual">Annual</label>
+      </div>
+    </div>
+    <div id="volContribField" class="field" style="display:none">
+      <label for="fVolContrib" id="volContribLabel">Monthly Voluntary Contribution</label>
+      <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fVolContrib" class="has-prefix" value="200" min="0" step="50"></div>
+      <div class="field-hint">Concessional cap: $30,000/yr total (incl. SGC).</div>
+    </div>
+  </div>
+
+  <div class="card collapsible-card">
+    <button type="button" class="collapsible-header" id="fundBtn" aria-expanded="true">
+      <h2>Fund &amp; Returns</h2>
+      <span class="collapse-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 8 10 13 15 8"/></svg></span>
+    </button>
+    <div class="collapsible-body" id="fundBody">
+      <div class="section-label first">Investment Return</div>
+      <div class="inline-fields">
+        <div class="field"><label for="fReturnRate">Return (Accumulation)</label><div class="input-wrap"><input type="number" id="fReturnRate" class="has-suffix" value="7.5" min="0" max="20" step="0.1"><span class="suffix">%</span></div><div class="field-hint">Balanced ~6-8%, Growth ~7-9%</div></div>
+        <div class="field"><label for="fReturnRetire">Return (Retirement)</label><div class="input-wrap"><input type="number" id="fReturnRetire" class="has-suffix" value="5.5" min="0" max="15" step="0.1"><span class="suffix">%</span></div><div class="field-hint">Conservative/pension phase</div></div>
+      </div>
+      <div class="inline-fields">
+        <div class="field"><label for="fFee">Annual Fund Fee</label><div class="input-wrap"><input type="number" id="fFee" class="has-suffix" value="0.60" min="0" max="5" step="0.05"><span class="suffix">%</span></div><div class="field-hint">Total incl. admin &amp; investment</div></div>
+        <div class="field"><label for="fTax">Contributions Tax</label><div class="input-wrap"><input type="number" id="fTax" class="has-suffix" value="15" min="0" max="30" step="1"><span class="suffix">%</span></div><div class="field-hint">Standard 15% (30% if &gt;$250k)</div></div>
+      </div>
+      <div class="section-label">Display Mode</div>
+      <div class="toggle-group">
+        <div class="toggle-label">Show results in</div>
+        <div class="toggle-switch">
+          <input type="radio" name="inflMode" id="inflNominal" value="nominal" checked><label for="inflNominal">Nominal $</label>
+          <input type="radio" name="inflMode" id="inflReal" value="real"><label for="inflReal">Real (Today's $)</label>
+        </div>
+        <div class="field-hint" id="inflModeHint" style="margin-top:6px">Nominal shows future dollar amounts at face value. Switch to Real to adjust for inflation and see what your balance is worth in today's purchasing power.</div>
+      </div>
+      <div class="field" id="inflationField" style="display:none">
+        <label for="fInflation">Inflation Rate</label>
+        <div class="input-wrap"><input type="number" id="fInflation" class="has-suffix" value="2.5" min="0" max="10" step="0.1"><span class="suffix">%</span></div>
+        <div class="field-hint">Used to deflate future values back to today's dollars.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card collapsible-card">
+    <button type="button" class="collapsible-header" id="incomeBtn" aria-expanded="true">
+      <h2>Retirement Income</h2>
+      <span class="collapse-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 8 10 13 15 8"/></svg></span>
+    </button>
+    <div class="collapsible-body" id="incomeBody">
+      <div class="section-label first">Drawdown</div>
+      <div class="inline-fields">
+        <div class="field"><label for="fDrawdown">Annual Drawdown</label><div class="input-wrap"><span class="prefix">$</span><input type="number" id="fDrawdown" class="has-prefix" value="65000" min="0" step="1000"></div><div class="field-hint">ASFA comfortable single: ~$52,000/yr</div></div>
+        <div class="field"><label for="fLifeExpect">Life Expectancy</label><div class="input-wrap"><input type="number" id="fLifeExpect" class="has-suffix" value="87" min="60" max="110" step="1"><span class="suffix">yrs</span></div></div>
+      </div>
+      <div class="toggle-group">
+        <div class="toggle-label">Age Pension</div>
+        <div class="toggle-switch">
+          <input type="radio" name="pension" id="pensionNo" value="no" checked><label for="pensionNo">Exclude</label>
+          <input type="radio" name="pension" id="pensionYes" value="yes"><label for="pensionYes">Include</label>
+        </div>
+      </div>
+      <div class="info-banner" id="pensionBanner" style="display:none">
+        Age Pension (single, full rate) at 67: approx. $29,754/yr. Used as a top-up to reduce super drawdown. Subject to income and assets tests.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="card">
+    <h2>Projection Results</h2>
+
+    <div class="results-grid">
+      <div class="result-box hl-green"><div class="lbl">Balance at Retirement</div><div class="val" id="rBalance">-</div><div class="sub" id="rBalanceSub"></div></div>
+      <div class="result-box hl-green"><div class="lbl">Monthly Income</div><div class="val" id="rMonthlyIncome">-</div><div class="sub">from super drawdown</div></div>
+      <div class="result-box"><div class="lbl">Super Lasts Until</div><div class="val" id="rLastsUntil">-</div><div class="sub" id="rLastsUntilSub"></div></div>
+    </div>
+    <div class="results-grid">
+      <div class="result-box"><div class="lbl">Employer Contributions</div><div class="val" id="rEmployer">-</div></div>
+      <div class="result-box" id="volBox" style="display:none"><div class="lbl">Voluntary Contributions</div><div class="val" id="rVoluntary">-</div><div class="sub">After-tax contributions</div></div>
+      <div class="result-box hl-blue"><div class="lbl">Investment Growth</div><div class="val" id="rGrowth">-</div></div>
+    </div>
+    <div class="results-grid-2">
+      <div class="result-box"><div class="lbl">Super Drawdown / yr</div><div class="val" id="rDrawdownAmt">-</div></div>
+      <div class="result-box" id="pensionBox" style="opacity:.45;display:none"><div class="lbl">Age Pension / yr (est.)</div><div class="val" id="rPensionAmt">Not included</div><div class="sub">Subject to income &amp; assets tests</div></div>
+    </div>
+    <div class="chart-section">
+      <div class="section-title">Super Balance Over Time</div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#2a9d67"></div>Accumulation</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3f7fb5"></div>Retirement Drawdown</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#000"></div>Cumulative Contributions</div>
+      </div>
+      <div class="chart-wrap"><canvas id="superChart"></canvas></div>
+      <div style="font-size:.72rem;color:var(--txl);margin-top:6px;text-align:right">Hover for details</div>
+    </div>
+    <button type="button" class="amort-btn" id="amortToggle">
+      <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+      Show Year-by-Year Schedule
+    </button>
+    <div id="amortSection" style="display:none">
+      <div class="amort-wrap">
+        <table class="amort-table">
+          <thead><tr><th>Age</th><th>Salary</th><th>SGC</th><th>Voluntary</th><th>Growth</th><th>Closing Balance</th></tr></thead>
+          <tbody id="amortBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="actions-bar">
+      <button type="button" class="btn btn-green" id="btnExportSummary">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 6h14v2H5z"/></svg>
+        Export Summary CSV
+      </button>
+      <button type="button" class="btn btn-green" id="btnExportSchedule">
+        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+        Export Schedule CSV
+      </button>
+      <div style="flex:1"></div>
+      <button type="button" class="btn btn-navy" id="btnStartOver">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Start Over
+      </button>
+    </div>
+    <div class="disclaimer">
+      Estimates only. Assumes constant rates of return, salary growth, and inflation. SGC contributions taxed at 15% on entry. Does not account for insurance premiums within super, co-contributions, spouse contributions, or downsizer contributions. Age Pension figures based on 2024-25 single full pension rates and are indicative only - subject to income and assets tests. Not personal financial advice.
+    </div>
+  </div>
+</div>
+
+</div></div></div>
+<div class="side-rail right"><div class="side-rail-inner"><div class="rail-ad-unit"><div class="rail-ad-label">Advertisement</div><div style="padding:8px;display:flex;justify-content:center;min-height:620px"><ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins></div></div></div></div>
+</div>
+<div class="ft"><span>&copy; 2025 Australian Finance Tools &nbsp;&middot;&nbsp; <a href="#">Privacy</a></span></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+var superChart = null;
+var summaryRows = [];
+var scheduleRows = [];
+var PENSION = 29754;
+
+function n(id) {
+  var v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? 0 : v;
+}
+
+function radio(name) {
+  var els = document.getElementsByName(name);
+  for (var i = 0; i < els.length; i++) { if (els[i].checked) return els[i].value; }
+  return "";
+}
+
+function set(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function fmt(v) {
+  return "$" + Math.round(v).toLocaleString("en-AU");
+}
+
+function calc() {
+  var ca  = n("fCurrentAge");
+  var ra  = n("fRetireAge");
+  var sal = n("fSalary");
+  var sr  = n("fSuperRate") / 100;
+  var sg  = n("fSalGrowth") / 100;
+  var bal = n("fCurrentBalance");
+  var rr  = (n("fReturnRate") - n("fFee")) / 100;
+  var rrr = (n("fReturnRetire") - n("fFee")) / 100;
+  var ct  = n("fTax") / 100;
+  var inf = n("fInflation") / 100;
+  var dw  = n("fDrawdown");
+  var le  = n("fLifeExpect");
+  var vf  = radio("volFreq");
+  var va  = n("fVolContrib");
+  var im  = radio("inflMode");
+  var pen = radio("pension") === "yes";
+
+  if (ca < 15 || ra <= ca) return;
+
+  var ytr = Math.floor(ra - ca);
+  var ril = document.getElementById("retireInfoLeft");
+  if (ril) { ril.textContent = ytr + (ytr === 1 ? " year to retirement" : " years to retirement"); ril.style.display = "block"; }
+  var av = 0;
+  if (vf === "monthly") av = va * 12;
+  else if (vf === "annual") av = va;
+
+  var labels=[], bArr=[], dArr=[], cArr=[];
+  var tEmp=0, tVol=0, tGrw=0, cum=bal;
+  var rows = "";
+  var cs = sal;
+  scheduleRows = ["Age,Phase,Salary,SGC After Tax,Voluntary After Tax,Growth,Closing Balance"];
+
+  for (var y = 0; y < ytr; y++) {
+    var age   = ca + y + 1;
+    var sgn   = cs * sr * (1 - ct);
+    var vn    = av * (1 - ct);
+    var grw   = (bal + sgn/2 + vn/2) * rr;
+    bal       = bal + sgn + vn + grw;
+    tEmp += sgn; tVol += vn; tGrw += grw; cum += sgn + vn;
+    labels.push("Age " + age);
+    bArr.push(Math.round(bal));
+    dArr.push(null);
+    cArr.push(Math.round(cum));
+    var rc = (age === ra) ? " class=\"milestone-row\"" : "";
+    rows += "<tr" + rc + "><td>" + age + "</td><td>" + fmt(cs) + "</td><td>" + fmt(sgn) + "</td><td>" + (av > 0 ? fmt(vn) : "-") + "</td><td>" + fmt(grw) + "</td><td><strong>" + fmt(bal) + "</strong></td></tr>";
+    scheduleRows.push([age,"Accumulation",Math.round(cs),Math.round(sgn),Math.round(vn),Math.round(grw),Math.round(bal)].join(","));
+    cs = cs * (1 + sg);
+  }
+
+  var retBal  = bal;
+  var dispBal = (im === "real") ? retBal / Math.pow(1 + inf, ytr) : retBal;
+  var pt      = pen ? PENSION : 0;
+  var nd      = dw > pt ? dw - pt : 0;
+  var ry      = Math.floor(le - ra);
+  var rb      = retBal;
+  var lasts   = ra;
+
+  rows += "<tr class=\"phase-row\"><td colspan=\"6\">Retirement Phase</td></tr>";
+
+  for (var y2 = 0; y2 < ry; y2++) {
+    var ar  = ra + y2 + 1;
+    var gr2 = rb * rrr;
+    rb      = rb + gr2 - nd;
+    if (rb < 0) rb = 0;
+    labels.push("Age " + ar);
+    bArr.push(null);
+    dArr.push(Math.round(rb));
+    cArr.push(null);
+    if (rb > 0) lasts = ar;
+    rows += "<tr><td>" + ar + "</td><td>-</td><td>-</td><td>-</td><td>" + fmt(gr2) + "</td><td><strong>" + fmt(rb) + "</strong></td></tr>";
+    scheduleRows.push([ar,"Retirement",0,0,0,Math.round(gr2),Math.round(rb)].join(","));
+  }
+
+  summaryRows = [
+    "Metric,Value",
+    "Balance at Retirement," + Math.round(retBal),
+    "Balance at Retirement (Display)," + Math.round(dispBal),
+    "Total Employer Contributions," + Math.round(tEmp),
+    "Total Voluntary Contributions," + Math.round(tVol),
+    "Total Investment Growth," + Math.round(tGrw),
+    "Annual Drawdown," + dw,
+    "Monthly Income," + Math.round(dw/12),
+    "Super Lasts Until," + (rb > 0 ? le + "+" : lasts)
+  ];
+
+  set("rBalance",       fmt(dispBal));
+  set("rBalanceSub",    im === "real" ? "In todays dollars (inflation adjusted)" : "Nominal future value");
+  set("rMonthlyIncome", fmt(dw/12) + "/mo");
+  set("rLastsUntil",    rb > 0 ? "Age " + le + "+" : "Age " + lasts);
+  set("rLastsUntilSub", rb > 0 ? "Outlasts life expectancy" : "Depleted before life expectancy");
+  set("rEmployer",      fmt(tEmp));
+  set("rVoluntary",     fmt(tVol));
+  var vb = document.getElementById("volBox"); if (vb) vb.style.display = tVol > 0 ? "block" : "none";
+  set("rGrowth",        fmt(tGrw));
+  set("rDrawdownAmt",   fmt(dw) + "/yr");
+  set("rPensionAmt",    pen ? fmt(PENSION) + "/yr" : "Not included");
+  var pb = document.getElementById("pensionBox"); if (pb) pb.style.display = pen ? "block" : "none";
+  document.getElementById("amortBody").innerHTML = rows || "<tr><td colspan=\"6\" style=\"text-align:center;color:var(--txl);padding:14px\">No results yet</td></tr>";
+  drawChart(labels, bArr, dArr, cArr);
+}
+
+function drawChart(labels, bArr, dArr, cArr) {
+  
+  if (typeof Chart === "undefined") return;
+  var canvas = document.getElementById("superChart");
+  if (!canvas) return;
+  if (superChart) { superChart.destroy(); superChart = null; }
+  superChart = new Chart(canvas.getContext("2d"), {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [
+        { label: "Accumulation",            data: bArr,  borderColor: "rgba(42,157,103,.9)",  backgroundColor: "rgba(42,157,103,1)", fill: true,  tension: 0.35, pointRadius: 1, pointHoverRadius: 5, borderWidth: 2.5 },
+        { label: "Retirement Drawdown",     data: dArr,  borderColor: "rgba(63,127,181,.9)",  backgroundColor: "rgba(63,127,181,1)", fill: true,  tension: 0.35, pointRadius: 1, pointHoverRadius: 5, borderWidth: 2.5 },
+        { label: "Cumulative Contributions",data: cArr,  borderColor: "rgba(255,0,0,1)",       backgroundColor: "rgba(255,0,0,.2)",     fill: false, tension: 0.35, pointRadius: 3, pointHoverRadius: 6, borderWidth: 6, borderDash: [], order: 1000, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: "rgba(30,20,10,.93)", titleColor: "#fff", bodyColor: "rgba(255,255,255,.88)", padding: 11, cornerRadius: 8,
+          callbacks: { label: function(item) { return item.dataset.label + ": $" + Math.round(item.parsed.y).toLocaleString("en-AU"); } }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, color: "#6c7a89", maxTicksLimit: 14 } },
+        y: { grid: { color: "rgba(0,0,0,.05)" }, ticks: { font: { size: 10 }, color: "#6c7a89", callback: function(v) { return "$" + (v >= 1000000 ? (v/1000000).toFixed(1)+"m" : Math.round(v/1000)+"k"); } } }
+      },
+      animation: { duration: 350 }
+    }
+  });
+}
+
+function toggleVol() {
+  var f = radio("volFreq");
+  document.getElementById("volContribField").style.display = f === "none" ? "none" : "block";
+  document.getElementById("volContribLabel").textContent = f === "monthly" ? "Monthly Voluntary Contribution" : "Annual Voluntary Contribution";
+}
+
+function togglePension() {
+  document.getElementById("pensionBanner").style.display = radio("pension") === "yes" ? "block" : "none";
+}
+
+function toggleInflMode() {
+  var real = radio("inflMode") === "real";
+  document.getElementById("inflationField").style.display = real ? "block" : "none";
+  document.getElementById("inflModeHint").textContent = real
+    ? "Showing values in today's dollars. Enter an inflation rate below to deflate future amounts."
+    : "Nominal shows future dollar amounts at face value. Switch to Real to adjust for inflation and see what your balance is worth in today's purchasing power.";
+}
+
+function resetAll() {
+  var d = {fCurrentAge:35,fRetireAge:67,fSalary:90000,fSuperRate:12,fSalGrowth:2.5,fCurrentBalance:75000,fVolContrib:200,fReturnRate:7.5,fReturnRetire:5.5,fFee:0.60,fTax:15,fInflation:2.5,fDrawdown:65000,fLifeExpect:87};
+  for (var k in d) document.getElementById(k).value = d[k];
+  document.getElementById("volNone").checked = true;
+  document.getElementById("inflNominal").checked = true;
+  document.getElementById("pensionNo").checked = true;
+  toggleVol(); togglePension(); toggleInflMode(); var ri=document.getElementById("retireInfo"); if(ri) ri.style.display="none"; var ril=document.getElementById("retireInfoLeft"); if(ril) ril.style.display="none"; calc();
+}
+
+function dlCSV(rows, fname) {
+  if (!rows.length) return;
+  var a = document.createElement("a");
+  a.href = "data:text/csv;charset=utf-8," + encodeURIComponent(rows.join("\n"));
+  a.download = fname;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+// Wire inputs
+["fCurrentAge","fRetireAge","fSalary","fSuperRate","fSalGrowth","fCurrentBalance","fVolContrib","fReturnRate","fReturnRetire","fFee","fTax","fInflation","fDrawdown","fLifeExpect"].forEach(function(id) {
+  document.getElementById(id).addEventListener("input", calc);
+});
+["volNone","volMonthly","volAnnual"].forEach(function(id) {
+  document.getElementById(id).addEventListener("change", function() { toggleVol(); calc(); });
+});
+["inflNominal","inflReal"].forEach(function(id) {
+  document.getElementById(id).addEventListener("change", function() { toggleInflMode(); calc(); });
+});
+["pensionYes","pensionNo"].forEach(function(id) {
+  document.getElementById(id).addEventListener("change", function() { togglePension(); calc(); });
+});
+document.getElementById("btnReset").addEventListener("click", resetAll);
+document.getElementById("btnStartOver").addEventListener("click", resetAll);
+document.getElementById("btnExportSummary").addEventListener("click",  function() { dlCSV(summaryRows,  "super-summary.csv"); });
+document.getElementById("btnExportSchedule").addEventListener("click", function() { dlCSV(scheduleRows, "super-schedule.csv"); });
+
+// Collapsibles
+[["fundBtn","fundBody"],["incomeBtn","incomeBody"]].forEach(function(p) {
+  var btn = document.getElementById(p[0]), body = document.getElementById(p[1]);
+  btn.addEventListener("click", function() {
+    var open = btn.getAttribute("aria-expanded") === "true";
+    btn.setAttribute("aria-expanded", open ? "false" : "true");
+    body.classList.toggle("collapsed", open);
+  });
+  if (window.innerWidth < 900) { btn.setAttribute("aria-expanded","false"); body.classList.add("collapsed"); }
+});
+
+// Year-by-year toggle
+document.getElementById("amortToggle").addEventListener("click", function() {
+  var sec = document.getElementById("amortSection");
+  var open = sec.style.display === "block";
+  sec.style.display = open ? "none" : "block";
+  this.innerHTML = (open ? '<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> Show Year-by-Year Schedule' : '<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> Hide Year-by-Year Schedule');
+});
+
+// Init
+toggleVol();
+togglePension();
+toggleInflMode();
+calc();
+</script>
+</body>
+</html>
