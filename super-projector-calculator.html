@@ -167,6 +167,20 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
   </div>
 
+  <div class="card">
+    <h2>Retirement Income</h2>
+    <div>
+      <div class="section-label first">Drawdown</div>
+      <div class="inline-fields">
+        <div class="field"><label for="fDrawdown">Annual Income Drawdown</label><div class="input-wrap"><span class="prefix">$</span><input type="number" id="fDrawdown" class="has-prefix" value="65000" min="0" step="1000"></div><div class="field-hint">ASFA comfortable single: ~$52,000/yr. Adjusts annually with your inflation rate in retirement.</div></div>
+        <div class="field"><label for="fLifeExpect">Life Expectancy</label><div class="input-wrap"><input type="number" id="fLifeExpect" class="has-suffix" value="87" min="60" max="110" step="1"><span class="suffix">yrs</span></div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div>
   <div class="card collapsible-card">
     <button type="button" class="collapsible-header" id="fundBtn" aria-expanded="true">
       <h2>Fund &amp; Returns</h2>
@@ -199,48 +213,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
   </div>
 
-  <div class="card collapsible-card">
-    <button type="button" class="collapsible-header" id="incomeBtn" aria-expanded="true">
-      <h2>Retirement Income</h2>
-      <span class="collapse-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 8 10 13 15 8"/></svg></span>
-    </button>
-    <div class="collapsible-body" id="incomeBody">
-      <div class="section-label first">Drawdown</div>
-      <div class="inline-fields">
-        <div class="field"><label for="fDrawdown">Annual Income Drawdown</label><div class="input-wrap"><span class="prefix">$</span><input type="number" id="fDrawdown" class="has-prefix" value="65000" min="0" step="1000"></div><div class="field-hint">ASFA comfortable single: ~$52,000/yr. Adjusts annually with your inflation rate in retirement.</div></div>
-        <div class="field"><label for="fLifeExpect">Life Expectancy</label><div class="input-wrap"><input type="number" id="fLifeExpect" class="has-suffix" value="87" min="60" max="110" step="1"><span class="suffix">yrs</span></div></div>
-      </div>
-      <div class="toggle-group">
-        <div class="toggle-label">Age Pension</div>
-        <div class="toggle-switch">
-          <input type="radio" name="pension" id="pensionNo" value="no" checked><label for="pensionNo">Exclude</label>
-          <input type="radio" name="pension" id="pensionYes" value="yes"><label for="pensionYes">Include</label>
-        </div>
-      </div>
-      <div id="pensionOptions" style="display:none;margin-top:8px">
-        <div class="inline-fields">
-          <div class="field">
-            <label>Relationship Status</label>
-            <div class="toggle-switch" style="width:100%">
-              <input type="radio" name="relStatus" id="relSingle" value="single" checked onchange="calc()"><label for="relSingle">Single</label>
-              <input type="radio" name="relStatus" id="relCouple" value="couple" onchange="calc()"><label for="relCouple">Couple</label>
-            </div>
-          </div>
-          <div class="field">
-            <label>Home Ownership</label>
-            <div class="toggle-switch" style="width:100%">
-              <input type="radio" name="homeOwn" id="homeYes" value="yes" checked onchange="calc()"><label for="homeYes">Homeowner</label>
-              <input type="radio" name="homeOwn" id="homeNo" value="no" onchange="calc()"><label for="homeNo">Renter</label>
-            </div>
-          </div>
-        </div>
-        <div class="field-hint" style="margin-top:4px">&#9432; Estimate only — based on your super balance at retirement. Other assets, income &amp; partner finances are not assessed.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div>
   <div class="card">
     <h2>Projection Results</h2>
 
@@ -250,15 +222,15 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div class="result-box hl-green"><div class="lbl">Retirement Income</div><div class="val" id="rDrawdownAmt">-</div><div class="sub">From Superannuation</div><div class="sub" id="rDrawdownInflSub" style="margin-top:2px;font-style:italic"></div></div>
       <div class="result-box"><div class="lbl">Employer Contributions</div><div class="val" id="rEmployer">-</div></div>
       <div class="result-box" id="volBox" style="display:none"><div class="lbl">Voluntary Contributions</div><div class="val" id="rVoluntary">-</div><div class="sub">After-tax contributions</div></div>
-      <div class="result-box hl-blue"><div class="lbl">Investment Growth</div><div class="val" id="rGrowth">-</div><div class="sub">To retirement</div></div>
+      <div class="result-box hl-blue"><div class="lbl">Superannuation Growth</div><div class="val" id="rGrowth">-</div><div class="sub">Up to Retirement</div></div>
       <div class="result-box"><div class="lbl">Super Lasts Until</div><div class="val" id="rLastsUntil">-</div><div class="sub" id="rLastsUntilSub"></div></div>
-      <div class="result-box" id="pensionBox" style="opacity:.45;display:none"><div class="lbl">Age Pension / yr (est.)</div><div class="val" id="rPensionAmt">Not included</div><div class="sub" id="rPensionSub">Based on super balance only</div></div>
+      
     </div>
     <div class="chart-section">
       <div class="section-title">Super Balance Over Time</div>
       <div class="chart-legend">
         <div class="legend-item"><div class="legend-dot" style="background:rgba(232,168,56,1)"></div>Contributions</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,1)"></div>Investment Growth</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,1)"></div>Superannuation Growth</div>
         <div class="legend-item"><div class="legend-dot" style="background:rgba(63,127,181,1)"></div>Retirement Balance</div>
       </div>
       <div class="chart-wrap"><canvas id="superChart"></canvas></div>
@@ -296,7 +268,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       </button>
     </div>
     <div class="disclaimer">
-      Estimates only. Assumes constant rates of return, salary growth, and inflation. SGC contributions taxed at 15% on entry. Does not account for insurance premiums within super, co-contributions, spouse contributions, or downsizer contributions. Age Pension figures based on 2024-25 single full pension rates and are indicative only - subject to income and assets tests. Not personal financial advice.
+      Estimates only. Assumes constant rates of return, salary growth, and inflation. SGC contributions are taxed at 15% on entry. Annual income drawdown adjusts with your nominated inflation rate. Does not account for insurance premiums within super, co-contributions, spouse contributions, or downsizer contributions. Age Pension is not included in these projections — depending on your assets and income you may be eligible; speak to a licensed financial adviser for personalised advice. Not personal financial advice.
     </div>
   </div>
 </div>
@@ -310,42 +282,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 var superChart = null;
 var summaryRows = [];
 var scheduleRows = [];
-// Age Pension calculation — March 2026 rates
-// Assets and income test based solely on super balance at retirement
-function calcAgePension(retireBal, isSingle, isHomeowner) {
-  var maxPension = isSingle ? 31223 : 23535;
-
-  // Assets test thresholds
-  var atFull, atNil;
-  if (isSingle) {
-    atFull = isHomeowner ? 321500 : 579500;
-    atNil  = isHomeowner ? 722000 : 980000;
-  } else {
-    atFull = isHomeowner ? 481500 : 739500;
-    atNil  = isHomeowner ? 1085000 : 1343000;
-  }
-  var pensionByAssets;
-  if (retireBal <= atFull) {
-    pensionByAssets = maxPension;
-  } else if (retireBal >= atNil) {
-    pensionByAssets = 0;
-  } else {
-    var reduction = Math.floor((retireBal - atFull) / 1000) * 78;
-    pensionByAssets = Math.max(0, maxPension - reduction);
-  }
-
-  // Income test — deeming rates 1.25% / 3.25%
-  var deemThresh = isSingle ? 64200 : 106200;
-  var freeArea   = isSingle ? 5512 : 4836; // couple free area split per person
-  var deemedIncome = retireBal <= deemThresh
-    ? retireBal * 0.0125
-    : deemThresh * 0.0125 + (retireBal - deemThresh) * 0.0325;
-  var pensionByIncome = Math.max(0, maxPension - Math.max(0, deemedIncome - freeArea) * 0.5);
-
-  return Math.min(pensionByAssets, pensionByIncome);
-}
-
-
 function n(id) {
   var v = parseFloat(document.getElementById(id).value);
   return isNaN(v) ? 0 : v;
@@ -382,7 +318,6 @@ function calc() {
   var vf  = radio("volFreq");
   var va  = n("fVolContrib");
   var im  = radio("inflMode");
-  var pen = radio("pension") === "yes";
 
   if (ca < 15 || ra <= ca) return;
 
@@ -394,10 +329,15 @@ function calc() {
   else if (vf === "annual") av = va;
 
   var labels=[], bArr=[], dArr=[], cArr=[];
-  var tEmp=0, tVol=0, tGrw=0, cum=bal;
+  var tEmp=0, tVol=0, tGrw=0, cum=0;
   var rows = "";
   var cs = sal;
   scheduleRows = ["Age,Phase,Salary,SGC After Tax,Voluntary After Tax,Growth,Closing Balance"];
+
+  labels.push("Age " + ca);
+  bArr.push(Math.round(bal));
+  dArr.push(null);
+  cArr.push(0);
 
   for (var y = 0; y < ytr; y++) {
     var age   = ca + y + 1;
@@ -418,9 +358,7 @@ function calc() {
 
   var retBal  = bal;
   var dispBal = (im === "real") ? retBal / Math.pow(1 + inf, ytr) : retBal;
-  var isSingle    = radio("relStatus") !== "couple";
-  var isHomeowner = radio("homeOwn") !== "no";
-  var pt          = pen ? calcAgePension(retireBal, isSingle, isHomeowner) : 0;
+  var pt = 0;
   var nd      = dw > pt ? dw - pt : 0;
   var ry      = Math.floor(le - ra);
   var rb      = retBal;
@@ -467,26 +405,18 @@ function calc() {
   set("rGrowth",        fmt(dispGrw));
   set("rDrawdownAmt",   fmt(dw) + "/yr");
   document.getElementById("rDrawdownInflSub").textContent = "Adjusts +" + (inf*100).toFixed(1) + "%/yr with inflation";
-  set("rPensionAmt",    pen ? fmt(pt) + "/yr" : "Not included");
-  if (document.getElementById("rPensionSub")) {
-    document.getElementById("rPensionSub").textContent = !pen ? "" : pt > 0
-      ? "Est. based on super balance only"
-      : "Balance exceeds assets test threshold";
-  }
-  var pb = document.getElementById("pensionBox"); if (pb) pb.style.display = pen ? "block" : "none";
   document.getElementById("amortBody").innerHTML = rows || "<tr><td colspan=\"6\" style=\"text-align:center;color:var(--txl);padding:14px\">No results yet</td></tr>";
   // Deflate chart arrays when Real $ mode is active
   var chartBArr = bArr, chartDArr = dArr, chartCArr = cArr;
   if (im === "real" && inf > 0) {
     chartBArr = bArr.map(function(v, i) {
-      return v === null ? null : Math.round(v / Math.pow(1 + inf, i + 1));
+      return v === null ? null : Math.round(v / Math.pow(1 + inf, i));
     });
     chartCArr = cArr.map(function(v, i) {
-      return v === null ? null : Math.round(v / Math.pow(1 + inf, i + 1));
+      return v === null ? null : Math.round(v / Math.pow(1 + inf, i));
     });
     chartDArr = dArr.map(function(v, i) {
-      var yearsTotal = i + 1;
-      return v === null ? null : Math.round(v / Math.pow(1 + inf, yearsTotal));
+      return v === null ? null : Math.round(v / Math.pow(1 + inf, i));
     });
   }
   drawChart(labels, chartBArr, chartDArr, chartCArr);
@@ -533,11 +463,6 @@ function toggleVol() {
   document.getElementById("volContribLabel").textContent = f === "monthly" ? "Monthly Voluntary Contribution" : "Annual Voluntary Contribution";
 }
 
-function togglePension() {
-  var show = radio("pension") === "yes";
-  document.getElementById("pensionOptions").style.display = show ? "block" : "none";
-  calc();
-}
 
 function toggleInflMode() {
   var real = radio("inflMode") === "real";
@@ -553,8 +478,7 @@ function resetAll() {
   for (var k in d) document.getElementById(k).value = d[k];
   document.getElementById("volNone").checked = true;
   document.getElementById("inflNominal").checked = true;
-  document.getElementById("pensionNo").checked = true;
-  toggleVol(); togglePension(); toggleInflMode(); var ri=document.getElementById("retireInfo"); if(ri) ri.style.display="none"; var ril=document.getElementById("retireInfoLeft"); if(ril) ril.style.display="none"; calc();
+  toggleVol(); toggleInflMode(); var ri=document.getElementById("retireInfo"); if(ri) ri.style.display="none"; var ril=document.getElementById("retireInfoLeft"); if(ril) ril.style.display="none"; calc();
 }
 
 function dlCSV(rows, fname) {
@@ -575,9 +499,6 @@ function dlCSV(rows, fname) {
 ["inflNominal","inflReal"].forEach(function(id) {
   document.getElementById(id).addEventListener("change", function() { toggleInflMode(); calc(); });
 });
-["pensionYes","pensionNo"].forEach(function(id) {
-  document.getElementById(id).addEventListener("change", function() { togglePension(); calc(); });
-});
 document.getElementById("btnReset").addEventListener("click", resetAll);
 document.getElementById("btnStartOver").addEventListener("click", resetAll);
 document.getElementById("btnExportSummary").addEventListener("click",  function() { dlCSV(summaryRows,  "super-summary.csv"); });
@@ -593,7 +514,7 @@ document.getElementById("btnSaveSnapshot").addEventListener("click", function() 
 });
 
 // Collapsibles
-[["fundBtn","fundBody"],["incomeBtn","incomeBody"]].forEach(function(p) {
+[["fundBtn","fundBody"]].forEach(function(p) {
   var btn = document.getElementById(p[0]), body = document.getElementById(p[1]);
   btn.addEventListener("click", function() {
     var open = btn.getAttribute("aria-expanded") === "true";
@@ -613,7 +534,6 @@ document.getElementById("amortToggle").addEventListener("click", function() {
 
 // Init
 toggleVol();
-togglePension();
 toggleInflMode();
 calc();
 </script>
