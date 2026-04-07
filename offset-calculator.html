@@ -26,11 +26,8 @@ body{
   border-bottom:1px solid rgba(255,255,255,.10);
   box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0;
 }
-.topbar-logo a{
-  display:flex;align-items:center;justify-content:center;
-  width:40px;height:40px;background:rgba(255,255,255,.15);
-  border-radius:10px;color:#fff;text-decoration:none;
-}
+.topbar-logo a{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:#546e7a;color:#fff;text-decoration:none;box-shadow:0 8px 20px rgba(84,110,122,.35);flex-shrink:0}
+.topbar-logo a svg{width:22px;height:22px;fill:#fff}
 .topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
 .topbar-title{color:#fff;font-size:1rem;font-weight:700}
 .topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px}
@@ -216,10 +213,7 @@ html,body{overflow-x:hidden;width:100%;max-width:100%}
 <div class="topbar">
   <div class="topbar-logo">
     <a href="index.html" title="Back to calculators">
-      <!-- Offset account icon in #546e7a to match index.html card -->
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="#546e7a">
-        <path d="M4 10v7h3v-7H4zm6.5 0v7h3v-7h-3zM2 22h19v-3H2v3zm15-12v7h3v-7h-3zM11.5 1L2 6v2h19V6l-9.5-5z"/>
-      </svg>
+      <svg viewBox="0 0 24 24"><path d="M17 12c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.24-5 5-5 5 2.24 5 5zm-5-7A7 7 0 1 0 12 19 7 7 0 0 0 12 5zm-1 3v4l3.28 1.97.72-1.21-2.75-1.63V8H11zm9.78 2.61l-1.42-1.42-1.4 1.42 1.42 1.42 1.4-1.42zM3.64 10.19L2.22 11.61l1.4 1.42 1.42-1.42-1.4-1.42zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
     </a>
   </div>
   <div class="topbar-divider"></div>
@@ -248,7 +242,7 @@ html,body{overflow-x:hidden;width:100%;max-width:100%}
     <div class="container">
       <div class="layout">
 
-        <!-- LEFT INPUTS -->
+        <!-- LEFT: INPUTS -->
         <div>
           <div class="card">
             <div class="card-header-row">
@@ -338,7 +332,7 @@ html,body{overflow-x:hidden;width:100%;max-width:100%}
           </div>
         </div>
 
-        <!-- RIGHT RESULTS -->
+        <!-- RIGHT: RESULTS -->
         <div>
           <div class="card">
             <h2>Results</h2>
@@ -401,8 +395,14 @@ html,body{overflow-x:hidden;width:100%;max-width:100%}
                 <canvas id="myChart" height="140"></canvas>
               </div>
               <div class="chart-legend">
-                <div class="chart-legend-item"><div class="chart-swatch" style="background:#2a9d67"></div>With Offset</div>
-                <div class="chart-legend-item"><div class="chart-swatch" style="background:#e66414"></div>Without Offset</div>
+                <div class="chart-legend-item">
+                  <div class="chart-swatch" style="background:rgba(230,100,20,1)"></div>
+                  Without Offset
+                </div>
+                <div class="chart-legend-item">
+                  <div class="chart-swatch" style="background:rgba(42,157,103,1)"></div>
+                  With Offset
+                </div>
               </div>
             </div>
 
@@ -550,40 +550,20 @@ function drawChart(withRows,noRows,P,yrs,freq){
   lineChart=new Chart(ctx,{
     type:'line',
     data:{labels:labels,datasets:[
-      {
-        label:'With Offset',
-        data:withDebt,
-        borderColor:'#2a9d67',
-        backgroundColor:'#2a9d67',
-        fill:'origin',
-        tension:0.4,
-        pointRadius:3,
-        pointHoverRadius:6,
-        pointBackgroundColor:'#2a9d67',
-        pointBorderColor:'#fff',
-        pointBorderWidth:1.5,
-        borderWidth:2.5
-      },
-      {
-        label:'Without Offset',
-        data:noDebt,
-        borderColor:'#e66414',
-        backgroundColor:'#e66414',
-        fill:'origin',
-        tension:0.4,
-        pointRadius:3,
-        pointHoverRadius:6,
-        pointBackgroundColor:'#e66414',
-        pointBorderColor:'#fff',
-        pointBorderWidth:1.5,
-        borderWidth:2,
-        borderDash:[5,3]
-      }
+      {label:'Without Offset',data:noDebt,borderColor:'rgba(230,100,20,1)',backgroundColor:'rgba(230,100,20,1)',fill:'origin',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2,order:2},
+      {label:'With Offset',data:withDebt,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,1)',fill:'-1',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5,order:1}
     ]},
     options:{
-      responsive:true,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(30,20,50,0.92)',titleColor:'#fff',bodyColor:'rgba(255,255,255,0.88)',padding:11,cornerRadius:8,
-        callbacks:{label:function(item){return ' '+item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');}}}},
+      responsive:true,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(30,20,10,.93)',titleColor:'#fff',
+          bodyColor:'rgba(255,255,255,.88)',padding:11,cornerRadius:8,
+          callbacks:{label:function(item){return ' '+item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');}}
+        }
+      },
       scales:{
         x:{grid:{display:false},ticks:{font:{size:10},color:'#6c7a89',maxTicksLimit:16}},
         y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#6c7a89',callback:function(v){return '$'+(v/1000).toFixed(0)+'k';}}}
@@ -632,10 +612,17 @@ function calculate(){
   g('rIntNo').textContent=fmt0(totIntNo);
   g('rSaved').textContent=fmt0(saved);
 
-  if(offset>0){g('bnOffsetAmt').textContent=fmt0(offset);g('bnSaved').textContent=fmt0(saved);g('bnTime').textContent=tsDiff;g('bannerSaving').style.display='';}
-  else g('bannerSaving').style.display='none';
-  if(contrib>0){g('bnContrib').textContent=fmt0(contrib);g('bannerContrib').style.display='';}
-  else g('bannerContrib').style.display='none';
+  if(offset>0){
+    g('bnOffsetAmt').textContent=fmt0(offset);
+    g('bnSaved').textContent=fmt0(saved);
+    g('bnTime').textContent=tsDiff;
+    g('bannerSaving').style.display='';
+  } else g('bannerSaving').style.display='none';
+
+  if(contrib>0){
+    g('bnContrib').textContent=fmt0(contrib);
+    g('bannerContrib').style.display='';
+  } else g('bannerContrib').style.display='none';
 
   if(sv){
     var pts=sv.split('-');
@@ -697,7 +684,11 @@ function doReset(){
 g('btnReset1').addEventListener('click',doReset);
 g('btnReset2').addEventListener('click',doReset);
 
-function dlCSV(name,content){var blob=new Blob([content],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();}
+function dlCSV(name,content){
+  var blob=new Blob([content],{type:'text/csv'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=name;a.click();
+}
 g('btnCSV').addEventListener('click',function(){
   var P=g('fLoan').value,R=g('fRate').value,T=g('fTerm').value;
   if(!P||!R||!T) return;
@@ -713,7 +704,8 @@ g('btnSchedCSV').addEventListener('click',function(){
 });
 
 ['fLoan','fRate','fTerm','fOffset','fContrib','fStart'].forEach(function(id){
-  g(id).addEventListener('input',calculate);g(id).addEventListener('change',calculate);
+  g(id).addEventListener('input',calculate);
+  g(id).addEventListener('change',calculate);
 });
 document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventListener('change',calculate);});
 
@@ -721,7 +713,10 @@ document.addEventListener('DOMContentLoaded',function(){
   var now=new Date();
   g('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
   calculate();
-  if(window.innerWidth<900){g('addlBody').classList.add('collapsed');g('addlBtn').setAttribute('aria-expanded','false');}
+  if(window.innerWidth<900){
+    g('addlBody').classList.add('collapsed');
+    g('addlBtn').setAttribute('aria-expanded','false');
+  }
 });
 </script>
 </body>
