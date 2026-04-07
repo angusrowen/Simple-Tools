@@ -2,93 +2,68 @@
 <html lang="en-AU">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
 <title>Buy vs Invest Calculator – Australian Finance Tools</title>
-<script>
-var isMobile = window.innerWidth < 768 || navigator.maxTouchPoints > 0 && window.innerWidth < 1024;
-if (isMobile) { window.adsbygoogle = window.adsbygoogle || []; window.adsbygoogle.loaded = true; }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
-:root {
-  --dk:#2d3a42; --nv:#3e5f75; --gr:#2a9d67; --grl:#e7f8ef;
-  --bg:#f5f2ec; --card:#fffdfa; --bdr:#ddd7cf;
-  --tx:#22313f; --txl:#6c7a89; --red:#e53935;
-  --bl:#3f7fb5; --bll:#edf5fb; --amb:#b6862c; --aml:#faf2df;
-  --accent:#c0392b; --accent-bg:#fdecea;
+:root{
+  --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
+  --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
+  --tx:#22313f;--txl:#6c7a89;--red:#e53935;
+  --bl:#3f7fb5;--bll:#edf5fb;--amb:#b6862c;--aml:#faf2df;
+  --accent:#c0392b;--accent-bg:#fdecea;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{overflow-x:hidden}body{overflow-x:hidden}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background:linear-gradient(180deg,#ece8e0 0,var(--bg) 200px,var(--bg) 100%);
-  color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column;
-}
-/* ── Topbar ── */
-.topbar{
-  background:linear-gradient(180deg,#4d7289 0,var(--nv) 100%);
-  padding:18px 32px;display:flex;align-items:center;gap:16px;
-  border-bottom:1px solid rgba(255,255,255,.10);
-  box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0;
-}
-.topbar-logo a{
-  display:flex;align-items:center;justify-content:center;
-  width:42px;height:42px;border-radius:14px;
-  background:var(--accent);color:#fff;text-decoration:none;
-  box-shadow:0 8px 20px rgba(192,57,43,.32);flex-shrink:0;
-}
-.topbar-logo a svg{width:22px;height:22px;fill:#fff;}
+html,body{overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+/* Topbar */
+.topbar{background:linear-gradient(180deg,#4d7289 0,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
+.topbar-logo a{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:var(--accent);color:#fff;text-decoration:none;box-shadow:0 8px 20px rgba(192,57,43,.32);flex-shrink:0}
+.topbar-logo a svg{width:22px;height:22px;fill:#fff}
 .topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
 .topbar-title{color:#fff;font-size:1rem;font-weight:700}
-.topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px;line-height:1.35}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-/* ── Page wrapper ── */
-.page-wrapper{
-  display:flex;justify-content:center;align-items:stretch;
-  gap:0;width:100%;overflow:hidden;position:relative;min-height:100vh;
-}
-/* ── Side rails ── */
+.topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px}
+.topbar-right{margin-left:auto}
+/* Page wrapper */
+.page-wrapper{display:flex;justify-content:center;width:100%;overflow:hidden;position:relative;min-height:100vh}
+/* Side rails */
 .side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;position:absolute;top:120px;z-index:10}
 .side-rail.left{left:0}.side-rail.right{right:0}
-.side-rail-inner{position:sticky;top:80px;padding:8px;display:flex;flex-direction:column;align-items:center}
-.rail-ad-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:7px 0 4px;border-bottom:1px solid var(--bdr);margin-bottom:8px;width:100%}
-.rail-ad-inner{display:flex;justify-content:center;align-items:center}
+.side-rail-inner{position:sticky;top:80px;padding:8px}
 .rail-ad-unit{background:var(--card);border:1px solid var(--bdr);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(45,50,40,.06)}
-@media(min-width:1400px){
-  .side-rail{display:flex;flex-direction:column}
-  .main-wrapper{padding-left:200px;padding-right:200px}
-}
-/* ── Main wrapper ── */
-.main-wrapper{background:transparent;padding:24px 32px;flex:1;min-width:0;overflow-x:hidden;max-width:100%;box-sizing:border-box;width:100%}
-.container{max-width:1500px;margin:0 auto;width:100%;min-width:0;overflow-x:hidden}
-/* ── Layout ── */
-.layout{display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:24px;align-items:start;min-width:0}
+.rail-ad-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:7px 0 4px;border-bottom:1px solid var(--bdr)}
+@media(min-width:1400px){.side-rail{display:flex;flex-direction:column}.main-wrapper{padding-left:200px;padding-right:200px}}
+/* Main */
+.main-wrapper{padding:24px 32px;flex:1;min-width:0;overflow-x:hidden;width:100%;box-sizing:border-box}
+.container{max-width:1500px;margin:0 auto;width:100%;box-sizing:border-box}
+/* Layout */
+.layout{display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:24px;align-items:start}
 @media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
-/* ── Card ── */
-.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06);min-width:0;box-sizing:border-box;max-width:100%}
+/* Card */
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06);box-sizing:border-box;width:100%}
 .card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
 .card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
 .card-header-row h2{margin:0;padding:0;border:none}
-/* ── Section labels ── */
+/* Section label */
 .section-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gr);margin-top:16px;margin-bottom:10px;padding-top:12px;border-top:1px solid var(--bdr)}
 .section-label.first{margin-top:0;padding-top:0;border-top:none}
-/* ── Fields ── */
-.field{margin-bottom:14px}
-.field label{display:block;font-size:.8rem;font-weight:600;margin-bottom:4px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
+/* Fields */
+.field{margin-bottom:14px;min-width:0}
+.field label{display:block;font-size:.76rem;font-weight:600;margin-bottom:4px;color:var(--txl);text-transform:uppercase;letter-spacing:.05px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;line-height:1.1}
 .field-hint{font-size:.75rem;color:var(--txl);margin-top:2px}
-.field input,.field select{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s;font-family:inherit}
-.field input:focus,.field select:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
+.field select{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s;font-family:inherit}
+.field select:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
 .inline-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-/* ── Input wrap ── */
-.input-wrap{position:relative;display:flex;align-items:center}
-.input-wrap .prefix,.input-wrap .suffix{position:absolute;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;user-select:none;z-index:1}
-.input-wrap .prefix{left:10px}.input-wrap .suffix{right:10px}
-.input-wrap input{width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s;font-family:inherit}
-.input-wrap input.has-prefix{padding-left:22px}.input-wrap input.has-suffix{padding-right:28px}
+/* Input wrap — matches super calc pattern exactly */
+.input-wrap{position:relative;display:flex;align-items:center;width:100%}
+.input-wrap .prefix{position:absolute;left:10px;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;user-select:none;z-index:1;line-height:1}
+.input-wrap .suffix{position:absolute;right:10px;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;user-select:none;z-index:1;line-height:1}
+.input-wrap input{width:100%;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s;font-family:inherit;box-sizing:border-box}
+.input-wrap input.has-prefix{padding:9px 12px 9px 22px}
+.input-wrap input.has-suffix{padding:9px 28px 9px 12px}
+.input-wrap input:not(.has-prefix):not(.has-suffix){padding:9px 12px}
 .input-wrap input:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:.4}
-input[type=number]::placeholder{color:#c5bdb2;font-style:normal}
-/* ── Toggle ── */
+/* Toggle */
 .toggle-group{margin-bottom:14px}
 .toggle-label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
 .toggle-switch{display:flex;border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
@@ -96,100 +71,109 @@ input[type=number]::placeholder{color:#c5bdb2;font-style:normal}
 .toggle-switch label{flex:1;text-align:center;padding:8px 10px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fffdf8;color:var(--txl);transition:all .15s;border-right:1px solid var(--bdr)}
 .toggle-switch label:last-of-type{border-right:none}
 .toggle-switch input[type=radio]:checked+label{background:var(--gr);color:#fff}
-/* ── Banners ── */
+/* Banners */
 .derived-info{background:var(--grl);border:1px solid var(--gr);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.84rem;color:var(--tx);display:none}
-.derived-info span{font-weight:700;color:var(--dk)}
-/* ── Collapsible ── */
-.collapsible-card .collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0;margin-bottom:0;text-align:left;gap:10px}
+/* Collapsible */
+.collapsible-card .collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0;text-align:left;gap:10px;font-family:inherit}
 .collapsible-header h2{color:var(--dk);margin:0;padding:0;border:none}
 .collapsible-header:hover h2{color:var(--gr)}
 .collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center}
 .collapsible-header[aria-expanded="true"] .collapse-icon{transform:rotate(180deg)}
-.collapsible-body{overflow:hidden;transition:max-height .3s ease,opacity .25s ease;max-height:4000px;opacity:1}
+.collapsible-body{overflow:hidden;transition:max-height .35s ease,opacity .25s ease;max-height:4000px;opacity:1}
 .collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
 .collapsible-header{padding-bottom:8px;border-bottom:2px solid var(--gr);margin-bottom:16px}
 .collapsible-header[aria-expanded="false"]{border-bottom-color:var(--bdr);margin-bottom:0}
-/* ── Results grid ── */
-.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+/* Results */
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
 .result-box{background:#f8f5ef;border:1px solid var(--bdr);border-radius:12px;padding:12px 14px}
-.result-box.highlight-green{background:var(--grl);border-color:var(--gr)}
-.result-box.highlight-red{background:var(--accent-bg);border-color:var(--accent)}
-.result-box.highlight-blue{background:var(--bll);border-color:var(--bl)}
-.result-box .label{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);font-weight:600;margin-bottom:2px}
-.result-box .value{font-size:1.15rem;font-weight:700;color:var(--dk)}
-.result-box.highlight-green .value{color:var(--gr);font-size:1.3rem}
-.result-box.highlight-red   .value{color:var(--accent);font-size:1.3rem}
-.result-box.highlight-blue  .value{color:var(--bl);font-size:1.3rem}
-/* ── Winner badge ── */
+.result-box.hl-green{background:var(--grl);border-color:var(--gr)}
+.result-box.hl-blue{background:var(--bll);border-color:var(--bl)}
+.result-box.hl-red{background:var(--accent-bg);border-color:var(--accent)}
+.result-box .lbl{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);font-weight:600;margin-bottom:2px}
+.result-box .val{font-size:1.15rem;font-weight:700;color:var(--dk)}
+.result-box.hl-green .val{color:var(--gr);font-size:1.3rem}
+.result-box.hl-blue .val{color:var(--bl);font-size:1.3rem}
+/* Winner badge */
 .winner-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:16px}
 .winner-buy{background:var(--grl);color:var(--gr);border:1px solid var(--gr)}
 .winner-invest{background:var(--bll);color:var(--bl);border:1px solid var(--bl)}
 .winner-tie{background:var(--aml);color:var(--amb);border:1px solid var(--amb)}
-/* ── Section title ── */
+/* Section title */
 .section-title{font-size:.85rem;font-weight:700;margin:20px 0 8px;color:var(--dk)}
-/* ── Tables ── */
+/* Chart */
+.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
+.chart-wrap{position:relative;width:100%;height:280px}
+.chart-legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--txl)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+/* Amort toggle button */
+.amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:7px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s;font-family:inherit}
+.amort-btn:hover{border-color:var(--gr);color:var(--gr)}
+.amort-btn svg{width:13px;height:13px;fill:currentColor}
+.amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
+/* Amort table */
+.amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
+.amort-table th:first-child{text-align:left}
+.amort-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums;text-align:right}
+.amort-table td:first-child{text-align:left;font-weight:600}
+.amort-table tr:last-child td{border-bottom:none}
+.amort-table .positive-val{color:var(--gr)!important;font-weight:700!important}
+.amort-table .negative-val{color:var(--accent)!important;font-weight:700!important}
+/* Scenario summary table */
 .combined-table{width:100%;border-collapse:collapse;font-size:.88rem}
 .combined-table th{text-align:left;padding:8px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
 .combined-table th:not(:first-child){text-align:right}
-.combined-table td{padding:8px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
+.combined-table td{padding:8px 10px;border-bottom:1px solid var(--bdr)}
 .combined-table td:not(:first-child){text-align:right}
 .combined-table tr:last-child td{border-bottom:none}
-.combined-table .total-row td{font-weight:700;border-top:2px solid var(--dk);border-bottom:none}
-.combined-table .positive-val{color:var(--gr)!important;font-weight:700!important}
-.combined-table .negative-val{color:var(--accent)!important;font-weight:700!important}
-/* ── Chart ── */
-.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
-.chart-wrap{background:#f8f5ef;border:1px solid var(--bdr);border-radius:14px;padding:14px;overflow:hidden}
-.chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;justify-content:center}
-.chart-legend-item{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--tx)}
-.chart-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0}
-/* ── Table scroll ── */
-.table-scroll-wrap{max-height:340px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:8px}
-/* ── Actions ── */
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .15s;font-family:inherit}
+.btn svg{width:14px;height:14px;fill:currentColor}
+.btn-green{background:var(--gr);color:#fff}.btn-green:hover{background:#228052}
+.btn-navy{background:var(--nv);color:#fff}.btn-navy:hover{background:#2d5268}
+/* Actions bar */
 .actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);flex-wrap:wrap}
-.btn-action{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;letter-spacing:.3px;font-family:inherit}
-.btn-action svg{width:14px;height:14px;fill:currentColor}
-.btn-reset{background:var(--nv);color:#fff}.btn-reset:hover{background:#2d5268}
-.btn-export{background:var(--gr);color:#fff}.btn-export:hover{background:#228052}
-.note{font-size:.78rem;color:var(--txl);margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr);line-height:1.5}
-/* ── Mobile mid ad ── */
-.mobile-ad-slot{display:none;width:100%;justify-content:center;align-items:center;padding:12px 0;margin:4px 0}
-.mobile-ad-slot .ad-slot-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;margin-bottom:6px}
+/* Disclaimer */
+.disclaimer{font-size:.75rem;color:var(--txl);line-height:1.6;padding:10px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--bdr);margin-top:16px}
+/* Mobile mid ad */
+.mobile-ad-slot{display:none;width:100%;justify-content:center;padding:12px 0;margin:4px 0}
 .mobile-ad-inner{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:10px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
-@media(max-width:899px){.mobile-ad-slot{display:flex;flex-direction:column;overflow-x:hidden;width:100%}}
-/* ── Footer ── */
-.ft{background:linear-gradient(180deg,#4d7289 0,var(--nv) 100%);padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center}
+.ad-slot-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;margin-bottom:6px}
+@media(max-width:899px){.mobile-ad-slot{display:flex;flex-direction:column}}
+/* Footer */
+.ft{background:linear-gradient(180deg,#4d7289 0,var(--nv) 100%);padding:16px 32px;text-align:center;margin-top:auto}
 .ft span,.ft a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem}
 .ft a:hover{color:#fff}
-.hidden{display:none!important}
-/* ── Suppress all ads on mobile/touch ── */
+/* Suppress ads on mobile/touch */
 @media(max-width:768px){
-  ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,[data-ad-client],[data-ad-slot]{display:none!important;width:0!important;height:0!important;max-width:0!important;overflow:hidden!important;visibility:hidden!important;position:absolute!important;pointer-events:none!important}
-  .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}
-  .combined-table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;font-size:.78rem!important;max-width:100%!important}
+  ins.adsbygoogle,.side-rail{display:none!important}
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important;margin-bottom:0!important}
 }
 @media(max-width:1024px) and (pointer:coarse){
-  ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,[data-ad-client],[data-ad-slot]{display:none!important;width:0!important;height:0!important;max-width:0!important;overflow:hidden!important;visibility:hidden!important;position:absolute!important;pointer-events:none!important}
+  ins.adsbygoogle,.side-rail{display:none!important}
 }
+/* Desktop label size */
+@media(min-width:1001px){
+  .field label{font-size:.72rem}
+  .field-hint{font-size:.72rem}
+}
+/* Mobile */
 @media(max-width:480px){
-  .main-wrapper{padding:12px!important;box-sizing:border-box!important}
+  .main-wrapper{padding:12px!important}
   .layout{grid-template-columns:1fr!important;gap:10px!important}
   .card{padding:14px!important}
   .topbar{padding:8px 14px!important}
-  .toggle-switch label{font-size:.72rem!important;padding:6px 4px!important}
-  .field input,.field select{font-size:.88rem!important;padding:7px 8px!important}
   .inline-fields{grid-template-columns:1fr!important}
-  .results-grid{grid-template-columns:1fr 1fr!important;gap:6px!important}
-  .ft{padding:10px 14px!important;font-size:.7rem!important}
+  .results-grid{grid-template-columns:1fr 1fr!important;gap:6px!important;margin-bottom:0!important}
+  .ft{padding:10px 14px!important}
 }
-@media(min-width:481px) and (max-width:768px){
-  .main-wrapper{padding:14px 18px!important;box-sizing:border-box!important}
+@media(min-width:481px) and (max-width:1000px){
+  .main-wrapper{padding:14px 18px!important}
   .layout{grid-template-columns:1fr!important}
 }
-ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner{max-width:100%!important;overflow:hidden!important}
 </style>
-<!-- Google AdSense -->
-<script>if(window.innerWidth>768&&navigator.maxTouchPoints===0)document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"><\/scr'+'ipt>');</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -213,14 +197,11 @@ ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner
   <!-- Left rail -->
   <div class="side-rail left">
     <div class="side-rail-inner">
-      <div class="rail-ad-label">Advertisement</div>
-      <div class="rail-ad-inner">
-        <div class="rail-ad-unit">
-          <div class="rail-ad-label">Advertisement</div>
-          <div class="rail-ad-inner" style="padding:8px;display:flex;justify-content:center;align-items:center;min-height:620px">
-            <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-          </div>
+      <div class="rail-ad-unit">
+        <div class="rail-ad-label">Advertisement</div>
+        <div style="padding:8px;display:flex;justify-content:center;min-height:620px">
+          <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+          <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
         </div>
       </div>
     </div>
@@ -230,16 +211,15 @@ ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner
   <div class="container">
   <div class="layout">
 
-  <!-- ══════════════════ LEFT PANEL ══════════════════ -->
+  <!-- ══════ LEFT PANEL ══════ -->
   <div>
 
     <!-- Property Details -->
     <div class="card">
       <div class="card-header-row">
         <h2>Property Details</h2>
-        <button class="btn-action btn-reset" type="button" onclick="resetAll()">
-          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-          Reset
+        <button type="button" class="btn btn-navy" id="btnReset">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Reset
         </button>
       </div>
 
@@ -320,16 +300,16 @@ ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner
           <div class="input-wrap"><input type="number" id="fPropertyGrowth" class="has-suffix" value="4.00" min="0" max="20" step="0.1"><span class="suffix">%</span></div>
         </div>
         <div class="field">
-          <label for="fSellCosts">Selling Costs</label>
-          <div class="input-wrap"><input type="number" id="fSellCosts" class="has-suffix" value="2.5" min="0" max="10" step="0.1"><span class="suffix">%</span></div>
-          <div class="field-hint">Agent + legal fees at sale</div>
+          <label for="fAgentFee">Property Agent Fee</label>
+          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fAgentFee" class="has-prefix" placeholder="0" min="0" step="100"></div>
+          <div class="field-hint">Annual fee if using a property manager</div>
         </div>
       </div>
     </div>
 
-    <!-- Renting & Investment -->
+    <!-- Renting & Investment (collapsible) -->
     <div class="card collapsible-card">
-      <button class="collapsible-header" id="rentInvBtn" aria-expanded="true" aria-controls="rentInvBody" type="button">
+      <button type="button" class="collapsible-header" id="rentInvBtn" aria-expanded="true" aria-controls="rentInvBody">
         <h2>Renting &amp; Investment</h2>
         <span class="collapse-icon">
           <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 8 10 13 15 8"/></svg>
@@ -403,7 +383,7 @@ ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner
 
   </div><!-- end left -->
 
-  <!-- Mobile mid-page ad -->
+  <!-- Mobile mid ad -->
   <div class="mobile-ad-slot">
     <div class="mobile-ad-inner">
       <div class="ad-slot-label">Advertisement</div>
@@ -412,81 +392,84 @@ ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner
     </div>
   </div>
 
-  <!-- ══════════════════ RIGHT PANEL ══════════════════ -->
+  <!-- ══════ RIGHT PANEL ══════ -->
   <div>
     <div class="card">
       <h2>Results</h2>
       <div id="winnerBadge"></div>
 
       <div class="results-grid">
-        <div class="result-box highlight-green">
-          <div class="label">Buy: Net Wealth</div>
-          <div class="value" id="rBuyWealth">—</div>
+        <div class="result-box hl-green">
+          <div class="lbl">Buy: Net Wealth</div>
+          <div class="val" id="rBuyWealth">—</div>
         </div>
-        <div class="result-box highlight-blue">
-          <div class="label">Rent &amp; Invest: Net Wealth</div>
-          <div class="value" id="rInvWealth">—</div>
+        <div class="result-box hl-blue">
+          <div class="lbl">Rent &amp; Invest: Net Wealth</div>
+          <div class="val" id="rInvWealth">—</div>
         </div>
         <div class="result-box" id="rboxDiff">
-          <div class="label">Difference</div>
-          <div class="value" id="rDiff">—</div>
+          <div class="lbl">Difference</div>
+          <div class="val" id="rDiff">—</div>
         </div>
         <div class="result-box">
-          <div class="label">Property Value (end)</div>
-          <div class="value" id="rPropValue">—</div>
+          <div class="lbl">Property Value (end)</div>
+          <div class="val" id="rPropValue">—</div>
         </div>
         <div class="result-box">
-          <div class="label">Investment Portfolio (end)</div>
-          <div class="value" id="rPortfolio">—</div>
+          <div class="lbl">Investment Portfolio (end)</div>
+          <div class="val" id="rPortfolio">—</div>
         </div>
         <div class="result-box">
-          <div class="label">Monthly Mortgage</div>
-          <div class="value" id="rRepayment">—</div>
+          <div class="lbl">Monthly Mortgage</div>
+          <div class="val" id="rRepayment">—</div>
         </div>
         <div class="result-box">
-          <div class="label">Total Mortgage Paid</div>
-          <div class="value" id="rMortgagePaid">—</div>
+          <div class="lbl">Total Mortgage Paid</div>
+          <div class="val" id="rMortgagePaid">—</div>
         </div>
         <div class="result-box">
-          <div class="label">Total Rent Paid</div>
-          <div class="value" id="rRentPaid">—</div>
+          <div class="lbl">Total Rent Paid</div>
+          <div class="val" id="rRentPaid">—</div>
         </div>
         <div class="result-box">
-          <div class="label">Total Ownership Costs</div>
-          <div class="value" id="rOwnerCosts">—</div>
+          <div class="lbl">Total Ownership Costs</div>
+          <div class="val" id="rOwnerCosts">—</div>
         </div>
       </div>
 
       <!-- Chart -->
       <div class="chart-section">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px">
           <div class="section-title" style="margin:0">Wealth Comparison Over Time</div>
           <div style="font-size:.74rem;color:var(--txl);font-style:italic">ℹ Hover for details</div>
         </div>
-        <div class="chart-wrap">
-          <canvas id="wealthChart" height="160"></canvas>
-        </div>
         <div class="chart-legend">
-          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(42,157,103,0.85)"></div>Buy: Net Wealth</div>
-          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(63,127,181,0.85)"></div>Rent &amp; Invest: Net Wealth</div>
-          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(192,57,43,0.45);border:1px dashed rgba(192,57,43,0.7)"></div>Property Value</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,1)"></div>Buy: Net Wealth</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(63,127,181,1)"></div>Rent &amp; Invest: Net Wealth</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(192,57,43,0.5);border:1px dashed rgba(192,57,43,0.7)"></div>Property Value</div>
         </div>
+        <div class="chart-wrap"><canvas id="wealthChart"></canvas></div>
       </div>
 
-      <!-- Year-by-year table -->
-      <div class="section-title">Year-by-Year Comparison</div>
-      <div class="table-scroll-wrap">
-        <table class="combined-table">
-          <thead>
-            <tr>
-              <th>Year</th><th>Property Value</th><th>Buy Net Wealth</th>
-              <th>Invest Portfolio</th><th>Rent+Inv Net Wealth</th><th>Ahead By</th>
-            </tr>
-          </thead>
-          <tbody id="compBody">
-            <tr><td colspan="6" style="color:var(--txl);font-style:italic;text-align:center;padding:18px">Enter details to see results</td></tr>
-          </tbody>
-        </table>
+      <!-- Year-by-year toggle -->
+      <button type="button" class="amort-btn" id="amortToggle">
+        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+        Show Year-by-Year Schedule
+      </button>
+      <div id="amortSection" style="display:none">
+        <div class="amort-wrap">
+          <table class="amort-table">
+            <thead>
+              <tr>
+                <th>Year</th><th>Property Value</th><th>Buy Net Wealth</th>
+                <th>Invest Portfolio</th><th>Rent+Inv Net Wealth</th><th>Ahead By</th>
+              </tr>
+            </thead>
+            <tbody id="compBody">
+              <tr><td colspan="6" style="color:var(--txl);font-style:italic;text-align:center;padding:18px">Enter details to see results</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Scenario summary -->
@@ -498,18 +481,22 @@ ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner
 
       <!-- Actions -->
       <div class="actions-bar">
-        <button class="btn-action btn-export" type="button" onclick="exportCSV()">
-          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
-          Export CSV
+        <button type="button" class="btn btn-green" id="btnExportSummary">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 6h14v2H5z"/></svg>Export Summary CSV
+        </button>
+        <button type="button" class="btn btn-green" id="btnExportSchedule">
+          <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Export Schedule CSV
         </button>
         <div style="flex:1"></div>
-        <button class="btn-action btn-reset" type="button" onclick="resetAll();window.scrollTo({top:0,behavior:'smooth'})">
-          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-          Start Over
+        <button type="button" class="btn btn-navy" id="btnSaveSnapshot">
+          <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>Save File
+        </button>
+        <button type="button" class="btn btn-navy" id="btnStartOver">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Start Over
         </button>
       </div>
 
-      <p class="note">Estimates only. Assumes constant growth rates throughout the analysis period. Property returns are modelled as owner-occupied (no CGT). Investment returns shown after CGT where selected. Does not account for all individual tax circumstances, transaction costs, or market volatility. Not personal financial advice.</p>
+      <div class="disclaimer">Estimates only. Assumes constant growth rates throughout the analysis period. Property returns are modelled as owner-occupied (no CGT). Investment returns shown after CGT where selected. Does not account for all individual tax circumstances, transaction costs, or market volatility. Not personal financial advice.</div>
     </div>
   </div><!-- end right -->
 
@@ -520,14 +507,11 @@ ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner
   <!-- Right rail -->
   <div class="side-rail right">
     <div class="side-rail-inner">
-      <div class="rail-ad-label">Advertisement</div>
-      <div class="rail-ad-inner">
-        <div class="rail-ad-unit">
-          <div class="rail-ad-label">Advertisement</div>
-          <div class="rail-ad-inner" style="padding:8px;display:flex;justify-content:center;align-items:center;min-height:620px">
-            <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-          </div>
+      <div class="rail-ad-unit">
+        <div class="rail-ad-label">Advertisement</div>
+        <div style="padding:8px;display:flex;justify-content:center;min-height:620px">
+          <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+          <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
         </div>
       </div>
     </div>
@@ -535,11 +519,16 @@ ins.adsbygoogle,ins.adsbygoogle iframe,.ad-slot,.mobile-ad-slot,.mobile-ad-inner
 
 </div><!-- page-wrapper -->
 
-<div class="ft"><span>Estimates only — general information, not personal financial advice.</span></div>
+<div class="ft"><span>&copy; 2025 Australian Finance Tools &nbsp;&middot;&nbsp; <a href="Privacy">Privacy</a></span></div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script>
-function fmt$(n){var a=Math.abs(n);return(n<0?'-':'')+'$'+a.toLocaleString('en-AU',{minimumFractionDigits:0,maximumFractionDigits:0});}
-function fmt2(n){return '$'+Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});}
+var wealthChart=null, summaryRows=[], scheduleRows=[];
+
+function n(id){var v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v;}
+function fmt(v){return '$'+Math.round(Math.abs(v)).toLocaleString('en-AU');}
+function fmt2(v){return '$'+Math.abs(v).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,val){var el=document.getElementById(id);if(el)el.textContent=val;}
 
 function estimateStampDuty(p){
   if(p<=16000)return p*0.0125;
@@ -558,34 +547,32 @@ function estimateLMI(loan,price){
   return loan*0.042;
 }
 function calcRepayment(P,annRate,termYrs){
-  var r=annRate/100/12,n=termYrs*12;
-  if(r===0)return P/n;
-  return P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  var r=annRate/100/12,nn=termYrs*12;
+  if(r===0)return P/nn;
+  return P*r*Math.pow(1+r,nn)/(Math.pow(1+r,nn)-1);
 }
 
-var wealthChart=null,csvRows=[];
-
-function calculate(){
-  var price      =parseFloat(document.getElementById('fPrice').value)||0;
-  var deposit    =parseFloat(document.getElementById('fDeposit').value)||0;
-  var stampDuty  =parseFloat(document.getElementById('fStampDuty').value)||0;
-  var convey     =parseFloat(document.getElementById('fConveyancing').value)||0;
-  var inspect    =parseFloat(document.getElementById('fInspections').value)||0;
-  var furnish    =parseFloat(document.getElementById('fFurnishing').value)||0;
-  var rate       =parseFloat(document.getElementById('fRate').value)||0;
-  var term       =parseFloat(document.getElementById('fTerm').value)||30;
-  var council    =parseFloat(document.getElementById('fCouncil').value)||0;
-  var insurance  =parseFloat(document.getElementById('fInsurance').value)||0;
-  var maint      =parseFloat(document.getElementById('fMaintenance').value)||0;
-  var bodyCorp   =parseFloat(document.getElementById('fBodyCorp').value)||0;
-  var propGrowth =parseFloat(document.getElementById('fPropertyGrowth').value)||0;
-  var sellCostPct=parseFloat(document.getElementById('fSellCosts').value)||0;
-  var rent       =parseFloat(document.getElementById('fRent').value)||0;
-  var rentGrowth =parseFloat(document.getElementById('fRentGrowth').value)||0;
-  var rentIns    =parseFloat(document.getElementById('fRentInsurance').value)||0;
-  var invReturn  =parseFloat(document.getElementById('fInvReturn').value)||0;
-  var invFee     =parseFloat(document.getElementById('fInvFee').value)||0;
-  var margTax    =parseFloat(document.getElementById('fMarginalTax').value)||0;
+function calc(){
+  var price      =n('fPrice');
+  var deposit    =n('fDeposit');
+  var stampDuty  =n('fStampDuty');
+  var convey     =n('fConveyancing');
+  var inspect    =n('fInspections');
+  var furnish    =n('fFurnishing');
+  var rate       =n('fRate');
+  var term       =n('fTerm')||30;
+  var council    =n('fCouncil');
+  var insurance  =n('fInsurance');
+  var maint      =n('fMaintenance');
+  var bodyCorp   =n('fBodyCorp');
+  var propGrowth =n('fPropertyGrowth');
+  var agentFee   =n('fAgentFee');
+  var rent       =n('fRent');
+  var rentGrowth =n('fRentGrowth');
+  var rentIns    =n('fRentInsurance');
+  var invReturn  =n('fInvReturn');
+  var invFee     =n('fInvFee');
+  var margTax    =n('fMarginalTax');
   var years      =parseInt(document.getElementById('fYears').value)||20;
   var taxYes     =document.getElementById('taxYes').checked;
   var oppYes     =document.getElementById('oppYes').checked;
@@ -595,22 +582,24 @@ function calculate(){
   var depositPct=(deposit/price*100).toFixed(1);
   document.getElementById('depositHint').textContent=depositPct+'% of purchase price'+(deposit/price>=0.20?' — no LMI required':' — LMI may apply');
   var lmiInfo=document.getElementById('lmiInfo');
-  if(lmi>0){document.getElementById('lmiAmt').textContent=fmt$(lmi);lmiInfo.style.display='block';}
-  else{lmiInfo.style.display='none';}
+  if(lmi>0){document.getElementById('lmiAmt').textContent=fmt(lmi);lmiInfo.style.display='block';}
+  else lmiInfo.style.display='none';
 
   var upfrontOther=convey+inspect+furnish;
   var monthlyRepay=calcRepayment(loan,rate,term);
   var annualRepay=monthlyRepay*12;
-  var annualOwner=council+insurance+maint+bodyCorp;
+  var annualOwner=council+insurance+maint+bodyCorp+agentFee;
   var netInvRate=(invReturn-invFee)/100;
   var investorStart=deposit+(oppYes?stampDuty+upfrontOther:0);
 
   var propValue=price,loanBal=loan,r=rate/100/12;
   var portfolio=investorStart,annualRent=rent*12;
   var totalMortgagePaid=0,totalRentPaid=0,totalOwnerPaid=0;
+
   var labels=[],buyArr=[],invArr=[],propArr=[];
-  csvRows=['Year,Property Value,Mortgage Balance,Buy Net Wealth,Invest Portfolio,Rent+Inv Net Wealth,Difference'];
-  var htmlRows='';
+  var tableRows='';
+  summaryRows=['Year,Property Value,Mortgage Balance,Buy Net Wealth,Invest Portfolio,Rent+Inv Net Wealth,Difference'];
+  scheduleRows=['Year,Property Value,Mortgage Balance,Buy Net Wealth,Invest Portfolio,Rent+Inv Net Wealth,Difference'];
 
   for(var y=1;y<=years;y++){
     for(var m=0;m<12;m++){
@@ -623,10 +612,8 @@ function calculate(){
     }
     propValue*=(1+propGrowth/100);
     totalOwnerPaid+=annualOwner;
-    var saleProceeds=propValue*(1-sellCostPct/100);
-    var buyNetWealth=saleProceeds-loanBal;
-    var annualRentThisYear=annualRent+rentIns;
-    var annualCashFlow=annualRepay+annualOwner-annualRentThisYear;
+    var buyNetWealth=propValue-loanBal;
+    var annualCashFlow=annualRepay+annualOwner-(annualRent+rentIns);
     portfolio=portfolio*(1+netInvRate)+annualCashFlow;
     totalRentPaid+=annualRent;
     annualRent*=(1+rentGrowth/100);
@@ -634,37 +621,57 @@ function calculate(){
     if(taxYes){var gain=Math.max(0,portfolio-investorStart);invNetWealth=portfolio-gain*0.5*(margTax/100);}
     var diff=buyNetWealth-invNetWealth;
     var cls=diff>0?'positive-val':'negative-val';
-    var diffStr=diff>0?'Buy +'+fmt$(diff):'Invest +'+fmt$(Math.abs(diff));
-    labels.push('Yr '+y);buyArr.push(Math.round(buyNetWealth));invArr.push(Math.round(invNetWealth));propArr.push(Math.round(propValue));
-    htmlRows+='<tr><td><strong>'+y+'</strong></td><td>'+fmt$(propValue)+'</td><td>'+fmt$(buyNetWealth)+'</td><td>'+fmt$(portfolio)+'</td><td>'+fmt$(invNetWealth)+'</td><td class="'+cls+'">'+diffStr+'</td></tr>';
-    csvRows.push([y,Math.round(propValue),Math.round(loanBal),Math.round(buyNetWealth),Math.round(portfolio),Math.round(invNetWealth),Math.round(diff)].join(','));
+    var diffStr=diff>0?'Buy +'+fmt(diff):'Invest +'+fmt(Math.abs(diff));
+    labels.push('Yr '+y);
+    buyArr.push(Math.round(buyNetWealth));
+    invArr.push(Math.round(invNetWealth));
+    propArr.push(Math.round(propValue));
+    tableRows+='<tr><td><strong>'+y+'</strong></td><td>'+fmt(propValue)+'</td><td>'+fmt(buyNetWealth)+'</td><td>'+fmt(portfolio)+'</td><td>'+fmt(invNetWealth)+'</td><td class="'+cls+'">'+diffStr+'</td></tr>';
+    scheduleRows.push([y,Math.round(propValue),Math.round(loanBal),Math.round(buyNetWealth),Math.round(portfolio),Math.round(invNetWealth),Math.round(diff)].join(','));
   }
 
   var finalBuy=buyArr[buyArr.length-1],finalInv=invArr[invArr.length-1],finalDiff=finalBuy-finalInv;
   var tie=Math.abs(finalDiff)<1000,buyWins=finalDiff>0;
-  document.getElementById('rBuyWealth').textContent=fmt$(finalBuy);
-  document.getElementById('rInvWealth').textContent=fmt$(finalInv);
-  document.getElementById('rPropValue').textContent=fmt$(propArr[propArr.length-1]);
-  document.getElementById('rPortfolio').textContent=fmt$(portfolio);
-  document.getElementById('rMortgagePaid').textContent=fmt$(totalMortgagePaid);
-  document.getElementById('rRentPaid').textContent=fmt$(totalRentPaid);
-  document.getElementById('rOwnerCosts').textContent=fmt$(totalOwnerPaid);
-  document.getElementById('rRepayment').textContent=fmt2(monthlyRepay)+'/mo';
-  var diffBox=document.getElementById('rboxDiff');
-  diffBox.className='result-box'+(tie?'':buyWins?' highlight-green':' highlight-blue');
-  document.getElementById('rDiff').textContent=tie?'~Even':(buyWins?'Buy +'+fmt$(finalDiff):'Invest +'+fmt$(Math.abs(finalDiff)));
+
+  set('rBuyWealth',fmt(finalBuy));
+  set('rInvWealth',fmt(finalInv));
+  set('rPropValue',fmt(propArr[propArr.length-1]));
+  set('rPortfolio',fmt(portfolio));
+  set('rMortgagePaid',fmt(totalMortgagePaid));
+  set('rRentPaid',fmt(totalRentPaid));
+  set('rOwnerCosts',fmt(totalOwnerPaid));
+  set('rRepayment',fmt2(monthlyRepay)+'/mo');
+
+  var db=document.getElementById('rboxDiff');
+  db.className='result-box'+(tie?'':buyWins?' hl-green':' hl-blue');
+  set('rDiff',tie?'~Even':(buyWins?'Buy +'+fmt(finalDiff):'Invest +'+fmt(Math.abs(finalDiff))));
+
   var badge=document.getElementById('winnerBadge');
   if(tie)badge.innerHTML='<span class="winner-badge winner-tie">⚖ Roughly Equal After '+years+' Years</span>';
   else if(buyWins)badge.innerHTML='<span class="winner-badge winner-buy">🏠 Buying Wins After '+years+' Years</span>';
   else badge.innerHTML='<span class="winner-badge winner-invest">📈 Renting &amp; Investing Wins After '+years+' Years</span>';
-  document.getElementById('compBody').innerHTML=htmlRows;
+
+  document.getElementById('compBody').innerHTML=tableRows||'<tr><td colspan="6" style="color:var(--txl);font-style:italic;text-align:center;padding:18px">No results yet</td></tr>';
+
   document.getElementById('assumptBody').innerHTML=
-    '<tr><td>Capital deployed</td><td>'+fmt$(deposit)+' deposit + '+fmt$(stampDuty+upfrontOther)+' upfront costs</td><td>'+fmt$(investorStart)+' invested at start</td></tr>'
-   +'<tr><td>Loan amount</td><td>'+fmt$(loan)+(lmi>0?' (incl. LMI '+fmt$(lmi)+')':'')+' </td><td>No mortgage</td></tr>'
-   +'<tr><td>Annual repayment / rent (Yr 1)</td><td>'+fmt$(annualRepay)+' mortgage</td><td>'+fmt$(rent*12)+' rent</td></tr>'
-   +'<tr><td>Annual holding costs (Yr 1)</td><td>'+fmt$(annualOwner)+' council/insur/maint</td><td>'+fmt$(rentIns)+' contents insurance</td></tr>'
+    '<tr><td>Capital deployed</td><td>'+fmt(deposit)+' deposit + '+fmt(stampDuty+upfrontOther)+' upfront</td><td>'+fmt(investorStart)+' invested at start</td></tr>'
+   +'<tr><td>Loan amount</td><td>'+fmt(loan)+(lmi>0?' (incl. LMI '+fmt(lmi)+')':'')+' </td><td>No mortgage</td></tr>'
+   +'<tr><td>Annual repayment / rent (Yr 1)</td><td>'+fmt(annualRepay)+' mortgage</td><td>'+fmt(rent*12)+' rent</td></tr>'
+   +'<tr><td>Annual holding costs (Yr 1)</td><td>'+fmt(annualOwner)+' total</td><td>'+fmt(rentIns)+' contents insurance</td></tr>'
    +'<tr><td>Growth rate</td><td>'+propGrowth+'% p.a. property</td><td>'+invReturn+'% p.a. gross ('+invFee+'% MER)</td></tr>'
-   +'<tr><td>Tax treatment</td><td>Owner-occupied — no CGT</td><td>'+(taxYes?'CGT 50% discount at '+margTax+'% marginal rate':'No tax applied (super)')+'</td></tr>';
+   +'<tr><td>Tax treatment</td><td>Owner-occupied — no CGT</td><td>'+(taxYes?'CGT 50% discount at '+margTax+'% marginal rate':'No tax (super)')+'</td></tr>';
+
+  summaryRows=[
+    'Metric,Buy Scenario,Rent & Invest Scenario',
+    'Net Wealth (end),'+Math.round(finalBuy)+','+Math.round(finalInv),
+    'Property Value (end),'+Math.round(propArr[propArr.length-1])+',N/A',
+    'Investment Portfolio (end),N/A,'+Math.round(portfolio),
+    'Total Mortgage Paid,'+Math.round(totalMortgagePaid)+',N/A',
+    'Total Rent Paid,N/A,'+Math.round(totalRentPaid),
+    'Total Ownership Costs,'+Math.round(totalOwnerPaid)+',N/A',
+    'Monthly Mortgage Repayment,'+Math.round(monthlyRepay)+',N/A'
+  ];
+
   drawChart(labels,buyArr,invArr,propArr);
 }
 
@@ -672,17 +679,17 @@ function drawChart(labels,buyArr,invArr,propArr){
   var canvas=document.getElementById('wealthChart');
   if(!canvas)return;
   if(wealthChart){wealthChart.destroy();wealthChart=null;}
-  var ctx=canvas.getContext('2d');
-  wealthChart=new Chart(ctx,{
+  wealthChart=new Chart(canvas.getContext('2d'),{
     type:'line',
     data:{labels:labels,datasets:[
-      {label:'Buy: Net Wealth',data:buyArr,borderColor:'rgba(42,157,103,0.9)',backgroundColor:'rgba(42,157,103,0.07)',fill:true,tension:0.35,pointRadius:2,pointHoverRadius:6,borderWidth:2.5},
-      {label:'Rent & Invest: Net Wealth',data:invArr,borderColor:'rgba(63,127,181,0.9)',backgroundColor:'rgba(63,127,181,0.07)',fill:true,tension:0.35,pointRadius:2,pointHoverRadius:6,borderWidth:2.5},
+      {label:'Buy: Net Wealth',data:buyArr,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,0.07)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
+      {label:'Rent & Invest: Net Wealth',data:invArr,borderColor:'rgba(63,127,181,1)',backgroundColor:'rgba(63,127,181,0.07)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
       {label:'Property Value',data:propArr,borderColor:'rgba(192,57,43,0.5)',backgroundColor:'transparent',borderDash:[5,4],tension:0.35,pointRadius:0,pointHoverRadius:4,borderWidth:1.5,fill:false}
     ]},
     options:{
-      responsive:true,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(30,20,50,0.92)',titleColor:'#fff',bodyColor:'rgba(255,255,255,0.88)',padding:11,cornerRadius:8,
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(30,20,10,.93)',titleColor:'#fff',bodyColor:'rgba(255,255,255,.88)',padding:11,cornerRadius:8,
         callbacks:{label:function(item){return item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');}}}},
       scales:{
         x:{grid:{display:false},ticks:{font:{size:10},color:'#6c7a89',maxTicksLimit:14}},
@@ -693,36 +700,70 @@ function drawChart(labels,buyArr,invArr,propArr){
   });
 }
 
-document.getElementById('fPrice').addEventListener('input',function(){
-  var p=parseFloat(this.value)||0;
-  document.getElementById('fStampDuty').value=Math.round(estimateStampDuty(p));
-  calculate();
-});
-['fDeposit','fStampDuty','fConveyancing','fInspections','fFurnishing','fRate','fTerm',
- 'fCouncil','fInsurance','fMaintenance','fBodyCorp','fPropertyGrowth','fSellCosts',
- 'fRent','fRentGrowth','fRentInsurance','fInvReturn','fInvFee','fMarginalTax','fYears'
-].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calculate);});
-['taxYes','taxNo','oppYes','oppNo'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);});
+function dlCSV(rows,fname){
+  if(!rows||!rows.length)return;
+  var a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.join('\n'));
+  a.download=fname;a.click();
+}
 
+function resetAll(){
+  var d={fPrice:800000,fDeposit:160000,fStampDuty:31070,fConveyancing:2000,fInspections:1000,fFurnishing:10000,fRate:6.00,fTerm:30,fCouncil:2000,fInsurance:2000,fMaintenance:4000,fBodyCorp:'',fPropertyGrowth:4.00,fAgentFee:'',fRent:3000,fRentGrowth:3.0,fRentInsurance:600,fInvReturn:8.0,fInvFee:0.20,fMarginalTax:32.5,fYears:20};
+  for(var k in d){var el=document.getElementById(k);if(el)el.value=d[k];}
+  document.getElementById('taxYes').checked=true;
+  document.getElementById('oppYes').checked=true;
+  calc();
+}
+
+// Wire inputs
+['fPrice','fDeposit','fStampDuty','fConveyancing','fInspections','fFurnishing','fRate','fTerm',
+ 'fCouncil','fInsurance','fMaintenance','fBodyCorp','fPropertyGrowth','fAgentFee',
+ 'fRent','fRentGrowth','fRentInsurance','fInvReturn','fInvFee','fMarginalTax','fYears'
+].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calc);});
+['taxYes','taxNo','oppYes','oppNo'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('change',calc);});
+
+// Auto stamp duty
+document.getElementById('fPrice').addEventListener('input',function(){
+  document.getElementById('fStampDuty').value=Math.round(estimateStampDuty(parseFloat(this.value)||0));
+  calc();
+});
+
+// Collapsible — Renting & Investment section
 (function(){
   var btn=document.getElementById('rentInvBtn'),body=document.getElementById('rentInvBody');
-  btn.addEventListener('click',function(){var open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',open?'false':'true');body.classList.toggle('collapsed',open);});
+  btn.addEventListener('click',function(){
+    var open=btn.getAttribute('aria-expanded')==='true';
+    btn.setAttribute('aria-expanded',open?'false':'true');
+    body.classList.toggle('collapsed',open);
+  });
   if(window.innerWidth<900){btn.setAttribute('aria-expanded','false');body.classList.add('collapsed');}
 })();
 
-function resetAll(){
-  var d={fPrice:800000,fDeposit:160000,fStampDuty:31070,fConveyancing:2000,fInspections:1000,fFurnishing:10000,fRate:6.00,fTerm:30,fCouncil:2000,fInsurance:2000,fMaintenance:4000,fBodyCorp:'',fPropertyGrowth:4.00,fSellCosts:2.5,fRent:3000,fRentGrowth:3.0,fRentInsurance:600,fInvReturn:8.0,fInvFee:0.20,fMarginalTax:32.5,fYears:20};
-  for(var k in d){var el=document.getElementById(k);if(el)el.value=d[k];}
-  document.getElementById('taxYes').checked=true;document.getElementById('oppYes').checked=true;
-  calculate();
-}
-function exportCSV(){
-  if(!csvRows.length)return;
+// Year-by-year schedule toggle
+document.getElementById('amortToggle').addEventListener('click',function(){
+  var sec=document.getElementById('amortSection');
+  var open=sec.style.display==='block';
+  sec.style.display=open?'none':'block';
+  this.innerHTML=open
+    ?'<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Show Year-by-Year Schedule'
+    :'<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Hide Year-by-Year Schedule';
+});
+
+document.getElementById('btnReset').addEventListener('click',resetAll);
+document.getElementById('btnStartOver').addEventListener('click',function(){resetAll();window.scrollTo({top:0,behavior:'smooth'});});
+document.getElementById('btnExportSummary').addEventListener('click',function(){dlCSV(summaryRows,'buy-vs-invest-summary.csv');});
+document.getElementById('btnExportSchedule').addEventListener('click',function(){dlCSV(scheduleRows,'buy-vs-invest-schedule.csv');});
+document.getElementById('btnSaveSnapshot').addEventListener('click',function(){
+  var html=document.documentElement.outerHTML;
+  var blob=new Blob([html],{type:'text/html;charset=utf-8'});
   var a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csvRows.join('\n'));
-  a.download='buy-vs-invest-comparison.csv';a.click();
-}
-document.addEventListener('DOMContentLoaded',calculate);
+  a.href=URL.createObjectURL(blob);
+  var d=new Date;
+  a.download='buy-vs-invest-snapshot-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+});
+
+calc();
 </script>
 </body>
 </html>
