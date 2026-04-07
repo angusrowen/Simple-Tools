@@ -396,12 +396,12 @@ html,body{overflow-x:hidden;width:100%;max-width:100%}
               </div>
               <div class="chart-legend">
                 <div class="chart-legend-item">
-                  <div class="chart-swatch" style="background:rgba(230,100,20,0.72)"></div>
-                  Without Offset
-                </div>
-                <div class="chart-legend-item">
                   <div class="chart-swatch" style="background:rgba(42,157,103,0.65)"></div>
                   With Offset
+                </div>
+                <div class="chart-legend-item">
+                  <div class="chart-swatch" style="background:rgba(230,100,20,0.72)"></div>
+                  Without Offset
                 </div>
               </div>
             </div>
@@ -535,6 +535,16 @@ function termStr(periods,freq){
 }
 
 var lineChart=null;
+function makeGrad(ctx,splitRatio){
+  var h=ctx.canvas.clientHeight||120;
+  var g=ctx.createLinearGradient(0,0,0,h);
+  var sp=Math.max(0,Math.min(1,splitRatio));
+  g.addColorStop(0,  'rgba(230,100,20,0.72)');
+  g.addColorStop(sp, 'rgba(230,100,20,0.72)');
+  g.addColorStop(sp, 'rgba(42,157,103,0.65)');
+  g.addColorStop(1,  'rgba(42,157,103,0.65)');
+  return g;
+}
 function drawChart(withRows,noRows,P,yrs,freq){
   var n=ppy(freq),labels=[],withDebt=[],noDebt=[];
   for(var y=0;y<=yrs;y++){
@@ -547,11 +557,13 @@ function drawChart(withRows,noRows,P,yrs,freq){
   }
   var ctx=g('myChart').getContext('2d');
   if(lineChart){lineChart.destroy();lineChart=null;}
+  var paidRatio=withRows.length>0?withRows[withRows.length-1].closing/P:0;
+  var splitRatio=1-paidRatio;
   lineChart=new Chart(ctx,{
     type:'line',
     data:{labels:labels,datasets:[
-      {label:'Without Offset',data:noDebt,borderColor:'#e6641e',backgroundColor:'rgba(230,100,20,0.72)',fill:'origin',tension:0.4,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:'#e6641e',pointBorderColor:'#fff',pointBorderWidth:1.5,borderWidth:2.5,order:2},
-        {label:'With Offset',data:withDebt,borderColor:'rgba(42,157,103,0.9)',backgroundColor:'rgba(42,157,103,0.65)',fill:'origin',tension:0.4,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:'rgba(42,157,103,0.9)',pointBorderColor:'#fff',pointBorderWidth:1.5,borderWidth:2.5,order:1}
+      {label:'Without Offset',data:noDebt,borderColor:'#e6641e',backgroundColor:makeGrad(ctx,splitRatio),fill:'origin',tension:0.4,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:'#e6641e',pointBorderColor:'#fff',pointBorderWidth:1.5,borderWidth:2.5,order:2},
+      {label:'With Offset',data:withDebt,borderColor:'rgba(42,157,103,0.9)',backgroundColor:'transparent',fill:false,tension:0.4,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:'rgba(42,157,103,0.9)',pointBorderColor:'#fff',pointBorderWidth:1.5,borderWidth:2.5,order:1}
     ]},
     options:{
       responsive:true,
