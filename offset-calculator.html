@@ -550,8 +550,8 @@ function drawChart(withRows,noRows,P,yrs,freq){
   lineChart=new Chart(ctx,{
     type:'line',
     data:{labels:labels,datasets:[
-      {label:'Without Offset',data:noDebt,borderColor:'rgba(230,100,20,1)',backgroundColor:'rgba(230,100,20,1)',fill:'origin',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2,order:2},
-      {label:'With Offset',data:withDebt,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,1)',fill:'-1',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5,order:1}
+      {label:'Without Offset',data:noDebt,borderColor:'#e6641e',backgroundColor:'rgba(230,100,20,0.72)',fill:'origin',tension:0.4,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:'#e6641e',pointBorderColor:'#fff',pointBorderWidth:1.5,borderWidth:2.5,order:2},
+        {label:'With Offset',data:withDebt,borderColor:'rgba(42,157,103,0.9)',backgroundColor:'rgba(42,157,103,0.65)',fill:'origin',tension:0.4,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:'rgba(42,157,103,0.9)',pointBorderColor:'#fff',pointBorderWidth:1.5,borderWidth:2.5,order:1}
     ]},
     options:{
       responsive:true,
