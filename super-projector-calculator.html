@@ -91,8 +91,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:7px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s;font-family:inherit}
 .amort-btn:hover{border-color:var(--gr);color:var(--gr)}
 .amort-btn svg{width:13px;height:13px;fill:currentColor}
-.amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
-.amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.amort-wrap{max-height:380px;overflow-y:auto;overflow-x:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px;-webkit-overflow-scrolling:touch}
+.amort-table{width:100%;min-width:520px;border-collapse:collapse;font-size:.82rem}
 .amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
 .amort-table th:first-child{text-align:left}
 .amort-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums;text-align:right}
