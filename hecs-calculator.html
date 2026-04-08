@@ -10,14 +10,15 @@
   --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
   --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
   --tx:#22313f;--txl:#6c7a89;--red:#e53935;
-  --bl:#3f7fb5;--bll:#edf5fb;--am:#b6862c;--aml:#faf2df;
+  --bl:#3f7fb5;--bll:#edf5fb;--am:#e6641e;--aml:#fdf2ee;
   --pu:#7b5ea7;--pul:#f3eeff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;overflow-x:hidden}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
 .topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
-.topbar-logo a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;color:#fff;text-decoration:none}
+.topbar-logo a{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:#e8650a;color:#fff;text-decoration:none;box-shadow:0 8px 20px rgba(232,101,10,.35);flex-shrink:0}
+.topbar-logo a svg{width:22px;height:22px;fill:#fff}
 .topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
 .topbar-title{color:#fff;font-size:1rem;font-weight:700}
 .topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px}
@@ -52,11 +53,13 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
 .results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
 .result-box{background:#f8f5ef;border:1px solid var(--bdr);border-radius:12px;padding:12px 14px}
 .result-box.hl{background:var(--grl);border-color:var(--gr)}
-.result-box.hl-pu{background:var(--pul);border-color:var(--pu)}
+.result-box.hl-am{background:var(--aml);border-color:var(--am)}
+.result-box.hl-red{background:#fdecea;border-color:var(--red)}
 .result-box .lbl{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);font-weight:600;margin-bottom:2px}
 .result-box .val{font-size:1.15rem;font-weight:700;color:var(--dk)}
 .result-box.hl .val{color:var(--gr);font-size:1.3rem}
-.result-box.hl-pu .val{color:var(--pu);font-size:1.3rem}
+.result-box.hl-am .val{color:var(--am);font-size:1.3rem}
+.result-box.hl-red .val{color:var(--red);font-size:1.3rem}
 /* Banners */
 .banner{border-radius:8px;padding:10px 13px;margin-bottom:12px;font-size:.84rem}
 .bn-green{background:var(--grl);border:1px solid var(--gr);color:var(--tx)}
@@ -264,7 +267,7 @@ ins.adsbygoogle,ins.adsbygoogle iframe{max-width:100%!important;overflow:hidden!
 <!-- ═══ RIGHT — RESULTS ═══ -->
 <div>
   <div class="card">
-    <h2>Results <span id="threshBadge" class="threshold-badge" style="display:none"></span></h2>
+    <h2>Results</h2>
 
     <div id="belowThreshBanner" class="banner bn-amber" style="display:none">
       ⚠️ Your income is <strong>below the $67,000 repayment threshold</strong>. No compulsory HECS repayment is required this year — but indexation still applies to your balance.
@@ -295,7 +298,7 @@ ins.adsbygoogle,ins.adsbygoogle iframe{max-width:100%!important;overflow:hidden!
         <div class="lbl">Total Repaid</div>
         <div class="val" id="rTotalPaid">—</div>
       </div>
-      <div class="result-box hl-pu">
+      <div class="result-box hl-red">
         <div class="lbl">Total Indexation</div>
         <div class="val" id="rTotalIndex">—</div>
       </div>
@@ -318,13 +321,6 @@ ins.adsbygoogle,ins.adsbygoogle iframe{max-width:100%!important;overflow:hidden!
       </tbody>
     </table>
 
-    <!-- Active ATO bracket -->
-    <div class="section-title">2025–26 Repayment Bracket</div>
-    <table class="bracket-table">
-      <thead><tr><th>Repayment Income Range</th><th>Rate / Calculation</th></tr></thead>
-      <tbody id="bracketBody"></tbody>
-    </table>
-
     <!-- Chart -->
     <div class="chart-section">
       <div class="chart-header">
@@ -336,7 +332,7 @@ ins.adsbygoogle,ins.adsbygoogle iframe{max-width:100%!important;overflow:hidden!
       </div>
       <div class="chart-legend">
         <div class="chart-legend-item"><div class="chart-swatch" style="background:#2a9d67"></div>Closing Balance</div>
-        <div class="chart-legend-item"><div class="chart-swatch" style="background:#e8a838"></div>Indexation Added</div>
+        <div class="chart-legend-item"><div class="chart-swatch" style="background:#e6641e"></div>Indexation Added</div>
         <div class="chart-legend-item" id="legVoluntary" style="display:none"><div class="chart-swatch" style="background:#3f7fb5"></div>Voluntary Repayment</div>
       </div>
     </div>
@@ -366,6 +362,17 @@ ins.adsbygoogle,ins.adsbygoogle iframe{max-width:100%!important;overflow:hidden!
       </div>
     </div>
 
+
+    <!-- Repayment Thresholds — combined inline -->
+    <div class="chart-section">
+      <div class="section-title">2025–26 Repayment Thresholds</div>
+      <p style="font-size:.83rem;color:var(--txl);margin-bottom:10px">From 2025–26, HECS uses a <strong>marginal rate system</strong> — you only pay on income <em>above</em> each threshold. Your active bracket is highlighted. Indexation applied 1 June (2025: 3.2%).</p>
+      <table class="bracket-table">
+        <thead><tr><th>Repayment Income Range</th><th>Rate / Calculation</th></tr></thead>
+        <tbody id="bracketBody"></tbody>
+      </table>
+    </div>
+
     <!-- Actions bar — inside same card, below schedule -->
     <div class="actions-bar">
       <button class="btn btn-green" id="btnCSV" type="button">
@@ -377,37 +384,22 @@ ins.adsbygoogle,ins.adsbygoogle iframe{max-width:100%!important;overflow:hidden!
         Export Schedule CSV
       </button>
       <div style="flex:1"></div>
-      <button class="btn btn-navy" id="btnPrint" type="button">
-        <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
-        Print
+      <button class="btn btn-navy" id="btnSave" type="button">
+        <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>
+        Save File
+      </button>
+      <button class="btn btn-navy" id="btnStartOver" type="button">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Start Overt
       </button>
     </div>
 
     <div class="note">Estimates only. Assumes constant indexation rate and steady income growth. Actual repayments are withheld by your employer via PAYG and reconciled at tax time. Not financial advice — refer to <a href="https://www.ato.gov.au" target="_blank" rel="noopener">ato.gov.au</a> for official figures.</div>
   </div><!-- /results card -->
 
-  <!-- ATO rates reference -->
-  <div class="card">
-    <button class="collapsible-header" id="ratesToggle" aria-expanded="false">
-      <h2>2025–26 ATO Repayment Thresholds</h2>
-      <span class="collapse-icon">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
-      </span>
-    </button>
-    <div class="collapsible-body collapsed" id="ratesBody">
-      <p style="font-size:.84rem;color:var(--txl);margin-bottom:10px">From 2025–26, HECS repayments use a <strong>marginal rate system</strong> — you only pay the rate on income <em>above</em> each threshold, not on your entire income.</p>
-      <table class="bracket-table">
-        <thead><tr><th>Repayment Income</th><th>Rate / Calculation</th></tr></thead>
-        <tbody>
-          <tr><td>$0 – $67,000</td><td style="text-align:right">Nil</td></tr>
-          <tr><td>$67,001 – $125,000</td><td style="text-align:right">15c per $1 over $67,000</td></tr>
-          <tr><td>$125,001 – $179,285</td><td style="text-align:right">$8,700 + 17c per $1 over $125,000</td></tr>
-          <tr><td>$179,286 and above</td><td style="text-align:right">10% of total repayment income</td></tr>
-        </tbody>
-      </table>
-      <p style="font-size:.78rem;color:var(--txl);margin-top:10px">Indexation applied on 1 June each year at the lower of CPI or WPI. The 2025 rate is 3.2%. Voluntary repayments no longer attract a bonus (removed 2017).</p>
-    </div>
-  </div>
+    <!-- Hidden stubs to prevent JS errors -->
+    <button id="ratesToggle" style="display:none"></button>
+    <div id="ratesBody" style="display:none"></div>
 
 </div><!-- /right -->
 </div><!-- /layout -->
@@ -488,7 +480,7 @@ function initChart(){
     type: 'bar',
     data: { labels:[], datasets:[
       { label:'Closing Balance',    data:[], backgroundColor:'rgba(42,157,103,.75)', borderRadius:4, order:1 },
-      { label:'Indexation Added',   data:[], backgroundColor:'rgba(232,168,56,.75)', borderRadius:4, order:2 },
+      { label:'Indexation Added',   data:[], backgroundColor:'rgba(230,100,20,0.72)', borderRadius:4, order:2 },
       { label:'Voluntary Repayment',data:[], backgroundColor:'rgba(63,127,181,.7)',  borderRadius:4, order:3 }
     ]},
     options:{
@@ -541,7 +533,7 @@ function calc(){
   $('aboveThreshBanner').style.display = income >  67000 ? '' : 'none';
 
   // Badge
-  const badge = $('threshBadge');
+  const badge = {textContent:'',className:'',style:{display:'none'}}; // removed badge
   if(income <= 67000)      { badge.textContent='Below threshold'; badge.className='threshold-badge';       badge.style.display=''; }
   else if(income <= 125000){ badge.textContent='Bracket 2';       badge.className='threshold-badge above'; badge.style.display=''; }
   else if(income <= 179285){ badge.textContent='Bracket 3';       badge.className='threshold-badge above'; badge.style.display=''; }
@@ -633,6 +625,17 @@ function calc(){
 }
 
 // ─── Export Summary CSV ──────────────────────────────────────────────────────
+
+$('btnSave').addEventListener('click', () => {
+  const html = document.documentElement.outerHTML;
+  const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const d = new Date();
+  a.download = 'hecs-calculator-' + d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+});
+
 $('btnCSV').addEventListener('click', () => {
   const d = window._schedData || {};
   const balance = parseFloat($('loanBalance').value)||0;
@@ -666,7 +669,7 @@ $('btnAmortCSV').addEventListener('click', () => {
   a.click();
 });
 
-$('btnPrint').addEventListener('click', () => window.print());
+$('btnStartOver').addEventListener('click', () => { $('btnReset').click(); });
 
 $('btnReset').addEventListener('click', () => {
   $('loanBalance').value = 35000; $('loanBalanceRange').value = 35000;
