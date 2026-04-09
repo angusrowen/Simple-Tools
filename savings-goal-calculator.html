@@ -7,6 +7,7 @@
 <style>
 :root {
   --dk:#2d3a42; --nv:#3e5f75; --gr:#2a9d67; --grl:#e7f8ef;
+  
   --bg:#f5f2ec; --card:#fffdfa; --bdr:#ddd7cf;
   --tx:#22313f; --txl:#6c7a89; --red:#e53935;
   --bl:#3f7fb5; --bll:#edf5fb; --am:#b6862c; --aml:#faf2df;
@@ -28,7 +29,7 @@ body {
 }
 .topbar-logo a {
   display:flex; align-items:center; justify-content:center;
-  width:40px; height:40px; background:rgba(255,255,255,.15);
+  width:40px; height:40px; background:var(--am); box-shadow:0 4px 12px rgba(182,134,44,.3);
   border-radius:10px; color:#fff; text-decoration:none;
 }
 .topbar-divider { width:1px; height:28px; background:rgba(255,255,255,.18); }
@@ -444,7 +445,7 @@ html, body { overflow-x:hidden; }
     <div class="res-box"><div class="lbl">Total Deposited</div><div class="val" id="rDep">—</div></div>
     <div class="res-box"><div class="lbl">Interest Earned</div><div class="val" id="rInt" style="color:var(--gr)">—</div></div>
     <div class="res-box dn" id="rLumpBox"><div class="lbl">Total Lump Sums</div><div class="val" id="rLump" style="color:var(--am)">—</div></div>
-    <div class="res-box dn" id="rRealBox"><div class="lbl">Real Value</div><div class="val" id="rReal" style="color:var(--bl)">—</div></div>
+    <div class="res-box dn" id="rRealBox"><div class="lbl">Real Value</div><div class="val" id="rReal" style="color:var(--am)">—</div></div>
     <div class="res-box"><div class="lbl">Goal Date</div><div class="val" id="rDate" style="font-size:.95rem">—</div></div>
   </div>
 
@@ -470,7 +471,7 @@ html, body { overflow-x:hidden; }
       <canvas id="chart" height="180"></canvas>
       <div class="legend">
         <div class="leg-item"><div class="leg-sw" style="background:rgba(42,157,103,0.8)"></div>Initial + Contributions</div>
-        <div class="leg-item"><div class="leg-sw" style="background:rgba(63,127,181,0.8)"></div>Interest</div>
+        <div class="leg-item"><div class="leg-sw" style="background:rgba(232,168,56,0.8)"></div>Interest</div>
         <div class="leg-item dn" id="legLump"><div class="leg-sw" style="background:rgba(182,134,44,0.8)"></div>Lump Sums</div>
       </div>
     </div>
@@ -611,7 +612,7 @@ html, body { overflow-x:hidden; }
     if (myChart) { myChart.destroy(); myChart = null; }
     var datasets = [
       { label:'Initial+Contributions', data:cC, backgroundColor:'rgba(42,157,103,0.78)', stack:'s' },
-      { label:'Interest',              data:cI, backgroundColor:'rgba(63,127,181,0.78)',  stack:'s' }
+      { label:'Interest',              data:cI, backgroundColor:'rgba(232,168,56,0.65)',  stack:'s' }
     ];
     if (cL.some(function(v){return v>0;})) {
       datasets.push({ label:'Lump Sums', data:cL, backgroundColor:'rgba(182,134,44,0.78)', stack:'s' });
@@ -769,9 +770,9 @@ html, body { overflow-x:hidden; }
         + '<td>' + f0(row.open) + '</td>'
         + '<td style="color:var(--gr)">' + f0(row.c) + '</td>'
         + '<td style="color:var(--am)">' + (row.l > 0 ? f0(row.l) : '—') + '</td>'
-        + '<td style="color:var(--bl)">' + f0(row.i) + '</td>'
+        + '<td style="color:var(--am)">' + f0(row.i) + '</td>'
         + '<td style="font-weight:700">' + f0(row.close) + '</td>'
-        + (useInfl ? '<td style="color:var(--bl)">' + f0(row.real) + '</td>' : '')
+        + (useInfl ? '<td style="color:var(--am)">' + f0(row.real) + '</td>' : '')
         + '<td>' + pct(Math.min(100, row.close/goal*100)) + '</td>'
         + '</tr>';
     });
