@@ -6,13 +6,28 @@ var _isMobile = window.innerWidth<=768 || (navigator.maxTouchPoints>0 && window.
 if(_isMobile){
   window.adsbygoogle={loaded:true,push:function(){}};
   document.addEventListener('DOMContentLoaded',function(){
+  // Salary slider sync
+  (function(){
+    var si=document.getElementById('salary'),sr=document.getElementById('salaryRange');
+    if(si&&sr){
+      si.addEventListener('input',function(){if(parseFloat(si.value)<=300000)sr.value=si.value;else sr.value=300000;calculate();});
+      sr.addEventListener('input',function(){si.value=sr.value;calculate();});
+    }
+  })();
+  // Pay frequency radio listeners
+  // Second job pay frequency radios
+  ['sjFreqFortnightly','sjFreqWeekly','sjFreqMonthly'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
+  });
+  ['freqFortnightly','freqWeekly','freqMonthly'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
+  });
     document.querySelectorAll(
       'ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,[data-ad-client],[data-ad-slot]'
     ).forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});
     document.querySelectorAll('script[src*="googlesyndication"]')
       .forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});
   });
-}
 </script>
 <meta charset="UTF-8">
 <style>html{overflow-x:hidden}body{overflow-x:hidden}</style>
@@ -30,7 +45,7 @@ if(_isMobile){
 *{box-sizing:border-box;margin:0;padding:0}
 html{overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;width:100%}
 .topbar{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
-.topbar-logo a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;color:#fff;text-decoration:none}
+.topbar-logo a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#2a9d67;border-radius:10px;color:#fff;text-decoration:none}
 .app-mark{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:var(--gr);color:#fff;font-weight:800;font-size:1rem;box-shadow:0 8px 20px rgba(42,157,103,.28)}
 .topbar-title{color:#fff;font-size:1rem;font-weight:700}
 .topbar-subtitle{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.72);margin-top:2px}
@@ -91,6 +106,17 @@ html{overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe 
 .result-box .value{font-size:1.15rem;font-weight:700;color:var(--dk)}
 .result-box.highlight .value{color:var(--gr);font-size:1.3rem}
 .combined-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.range-wrap{margin-top:6px}
+input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
+.range-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--txl);margin-top:2px}
+.switch-field{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.switch-field label:first-child{font-size:.88rem;font-weight:500;color:var(--tx);cursor:pointer;flex:1}
+.switch{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;border-radius:24px;transition:.3s}
+.switch-slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+.switch input:checked+.switch-slider{background:var(--gr)}
+.switch input:checked+.switch-slider:before{transform:translateX(20px)}
 .combined-table th{text-align:left;padding:8px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
 .combined-table th:not(:first-child){text-align:right}
 .combined-table td{padding:8px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums}
@@ -127,13 +153,18 @@ html{overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe 
 .legend-label{font-weight:600;color:var(--tx)}
 .legend-amount{font-weight:700;color:var(--dk);font-variant-numeric:tabular-nums;text-align:right}
 .legend-share{font-size:.82rem;color:var(--txl);text-align:right;min-width:42px}
-.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr)}
+
+.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);flex-wrap:wrap}
 .btn-action{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;letter-spacing:.3px}
 .btn-action svg{width:14px;height:14px;fill:currentColor}
 .btn-reset{background:var(--nv);color:#fff}
 .btn-reset:hover{background:#2d5268;color:#fff}
 .btn-export{background:var(--gr);color:#fff}
 .btn-export:hover{background:#228052}
+.btn-save{background:var(--nv);color:#fff}
+.btn-save:hover{background:#2d5268}
+.actions-right{display:flex;gap:10px;margin-left:auto;align-items:center}
+@media(max-width:600px){.actions-bar{flex-direction:column;align-items:stretch}.actions-right{flex-direction:column-reverse;margin-left:0}.btn-action{justify-content:center}}
 .note{font-size:.78rem;color:var(--txl);margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr);line-height:1.5}
 .ft{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center}
 .ft span,.ft a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem}
@@ -358,7 +389,7 @@ ins.adsbygoogle iframe,
     </div>
 
     <div class="section-label">Income</div>
-    <div class="inline-fields">
+    <div class="inline-fields" style="align-items:flex-end">
       <div class="field">
         <label>Financial Year</label>
         <select id="financialYear">
@@ -368,25 +399,24 @@ ins.adsbygoogle iframe,
         </select>
       </div>
       <div class="field">
-        <label>Pay Frequency</label>
-        <select id="frequency">
-          <option value="26">Fortnightly</option>
-          <option value="52">Weekly</option>
-          <option value="12">Monthly</option>
+        <label>Entry Method</label>
+        <select id="incMethodSelect" onchange="document.getElementById(this.value==='annual'?'methodAnnual':'methodHourly').checked=true;syncVisibility();calculate();">
+          <option value="annual" selected>Annual Salary</option>
+          <option value="hourly">Hourly Rate</option>
         </select>
       </div>
-    </div>
-    <div class="toggle-group">
-      <span class="toggle-label">Income Entry Method</span>
-      <div class="toggle-switch">
-        <input type="radio" name="incMethod" id="methodAnnual" value="annual" checked>
-        <label for="methodAnnual">Annual Salary</label>
-        <input type="radio" name="incMethod" id="methodHourly" value="hourly">
-        <label for="methodHourly">Hourly Rate</label>
-      </div>
+    <input type="radio" name="incMethod" id="methodAnnual" value="annual" checked style="display:none">
+    <input type="radio" name="incMethod" id="methodHourly" value="hourly" style="display:none">
     </div>
     <div id="annualField">
-      <div class="field"><label>Annual Salary / FTE ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="salary" value="100000" min="0" step="100"></div></div>
+      <div class="field">
+        <label>Annual Salary / FTE ($)</label>
+        <div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="salary" value="100000" min="0" step="1000"></div>
+        <div class="range-wrap">
+          <input type="range" id="salaryRange" min="0" max="300000" step="1000" value="100000">
+          <div class="range-labels"><span>$0</span><span>$300k</span></div>
+        </div>
+      </div>
     </div>
     <div id="hourlyFields" class="hourly-fields hidden">
       <div class="inline-fields">
@@ -396,15 +426,7 @@ ins.adsbygoogle iframe,
       <div class="field"><label>Weeks Per Year</label><input type="number" id="hourlyWeeks" value="52" min="1" max="52" step="1"></div>
       <div class="derived-info" id="hourlyDerived">Derived annual salary: <span id="hourlyAnnual">$0</span></div>
     </div>
-    <div class="toggle-group">
-      <span class="toggle-label">Salary Includes Super?</span>
-      <div class="toggle-switch">
-        <input type="radio" name="superInc" id="superNo" value="no" checked>
-        <label for="superNo">No</label>
-        <input type="radio" name="superInc" id="superYes" value="yes">
-        <label for="superYes">Yes</label>
-      </div>
-    </div>
+    
     <div class="derived-info" id="derivedInfo">Base salary (excl. super): <span id="derivedSalary">$0</span> &nbsp;&nbsp; Super: <span id="derivedSuper">$0</span></div>
     <div class="toggle-group">
       <span class="toggle-label">Employment Basis</span>
@@ -422,8 +444,28 @@ ins.adsbygoogle iframe,
       </div>
       <div class="prorata-info" id="prorataInfo" style="display:block">FTE fraction: <span id="fteFraction">0.6</span> &nbsp;&nbsp; Pro-rata salary: <span id="prorataSalary">$0</span></div>
     </div>
+    <div class="toggle-group" style="margin-top:14px">
+      <span class="toggle-label">Pay Frequency</span>
+      <div class="toggle-switch">
+        <input type="radio" name="freqR" id="freqWeekly" value="52">
+        <label for="freqWeekly">Weekly</label>
+        <input type="radio" name="freqR" id="freqFortnightly" value="26" checked>
+        <label for="freqFortnightly">Fortnightly</label>
+        <input type="radio" name="freqR" id="freqMonthly" value="12">
+        <label for="freqMonthly">Monthly</label>
+      </div>
+    </div>
 
     <div class="section-label">Superannuation</div>
+    <div class="switch-field">
+      <label for="superIncSwitch">Salary Includes Super</label>
+      <label class="switch">
+        <input type="checkbox" id="superIncSwitch" onchange="document.getElementById('superYes').checked=this.checked;document.getElementById('superNo').checked=!this.checked;calculate();">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="radio" name="superInc" id="superNo" value="no" checked style="display:none">
+    <input type="radio" name="superInc" id="superYes" value="yes" style="display:none">
     <div class="field">
       <label>Super Guarantee Rate (%)</label>
       <div class="input-wrap"><input class="has-suffix" type="number" id="superRate" value="12.0" min="0" max="30" step="0.5"><span class="suffix">%</span></div>
@@ -445,24 +487,24 @@ ins.adsbygoogle iframe,
         <option value="whm">Working Holiday Maker</option>
       </select>
     </div>
-    <div class="toggle-group">
-      <span class="toggle-label">HECS/HELP, VSL, SSL or TSL Debt</span>
-      <div class="toggle-switch">
-        <input type="radio" name="helpDebtR" id="helpDebtNo" value="no" checked>
-        <label for="helpDebtNo">No</label>
-        <input type="radio" name="helpDebtR" id="helpDebtYes" value="yes">
-        <label for="helpDebtYes">Yes</label>
-      </div>
+    <div class="switch-field">
+      <label for="helpDebtSwitch">HECS/HELP, VSL, SSL or TSL Debt</label>
+      <label class="switch">
+        <input type="checkbox" id="helpDebtSwitch" onchange="document.getElementById('helpDebtYes').checked=this.checked;document.getElementById('helpDebtNo').checked=!this.checked;calculate();">
+        <span class="switch-slider"></span>
+      </label>
     </div>
-    <div class="toggle-group">
-      <span class="toggle-label">Tax File Number Withheld</span>
-      <div class="toggle-switch">
-        <input type="radio" name="tfnR" id="tfnNo" value="no" checked>
-        <label for="tfnNo">No</label>
-        <input type="radio" name="tfnR" id="tfnYes" value="yes">
-        <label for="tfnYes">Yes</label>
-      </div>
+    <input type="radio" name="helpDebtR" id="helpDebtNo" value="no" checked style="display:none">
+    <input type="radio" name="helpDebtR" id="helpDebtYes" value="yes" style="display:none">
+    <div class="switch-field">
+      <label for="tfnSwitch">Tax File Number Withheld</label>
+      <label class="switch">
+        <input type="checkbox" id="tfnSwitch" onchange="document.getElementById('tfnYes').checked=this.checked;document.getElementById('tfnNo').checked=!this.checked;calculate();">
+        <span class="switch-slider"></span>
+      </label>
     </div>
+    <input type="radio" name="tfnR" id="tfnNo" value="no" checked style="display:none">
+    <input type="radio" name="tfnR" id="tfnYes" value="yes" style="display:none">
     
   </div>
 
@@ -477,16 +519,27 @@ ins.adsbygoogle iframe,
     <div class="collapsible-body" id="additionalOptionsBody">
 
     <div class="section-label">Additional Income</div>
-    <div class="checkbox-field"><input type="checkbox" id="showBonus"><label for="showBonus">Add additional income / annual bonus</label></div>
+    <div class="switch-field">
+      <label for="showBonus_sw">Add additional income / annual bonus</label>
+      <label class="switch">
+        <input type="checkbox" id="showBonus_sw" onchange="document.getElementById('showBonus').checked=this.checked;document.getElementById('showBonus').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="showBonus" style="display:none">
     <div id="bonusWrap" class="hidden">
       <div class="field"><label>Additional Income / Annual Bonus ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="bonus" placeholder="0" min="0" step="100"></div></div>
     </div>
 
 
-    <div class="checkbox-field" style="margin-top:4px">
-      <input type="checkbox" id="hasSecondJob">
-      <label for="hasSecondJob">Add a second job</label>
+    <div class="switch-field">
+      <label for="hasSecondJob_sw">Add a second job</label>
+      <label class="switch">
+        <input type="checkbox" id="hasSecondJob_sw" onchange="document.getElementById('hasSecondJob').checked=this.checked;document.getElementById('hasSecondJob').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
     </div>
+    <input type="checkbox" id="hasSecondJob" style="display:none">
     <div id="secondJobFields" class="hidden">
       <div class="sj-note"><strong>Important:</strong> You can only claim the tax-free threshold on one job. Second job income is added to your total taxable income and is usually withheld without the threshold applied.</div>
       <div class="toggle-group">
@@ -522,8 +575,33 @@ ins.adsbygoogle iframe,
         </div>
         <div class="prorata-info" style="display:block">SJ FTE fraction: <span id="sjFteFraction">0.6</span> &nbsp;&nbsp; Pro-rata: <span id="sjProrataSalary">$0</span></div>
       </div>
-      <div class="checkbox-field"><input type="checkbox" id="sjNoTFN" checked><label for="sjNoTFN">No tax-free threshold claimed on second job</label></div>
+      <div class="toggle-group" style="margin-top:14px">
+        <span class="toggle-label">Second Job Pay Frequency</span>
+        <div class="toggle-switch">
+          <input type="radio" name="sjFreqR" id="sjFreqWeekly" value="52">
+          <label for="sjFreqWeekly">Weekly</label>
+          <input type="radio" name="sjFreqR" id="sjFreqFortnightly" value="26" checked>
+          <label for="sjFreqFortnightly">Fortnightly</label>
+          <input type="radio" name="sjFreqR" id="sjFreqMonthly" value="12">
+          <label for="sjFreqMonthly">Monthly</label>
+        </div>
+      </div>
+      <div class="switch-field">
+      <label for="sjNoTFN_sw">No tax-free threshold claimed on second job</label>
+      <label class="switch">
+        <input type="checkbox" id="sjNoTFN_sw" checked onchange="document.getElementById('sjNoTFN').checked=this.checked;document.getElementById('sjNoTFN').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="sjNoTFN" checked style="display:none">
       <div class="section-label">Second Job Superannuation</div>
+      <div class="switch-field">
+        <label for="sjSuperIncSwitch">Salary Includes Super</label>
+        <label class="switch">
+          <input type="checkbox" id="sjSuperIncSwitch" onchange="calculate();">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
       <div class="field">
         <label>Second Job Super Guarantee Rate (%)</label>
         <div class="input-wrap"><input class="has-suffix" type="number" id="sjSuperRate" value="12.0" min="0" max="30" step="0.5"><span class="suffix">%</span></div>
@@ -536,11 +614,25 @@ ins.adsbygoogle iframe,
     </div>
 
     <div class="section-label">Withholding</div>
-    <div class="checkbox-field"><input type="checkbox" id="showExtraTax"><label for="showExtraTax">Withhold extra tax each pay period</label></div>
+    <div class="switch-field">
+      <label for="showExtraTax_sw">Withhold extra tax each pay period</label>
+      <label class="switch">
+        <input type="checkbox" id="showExtraTax_sw" onchange="document.getElementById('showExtraTax').checked=this.checked;document.getElementById('showExtraTax').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="showExtraTax" style="display:none">
     <div id="extraTaxWrap" class="hidden">
       <div class="field" style="margin-top:6px"><label>Extra Tax Withheld Per Pay ($)</label><div class="input-wrap"><span class="prefix">$</span><input type="number" class="has-prefix" id="extraTax" placeholder="0" min="0" step="1"></div></div>
     </div>
-    <div class="checkbox-field" style="margin-top:6px"><input type="checkbox" id="showPurchasedLeave"><label for="showPurchasedLeave">Purchased leave</label></div>
+    <div class="switch-field">
+      <label for="showPurchasedLeave_sw">Purchased leave</label>
+      <label class="switch">
+        <input type="checkbox" id="showPurchasedLeave_sw" onchange="document.getElementById('showPurchasedLeave').checked=this.checked;document.getElementById('showPurchasedLeave').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="showPurchasedLeave" style="display:none">
     <div id="purchasedLeaveWrap" class="hidden">
       <div class="field" style="margin-top:6px">
         <label>Purchased Leave Weeks Per Year</label>
@@ -548,7 +640,14 @@ ins.adsbygoogle iframe,
         <div class="field-hint">Salary is reduced proportionally, lowering taxable income and take-home pay.</div>
       </div>
     </div>
-    <div class="checkbox-field" style="margin-top:6px"><input type="checkbox" id="showGeneralSalSac"><label for="showGeneralSalSac">Additional salary sacrifice</label></div>
+    <div class="switch-field">
+      <label for="showGeneralSalSac_sw">Additional salary sacrifice</label>
+      <label class="switch">
+        <input type="checkbox" id="showGeneralSalSac_sw" onchange="document.getElementById('showGeneralSalSac').checked=this.checked;document.getElementById('showGeneralSalSac').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="showGeneralSalSac" style="display:none">
     <div id="generalSalSacWrap" class="hidden">
       <div class="field" style="margin-top:6px">
         <label>Annual Salary Sacrifice Amount ($)</label>
@@ -558,7 +657,14 @@ ins.adsbygoogle iframe,
     </div>
 
     <div class="section-label">Medicare Levy Surcharge</div>
-    <div class="checkbox-field"><input type="checkbox" id="mlsEnabled"><label for="mlsEnabled">No private health insurance (MLS may apply)</label></div>
+    <div class="switch-field">
+      <label for="mlsEnabled_sw">No private health insurance (MLS may apply)</label>
+      <label class="switch">
+        <input type="checkbox" id="mlsEnabled_sw" onchange="document.getElementById('mlsEnabled').checked=this.checked;document.getElementById('mlsEnabled').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="mlsEnabled" style="display:none">
     <div id="mlsFields" class="mls-fields hidden">
       <div class="field">
         <label>Family Status for MLS</label>
@@ -570,7 +676,14 @@ ins.adsbygoogle iframe,
     </div>
 
     <div class="section-label">Tax Offsets</div>
-    <div class="checkbox-field"><input type="checkbox" id="seniorsOffset"><label for="seniorsOffset">Seniors and Pensioners Tax Offset (SAPTO)</label></div>
+    <div class="switch-field">
+      <label for="seniorsOffset_sw">Seniors and Pensioners Tax Offset (SAPTO)</label>
+      <label class="switch">
+        <input type="checkbox" id="seniorsOffset_sw" onchange="document.getElementById('seniorsOffset').checked=this.checked;document.getElementById('seniorsOffset').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="seniorsOffset" style="display:none">
     <div id="seniorsFields" class="seniors-fields hidden">
       <div class="field">
         <label>Filing Status</label>
@@ -583,7 +696,14 @@ ins.adsbygoogle iframe,
     </div>
 
     <div class="section-label">Family Tax Benefit</div>
-    <div class="checkbox-field"><input type="checkbox" id="ftbEnabled"><label for="ftbEnabled">Estimate Family Tax Benefit</label></div>
+    <div class="switch-field">
+      <label for="ftbEnabled_sw">Estimate Family Tax Benefit</label>
+      <label class="switch">
+        <input type="checkbox" id="ftbEnabled_sw" onchange="document.getElementById('ftbEnabled').checked=this.checked;document.getElementById('ftbEnabled').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="ftbEnabled" style="display:none">
     <div id="ftbFields" class="ftb-fields hidden">
       <div class="inline-fields">
         <div class="field"><label>Children Under 13</label><input type="number" id="ftbUnder13" value="1" min="0" max="20" step="1"></div>
@@ -688,15 +808,16 @@ ins.adsbygoogle iframe,
         <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zm-3-7l-4 4-4-4h2.5v-3h3v3H15z"/></svg>
         Export CSV
       </button>
-      <button class="btn-action btn-export" onclick="saveHTML()">
-        <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V7l-4-4zm-5 16a3 3 0 110-6 3 3 0 010 6zm3-10H5V5h10v4z"/></svg>
-        Save File
-      </button>
-      <div style="flex:1"></div>
-      <button class="btn-action btn-reset" onclick="resetAll();window.scrollTo({top:0,behavior:'smooth'});">
-        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-        Start Over
-      </button>
+      <div class="actions-right">
+        <button class="btn-action btn-save" onclick="saveHTML()">
+          <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V7l-4-4zm-5 16a3 3 0 110-6 3 3 0 010 6zm3-10H5V5h10v4z"/></svg>
+          Save File
+        </button>
+        <button class="btn-action btn-reset" onclick="resetAll();window.scrollTo({top:0,behavior:'smooth'});">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          Start Over
+        </button>
+      </div>
     </div>
 
     <p class="note">This calculator provides estimates only. It does not account for all deductions, private health insurance rebates, or other individual circumstances. Super contributions tax (15%) on concessional contributions is paid inside the fund. Division 293 tax is paid from your super fund or by personal assessment. Family Tax Benefit estimates are indicative only. Consult a registered tax agent or Services Australia for personal advice.</p>
@@ -759,11 +880,16 @@ function getSJSalSac(){
 function getSecondJobIncome(){
   if(!document.getElementById('hasSecondJob').checked) return 0;
   var method=document.querySelector('input[name="sjMethod"]:checked').value;
+  var sjSalary=parseFloat(document.getElementById('sjSalary').value)||0;
+  var sjHourlyRate=parseFloat(document.getElementById('sjHourlyRate').value)||0;
+  var sjHours=parseFloat(document.getElementById('sjHours').value)||0;
+  var sjWeeks=parseFloat(document.getElementById('sjWeeks').value)||0;
+  if(sjSalary===0 && (sjHourlyRate===0 || sjHours===0 || sjWeeks===0)) return 0;  // No data entered
   var income;
   if(method==='hourly'){
-    income=(parseFloat(document.getElementById('sjHourlyRate').value)||0)*(parseFloat(document.getElementById('sjHours').value)||0)*(parseFloat(document.getElementById('sjWeeks').value)||0);
+    income=sjHourlyRate*sjHours*sjWeeks;
   } else {
-    income=parseFloat(document.getElementById('sjSalary').value)||0;
+    income=sjSalary;
   }
   var sjPart=document.getElementById('sjBasisPart')&&document.getElementById('sjBasisPart').checked;
   if(sjPart){
@@ -851,7 +977,7 @@ function syncVisibility(){
 function calculate(){
   syncVisibility();
   var fy=getFY();
-  var freq=parseFloat(document.getElementById('frequency').value)||26;
+  var freq=parseFloat(document.querySelector('input[name="freqR"]:checked').value)||26;
   var residency=document.getElementById('residency').value;
   var superRate=(parseFloat(document.getElementById('superRate').value)||0)/100;
   var salSac=parseFloat(document.getElementById('salSac').value)||0;
@@ -891,7 +1017,16 @@ function calculate(){
   var secondJobIncome=getSecondJobIncome();
   var sjSuperRate=getSJSuperRate();
   var sjSalSac=getSJSalSac();
-  var sjSuperAmt=secondJobIncome*sjSuperRate;
+  var sjSuperAmt=0;
+  if(secondJobIncome>0){
+    if(document.getElementById('sjSuperIncSwitch').checked){
+      var sjBase=secondJobIncome/(1+sjSuperRate);
+      sjSuperAmt=secondJobIncome-sjBase;
+      secondJobIncome=sjBase;
+    } else {
+      sjSuperAmt=secondJobIncome*sjSuperRate;
+    }
+  }
   var purchasedLeaveWeeks=document.getElementById('showPurchasedLeave').checked?(parseFloat(document.getElementById('purchasedLeaveWeeks').value)||0):0;
   var purchasedLeaveDeduction=purchasedLeaveWeeks>0?(purchasedLeaveWeeks/52)*baseSalary:0;
   var generalSalSac=document.getElementById('showGeneralSalSac').checked?(parseFloat(document.getElementById('generalSalSacAmt').value)||0):0;
@@ -1099,7 +1234,7 @@ function resetAll(){
   document.getElementById('showBonus').checked=false;
   document.getElementById('superRate').value='12.0';
   document.getElementById('salSac').value='';
-  document.getElementById('frequency').value='26';
+  document.querySelector('input[name="freqR"]:checked').value='26';
   document.getElementById('residency').value='resident';
   document.getElementById('helpDebtYes').checked=false;
   document.getElementById('tfnYes').checked=false;
@@ -1164,7 +1299,7 @@ function saveHTML(){
   var eff=document.getElementById('effectiveRate').textContent;
   var marg=document.getElementById('marginalRate').textContent;
   var sup=document.getElementById('totalSuperDisplay').textContent;
-  var freqLabel=document.getElementById('frequency').selectedOptions[0].text;
+  var freqLabel=document.querySelector('label[for="'+document.querySelector('input[name="freqR"]:checked').id+'"]').textContent;
   var h='<!DOCTYPE html><html lang="en-AU"><head><meta charset="UTF-8"><title>Tax Calculation - '+fy.label+' - '+dateStr+'</title>';
   h+='<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f8fb;color:#22313f;line-height:1.5}';
   h+='.hd{background:#3e5f75;padding:16px 32px;border-bottom:1px solid #6a92ad;display:flex;align-items:center;gap:16px}.hd-t{color:#fff;font-size:1rem;font-weight:700}.hd-d{color:rgba(255,255,255,.7);font-size:.8rem}';
@@ -1217,18 +1352,34 @@ function setCollapsibleByViewport(){
 // and would auto-collapse sections the user intentionally opened
 
 document.addEventListener('DOMContentLoaded',function(){
+  // Salary slider sync
+  (function(){
+    var si=document.getElementById('salary'),sr=document.getElementById('salaryRange');
+    if(si&&sr){
+      si.addEventListener('input',function(){if(parseFloat(si.value)<=300000)sr.value=si.value;else sr.value=300000;calculate();});
+      sr.addEventListener('input',function(){si.value=sr.value;calculate();});
+    }
+  })();
+  // Pay frequency radio listeners
+  // Second job pay frequency radios
+  ['sjFreqFortnightly','sjFreqWeekly','sjFreqMonthly'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
+  });
+  ['freqFortnightly','freqWeekly','freqMonthly'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
+  });
   setCollapsibleByViewport();
   // number/select inputs
   ['salary','hourlyRate','hourlyHours','hourlyWeeks','superRate','salSac','extraTax','purchasedLeaveWeeks','generalSalSacAmt','bonus','actualHours','fteHours','ftbUnder13','ftb13to15','ftb16to19','ftbFamilyIncome','sjSalary','sjHourlyRate','sjHours','sjWeeks','sjSuperRate','sjSalSac','sjActualHours','sjFteHours'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.addEventListener('input',calculate);
   });
-  ['financialYear','frequency','residency','mlsFamily','seniorsStatus'].forEach(function(id){
+  ['financialYear','residency','mlsFamily','seniorsStatus'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.addEventListener('change',function(){if(id==='financialYear')onFYChange();else calculate();});
   });
   ['methodAnnual','methodHourly','superNo','superYes','basisFull','basisPart','sjAnnual','sjHourly','sjBasisFull','sjBasisPart','helpDebtYes','helpDebtNo','tfnYes','tfnNo'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
   });
-  ['showPurchasedLeave','showGeneralSalSac','seniorsOffset','ftbEnabled','mlsEnabled','hasSecondJob','showBonus','sjNoTFN','showExtraTax'].forEach(function(id){
+  ['showPurchasedLeave_sw','showGeneralSalSac_sw','seniorsOffset_sw','ftbEnabled_sw','mlsEnabled_sw','hasSecondJob_sw','showBonus_sw','sjNoTFN_sw','showExtraTax_sw','helpDebtSwitch','tfnSwitch','superIncSwitch','sjSuperIncSwitch'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
   });
   onFYChange();
