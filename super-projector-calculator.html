@@ -167,20 +167,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
   </div>
 
-  <div class="card">
-    <h2>Retirement Income</h2>
-    <div>
-      <div class="section-label first">Drawdown</div>
-      <div class="inline-fields">
-        <div class="field"><label for="fDrawdown">Annual Income Drawdown</label><div class="input-wrap"><span class="prefix">$</span><input type="number" id="fDrawdown" class="has-prefix" value="65000" min="0" step="1000"></div><div class="field-hint">ASFA comfortable single: ~$52,000/yr. Adjusts annually with your inflation rate in retirement.</div></div>
-        <div class="field"><label for="fLifeExpect">Life Expectancy</label><div class="input-wrap"><input type="number" id="fLifeExpect" class="has-suffix" value="87" min="60" max="110" step="1"><span class="suffix">yrs</span></div></div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div>
   <div class="card collapsible-card">
     <button type="button" class="collapsible-header" id="fundBtn" aria-expanded="true">
       <h2>Fund &amp; Returns</h2>
@@ -214,7 +200,21 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   </div>
 
   <div class="card">
-    <h2>Projection Results</h2>
+    <h2>Retirement Income</h2>
+    <div>
+      <div class="section-label first">Drawdown</div>
+      <div class="inline-fields">
+        <div class="field"><label for="fDrawdown">Annual Income Drawdown</label><div class="input-wrap"><span class="prefix">$</span><input type="number" id="fDrawdown" class="has-prefix" value="65000" min="0" step="1000"></div><div class="field-hint">ASFA comfortable single: ~$52,000/yr. Adjusts annually with your inflation rate in retirement.</div></div>
+        <div class="field"><label for="fLifeExpect">Life Expectancy</label><div class="input-wrap"><input type="number" id="fLifeExpect" class="has-suffix" value="87" min="60" max="110" step="1"><span class="suffix">yrs</span></div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="card">
+    <h2>Results</h2>
 
     <div class="results-grid" style="margin-bottom:0">
       <div class="result-box hl-green"><div class="lbl">Balance at Retirement</div><div class="val" id="rBalance">-</div><div class="sub" id="rBalanceSub"></div></div>
@@ -228,11 +228,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     </div>
     <div class="chart-section">
       <div class="section-title">Super Balance Over Time</div>
-      <div class="chart-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(232,168,56,1)"></div>Contributions</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,1)"></div>Superannuation Growth</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(63,127,181,1)"></div>Retirement Balance</div>
-      </div>
       <div class="chart-wrap"><canvas id="superChart"></canvas></div>
       <div style="font-size:.72rem;color:var(--txl);margin-top:6px;text-align:right">Hover for details</div>
     </div>
@@ -246,6 +241,11 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
           <thead><tr><th>Age</th><th>Salary</th><th>SGC</th><th>Voluntary</th><th>Growth</th><th>Closing Balance</th></tr></thead>
           <tbody id="amortBody"></tbody>
         </table>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(232,168,56,1)"></div>Contributions</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,1)"></div>Superannuation Growth</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(63,127,181,1)"></div>Retirement Balance</div>
       </div>
     </div>
     <div class="actions-bar">
@@ -273,7 +273,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   </div>
 </div>
 
-</div></div></div>
+</div>
 <div class="side-rail right"><div class="side-rail-inner"><div class="rail-ad-unit"><div class="rail-ad-label">Advertisement</div><div style="padding:8px;display:flex;justify-content:center;min-height:620px"><ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins></div></div></div></div>
 </div>
 <div class="ft"><span>&copy; 2025 Australian Finance Tools &nbsp;&middot;&nbsp; <a href="#">Privacy</a></span></div>
@@ -442,7 +442,7 @@ function drawChart(labels, bArr, dArr, cArr) {
       responsive: true, maintainAspectRatio: false,
       interaction: { mode: "index", intersect: false },
       plugins: {
-        legend: { display: false },
+        legend: { display: true, position: "bottom", labels: { padding: 16, usePointStyle: true, pointStyle: "circle", boxWidth: 10 } },
         tooltip: {
           backgroundColor: "rgba(30,20,10,.93)", titleColor: "#fff", bodyColor: "rgba(255,255,255,.88)", padding: 11, cornerRadius: 8,
           callbacks: { label: function(item) { return item.dataset.label + ": $" + Math.round(item.parsed.y).toLocaleString("en-AU"); } }
