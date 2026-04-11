@@ -79,7 +79,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .result-box .sub{font-size:.72rem;color:var(--txl);margin-top:2px}
 .retire-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:.78rem;font-weight:700;background:var(--grl);color:var(--gr);border:1px solid var(--gr);margin-bottom:14px}
 .section-title{font-size:.85rem;font-weight:700;margin:0 0 10px;color:var(--dk)}
-.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
+.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr);overflow:hidden;max-width:100%}
 .chart-legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:8px;justify-content:center}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--tx)}
 .legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
@@ -91,7 +91,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:7px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s;font-family:inherit}
 .amort-btn:hover{border-color:var(--gr);color:var(--gr)}
 .amort-btn svg{width:13px;height:13px;fill:currentColor}
-.amort-wrap{max-height:380px;overflow-y:auto;overflow-x:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px;-webkit-overflow-scrolling:touch;width:100%;box-sizing:border-box}
+.amort-wrap{max-height:380px;overflow-y:auto;overflow-x:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px;-webkit-overflow-scrolling:touch;width:100%;max-width:100%;box-sizing:border-box}
+.chart-wrap{width:100%;max-width:100%;overflow:hidden;box-sizing:border-box}
+.main-wrapper,.layout>div{min-width:0;max-width:100%;box-sizing:border-box}
 .amort-table{width:100%;min-width:520px;border-collapse:collapse;font-size:.82rem}
 .amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
 .amort-table th:first-child{text-align:left}
@@ -272,7 +274,7 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
   </div>
 </div>
 
-<div>
+<div style="min-width:0;overflow:hidden">
   <div class="card">
     <h2>Results</h2>
 
@@ -299,7 +301,7 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
       <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
       Show Year-by-Year Schedule
     </button>
-    <div id="amortSection" style="display:none;width:100%;overflow:hidden;box-sizing:border-box">
+    <div id="amortSection" style="display:none;width:100%;max-width:100%;overflow:hidden;box-sizing:border-box">
       <div class="amort-wrap">
         <table class="amort-table">
           <thead><tr><th>Age</th><th>Salary</th><th>SGC</th><th>Voluntary</th><th>Growth</th><th>Closing Balance</th></tr></thead>
