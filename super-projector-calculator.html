@@ -80,9 +80,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .retire-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:.78rem;font-weight:700;background:var(--grl);color:var(--gr);border:1px solid var(--gr);margin-bottom:14px}
 .section-title{font-size:.85rem;font-weight:700;margin:0 0 10px;color:var(--dk)}
 .chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
-.chart-legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
-.legend-item{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--txl)}
-.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.chart-legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:8px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--tx)}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
 .chart-wrap{position:relative;width:100%;height:300px}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .15s;font-family:inherit}
 .btn svg{width:14px;height:14px;fill:currentColor}
@@ -91,7 +91,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:7px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s;font-family:inherit}
 .amort-btn:hover{border-color:var(--gr);color:var(--gr)}
 .amort-btn svg{width:13px;height:13px;fill:currentColor}
-.amort-wrap{max-height:380px;overflow-y:auto;overflow-x:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px;-webkit-overflow-scrolling:touch}
+.amort-wrap{max-height:380px;overflow-y:auto;overflow-x:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px;-webkit-overflow-scrolling:touch;width:100%;box-sizing:border-box}
 .amort-table{width:100%;min-width:520px;border-collapse:collapse;font-size:.82rem}
 .amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
 .amort-table th:first-child{text-align:left}
@@ -108,6 +108,19 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 @media(max-width:768px){ins.adsbygoogle,.side-rail{display:none!important}.results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important;margin-bottom:0!important}}
 @media(max-width:480px){.main-wrapper{padding:12px!important}.layout{grid-template-columns:1fr!important;gap:10px!important}.card{padding:14px!important}.topbar{padding:8px 14px!important}.inline-fields{grid-template-columns:1fr!important}.results-grid,.results-grid-2{grid-template-columns:1fr 1fr!important;gap:6px!important;margin-bottom:0!important}}
 @media(min-width:481px) and (max-width:1000px){.main-wrapper{padding:14px 18px!important}.layout{grid-template-columns:1fr!important}}
+
+.range-wrap{margin-top:6px}
+input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
+.range-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--txl);margin-top:2px}
+
+.switch-field{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.switch-field label:first-child{font-size:.88rem;font-weight:500;color:var(--tx);flex:1}
+.switch{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;border-radius:24px;transition:.3s}
+.switch-slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+.switch input:checked+.switch-slider{background:var(--gr)}
+.switch input:checked+.switch-slider:before{transform:translateX(20px)}
 </style>
 </head>
 <body>
@@ -145,25 +158,71 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div class="field"><label for="fRetireAge">Retirement Age</label><div class="input-wrap"><input type="number" id="fRetireAge" class="has-suffix" value="67" min="50" max="80" step="1"><span class="suffix">yrs</span></div></div>
     </div>
     <div class="section-label">Income &amp; Contributions</div>
-    <div class="field"><label for="fSalary">Annual Salary (Before Tax)</label><div class="input-wrap"><span class="prefix">$</span><input type="number" id="fSalary" class="has-prefix" value="90000" min="0" step="1000"></div></div>
+    <div class="field">
+      <label for="fSalary">Annual Salary (Before Tax)</label>
+      <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fSalary" class="has-prefix" value="90000" min="0" step="1000"></div>
+      <div class="range-wrap">
+        <input type="range" id="fSalaryRange" min="0" max="300000" step="1000" value="90000">
+        <div class="range-labels"><span>$0</span><span>$300k</span></div>
+      </div>
+    </div>
     <div class="inline-fields">
       <div class="field"><label for="fSuperRate">Employer SGC Rate</label><div class="input-wrap"><input type="number" id="fSuperRate" class="has-suffix" value="12" min="0" max="30" step="0.5"><span class="suffix">%</span></div></div>
       <div class="field"><label for="fSalGrowth">Annual Salary Growth</label><div class="input-wrap"><input type="number" id="fSalGrowth" class="has-suffix" value="2.5" min="0" max="20" step="0.1"><span class="suffix">%</span></div></div>
     </div>
-    <div class="field"><label for="fCurrentBalance">Current Super Balance</label><div class="input-wrap"><span class="prefix">$</span><input type="number" id="fCurrentBalance" class="has-prefix" value="75000" min="0" step="1000"></div></div>
-    <div class="section-label">Voluntary Contributions</div>
-    <div class="toggle-group">
-      <div class="toggle-label">Frequency</div>
-      <div class="toggle-switch">
-        <input type="radio" name="volFreq" id="volNone" value="none" checked><label for="volNone">None</label>
-        <input type="radio" name="volFreq" id="volMonthly" value="monthly"><label for="volMonthly">Monthly</label>
-        <input type="radio" name="volFreq" id="volAnnual" value="annual"><label for="volAnnual">Annual</label>
+    <div class="field">
+      <label for="fCurrentBalance">Current Super Balance</label>
+      <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fCurrentBalance" class="has-prefix" value="75000" min="0" step="1000"></div>
+      <div class="range-wrap">
+        <input type="range" id="fCurrentBalanceRange" min="0" max="1000000" step="1000" value="75000">
+        <div class="range-labels"><span>$0</span><span>$1m</span></div>
       </div>
     </div>
-    <div id="volContribField" class="field" style="display:none">
-      <label for="fVolContrib" id="volContribLabel">Monthly Voluntary Contribution</label>
-      <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fVolContrib" class="has-prefix" value="200" min="0" step="50"></div>
-      <div class="field-hint">Concessional cap: $30,000/yr total (incl. SGC).</div>
+    <div class="section-label">Voluntary Concessional Contributions</div>
+    <div class="field-hint" style="margin-top:-8px;margin-bottom:10px;font-style:italic">Made <strong>before tax</strong> (e.g. salary sacrifice or employer SGC). Taxed at 15% inside your fund. Cap: $30,000/yr total (incl. SGC).</div>
+    <div class="switch-field">
+      <label for="volSwitch">Add concessional contributions?</label>
+      <label class="switch">
+        <input type="checkbox" id="volSwitch" onchange="toggleVol();calc();">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <div id="volOnFields" style="display:none">
+      <div class="toggle-group" style="margin-top:8px">
+        <div class="toggle-label">Frequency</div>
+        <div class="toggle-switch">
+          <input type="radio" name="volFreq" id="volMonthly" value="monthly" checked><label for="volMonthly">Monthly</label>
+          <input type="radio" name="volFreq" id="volAnnual" value="annual"><label for="volAnnual">Annual</label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="fVolContrib" id="volContribLabel">Monthly Voluntary Contribution</label>
+        <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fVolContrib" class="has-prefix" value="200" min="0" step="50"></div>
+        <div class="field-hint">Concessional (salary sacrifice) cap: $30,000/yr total (incl. SGC).</div>
+      </div>
+    </div>
+    <div class="section-label">One-off Non-Concessional Contribution</div>
+    <div class="field-hint" style="margin-top:-8px;margin-bottom:10px;font-style:italic">Made <strong>after tax</strong> from personal savings. Not taxed again when entering your fund. Annual cap: $120,000 (bring-forward rules may apply).</div>
+    <div class="switch-field">
+      <label for="nccSwitch">Add a non-concessional contribution?</label>
+      <label class="switch">
+        <input type="checkbox" id="nccSwitch" onchange="toggleNCC();calc();">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <div id="nccFields" style="display:none">
+      <div class="inline-fields" style="margin-top:8px">
+        <div class="field">
+          <label for="fNCC">Contribution Amount</label>
+          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fNCC" class="has-prefix" value="50000" min="0" step="1000"></div>
+        </div>
+        <div class="field">
+          <label for="fNCCAge">Age at Contribution</label>
+          <div class="input-wrap"><input type="number" id="fNCCAge" class="has-suffix" value="35" min="15" max="74" step="1"><span class="suffix">yrs</span></div>
+          <div class="field-hint">Must be before retirement age &amp; under 75.</div>
+        </div>
+      </div>
+      <div id="fNCCStatus" style="display:none;font-size:0.82rem;padding:7px 11px;border-radius:7px;margin:0 0 6px 0;font-weight:500;line-height:1.4"></div>
     </div>
   </div>
 
@@ -205,8 +264,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div class="section-label first">Drawdown</div>
       <div class="inline-fields">
         <div class="field"><label for="fDrawdown">Annual Income Drawdown</label><div class="input-wrap"><span class="prefix">$</span><input type="number" id="fDrawdown" class="has-prefix" value="65000" min="0" step="1000"></div><div class="field-hint">ASFA comfortable single: ~$52,000/yr. Adjusts annually with your inflation rate in retirement.</div></div>
-        <div class="field"><label for="fLifeExpect">Life Expectancy</label><div class="input-wrap"><input type="number" id="fLifeExpect" class="has-suffix" value="87" min="60" max="110" step="1"><span class="suffix">yrs</span></div></div>
+        <div class="field"><label for="fLifeExpect">Life Expectancy</label><div class="input-wrap"><input type="number" id="fLifeExpect" class="has-suffix" value="87" min="60" max="110" step="1"><span class="suffix">yrs</span></div><div class="field-hint">Australian average: ~85 for men, ~87 for women.</div></div>
       </div>
+      <div class="field-hint" style="margin-top:6px;font-style:italic;padding:7px 10px;border-radius:7px;background:var(--grl,#f0faf5);color:var(--gr,#1b5e38);border:1px solid var(--grb,#b2dfcc)">🎉 Super income drawn in retirement is generally <strong>tax-free</strong> for those aged 60 and over.</div>
 
     </div>
   </div>
@@ -230,22 +290,21 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div class="section-title">Super Balance Over Time</div>
       <div class="chart-wrap"><canvas id="superChart"></canvas></div>
       <div style="font-size:.72rem;color:var(--txl);margin-top:6px;text-align:right">Hover for details</div>
-    </div>
+      <div class="chart-legend" style="margin-top:12px;margin-bottom:12px">
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(232,168,56,1)"></div>Contributions</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,1)"></div>Superannuation Growth</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(63,127,181,1)"></div>Retirement Balance</div>
+      </div>
     <button type="button" class="amort-btn" id="amortToggle">
       <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
       Show Year-by-Year Schedule
     </button>
-    <div id="amortSection" style="display:none">
+    <div id="amortSection" style="display:none;width:100%;overflow:hidden;box-sizing:border-box">
       <div class="amort-wrap">
         <table class="amort-table">
           <thead><tr><th>Age</th><th>Salary</th><th>SGC</th><th>Voluntary</th><th>Growth</th><th>Closing Balance</th></tr></thead>
           <tbody id="amortBody"></tbody>
         </table>
-      </div>
-      <div class="chart-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(232,168,56,1)"></div>Contributions</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,1)"></div>Superannuation Growth</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(63,127,181,1)"></div>Retirement Balance</div>
       </div>
     </div>
     <div class="actions-bar">
@@ -302,6 +361,54 @@ function fmt(v) {
   return "$" + Math.round(v).toLocaleString("en-AU");
 }
 
+
+// ── NCC bring-forward logic (2025-26 ATO caps) ──────────────────────────────
+// Determines max NCC allowed based on projected balance at time of contribution
+function nccMaxCap(projectedBal, age) {
+  if (age >= 75) return 120000;           // no bring-forward at 75+
+  if (projectedBal >= 1900000) return 0;  // TSB >= $1.9m: ineligible
+  if (projectedBal >= 1780000) return 120000; // annual cap only
+  if (projectedBal >= 1660000) return 240000; // 2-yr bring-forward
+  return 360000;                          // 3-yr bring-forward
+}
+
+function validateNCC(projectedBal, ncc, age) {
+  var status = document.getElementById("fNCCStatus");
+  if (!status) return;
+  if (ncc <= 0) { status.style.display = "none"; return; }
+
+  var cap    = nccMaxCap(projectedBal, age);
+  var isOver = ncc > cap;
+  var balFmt = "$" + Math.round(projectedBal).toLocaleString("en-AU");
+  var capFmt = "$" + cap.toLocaleString("en-AU");
+  var msg    = "";
+
+  if (cap === 0) {
+    msg = "⚠ At age " + age + " your projected balance (" + balFmt + ") reaches $1.9m — NCCs not permitted. Contribution will not be applied.";
+  } else if (isOver) {
+    msg = "⚠ $" + ncc.toLocaleString("en-AU") + " exceeds your bring-forward cap of " + capFmt + " (projected balance " + balFmt + " at age " + age + "). Only " + capFmt + " will be applied.";
+  } else if (age >= 75) {
+    msg = "✓ Within annual cap (" + capFmt + "). No bring-forward at age 75+.";
+  } else if (projectedBal >= 1780000) {
+    msg = "✓ Within annual cap (" + capFmt + "). Projected balance limits bring-forward eligibility.";
+  } else if (ncc > 240000) {
+    msg = "✓ 3-year bring-forward ($360,000 cap). Projected balance at age " + age + ": " + balFmt + ".";
+  } else if (ncc > 120000) {
+    var bfLabel = cap >= 360000 ? "3-year" : "2-year";
+    msg = "✓ Using " + bfLabel + " bring-forward. Cap: " + capFmt + ". Projected balance: " + balFmt + ".";
+  } else {
+    msg = "✓ Within standard annual cap ($120,000). Projected balance at age " + age + ": " + balFmt + ".";
+  }
+
+  status.textContent   = msg;
+  status.style.display = "block";
+  if (cap === 0 || isOver) {
+    status.style.background = "#fdecea"; status.style.color = "#b71c1c"; status.style.border = "1px solid #f5c6c6";
+  } else {
+    status.style.background = "#f0faf5"; status.style.color = "#1b5e38"; status.style.border = "1px solid #b2dfcc";
+  }
+}
+
 function calc() {
   var ca  = n("fCurrentAge");
   var ra  = n("fRetireAge");
@@ -316,8 +423,10 @@ function calc() {
   var dw  = n("fDrawdown");
   var le  = n("fLifeExpect");
   var vf  = radio("volFreq");
-  var va  = n("fVolContrib");
+  var volSw = document.getElementById("volSwitch"); var va = volSw && volSw.checked ? n("fVolContrib") : 0;
   var im  = radio("inflMode");
+  var nccSw = document.getElementById("nccSwitch"); var ncc = nccSw && nccSw.checked ? n("fNCC") : 0;
+  var nccAge = parseInt(document.getElementById("fNCCAge").value) || ca;
 
   if (ca < 15 || ra <= ca) return;
 
@@ -339,8 +448,25 @@ function calc() {
   dArr.push(null);
   cArr.push(0);
 
+  var nccApplied = false;
+  // Handle NCC at current age (before loop starts)
+  if (ncc > 0 && nccAge <= ca && nccAge < ra) {
+    var nccCap0 = nccMaxCap(bal, nccAge);
+    var nccAmt0 = Math.min(ncc, nccCap0);
+    if (nccAmt0 > 0) { bal += nccAmt0; cum += nccAmt0; }
+    validateNCC(bal - nccAmt0, ncc, nccAge);
+    nccApplied = true;
+  }
   for (var y = 0; y < ytr; y++) {
     var age   = ca + y + 1;
+    // Apply one-off NCC at nominated age (before growth for that year)
+    if (ncc > 0 && !nccApplied && age === nccAge && nccAge < ra) {
+      var nccCap = nccMaxCap(bal, nccAge);
+      var nccAmt = Math.min(ncc, nccCap);
+      if (nccAmt > 0) { bal += nccAmt; cum += nccAmt; }
+      validateNCC(bal - nccAmt, ncc, nccAge); // pass pre-NCC projected balance for display
+      nccApplied = true;
+    }
     var sgn   = cs * sr * (1 - ct);
     var vn    = av * (1 - ct);
     var grw   = (bal + sgn/2 + vn/2) * rr;
@@ -419,6 +545,13 @@ function calc() {
       return v === null ? null : Math.round(v / Math.pow(1 + inf, i));
     });
   }
+  // If NCC age is outside accumulation range, show status with starting balance as estimate
+  if (ncc > 0 && !nccApplied) {
+    validateNCC(n("fCurrentBalance"), ncc, nccAge);
+  } else if (ncc <= 0) {
+    var st = document.getElementById("fNCCStatus");
+    if (st) st.style.display = "none";
+  }
   drawChart(labels, chartBArr, chartDArr, chartCArr);
 }
 
@@ -442,7 +575,7 @@ function drawChart(labels, bArr, dArr, cArr) {
       responsive: true, maintainAspectRatio: false,
       interaction: { mode: "index", intersect: false },
       plugins: {
-        legend: { display: true, position: "bottom", labels: { padding: 16, usePointStyle: true, pointStyle: "circle", boxWidth: 10 } },
+        legend: { display: false },
         tooltip: {
           backgroundColor: "rgba(30,20,10,.93)", titleColor: "#fff", bodyColor: "rgba(255,255,255,.88)", padding: 11, cornerRadius: 8,
           callbacks: { label: function(item) { return item.dataset.label + ": $" + Math.round(item.parsed.y).toLocaleString("en-AU"); } }
@@ -458,9 +591,19 @@ function drawChart(labels, bArr, dArr, cArr) {
 }
 
 function toggleVol() {
-  var f = radio("volFreq");
-  document.getElementById("volContribField").style.display = f === "none" ? "none" : "block";
-  document.getElementById("volContribLabel").textContent = f === "monthly" ? "Monthly Voluntary Contribution" : "Annual Voluntary Contribution";
+  var sw = document.getElementById("volSwitch");
+  var on = sw && sw.checked;
+  document.getElementById("volOnFields").style.display = on ? "block" : "none";
+  if (on) {
+    var f = radio("volFreq");
+    document.getElementById("volContribLabel").textContent = f === "monthly" ? "Monthly Voluntary Contribution" : "Annual Voluntary Contribution";
+  }
+}
+
+function toggleNCC() {
+  var sw = document.getElementById("nccSwitch");
+  var on = sw && sw.checked;
+  document.getElementById("nccFields").style.display = on ? "block" : "none";
 }
 
 
@@ -474,9 +617,13 @@ function toggleInflMode() {
 }
 
 function resetAll() {
-  var d = {fCurrentAge:35,fRetireAge:67,fSalary:90000,fSuperRate:12,fSalGrowth:2.5,fCurrentBalance:75000,fVolContrib:200,fReturnRate:7.5,fReturnRetire:5.5,fFee:0.60,fTax:15,fInflation:2.5,fDrawdown:65000,fLifeExpect:87};
+  var d = {fCurrentAge:35,fRetireAge:67,fSalary:90000,fSuperRate:12,fSalGrowth:2.5,fCurrentBalance:75000,fVolContrib:200,fReturnRate:7.5,fReturnRetire:5.5,fFee:0.60,fTax:15,fInflation:2.5,fDrawdown:65000,fLifeExpect:87,fNCC:0,fNCCAge:35};
   for (var k in d) document.getElementById(k).value = d[k];
-  document.getElementById("volNone").checked = true;
+  var volSw = document.getElementById("volSwitch"); if (volSw) volSw.checked = false;
+  var nccSw = document.getElementById("nccSwitch"); if (nccSw) nccSw.checked = false;
+  document.getElementById("volMonthly").checked = true;
+  document.getElementById("fSalaryRange").value = 90000;
+  document.getElementById("fCurrentBalanceRange").value = 75000;
   document.getElementById("inflNominal").checked = true;
   toggleVol(); toggleInflMode(); var ri=document.getElementById("retireInfo"); if(ri) ri.style.display="none"; var ril=document.getElementById("retireInfoLeft"); if(ril) ril.style.display="none"; calc();
 }
@@ -490,12 +637,31 @@ function dlCSV(rows, fname) {
 }
 
 // Wire inputs
-["fCurrentAge","fRetireAge","fSalary","fSuperRate","fSalGrowth","fCurrentBalance","fVolContrib","fReturnRate","fReturnRetire","fFee","fTax","fInflation","fDrawdown","fLifeExpect"].forEach(function(id) {
-  document.getElementById(id).addEventListener("input", calc);
+["fCurrentAge","fRetireAge","fSalary","fSuperRate","fSalGrowth","fCurrentBalance","fVolContrib","fReturnRate","fReturnRetire","fFee","fTax","fInflation","fDrawdown","fLifeExpect",
+  "fNCC","fNCCAge"].forEach(function(id) {
+  var el = document.getElementById(id); if (el) el.addEventListener("input", calc);
 });
-["volNone","volMonthly","volAnnual"].forEach(function(id) {
-  document.getElementById(id).addEventListener("change", function() { toggleVol(); calc(); });
+// Salary slider sync
+(function(){
+  var num = document.getElementById("fSalary");
+  var rng = document.getElementById("fSalaryRange");
+  if (!num || !rng) return;
+  rng.addEventListener("input", function() { num.value = rng.value; calc(); });
+  num.addEventListener("input", function() { if (parseFloat(num.value) <= 300000) rng.value = num.value; });
+})();
+// Balance slider sync
+(function(){
+  var num = document.getElementById("fCurrentBalance");
+  var rng = document.getElementById("fCurrentBalanceRange");
+  if (!num || !rng) return;
+  rng.addEventListener("input", function() { num.value = rng.value; calc(); });
+  num.addEventListener("input", function() { if (parseFloat(num.value) <= 1000000) rng.value = num.value; });
+})();
+// Frequency toggle for concessional (monthly/annual)
+["volMonthly","volAnnual"].forEach(function(id) {
+  var el = document.getElementById(id); if (el) el.addEventListener("change", function() { toggleVol(); calc(); });
 });
+// volSwitch and nccSwitch use inline onchange handlers
 ["inflNominal","inflReal"].forEach(function(id) {
   document.getElementById(id).addEventListener("change", function() { toggleInflMode(); calc(); });
 });
@@ -534,7 +700,13 @@ document.getElementById("amortToggle").addEventListener("click", function() {
 
 // Init
 toggleVol();
+toggleNCC();
 toggleInflMode();
+(function(){
+  var ca = document.getElementById("fCurrentAge");
+  var na = document.getElementById("fNCCAge");
+  if (ca && na && na.value === "35") na.value = ca.value;
+})();
 calc();
 </script>
 </body>
