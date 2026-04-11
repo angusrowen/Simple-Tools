@@ -32,7 +32,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .container{max-width:1500px;margin:0 auto;width:100%;box-sizing:border-box}
 .layout{display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:24px;align-items:start}
 @media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
-.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06);box-sizing:border-box;width:100%}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06);box-sizing:border-box;width:100%;overflow:hidden}
 .card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
 .card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
 .card-header-row h2{margin:0;padding:0;border:none}
@@ -369,7 +369,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <button type="button" class="amort-btn" id="amortToggle">
         <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Show Year-by-Year Schedule
       </button>
-      <div id="amortSection" style="display:none">
+      <div id="amortSection" style="display:none;max-width:100%;overflow:hidden">
         <div class="amort-wrap">
           <table class="amort-table">
             <thead><tr>
