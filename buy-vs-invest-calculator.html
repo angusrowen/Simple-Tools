@@ -89,13 +89,13 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .chart-wrap{position:relative;width:100%;height:280px}
 .chart-legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--txl)}
-.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
 
 .amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:7px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s;font-family:inherit}
 .amort-btn:hover{border-color:var(--gr);color:var(--gr)}
 .amort-btn svg{width:13px;height:13px;fill:currentColor}
-.amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
-.amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.amort-wrap{max-height:380px;overflow-y:auto;overflow-x:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px;width:100%;box-sizing:border-box}
+.amort-table{width:100%;min-width:560px;border-collapse:collapse;font-size:.82rem}
 .amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
 .amort-table th:first-child{text-align:left}
 .amort-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums;text-align:right}
@@ -357,12 +357,12 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
           <div class="section-title">Wealth Comparison Over Time</div>
           <div style="font-size:.74rem;color:var(--txl);font-style:italic">ℹ Hover for details</div>
         </div>
-        <div class="chart-legend">
+        <div class="chart-wrap"><canvas id="wealthChart"></canvas></div>
+        <div class="chart-legend" style="margin-top:10px;margin-bottom:0">
           <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,1)"></div>Buy: Net Wealth</div>
           <div class="legend-item"><div class="legend-dot" style="background:rgba(63,127,181,1)"></div>Rent &amp; Invest: Net Wealth</div>
           <div class="legend-item"><div class="legend-dot" style="background:rgba(232,168,56,1)"></div>Property Value</div>
         </div>
-        <div class="chart-wrap"><canvas id="wealthChart"></canvas></div>
       </div>
 
       <!-- Year-by-year -->
@@ -582,8 +582,8 @@ function drawChart(labels,buyArr,invArr,propArr){
   wealthChart=new Chart(canvas.getContext('2d'),{
     type:'line',
     data:{labels:labels,datasets:[
-      {label:'Buy: Net Wealth',data:buyArr,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,0.07)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
-      {label:'Rent & Invest: Net Wealth',data:invArr,borderColor:'rgba(63,127,181,1)',backgroundColor:'rgba(63,127,181,0.07)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
+      {label:'Buy: Net Wealth',data:buyArr,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,0.15)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
+      {label:'Rent & Invest: Net Wealth',data:invArr,borderColor:'rgba(63,127,181,1)',backgroundColor:'rgba(63,127,181,0.15)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
       {label:'Property Value',data:propArr,borderColor:'rgba(232,168,56,1)',backgroundColor:'rgba(232,168,56,0.05)',borderDash:[5,4],tension:0.35,pointRadius:0,pointHoverRadius:4,borderWidth:1.8,fill:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
