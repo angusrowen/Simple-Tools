@@ -79,7 +79,7 @@ body {
   background:var(--card); border:1px solid var(--bdr); border-radius:18px;
   padding:20px 24px; margin-bottom:16px;
   box-shadow:0 8px 24px rgba(45,50,40,.06);
-  min-width:0; box-sizing:border-box; max-width:100%;
+  min-width:0; box-sizing:border-box; overflow:hidden; max-width:100%;
 }
 .card h2 { font-size:1rem; margin-bottom:16px; padding-bottom:8px; border-bottom:2px solid var(--gr); color:var(--dk); }
 .card-hdr {
@@ -194,8 +194,8 @@ canvas { display:block; }
   cursor:pointer; margin-top:16px; font-family:inherit;
 }
 .sched-btn:hover { border-color:var(--gr); color:var(--gr); }
-.sched-wrap { max-height:360px; overflow-y:auto; border:1px solid var(--bdr); border-radius:10px; margin-top:10px; }
-.stbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+.sched-wrap { max-height:360px; overflow-y:auto; overflow-x:auto; border:1px solid var(--bdr); border-radius:10px; margin-top:10px; max-width:100%; width:100%; -webkit-overflow-scrolling:touch; }
+.stbl { width:100%; min-width:480px; border-collapse:collapse; font-size:.82rem; }
 .stbl th { text-align:right; padding:6px 10px; background:var(--bg); font-size:.73rem; text-transform:uppercase; color:var(--txl); border-bottom:2px solid var(--bdr); position:sticky; top:0; }
 .stbl th:first-child, .stbl th:nth-child(2) { text-align:left; }
 .stbl td { padding:6px 10px; border-bottom:1px solid var(--bdr); text-align:right; font-variant-numeric:tabular-nums; }
@@ -300,6 +300,13 @@ canvas { display:block; }
   .card-hdr { flex-wrap:wrap !important; gap:6px !important; }
   .card-hdr h2 { flex:1 !important; font-size:.92rem !important; }
 }
+
+/* ── CSS grid column overflow fix ── */
+.layout > div { min-width:0; max-width:100%; }
+.main-wrapper, .layout > div { min-width:0; }
+
+/* Chart section containment */
+.chart-section { overflow:hidden; max-width:100%; }
 
 /* ── Mobile overflow safety net ── */
 html, body { overflow-x:hidden; }
@@ -478,7 +485,7 @@ html, body { overflow-x:hidden; }
   </div>
 
   <button class="sched-btn" id="schedBtn" type="button">&#9776; Show Year-by-Year Schedule</button>
-  <div class="dn" id="schedWrap">
+  <div class="dn" id="schedWrap" style="max-width:100%; width:100%; overflow:hidden;">
     <div class="sched-wrap">
       <table class="stbl">
         <thead><tr>
