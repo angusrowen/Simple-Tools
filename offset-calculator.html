@@ -139,7 +139,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .bd-table td:not(:first-child){text-align:right}
 .bd-table tr:last-child td{border-bottom:none}
 .bd-table .total-row td{font-weight:700;border-top:2px solid var(--dk);border-bottom:none}
-.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
+.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr);overflow:hidden;max-width:100%}
 .chart-header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .chart-hint{font-size:.74rem;color:var(--txl);font-style:italic}
 .chart-wrap{background:#f8f5ef;border:1px solid var(--bdr);border-radius:14px;padding:14px 14px 10px}
@@ -148,7 +148,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .chart-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0}
 .amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:6px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s}
 .amort-btn:hover{border-color:var(--gr);color:var(--gr)}
-.amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px}
+.amort-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px;max-width:100%}
 .amort-table{width:100%;border-collapse:collapse;font-size:.82rem}
 .amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
 .amort-table th:first-child,.amort-table th:nth-child(2){text-align:left}
@@ -204,7 +204,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   }
 }
 html,body{overflow-x:hidden;width:100%;max-width:100%}
-.layout,.card,.main-wrapper,.container{min-width:0;box-sizing:border-box;width:100%;max-width:100%}
+.layout{min-width:0;overflow-x:hidden}
+.card,.main-wrapper,.container{box-sizing:border-box;width:100%;max-width:100%}
+.main-wrapper,.layout>div{min-width:0;max-width:100%}
 </style>
 <script>if(window.innerWidth>768&&navigator.maxTouchPoints===0){document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"><\/scr'+'ipt>')}</script>
 </head>
@@ -410,7 +412,7 @@ html,body{overflow-x:hidden;width:100%;max-width:100%}
               <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
               Show Year-by-Year Schedule
             </button>
-            <div id="amortSection" class="hidden">
+            <div id="amortSection" class="hidden" style="max-width:100%;overflow:hidden">
               <div class="amort-wrap">
                 <table class="amort-table">
                   <thead>
