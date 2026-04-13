@@ -143,6 +143,13 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 .main-wrapper,.layout>div{min-width:0;max-width:100%}
 .chart-section{overflow:hidden;max-width:100%}
+.actions-left,.actions-right{display:flex;flex-direction:row;gap:10px;flex-wrap:wrap}
+@media(max-width:600px){
+  .actions-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}
+  .actions-bar>div[style]{display:none}
+  .actions-left,.actions-right{flex-direction:column;gap:8px}
+  .actions-left .btn,.actions-right .btn{width:100%;justify-content:center}
+}
 </style>
 </head>
 <body>
@@ -393,19 +400,23 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div class="cf-note" id="cfNote"></div>
 
       <div class="actions-bar">
-        <button type="button" class="btn btn-green" id="btnExportSummary">
-          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 6h14v2H5z"/></svg>Export Summary CSV
-        </button>
-        <button type="button" class="btn btn-green" id="btnExportSchedule">
-          <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Export Schedule CSV
-        </button>
+        <div class="actions-left">
+          <button type="button" class="btn btn-green" id="btnExportSummary">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 6h14v2H5z"/></svg>Export Summary CSV
+          </button>
+          <button type="button" class="btn btn-green" id="btnExportSchedule">
+            <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Export Schedule CSV
+          </button>
+        </div>
         <div style="flex:1"></div>
-        <button type="button" class="btn btn-navy" id="btnSaveSnapshot">
-          <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>Save File
-        </button>
-        <button type="button" class="btn btn-navy" id="btnStartOver">
-          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Start Over
-        </button>
+        <div class="actions-right">
+          <button type="button" class="btn btn-navy" id="btnSaveSnapshot">
+            <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>Save File
+          </button>
+          <button type="button" class="btn btn-navy" id="btnStartOver">
+            <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Start Over
+          </button>
+        </div>
       </div>
 
       <div class="disclaimer">Estimates only. Assumes constant growth rates. Property net wealth = property value minus remaining mortgage (owner-occupied, no CGT). The invest scenario reinvests the annual cash flow difference each year — if buying is cheaper in a given year, that gap is drawn from the portfolio. Investment returns shown after estimated CGT where selected. Not personal financial advice.</div>
