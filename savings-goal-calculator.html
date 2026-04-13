@@ -103,6 +103,9 @@ body {
   color:var(--txl); text-transform:uppercase; letter-spacing:.3px;
 }
 .hint { font-size:.75rem; color:var(--txl); margin-top:3px; }
+.range-wrap { margin-top:6px; }
+.range-wrap input[type=range] { width:100%; accent-color:var(--gr); height:4px; cursor:pointer; display:block; }
+.range-labels { display:flex; justify-content:space-between; font-size:.72rem; color:var(--txl); margin-top:2px; }
 
 /* ── inputs ── */
 .iw { position:relative; }
@@ -202,8 +205,16 @@ canvas { display:block; }
 .stbl td:first-child, .stbl td:nth-child(2) { text-align:left; }
 
 /* ── actions ── */
-.actions { display:flex; gap:10px; margin-top:20px; padding-top:16px; border-top:1px solid var(--bdr); flex-wrap:wrap; }
-.btn { display:inline-flex; align-items:center; gap:6px; padding:8px 18px; border:none; border-radius:8px; font-size:.82rem; font-weight:600; cursor:pointer; font-family:inherit; }
+.actions-bar { display:flex; align-items:center; gap:10px; margin-top:20px; padding-top:16px; border-top:1px solid var(--bdr); flex-wrap:wrap; }
+.actions-left, .actions-right { display:flex; flex-direction:row; gap:10px; flex-wrap:wrap; }
+@media (max-width:600px) {
+  .actions-bar { display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:start; }
+  .actions-bar div[style] { display:none; }
+  .actions-left, .actions-right { flex-direction:column; gap:8px; }
+  .actions-left .btn, .actions-right .btn { width:100%; justify-content:center; }
+}
+.btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border:none; border-radius:8px; font-size:.8rem; font-weight:600; cursor:pointer; transition:background .15s; font-family:inherit; }
+.btn svg { width:14px; height:14px; fill:currentColor; }
 .btn-nv { background:var(--nv); color:#fff; }
 .btn-gr { background:var(--gr); color:#fff; }
 
@@ -365,6 +376,10 @@ html, body { overflow-x:hidden; }
   <div class="field">
     <label for="fGoal">Savings Goal</label>
     <div class="iw"><span class="pre">$</span><input type="number" id="fGoal" class="pl" value="50000" min="0" step="500"></div>
+    <div class="range-wrap">
+      <input type="range" id="fGoalRange" min="0" max="200000" step="500" value="50000">
+      <div class="range-labels"><span>$0</span><span>$50k</span></div>
+    </div>
   </div>
   <div class="field">
     <label for="fLabel">Goal Label (optional)</label>
@@ -375,6 +390,10 @@ html, body { overflow-x:hidden; }
   <div class="field">
     <label for="fInitial">Current Balance</label>
     <div class="iw"><span class="pre">$</span><input type="number" id="fInitial" class="pl" value="5000" min="0" step="500"></div>
+    <div class="range-wrap">
+      <input type="range" id="fInitialRange" min="0" max="50000" step="500" value="5000">
+      <div class="range-labels"><span>$0</span><span>$50k</span></div>
+    </div>
     <div class="hint">Amount already saved toward this goal.</div>
   </div>
 
@@ -390,6 +409,10 @@ html, body { overflow-x:hidden; }
   <div class="field">
     <label for="fContrib">Contribution Amount</label>
     <div class="iw"><span class="pre">$</span><input type="number" id="fContrib" class="pl" value="800" min="0" step="50"></div>
+    <div class="range-wrap">
+      <input type="range" id="fContribRange" min="0" max="5000" step="50" value="800">
+      <div class="range-labels"><span>$0</span><span>$5k</span></div>
+    </div>
   </div>
   <div class="tog-grp">
     <span class="tog-lbl">Frequency</span>
@@ -501,9 +524,28 @@ html, body { overflow-x:hidden; }
     </div>
   </div>
 
-  <div class="actions">
-    <button class="btn btn-gr" id="btnCSV" type="button">&#8595; Export Summary</button>
-    <button class="btn btn-gr" id="btnSchedCSV" type="button">&#8595; Export Schedule</button>
+  <div class="actions-bar">
+    <div class="actions-left">
+      <button type="button" class="btn btn-gr" id="btnCSV">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 6h14v2H5z"/></svg>
+        Export Summary CSV
+      </button>
+      <button type="button" class="btn btn-gr" id="btnSchedCSV">
+        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+        Export Schedule CSV
+      </button>
+    </div>
+    <div style="flex:1"></div>
+    <div class="actions-right">
+      <button type="button" class="btn btn-nv" id="btnSaveSnapshot">
+        <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>
+        Save File
+      </button>
+      <button type="button" class="btn btn-nv" id="btnStartOver">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Start Over
+      </button>
+    </div>
   </div>
 
   <div class="note">Estimates only. Assumes constant interest rate, contributions at start of each period compounded at contribution frequency. Not personal financial advice.</div>
@@ -860,6 +902,42 @@ html, body { overflow-x:hidden; }
     var lbl = el('fLabel').value || 'Savings';
     dlCSV(lbl+'_schedule.csv', lines);
   };
+
+  el('btnSaveSnapshot').onclick = function() {
+    var h = document.documentElement.outerHTML;
+    var blob = new Blob([h], {type:'text/html;charset=utf-8'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    var d = new Date();
+    a.download = 'savings-goal-snapshot-' + d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + '.html';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  };
+
+  el('btnStartOver').onclick = function() {
+    if (confirm('Reset all fields to defaults?')) {
+      location.reload();
+    }
+  };
+
+
+  // ── slider sync ──────────────────────────────────────────
+  [
+    ['fGoal',    'fGoalRange',    200000],
+    ['fInitial', 'fInitialRange', 50000],
+    ['fContrib', 'fContribRange', 5000]
+  ].forEach(function(pair) {
+    var num = el(pair[0]), rng = el(pair[1]), cap = pair[2];
+    if (!num || !rng) return;
+    rng.addEventListener('input', function() {
+      num.value = rng.value;
+      calc();
+    });
+    num.addEventListener('input', function() {
+      var v = parseFloat(num.value) || 0;
+      if (v <= cap) rng.value = v;
+      calc();
+    });
+  });
 
   // ── run on startup ────────────────────────────────────────────────────────
   calculate();
