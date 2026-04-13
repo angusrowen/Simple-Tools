@@ -61,16 +61,14 @@ body{
 /* Show rail only on very wide screens */
 @media(min-width:1400px){
   .side-rail{display:flex;flex-direction:column}
-  .main-wrapper{padding-left:200px;padding-right:200px;max-width:100%}
-  .container{max-width:100%;margin:0}
 }
 
 /* ── Main wrapper ── */
 .main-wrapper{
   background:transparent;padding:24px 32px;flex:1;
-  min-width:0;overflow-x:hidden;max-width:1400px;box-sizing:border-box;width:100%;margin:0 auto;
+  min-width:0;overflow-x:hidden;max-width:100%;box-sizing:border-box;width:100%;
 }
-.container{max-width:860px;margin:0 auto;width:100%;min-width:0;overflow-x:hidden}
+.container{max-width:1500px;margin:0 auto;width:100%;min-width:0;overflow-x:hidden}
 .layout{
   display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:24px;
   align-items:start;min-width:0;overflow-x:hidden;
@@ -268,7 +266,7 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
 /* Mobile overflow fix */
 html,body{overflow-x:hidden;width:100%;max-width:100%}
 .layout{min-width:0;overflow-x:hidden}
-.card,.main-wrapper,.container{box-sizing:border-box;width:100%;max-width:100%}
+.card,.main-wrapper{box-sizing:border-box;width:100%;max-width:100%}
 .main-wrapper,.layout>div{min-width:0;max-width:100%}
 .actions-left,.actions-right{display:flex;flex-direction:row;gap:10px;flex-wrap:wrap}
 @media(max-width:600px){
@@ -674,7 +672,7 @@ function drawChart(withRows,noRows,P,yrs,freq){
       labels:labels,
       datasets:[
         {label:'With Offset',data:withDebt,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,0.65)',fill:'origin',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5,order:1},
-        {label:'Without Offset',data:noDebt,borderColor:'rgba(230,100,20,1)',backgroundColor:'rgba(230,100,20,0.72)',fill:'-1',tension:0.35,pointRadius:0,pointHoverRadius:5,borderWidth:2,order:2}
+        {label:'Without Offset',data:noDebt,borderColor:'rgba(230,100,20,1)',backgroundColor:'rgba(230,100,20,0.72)',fill:'-1',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2,order:2}
       ]
     },
     options:{
