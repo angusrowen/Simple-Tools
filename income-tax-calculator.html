@@ -154,7 +154,9 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
 .legend-amount{font-weight:700;color:var(--dk);font-variant-numeric:tabular-nums;text-align:right}
 .legend-share{font-size:.82rem;color:var(--txl);text-align:right;min-width:42px}
 
-.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);flex-wrap:wrap}
+.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr)}
+.actions-left,.actions-right{display:flex;flex-direction:row;gap:10px;flex-wrap:wrap}
+@media(max-width:600px){.actions-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}.actions-bar>div[style]{display:none}.actions-left,.actions-right{flex-direction:column-reverse;gap:8px}.actions-left .btn,.actions-right .btn{width:100%;justify-content:center;min-height:auto}.actions-left{align-self:start}.actions-right{align-self:start}}
 .btn-action{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;letter-spacing:.3px}
 .btn-action svg{width:14px;height:14px;fill:currentColor}
 .btn-reset{background:var(--nv);color:#fff}
@@ -806,7 +808,7 @@ ins.adsbygoogle iframe,
     <div class="actions-bar">
       <button class="btn-action btn-export" onclick="exportCSV()">
         <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zm-3-7l-4 4-4-4h2.5v-3h3v3H15z"/></svg>
-        Export CSV
+        Export Summary CSV
       </button>
       <div class="actions-right">
         <button class="btn-action btn-save" onclick="saveHTML()">
