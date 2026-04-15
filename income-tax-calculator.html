@@ -156,7 +156,7 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
 
 .actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr)}
 .actions-left,.actions-right{display:flex;flex-direction:row;gap:10px;flex-wrap:wrap}
-@media(max-width:600px){.actions-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}.actions-bar>div[style]{display:none}.actions-left,.actions-right{flex-direction:column-reverse;gap:8px}.actions-left .btn,.actions-right .btn{width:100%;justify-content:center;min-height:auto}.actions-left{align-self:start}.actions-right{align-self:start}}
+@media(max-width:600px){.actions-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}.actions-bar>div[style]{display:none}.actions-left,.actions-right{display:flex;flex-direction:column;gap:8px}.actions-left .btn,.actions-right .btn{width:100%;justify-content:center;min-height:auto;align-self:start}.actions-left{align-self:start}.actions-right{align-self:start}.actions-right .btn-save{order:1}.actions-right .btn-reset{order:2}}
 .btn-action{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;letter-spacing:.3px}
 .btn-action svg{width:14px;height:14px;fill:currentColor}
 .btn-reset{background:var(--nv);color:#fff}
@@ -166,7 +166,7 @@ input[type=range]{width:100%;accent-color:var(--gr);height:4px;cursor:pointer}
 .btn-save{background:var(--nv);color:#fff}
 .btn-save:hover{background:#2d5268}
 .actions-right{display:flex;gap:10px;margin-left:auto;align-items:center}
-@media(max-width:600px){.actions-bar{flex-direction:column;align-items:stretch}.actions-right{flex-direction:column-reverse;margin-left:0}.btn-action{justify-content:center}}
+@media(max-width:600px){.actions-bar{flex-direction:column;align-items:stretch}.actions-right{flex-direction:column;margin-left:0}.btn-action{justify-content:center}}
 .note{font-size:.78rem;color:var(--txl);margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr);line-height:1.5}
 .ft{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center}
 .ft span,.ft a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem}
@@ -490,7 +490,7 @@ ins.adsbygoogle iframe,
       </select>
     </div>
     <div class="switch-field">
-      <label for="helpDebtSwitch">HECS/HELP, VSL, SSL or TSL Debt</label>
+      <label for="helpDebtSwitch">HECS/HELP Debt</label>
       <label class="switch">
         <input type="checkbox" id="helpDebtSwitch" onchange="document.getElementById('helpDebtYes').checked=this.checked;document.getElementById('helpDebtNo').checked=!this.checked;calculate();">
         <span class="switch-slider"></span>
