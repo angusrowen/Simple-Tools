@@ -339,8 +339,8 @@ ins.adsbygoogle,ins.adsbygoogle iframe{max-width:100%!important;overflow:hidden!
         <canvas id="balanceChart" height="220"></canvas>
       </div>
       <div class="chart-legend">
-        <div class="chart-legend-item"><div class="chart-swatch" style="background:#2a9d67"></div>Closing Balance</div>
-        <div class="chart-legend-item"><div class="chart-swatch" style="background:#e6641e"></div>Indexation Added</div>
+        <div class="chart-legend-item"><div class="chart-swatch" style="background:#e6641e"></div>Closing Balance</div>
+        <div class="chart-legend-item"><div class="chart-swatch" style="background:#e53935"></div>Indexation Added</div>
         <div class="chart-legend-item" id="legVoluntary" style="display:none"><div class="chart-swatch" style="background:#3f7fb5"></div>Voluntary Repayment</div>
       </div>
     </div>
@@ -492,8 +492,8 @@ function initChart(){
   balChart = new Chart($('balanceChart').getContext('2d'), {
     type: 'bar',
     data: { labels:[], datasets:[
-      { label:'Closing Balance',    data:[], backgroundColor:'rgba(42,157,103,.75)', borderRadius:4, stacked:true },
-      { label:'Indexation Added',   data:[], backgroundColor:'rgba(230,100,20,0.72)', borderRadius:4, stacked:true },
+      { label:'Closing Balance',    data:[], backgroundColor:'rgba(230,100,20,0.72)', borderRadius:4, stacked:true },
+      { label:'Indexation Added',   data:[], backgroundColor:'rgba(229,57,53,0.75)', borderRadius:4, stacked:true },
       { label:'Voluntary Repayment',data:[], backgroundColor:'rgba(63,127,181,.7)',  borderRadius:4, stacked:true }
     ]},
     options:{
