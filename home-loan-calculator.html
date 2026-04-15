@@ -115,12 +115,17 @@ html{overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe 
 .legend-amount{font-weight:700;color:var(--dk);font-variant-numeric:tabular-nums;text-align:right}
 .legend-share{font-size:.82rem;color:var(--txl);text-align:right;min-width:42px}
 .actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr)}
-.btn-action{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;letter-spacing:.3px}
-.btn-action svg{width:14px;height:14px;fill:currentColor}
-.btn-reset{background:var(--nv);color:#fff}
-.btn-reset:hover{background:#2d5268;color:#fff}
-.btn-export{background:var(--gr);color:#fff}
-.btn-export:hover{background:#228052}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .15s;font-family:inherit}
+.btn svg{width:14px;height:14px;fill:currentColor}
+.btn-green{background:var(--gr);color:#fff}.btn-green:hover{background:#228052}
+.btn-navy{background:var(--nv);color:#fff}.btn-navy:hover{background:#2d5268}
+.actions-left,.actions-right{display:flex;flex-direction:row;gap:10px;flex-wrap:wrap}
+@media(max-width:600px){
+  .actions-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}
+  .actions-bar>div[style]{display:none}
+  .actions-left,.actions-right{flex-direction:column;gap:8px}
+  .actions-left .btn,.actions-right .btn{width:100%;justify-content:center}
+}
 .note{font-size:.78rem;color:var(--txl);margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr);line-height:1.5}
 .ft{background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);padding:14px 32px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center}
 .ft span,.ft a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem}
@@ -377,7 +382,7 @@ body{background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%
   <div class="card">
     <div class="card-header-row">
       <h2>Loan Details</h2>
-      <button class="btn-action btn-reset" id="btnReset1" type="button">
+      <button type="button" class="btn btn-navy" id="btnReset1">
         <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
         Reset
       </button>
@@ -619,19 +624,23 @@ body{background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%
 
     <!-- Actions -->
     <div class="actions-bar">
-      <button class="btn-action btn-export" id="btnCSV" type="button">
-        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
-        Export CSV
-      </button>
-      <button class="btn-action btn-export" id="btnAmortCSV" type="button">
-        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
-        Export Amortisation CSV
-      </button>
+      <div class="actions-left">
+        <button type="button" class="btn btn-green" id="btnCSV">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>Export Summary CSV
+        </button>
+        <button type="button" class="btn btn-green" id="btnAmortCSV">
+          <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Export Schedule CSV
+        </button>
+      </div>
       <div style="flex:1"></div>
-      <button class="btn-action btn-reset" id="btnReset2" type="button">
-        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-        Start Over
-      </button>
+      <div class="actions-right">
+        <button type="button" class="btn btn-navy" id="btnSaveSnapshot">
+          <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>Save File
+        </button>
+        <button type="button" class="btn btn-navy" id="btnReset2">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Start Over
+        </button>
+      </div>
     </div>
 
     <div class="note">Estimates only. Assumes a constant interest rate and does not account for lender fees, rate changes, or early repayment restrictions. Not personal financial advice.</div>
@@ -1207,6 +1216,13 @@ body{background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%
   });
 
 })();
+
+  document.getElementById('btnSaveSnapshot').addEventListener('click',function(){
+    var blob=new Blob([document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    var d=new Date;a.download='home-loan-calculator-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+  });
 </script>
 </body>
 </html>
