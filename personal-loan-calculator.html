@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Loan Repayment Calculator</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+<!-- Google AdSense -->
+  <script>if(window.innerWidth>768 && navigator.maxTouchPoints===0){document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></scr'+'ipt>');}</script>
+  <link rel="stylesheet" href="css/personal-loan.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">
+    <a href="index.html" title="Back to calculators">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+    </a>
+  </div>
+  <div class="topbar-divider"></div>
+  <div>
+    <div class="topbar-title">Personal Loan Repayment Calculator</div>
+    <div class="topbar-desc">Estimate repayments, interest costs &amp; full payment schedule for any personal loan</div>
+  </div>
+</div>
+
+<div class="page-wrapper">
+  <div class="side-rail left">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+  </div>
+<div class="main-wrapper">
+<div class="container">
+<div class="layout">
+
+<!-- LEFT INPUTS -->
+<div>
+  <div class="card">
+    <div class="card-header-row">
+      <h2>Loan Details</h2>
+      <button class="btn btn-navy" id="btnReset1" type="button">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Reset
+      </button>
+    </div>
+
+    <div class="section-label first">Loan Amount</div>
+    <div class="field">
+      <label for="fAmt">Loan Amount</label>
+      <div class="input-wrap">
+        <span class="prefix">$</span>
+        <input type="number" id="fAmt" class="has-prefix" placeholder="e.g. 20000" min="0" step="500" value="20000">
+      </div>
+      <div class="range-wrap">
+        <input type="range" id="amtRange" min="0" max="100000" step="500" value="20000">
+        <div class="range-labels"><span>$0</span><span>$100K</span></div>
+      </div>
+    </div>
+
+    <div class="section-label">Interest Rate</div>
+    <div class="field">
+      <label for="fRate">Annual Interest Rate</label>
+      <div class="input-wrap">
+        <input type="number" id="fRate" class="has-suffix" placeholder="e.g. 9.99" min="0" max="60" step="0.05" value="15">
+        <span class="suffix">%</span>
+      </div>
+    </div>
+
+    <div class="section-label">Loan Term</div>
+    <div class="field">
+      <label for="fTerm">Loan Term</label>
+      <div class="input-wrap">
+        <input type="number" id="fTerm" class="has-suffix" placeholder="e.g. 5" min="1" max="10" step="1" value="5">
+        <span class="suffix">yrs</span>
+      </div>
+    </div>
+
+    <div class="section-label">Repayment Frequency</div>
+    <div class="toggle-group">
+      <div class="toggle-switch">
+        <input type="radio" name="freq" id="rMonthly" value="monthly" checked>
+        <label for="rMonthly">Monthly</label>
+        <input type="radio" name="freq" id="rFortnightly" value="fortnightly">
+        <label for="rFortnightly">Fortnightly</label>
+        <input type="radio" name="freq" id="rWeekly" value="weekly">
+        <label for="rWeekly">Weekly</label>
+      </div>
+    </div>
+
+    <div class="section-label">Loan Purpose</div>
+    <div class="field">
+      <label for="fPurpose">Purpose (optional)</label>
+      <select id="fPurpose">
+        <option value="">Select a purpose&hellip;</option>
+        <option value="car">Car / Vehicle</option>
+        <option value="consolidation">Debt Consolidation</option>
+        <option value="home_improvement">Home Improvement / Renovation</option>
+        <option value="medical">Medical / Dental</option>
+        <option value="holiday">Holiday / Travel</option>
+        <option value="wedding">Wedding</option>
+        <option value="education">Education</option>
+        <option value="other">Other</option>
+      </select>
+      <div class="field-hint">For your records only &mdash; does not affect calculations.</div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <button class="collapsible-header" id="addlBtn" aria-expanded="true" aria-controls="addlBody" type="button">
+      <h2>Additional Options</h2>
+      <span class="collapse-icon">
+        <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 8 10 13 15 8"/></svg>
+      </span>
+    </button>
+    <div class="collapsible-body" id="addlBody">
+
+      <div class="section-label first">Establishment Fee</div>
+      <div class="field">
+        <label for="fEstFee">Upfront Establishment Fee</label>
+        <div class="input-wrap">
+          <span class="prefix">$</span>
+          <input type="number" id="fEstFee" class="has-prefix" placeholder="e.g. 250 (optional)" min="0" step="10">
+        </div>
+        <div class="field-hint">One-off fee at loan origination. Included in total cost &amp; comparison rate.</div>
+      </div>
+
+      <div class="section-label">Monthly Fee</div>
+      <div class="field">
+        <label for="fMFee">Ongoing Monthly Fee</label>
+        <div class="input-wrap">
+          <span class="prefix">$</span>
+          <input type="number" id="fMFee" class="has-prefix" placeholder="e.g. 10 (optional)" min="0" step="1">
+        </div>
+        <div class="field-hint">Recurring account-keeping fee. Included in total cost &amp; comparison rate.</div>
+      </div>
+
+      <div class="section-label">Balloon / Residual Payment</div>
+      <div class="field">
+        <label for="fBalloon">Balloon Amount</label>
+        <div class="input-wrap">
+          <span class="prefix">$</span>
+          <input type="number" id="fBalloon" class="has-prefix" placeholder="e.g. 5000 (optional)" min="0" step="500">
+        </div>
+        <div class="field-hint">Optional lump sum due at end of term. Reduces periodic repayments but leaves an amount owing at the end. Common on car loans.</div>
+      </div>
+
+      <div class="section-label">Extra Repayments</div>
+      <div class="field">
+        <label for="fExtra">Extra Repayment per Period</label>
+        <div class="input-wrap">
+          <span class="prefix">$</span>
+          <input type="number" id="fExtra" class="has-prefix" placeholder="e.g. 50 (optional)" min="0" step="10">
+        </div>
+        <div class="field-hint">Additional amount on top of your minimum repayment each period.</div>
+      </div>
+
+      <div class="section-label">Start Date</div>
+      <div class="field">
+        <label for="fStart">Loan Start Date</label>
+        <input type="month" id="fStart">
+        <div class="field-hint">Used to calculate your projected payoff date.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT RESULTS -->
+<div>
+  <div class="card">
+    <h2>Results</h2>
+
+    <div class="results-grid">
+      <div class="result-box hl">
+        <div class="lbl" id="rRepayLbl">Monthly Repayment</div>
+        <div class="val" id="rRepay">&#8212;</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Total Repayments</div>
+        <div class="val" id="rTotal">&#8212;</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Total Interest</div>
+        <div class="val" id="rInterest" style="color:var(--red)">&#8212;</div>
+      </div>
+      <div class="result-box" id="rFeeBox" style="display:none">
+        <div class="lbl">Total Fees</div>
+        <div class="val" id="rFees" style="color:var(--am)">&#8212;</div>
+      </div>
+      <div class="result-box" id="rCostBox" style="display:none">
+        <div class="lbl">Total Cost of Loan</div>
+        <div class="val" id="rCost">&#8212;</div>
+      </div>
+      <div class="result-box" id="rCmpBox" style="display:none">
+        <div class="lbl">Comparison Rate <span style="font-size:.65rem;font-weight:400;text-transform:none">(est.)</span></div>
+        <div class="val" id="rCmp" style="color:var(--bl)">&#8212;</div>
+      </div>
+    </div>
+
+    <div class="banner bn-green" id="bannerExtra">Extra repayments of <strong id="bnExtraAmt"></strong>/period saves <strong id="bnExtraSaved"></strong> in interest and pays off your loan <strong id="bnExtraTime"></strong> earlier.</div>
+    <div class="banner bn-amber" id="bannerBalloon">A balloon of <strong id="bnBalloon"></strong> is due at end of term. Your periodic repayments are calculated on the amortised portion only.</div>
+    <div class="banner bn-green" id="bannerPayoff">Based on your start date, your loan will be paid off by <strong id="bnPayoff"></strong>.</div>
+
+    <div class="section-title">Repayment Breakdown</div>
+    <table class="bd-table">
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Per Period</th>
+          <th>Monthly</th>
+          <th>Annual</th>
+          <th>Loan Life</th>
+          <th>% of Total</th>
+        </tr>
+      </thead>
+      <tbody id="tBody">
+        <tr><td colspan="6" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter loan details to see results</td></tr>
+      </tbody>
+    </table>
+
+    <div class="chart-section">
+      <div class="chart-header">
+        <div class="section-title" style="margin:0">Remaining Loan Balance Over Time</div>
+        <div class="chart-hint">&#9432; Hover to see interest / principal split by year</div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="myChart" height="140"></canvas>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(230,100,20,0.72)"></div>Interest Portion</div>
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(42,157,103,0.65)"></div>Principal Portion</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="amort-btn" id="amortBtn" type="button">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+      Show Repayment Schedule
+    </button>
+    <div id="amortSection" class="hidden">
+      <div class="amort-wrap">
+        <table class="amort-table">
+          <thead><tr><th>#</th><th>Period</th><th>Opening</th><th>Interest</th><th>Principal</th><th>Extra</th><th>Closing</th></tr></thead>
+          <tbody id="amortBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <div class="actions-left">
+        <button class="btn btn-green" id="btnCSV" type="button">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
+          Export Summary CSV
+        </button>
+        <button class="btn btn-green" id="btnAmortCSV" type="button">
+          <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+          Export Schedule CSV
+        </button>
+      </div>
+      <div style="flex:1"></div>
+      <div class="actions-right">
+        <button class="btn btn-navy" id="btnSaveSnapshot" type="button">
+          <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>
+          Save File
+        </button>
+        <button class="btn btn-navy" id="btnReset2" type="button">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          Start Over
+        </button>
+      </div>
+    </div>
+
+    <div class="note">Estimates only. Assumes a constant interest rate and does not account for early repayment fees, rate changes, or lender-specific conditions. Comparison rate is an estimate and may differ from a lender&rsquo;s advertised rate. Not personal financial advice.</div>
+  </div>
+</div>
+
+</div><!-- end layout -->
+</div><!-- end container -->
+</div><!-- end main-wrapper -->
+  <div class="side-rail right">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+  </div>
+</div><!-- end page-wrapper -->
+
+<div class="ft"><span>Estimates only &mdash; general information, not personal financial advice.</span></div>
+
+
+
+  <script src="js/personal-loan.js"></script>
+</body>
+</html>
