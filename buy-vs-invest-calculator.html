@@ -1,659 +1,286 @@
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
-<title>Buy vs Invest Calculator – Australian Finance Tools</title>
-<style>
-:root{
-  --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
-  --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
-  --tx:#22313f;--txl:#6c7a89;
-  --bl:#3f7fb5;--bll:#edf5fb;--amb:#b6862c;--aml:#faf2df;
-  --accent:#c0392b;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{overflow-x:hidden}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:linear-gradient(180deg,#ece8e0 0,var(--bg) 200px,var(--bg) 100%);color:var(--tx);line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
-.topbar{background:linear-gradient(180deg,#4d7289 0,var(--nv) 100%);padding:18px 32px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(45,70,91,.14);flex-shrink:0}
-.topbar-logo a{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:var(--accent);color:#fff;text-decoration:none;box-shadow:0 8px 20px rgba(192,57,43,.32);flex-shrink:0}
-.topbar-logo a svg{width:22px;height:22px;fill:#fff}
-.topbar-divider{width:1px;height:28px;background:rgba(255,255,255,.18)}
-.topbar-title{color:#fff;font-size:1rem;font-weight:700}
-.topbar-desc{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px}
-.page-wrapper{display:flex;justify-content:center;width:100%;overflow:hidden;position:relative;min-height:100vh}
-.side-rail{display:none;width:180px;min-width:180px;flex-shrink:0;position:absolute;top:120px;z-index:10}
-.side-rail.left{left:0}.side-rail.right{right:0}
-.side-rail-inner{position:sticky;top:80px;padding:8px}
-.rail-ad-unit{background:var(--card);border:1px solid var(--bdr);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(45,50,40,.06)}
-.rail-ad-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txl);text-align:center;padding:7px 0 4px;border-bottom:1px solid var(--bdr)}
-@media(min-width:1400px){.side-rail{display:flex;flex-direction:column}.main-wrapper{padding-left:200px;padding-right:200px}}
-.main-wrapper{padding:24px 32px;flex:1;min-width:0;overflow-x:hidden;width:100%;box-sizing:border-box}
-.container{max-width:1500px;margin:0 auto;width:100%;box-sizing:border-box}
-.layout{display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:24px;align-items:start}
-@media(max-width:1000px){.layout{grid-template-columns:1fr}.main-wrapper{padding:16px}.topbar{padding:10px 16px}}
-.card{background:var(--card);border:1px solid var(--bdr);border-radius:18px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 24px rgba(45,50,40,.06);box-sizing:border-box;width:100%}
-.card h2{font-size:1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr);color:var(--dk)}
-.card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gr)}
-.card-header-row h2{margin:0;padding:0;border:none}
-.section-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--gr);margin-top:16px;margin-bottom:10px;padding-top:12px;border-top:1px solid var(--bdr)}
-.section-label.first{margin-top:0;padding-top:0;border-top:none}
-.field{margin-bottom:14px;min-width:0}
-.field label{display:block;font-size:.76rem;font-weight:600;margin-bottom:4px;color:var(--txl);text-transform:uppercase;letter-spacing:.05px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;line-height:1.1}
-.field-hint{font-size:.75rem;color:var(--txl);margin-top:2px}
-.inline-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.input-wrap{position:relative;display:flex;align-items:center;width:100%}
-.input-wrap .prefix{position:absolute;left:10px;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;user-select:none;z-index:1;line-height:1}
-.input-wrap .suffix{position:absolute;right:10px;font-size:.9rem;font-weight:600;color:var(--txl);pointer-events:none;user-select:none;z-index:1;line-height:1}
-.input-wrap input{width:100%;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8;transition:border-color .15s;font-family:inherit;box-sizing:border-box}
-.input-wrap input.has-prefix{padding:9px 12px 9px 22px}
-.input-wrap input.has-suffix{padding:9px 28px 9px 12px}
-.input-wrap input:not(.has-prefix):not(.has-suffix){padding:9px 12px}
-.input-wrap input:focus{outline:none;border-color:var(--gr);box-shadow:0 0 0 3px rgba(42,157,103,.15)}
-input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:.4}
-.toggle-group{margin-bottom:14px}
-.toggle-label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px;color:var(--txl);text-transform:uppercase;letter-spacing:.3px}
-.toggle-switch{display:flex;border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
-.toggle-switch input[type=radio]{display:none}
-.toggle-switch label{flex:1;text-align:center;padding:8px 10px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fffdf8;color:var(--txl);transition:all .15s;border-right:1px solid var(--bdr)}
-.toggle-switch label:last-of-type{border-right:none}
-.toggle-switch input[type=radio]:checked+label{background:var(--gr);color:#fff}
-.derived-info{background:var(--grl);border:1px solid var(--gr);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.84rem;color:var(--tx);display:none}
-.collapsible-card .collapsible-header{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0;text-align:left;gap:10px;font-family:inherit}
-.collapsible-header h2{color:var(--dk);margin:0;padding:0;border:none}
-.collapsible-header:hover h2{color:var(--gr)}
-.collapse-icon{color:var(--gr);transition:transform .25s;display:flex;align-items:center}
-.collapsible-header[aria-expanded="true"] .collapse-icon{transform:rotate(180deg)}
-.collapsible-body{overflow:hidden;transition:max-height .35s ease,opacity .25s ease;max-height:4000px;opacity:1}
-.collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
-.collapsible-header{padding-bottom:8px;border-bottom:2px solid var(--gr);margin-bottom:16px}
-.collapsible-header[aria-expanded="false"]{border-bottom-color:var(--bdr);margin-bottom:0}
-
-/* ── 8 equal-size result boxes in a 4-col grid ── */
-.results-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
-.result-box{background:#f8f5ef;border:1px solid var(--bdr);border-radius:12px;padding:12px 14px}
-.result-box.hl-green{background:var(--grl);border-color:var(--gr)}
-.result-box.hl-blue{background:var(--bll);border-color:var(--bl)}
-.result-box .lbl{font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);font-weight:600;margin-bottom:2px}
-.result-box .val{font-size:1.15rem;font-weight:700;color:var(--dk)}
-.result-box.hl-green .val{color:var(--gr);font-size:1.3rem}
-.result-box.hl-blue .val{color:var(--bl);font-size:1.3rem}
-.result-box .sub{font-size:.72rem;color:var(--txl);margin-top:2px}
-
-.winner-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:.78rem;font-weight:700;background:var(--grl);color:var(--gr);border:1px solid var(--gr);margin-bottom:14px}
-.winner-invest{background:var(--bll);color:var(--bl);border-color:var(--bl)}
-.winner-tie{background:var(--aml);color:var(--amb);border-color:var(--amb)}
-
-.section-title{font-size:.85rem;font-weight:700;margin:0 0 10px;color:var(--dk)}
-.chart-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)}
-.chart-wrap{position:relative;width:100%;height:280px}
-.chart-legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
-.legend-item{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--txl)}
-.legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-
-.amort-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--bdr);border-radius:8px;padding:7px 14px;font-size:.8rem;font-weight:600;color:var(--txl);cursor:pointer;margin-top:16px;transition:border-color .15s,color .15s;font-family:inherit}
-.amort-btn:hover{border-color:var(--gr);color:var(--gr)}
-.amort-btn svg{width:13px;height:13px;fill:currentColor}
-.amort-wrap{max-height:380px;overflow-y:auto;overflow-x:auto;border:1px solid var(--bdr);border-radius:10px;margin-top:10px;width:100%;max-width:100%;box-sizing:border-box}
-.amort-table{width:100%;min-width:560px;border-collapse:collapse;font-size:.82rem}
-.amort-table th{text-align:right;padding:6px 10px;background:var(--bg);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr);position:sticky;top:0;z-index:2}
-.amort-table th:first-child{text-align:left}
-.amort-table td{padding:6px 10px;border-bottom:1px solid var(--bdr);font-variant-numeric:tabular-nums;text-align:right}
-.amort-table td:first-child{text-align:left;font-weight:600}
-.amort-table tr:last-child td{border-bottom:none}
-.positive-val{color:var(--gr)!important;font-weight:700!important}
-.negative-val{color:var(--accent)!important;font-weight:700!important}
-
-/* Scenario summary — clean simple table matching super calc style */
-.combined-table{width:100%;border-collapse:collapse;font-size:.88rem}
-.combined-table th{text-align:left;padding:8px 10px;background:var(--bg);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--txl);border-bottom:2px solid var(--bdr)}
-.combined-table th:not(:first-child){text-align:right}
-.combined-table td{padding:8px 10px;border-bottom:1px solid var(--bdr)}
-.combined-table td:not(:first-child){text-align:right;font-variant-numeric:tabular-nums}
-.combined-table tr:last-child td{border-bottom:none}
-
-/* CF note under summary */
-.cf-note{font-size:.78rem;color:var(--txl);line-height:1.6;padding:10px 14px;background:var(--aml);border-radius:8px;border:1px solid var(--amb);margin-top:10px}
-.cf-note strong{color:var(--amb)}
-
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .15s;font-family:inherit}
-.btn svg{width:14px;height:14px;fill:currentColor}
-.btn-green{background:var(--gr);color:#fff}.btn-green:hover{background:#228052}
-.btn-navy{background:var(--nv);color:#fff}.btn-navy:hover{background:#2d5268}
-.actions-bar{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);flex-wrap:wrap}
-.disclaimer{font-size:.75rem;color:var(--txl);line-height:1.6;padding:10px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--bdr);margin-top:16px}
-.ft{background:linear-gradient(180deg,#4d7289 0,var(--nv) 100%);padding:16px 32px;text-align:center;margin-top:auto}
-.ft span,.ft a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem}
-.ft a:hover{color:#fff}
-
-@media(max-width:768px){ins.adsbygoogle,.side-rail{display:none!important}.results-grid{grid-template-columns:1fr 1fr!important;gap:8px!important;margin-bottom:0!important}}
-@media(max-width:1024px) and (pointer:coarse){ins.adsbygoogle,.side-rail{display:none!important}}
-@media(min-width:1001px){.field label{font-size:.72rem}.field-hint{font-size:.72rem}}
-@media(max-width:1280px) and (min-width:1001px){.results-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:480px){
-  .main-wrapper{padding:12px!important}.layout{grid-template-columns:1fr!important;gap:10px!important}
-  .card{padding:14px!important}.topbar{padding:8px 14px!important}
-  .inline-fields{grid-template-columns:1fr!important}
-  .results-grid{grid-template-columns:1fr 1fr!important;gap:6px!important;margin-bottom:0!important}
-  .ft{padding:10px 14px!important}
-}
-@media(min-width:481px) and (max-width:1000px){.main-wrapper{padding:14px 18px!important}.layout{grid-template-columns:1fr!important}.results-grid{grid-template-columns:1fr 1fr!important}}
-.exit-banner-hold{background:var(--bg);border:1px solid var(--bdr);border-radius:8px;padding:9px 13px;font-size:.82rem;line-height:1.5;color:var(--txl);margin-top:10px}
-.exit-banner-sell{background:var(--aml);border:1px solid var(--amb);border-radius:8px;padding:9px 13px;font-size:.82rem;line-height:1.5;color:var(--tx);margin-top:10px}
-
-.main-wrapper,.layout>div{min-width:0;max-width:100%}
-.chart-section{overflow:hidden;max-width:100%}
-.actions-left,.actions-right{display:flex;flex-direction:row;gap:10px;flex-wrap:wrap}
-@media(max-width:600px){
-  .actions-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}
-  .actions-bar>div[style]{display:none}
-  .actions-left,.actions-right{flex-direction:column;gap:8px}
-  .actions-left .btn,.actions-right .btn{width:100%;justify-content:center}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buy vs Invest — AusCalc</title>
+  <meta name="description" content="Compare the long-term wealth outcome of buying property versus renting and investing in the Australian share market." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+  <style>:root { --accent: #c0392b; }</style>
 </head>
 <body>
-
-<div class="topbar">
-  <div class="topbar-logo">
-    <a href="index.html" title="Back to calculators">
-      <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+  <header class="site-header">
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-calculator"></i> AusCalc
     </a>
-  </div>
-  <div class="topbar-divider"></div>
-  <div>
-    <div class="topbar-title">Buy vs Invest Calculator</div>
-    <div class="topbar-desc">Long-term wealth comparison: owning a home vs renting and investing your capital.</div>
-  </div>
-</div>
+    <nav>
+      <a href="index.html">Calculators</a>
+    </nav>
+  </header>
 
-<div class="page-wrapper">
-  <div class="side-rail left"><div class="side-rail-inner"><div class="rail-ad-unit">
-    <div class="rail-ad-label">Advertisement</div>
-    <div style="padding:8px;display:flex;justify-content:center;min-height:620px">
-      <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-    </div>
-  </div></div></div>
+  <section class="page-hero">
+    <div class="hero-icon"><i class="fa-solid fa-arrows-left-right"></i></div>
+    <h1>Buy vs Invest</h1>
+    <p>Compare long-term wealth from buying property versus renting and investing your capital.</p>
+  </section>
 
-  <div class="main-wrapper"><div class="container"><div class="layout">
+  <main class="site-main">
+    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left fa-xs"></i> All Calculators</a>
+    <div class="calc-layout">
 
-  <!-- ══ LEFT PANEL ══ -->
-  <div>
-    <div class="card">
-      <div class="card-header-row">
-        <h2>Property Details</h2>
-        <button type="button" class="btn btn-navy" id="btnReset">
-          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Reset
+      <!-- ══ INPUTS ══ -->
+      <div class="panel">
+
+        <!-- Property Details -->
+        <div class="section-label first">Property Details</div>
+        <div class="field">
+          <label for="fPrice">Purchase Price</label>
+          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fPrice" class="has-prefix" value="800000" min="0" step="10000"></div>
+          <div class="range-wrap"><input type="range" id="fPriceRange" min="0" max="3000000" step="10000" value="800000"><div class="range-labels"><span>$0</span><span>$3M</span></div></div>
+        </div>
+        <div class="inline-fields">
+          <div class="field">
+            <label for="fDepositPct">Deposit</label>
+            <div class="input-wrap"><input type="number" id="fDepositPct" class="has-suffix" value="20" min="5" max="100" step="0.5"><span class="suffix">%</span></div>
+            <div id="lmiWarning" class="field-hint" style="display:none;color:#e8650a">⚠️ Below 20% — LMI will apply.</div>
+          </div>
+          <div class="field">
+            <label for="fState">State / Territory</label>
+            <select id="fState">
+              <option value="nsw" selected>NSW</option>
+              <option value="vic">VIC</option>
+              <option value="qld">QLD</option>
+              <option value="wa">WA</option>
+              <option value="sa">SA</option>
+              <option value="other">Other</option>
+            </select>
+            <div class="field-hint">Stamp duty auto-estimated for NSW.</div>
+          </div>
+        </div>
+
+        <!-- Auto-estimated upfront costs display -->
+        <div class="results-grid" style="margin-bottom:.85rem">
+          <div class="result-box"><div class="lbl">Deposit</div><div class="val" id="rDeposit" style="font-size:.95rem">—</div></div>
+          <div class="result-box"><div class="lbl">Stamp Duty (est.)</div><div class="val" id="rStampDuty" style="font-size:.95rem">—</div></div>
+          <div class="result-box"><div class="lbl">LMI (est.)</div><div class="val" id="rLMI" style="font-size:.95rem">—</div></div>
+        </div>
+
+        <div class="inline-fields">
+          <div class="field">
+            <label for="fOtherUpfront">Other Upfront Costs</label>
+            <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fOtherUpfront" class="has-prefix" value="5000" min="0" step="500"></div>
+            <div class="field-hint">Conveyancing, inspections, etc.</div>
+          </div>
+          <div class="field">
+            <label for="fLoanTerm">Mortgage Term</label>
+            <div class="input-wrap"><input type="number" id="fLoanTerm" class="has-suffix" value="30" min="5" max="40"><span class="suffix">yrs</span></div>
+          </div>
+        </div>
+        <div class="inline-fields">
+          <div class="field">
+            <label for="fMortgageRate">Mortgage Rate</label>
+            <div class="input-wrap"><input type="number" id="fMortgageRate" class="has-suffix" value="6.0" min="0" max="15" step="0.05"><span class="suffix">%</span></div>
+          </div>
+          <div class="field">
+            <label for="fPropGrowth">Property Growth</label>
+            <div class="input-wrap"><input type="number" id="fPropGrowth" class="has-suffix" value="4.0" min="0" max="15" step="0.1"><span class="suffix">% p.a.</span></div>
+          </div>
+        </div>
+        <div class="inline-fields">
+          <div class="field">
+            <label for="fOwnerCosts">Annual Ownership Costs</label>
+            <div class="input-wrap"><input type="number" id="fOwnerCosts" class="has-suffix" value="1.0" min="0" max="5" step="0.1"><span class="suffix">% of value</span></div>
+            <div class="field-hint">Rates, insurance, maintenance ~0.5–1%</div>
+          </div>
+          <div class="field">
+            <label for="fRentYield">Rental Income Yield</label>
+            <div class="input-wrap"><input type="number" id="fRentYield" class="has-suffix" value="0" min="0" max="10" step="0.1"><span class="suffix">%</span></div>
+            <div class="field-hint">Leave 0 for owner-occupied.</div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="fPropMgmt">Property Management Fee</label>
+          <div class="input-wrap"><input type="number" id="fPropMgmt" class="has-suffix" value="8" min="0" max="15" step="0.5"><span class="suffix">% of rent</span></div>
+          <div class="field-hint">Annual fee if using a property manager.</div>
+        </div>
+
+        <!-- Rental / Investment (collapsible) -->
+        <button class="collapsible-header" aria-expanded="false" data-body="rentBody" style="margin-top:.8rem">
+          <span class="ch-title">Rental Costs &amp; Investment</span>
+          <span class="collapse-icon"><i class="fa-solid fa-chevron-down fa-xs"></i></span>
         </button>
-      </div>
-      <div class="section-label first">Purchase Price &amp; Deposit</div>
-      <div class="field"><label for="fPrice">Property Purchase Price</label>
-        <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fPrice" class="has-prefix" value="800000" min="0" step="5000"></div></div>
-      <div class="field"><label for="fDeposit">Deposit Amount</label>
-        <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fDeposit" class="has-prefix" value="160000" min="0" step="5000"></div>
-        <div class="field-hint" id="depositHint">20.0% of purchase price — no LMI required</div></div>
-      <div class="derived-info" id="lmiInfo"><strong>LMI estimated at <span id="lmiAmt">$0</span></strong> — deposit below 20%. Added to loan amount.</div>
+        <div class="collapsible-body collapsed" id="rentBody">
+          <div style="margin-top:.5rem">
+            <div class="section-label first">Rent You'd Pay (Invest Scenario)</div>
+            <div class="inline-fields">
+              <div class="field">
+                <label for="fRent">Monthly Rent</label>
+                <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fRent" class="has-prefix" value="2800" min="0" step="50"></div>
+              </div>
+              <div class="field">
+                <label for="fRentGrowth">Rent Growth</label>
+                <div class="input-wrap"><input type="number" id="fRentGrowth" class="has-suffix" value="3.0" min="0" max="15" step="0.1"><span class="suffix">% p.a.</span></div>
+              </div>
+            </div>
+            <div class="section-label">Investment Portfolio</div>
+            <div class="inline-fields">
+              <div class="field">
+                <label for="fEtfReturn">Portfolio Return</label>
+                <div class="input-wrap"><input type="number" id="fEtfReturn" class="has-suffix" value="8.0" min="0" max="20" step="0.1"><span class="suffix">% p.a.</span></div>
+                <div class="field-hint">Aus share market ~7–9% p.a.</div>
+              </div>
+              <div class="field">
+                <label for="fEtfFee">Management Fee</label>
+                <div class="input-wrap"><input type="number" id="fEtfFee" class="has-suffix" value="0.2" min="0" max="3" step="0.05"><span class="suffix">%</span></div>
+                <div class="field-hint">ETF MER / fund fee.</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <div class="section-label">Upfront Costs (Buying)</div>
-      <div class="inline-fields">
-        <div class="field"><label for="fStampDuty">Stamp Duty</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fStampDuty" class="has-prefix" value="31070" min="0" step="100"></div>
-          <div class="field-hint">Auto-estimated (NSW)</div></div>
-        <div class="field"><label for="fConveyancing">Legal / Conveyancing</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fConveyancing" class="has-prefix" value="2000" min="0" step="100"></div></div>
-      </div>
-      <div class="inline-fields">
-        <div class="field"><label for="fInspections">Inspections / Other</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fInspections" class="has-prefix" value="1000" min="0" step="100"></div></div>
-        <div class="field"><label for="fFurnishing">Furnishing / Renos</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fFurnishing" class="has-prefix" value="10000" min="0" step="500"></div></div>
+        <!-- Analysis Settings (collapsible) -->
+        <button class="collapsible-header" aria-expanded="false" data-body="settingsBody" style="margin-top:.8rem">
+          <span class="ch-title">Analysis Settings</span>
+          <span class="collapse-icon"><i class="fa-solid fa-chevron-down fa-xs"></i></span>
+        </button>
+        <div class="collapsible-body collapsed" id="settingsBody">
+          <div style="margin-top:.5rem">
+            <div class="field">
+              <label for="fYears">Analysis Period</label>
+              <div class="input-wrap"><input type="number" id="fYears" class="has-suffix" value="20" min="1" max="50"><span class="suffix">yrs</span></div>
+            </div>
+            <div class="field">
+              <label for="fCGTRate">Marginal Tax Rate (for CGT)</label>
+              <div class="input-wrap"><input type="number" id="fCGTRate" class="has-suffix" value="37" min="0" max="47" step="0.5"><span class="suffix">%</span></div>
+              <div class="field-hint">Used to estimate CGT on sale (50% discount applied for assets held &gt;12 months).</div>
+            </div>
+            <div class="switch-field" style="margin-top:.5rem">
+              <label for="fOppCost">Include opportunity cost on upfront costs?</label>
+              <label class="switch"><input type="checkbox" id="fOppCost" checked><span class="switch-slider"></span></label>
+            </div>
+            <div class="field-hint" style="margin-bottom:.75rem">If yes, stamp duty &amp; upfront costs are also invested in the rent scenario.</div>
+            <div class="switch-field">
+              <label for="fSellAtEnd">Assume both assets sold at end of period?</label>
+              <label class="switch"><input type="checkbox" id="fSellAtEnd" checked><span class="switch-slider"></span></label>
+            </div>
+            <div class="field-hint">Applies CGT to realised gains on sale.</div>
+          </div>
+        </div>
+
       </div>
 
-      <div class="section-label">Mortgage</div>
-      <div class="inline-fields">
-        <div class="field"><label for="fRate">Interest Rate</label>
-          <div class="input-wrap"><input type="number" id="fRate" class="has-suffix" value="6.00" min="0" max="20" step="0.05"><span class="suffix">%</span></div></div>
-        <div class="field"><label for="fTerm">Loan Term</label>
-          <div class="input-wrap"><input type="number" id="fTerm" class="has-suffix" value="30" min="1" max="40" step="1"><span class="suffix">yrs</span></div></div>
+      <!-- ══ RESULTS ══ -->
+      <div class="panel">
+        <div class="results-empty" id="emptyState"><i class="fa-solid fa-arrows-left-right"></i><span>Enter your details to see the comparison</span></div>
+        <div id="resultsContent" style="display:none">
+
+          <!-- Winner banner -->
+          <div class="result-box hl-green" style="margin-bottom:.75rem;text-align:center">
+            <div class="lbl" style="text-align:center">After <span id="rYears"></span> Years</div>
+            <div class="val" id="rWinner" style="font-size:1.3rem;text-align:center">—</div>
+          </div>
+
+          <div class="results-grid-2">
+            <div class="result-box hl-blue">
+              <div class="lbl">🏠 Buy — Final Equity</div>
+              <div class="val" id="rBuyWealth">—</div>
+              <div class="sub" id="rPropVal" style="font-size:.72rem;margin-top:.3rem"></div>
+            </div>
+            <div class="result-box hl-green">
+              <div class="lbl">📈 Invest — Portfolio</div>
+              <div class="val" id="rInvWealth">—</div>
+              <div class="sub" id="rPortfolio" style="font-size:.72rem;margin-top:.3rem"></div>
+            </div>
+          </div>
+
+          <div class="results-grid-2">
+            <div class="result-box">
+              <div class="lbl">Total Mortgage Paid</div>
+              <div class="val" id="rMortgageTotal">—</div>
+            </div>
+            <div class="result-box">
+              <div class="lbl">Total Rent Paid</div>
+              <div class="val" id="rRentTotal">—</div>
+            </div>
+          </div>
+
+          <div class="results-grid-2">
+            <div class="result-box">
+              <div class="lbl">Loan Balance Remaining</div>
+              <div class="val" id="rLoanBal">—</div>
+            </div>
+            <div class="result-box">
+              <div class="lbl">Total Upfront Costs</div>
+              <div class="val" id="rUpfront">—</div>
+            </div>
+          </div>
+
+          <div class="results-grid-2">
+            <div class="result-box">
+              <div class="lbl">Property CGT (est.)</div>
+              <div class="val" id="rPropCGT">—</div>
+            </div>
+            <div class="result-box">
+              <div class="lbl">ETF CGT (est.)</div>
+              <div class="val" id="rEtfCGT">—</div>
+            </div>
+          </div>
+
+          <!-- Chart -->
+          <div class="chart-section">
+            <div class="chart-title">Wealth Comparison Over Time</div>
+            <div class="chart-wrap"><canvas id="bviChart"></canvas></div>
+            <div class="chart-hint">Hover for year-by-year detail</div>
+            <div class="chart-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:rgba(63,127,181,1)"></div>Buy (Equity)</div>
+              <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,1)"></div>Invest (Portfolio)</div>
+            </div>
+          </div>
+
+          <!-- Year-by-year schedule -->
+          <button class="amort-btn" id="amortToggle">▼ Show Year-by-Year Schedule</button>
+          <div id="amortSection" style="display:none">
+            <div class="amort-wrap">
+              <table class="amort-table">
+                <thead><tr><th>Year</th><th>Property Value</th><th>Loan Balance</th><th>Buy Equity</th><th>Invest Portfolio</th><th>Difference</th></tr></thead>
+                <tbody id="amortBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="actions-bar">
+            <button class="btn btn-green" id="btnExportSummary"><i class="fa-solid fa-download fa-xs"></i> Export Summary</button>
+            <button class="btn btn-green" id="btnExportSchedule"><i class="fa-solid fa-table fa-xs"></i> Export Schedule</button>
+          </div>
+
+          <p class="disclaimer">Estimates only. Property growth, investment returns and rental costs are assumed constant. Stamp duty is auto-estimated for NSW — verify for your state. CGT applies the 50% discount for assets held &gt;12 months. Does not account for negative gearing, depreciation, principal place of residence CGT exemption, or changes in interest rates. Not personal financial advice — consult a licensed financial adviser.</p>
+        </div>
       </div>
 
-      <div class="section-label">Annual Ownership Costs</div>
-      <div class="inline-fields">
-        <div class="field"><label for="fCouncil">Council Rates</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fCouncil" class="has-prefix" value="2000" min="0" step="100"></div></div>
-        <div class="field"><label for="fInsurance">Home Insurance</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fInsurance" class="has-prefix" value="2000" min="0" step="100"></div></div>
-      </div>
-      <div class="inline-fields">
-        <div class="field"><label for="fMaintenance">Maintenance</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fMaintenance" class="has-prefix" value="4000" min="0" step="100"></div>
-          <div class="field-hint">~0.5–1% of value/yr</div></div>
-        <div class="field"><label for="fBodyCorp">Strata / Body Corp</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fBodyCorp" class="has-prefix" placeholder="0" min="0" step="100"></div></div>
-      </div>
-      <div class="inline-fields">
-        <div class="field"><label for="fPropertyGrowth">Annual Property Growth</label>
-          <div class="input-wrap"><input type="number" id="fPropertyGrowth" class="has-suffix" value="4.00" min="0" max="20" step="0.1"><span class="suffix">%</span></div></div>
-        <div class="field"><label for="fAgentFee">Property Agent Fee</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fAgentFee" class="has-prefix" placeholder="0" min="0" step="100"></div>
-          <div class="field-hint">Annual fee if using a property manager</div></div>
-      </div>
     </div>
+  </main>
 
-    <div class="card collapsible-card">
-      <button type="button" class="collapsible-header" id="rentInvBtn" aria-expanded="true">
-        <h2>Renting &amp; Investment</h2>
-        <span class="collapse-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 8 10 13 15 8"/></svg></span>
-      </button>
-      <div class="collapsible-body" id="rentInvBody">
-        <div class="section-label first">Rental Costs</div>
-        <div class="inline-fields">
-          <div class="field"><label for="fRent">Monthly Rent</label>
-            <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fRent" class="has-prefix" value="3000" min="0" step="50"></div></div>
-          <div class="field"><label for="fRentGrowth">Annual Rent Increase</label>
-            <div class="input-wrap"><input type="number" id="fRentGrowth" class="has-suffix" value="3.0" min="0" max="20" step="0.1"><span class="suffix">%</span></div></div>
-        </div>
-        <div class="field"><label for="fRentInsurance">Contents Insurance (Annual)</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fRentInsurance" class="has-prefix" value="600" min="0" step="100"></div></div>
-        <div class="section-label">Investment Portfolio</div>
-        <div class="inline-fields">
-          <div class="field"><label for="fInvReturn">Annual Return</label>
-            <div class="input-wrap"><input type="number" id="fInvReturn" class="has-suffix" value="8.0" min="0" max="30" step="0.1"><span class="suffix">%</span></div>
-            <div class="field-hint">Aus share market ~7–9% p.a.</div></div>
-          <div class="field"><label for="fInvFee">Annual Fee (MER)</label>
-            <div class="input-wrap"><input type="number" id="fInvFee" class="has-suffix" value="0.20" min="0" max="3" step="0.01"><span class="suffix">%</span></div>
-            <div class="field-hint">ETF management fee</div></div>
-        </div>
-      </div>
+  <footer class="site-footer">
+    <span>&copy; <span class="js-year"></span> AusCalc &mdash; General information only, not financial advice.</span>
+    <div class="footer-links">
+      <a href="index.html">All Calculators</a>
+      <a href="#disclaimer">Disclaimer</a>
     </div>
-
-    <div class="card">
-      <h2>Analysis Period</h2>
-      <div class="field"><label for="fYears">Comparison Timeframe</label>
-        <div class="input-wrap"><input type="number" id="fYears" class="has-suffix" value="20" min="1" max="40" step="1"><span class="suffix">yrs</span></div></div>
-      <div class="toggle-group">
-        <span class="toggle-label">Include Opportunity Cost on Upfront Costs?</span>
-        <div class="toggle-switch">
-          <input type="radio" name="oppCost" id="oppYes" value="yes" checked><label for="oppYes">Yes</label>
-          <input type="radio" name="oppCost" id="oppNo" value="no"><label for="oppNo">No</label>
-        </div>
-      </div>
-      <div class="field-hint" style="margin-top:-8px;margin-bottom:14px">If yes, stamp duty &amp; upfront costs are also invested in the rent scenario.</div>
-      <div class="section-label">End of Scenario: Sale &amp; Exit</div>
-      <div class="toggle-group">
-        <span class="toggle-label">Assume both assets sold at end of period?</span>
-        <div class="toggle-switch">
-          <input type="radio" name="exitMode" id="exitNo" value="no" checked><label for="exitNo">No — hold both</label>
-          <input type="radio" name="exitMode" id="exitYes" value="yes"><label for="exitYes">Yes — sell both</label>
-        </div>
-      </div>
-      <div id="exitBanner" class="exit-banner-hold"><strong>Hold mode:</strong> Neither asset is sold. Net wealth = property value minus mortgage and portfolio as-is. No selling costs or CGT applied.</div>
-      <div id="exitFields" style="display:none">
-        <div class="section-label">Property Sale Costs</div>
-        <div class="inline-fields">
-          <div class="field"><label for="fSellAgent">Selling Agent Fee</label>
-            <div class="input-wrap"><input type="number" id="fSellAgent" class="has-suffix" value="2.0" min="0" max="5" step="0.1"><span class="suffix">%</span></div>
-            <div class="field-hint">Typically 1.5–3% of sale price</div></div>
-          <div class="field"><label for="fSellOther">Other Selling Costs</label>
-            <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fSellOther" class="has-prefix" value="2000" min="0" step="100"></div>
-            <div class="field-hint">Legal, marketing, staging</div></div>
-        </div>
-        <div class="section-label">Investment CGT on Sale</div>
-        <div class="field"><label for="fSellTax">Marginal Tax Rate</label>
-          <select id="fSellTax" style="width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.9rem;color:var(--tx);background:#fffdf8;font-family:inherit;cursor:pointer;box-sizing:border-box">
-            <option value="0">0% — $0 to $18,200</option>
-            <option value="19">19% — $18,201 to $45,000</option>
-            <option value="32.5" selected>32.5% — $45,001 to $120,000</option>
-            <option value="37">37% — $120,001 to $180,000</option>
-            <option value="45">45% — $180,001+</option>
-          </select>
-          <div class="field-hint">CGT 50% discount applies. Tax on 50% of total gain.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ RIGHT PANEL ══ -->
-  <div style="min-width:0;overflow:hidden">
-    <div class="card">
-      <h2>Results</h2>
-      <div id="winnerBadge"></div>
-
-      <!-- 8 equal cards in a 4-col grid (2-col on mobile) -->
-      <div class="results-grid">
-        <div class="result-box hl-green">
-          <div class="lbl">Buy: Net Wealth</div>
-          <div class="val" id="rBuyWealth">—</div>
-          <div class="sub">Property value minus mortgage</div>
-        </div>
-        <div class="result-box hl-blue">
-          <div class="lbl">Rent &amp; Invest: Net Wealth</div>
-          <div class="val" id="rInvWealth">—</div>
-          <div class="sub" id="rInvWealthSub">Portfolio value — no CGT applied</div>
-        </div>
-        <div class="result-box" id="rboxDiff">
-          <div class="lbl">Difference</div>
-          <div class="val" id="rDiff">—</div>
-          <div class="sub" id="rDiffSub"></div>
-        </div>
-        <div class="result-box">
-          <div class="lbl">Annual Ongoing Costs (Yr 1)</div>
-          <div class="val" id="rAnnualOngoing">—</div>
-          <div class="sub" id="rAnnualOngoingSub">Mortgage + ownership costs</div>
-        </div>
-        <div class="result-box">
-          <div class="lbl">Property Value (end)</div>
-          <div class="val" id="rPropValue">—</div>
-        </div>
-        <div class="result-box">
-          <div class="lbl">Investment Portfolio (end)</div>
-          <div class="val" id="rPortfolio">—</div>
-          <div class="sub" id="rPortfolioSub">Gross, before any CGT</div>
-        </div>
-        <div class="result-box">
-          <div class="lbl">Total Mortgage Paid</div>
-          <div class="val" id="rMortgagePaid">—</div>
-          <div class="sub">Principal + interest</div>
-        </div>
-        <div class="result-box">
-          <div class="lbl">Total Rent Paid</div>
-          <div class="val" id="rRentPaid">—</div>
-        </div>
-      </div>
-
-      <!-- Chart -->
-      <div class="chart-section">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px">
-          <div class="section-title">Wealth Comparison Over Time</div>
-          <div style="font-size:.74rem;color:var(--txl);font-style:italic">ℹ Hover for details</div>
-        </div>
-        <div class="chart-wrap"><canvas id="wealthChart"></canvas></div>
-        <div class="chart-legend" style="margin-top:10px;margin-bottom:0">
-          <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,1)"></div>Buy: Net Wealth</div>
-          <div class="legend-item"><div class="legend-dot" style="background:rgba(63,127,181,1)"></div>Rent &amp; Invest: Net Wealth</div>
-          <div class="legend-item"><div class="legend-dot" style="background:rgba(232,168,56,1)"></div>Property Value</div>
-        </div>
-      </div>
-
-      <!-- Year-by-year -->
-      <button type="button" class="amort-btn" id="amortToggle">
-        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Show Year-by-Year Schedule
-      </button>
-      <div id="amortSection" style="display:none;max-width:100%;overflow:hidden">
-        <div class="amort-wrap">
-          <table class="amort-table">
-            <thead><tr>
-              <th>Yr</th><th>Property Value</th><th>Buy Net Wealth</th>
-              <th>Invest Portfolio</th><th>Rent+Inv Wealth</th><th>Cash Flow</th><th>Ahead By</th>
-            </tr></thead>
-            <tbody id="compBody"><tr><td colspan="7" style="color:var(--txl);font-style:italic;text-align:center;padding:18px">Enter details to see results</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Scenario Summary (simple) -->
-      <div class="section-title" style="margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)">Scenario Summary</div>
-      <table class="combined-table">
-        <thead><tr><th>Item</th><th>Buy Scenario</th><th>Rent &amp; Invest Scenario</th></tr></thead>
-        <tbody id="assumptBody"></tbody>
-      </table>
-      <div class="cf-note" id="cfNote"></div>
-
-      <div class="actions-bar">
-        <div class="actions-left">
-          <button type="button" class="btn btn-green" id="btnExportSummary">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 6h14v2H5z"/></svg>Export Summary CSV
-          </button>
-          <button type="button" class="btn btn-green" id="btnExportSchedule">
-            <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Export Schedule CSV
-          </button>
-        </div>
-        <div style="flex:1"></div>
-        <div class="actions-right">
-          <button type="button" class="btn btn-navy" id="btnSaveSnapshot">
-            <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>Save File
-          </button>
-          <button type="button" class="btn btn-navy" id="btnStartOver">
-            <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Start Over
-          </button>
-        </div>
-      </div>
-
-      <div class="disclaimer">Estimates only. Assumes constant growth rates. Property net wealth = property value minus remaining mortgage (owner-occupied, no CGT). The invest scenario reinvests the annual cash flow difference each year — if buying is cheaper in a given year, that gap is drawn from the portfolio. Investment returns shown after estimated CGT where selected. Not personal financial advice.</div>
-    </div>
-  </div>
-
-  </div></div></div>
-
-  <div class="side-rail right"><div class="side-rail-inner"><div class="rail-ad-unit">
-    <div class="rail-ad-label">Advertisement</div>
-    <div style="padding:8px;display:flex;justify-content:center;min-height:620px">
-      <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-    </div>
-  </div></div></div>
-</div>
-
-<div class="ft"><span>&copy; 2025 Australian Finance Tools &nbsp;&middot;&nbsp; <a href="Privacy">Privacy</a></span></div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script>
-var wealthChart=null,summaryRows=[],scheduleRows=[];
-function n(id){var v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v;}
-function fmt(v){return'$'+Math.round(Math.abs(v)).toLocaleString('en-AU');}
-function set(id,val){var el=document.getElementById(id);if(el)el.textContent=val;}
-function selling(){return document.getElementById('exitYes').checked;}
-
-function estimateStampDuty(p){
-  if(p<=16000)return p*0.0125;if(p<=35000)return 200+(p-16000)*0.015;
-  if(p<=93000)return 485+(p-35000)*0.0175;if(p<=351000)return 1500+(p-93000)*0.035;
-  if(p<=1168000)return 10530+(p-351000)*0.045;return 47295+(p-1168000)*0.055;
-}
-function estimateLMI(loan,price){
-  var lvr=loan/price;if(lvr<=0.80)return 0;if(lvr<=0.85)return loan*0.010;
-  if(lvr<=0.90)return loan*0.018;if(lvr<=0.95)return loan*0.030;return loan*0.042;
-}
-function calcRepayment(P,annRate,termYrs){
-  var r=annRate/100/12,nn=termYrs*12;if(r===0)return P/nn;
-  return P*r*Math.pow(1+r,nn)/(Math.pow(1+r,nn)-1);
-}
-
-function updateExitUI(){
-  var s=selling();
-  document.getElementById('exitFields').style.display=s?'block':'none';
-  var b=document.getElementById('exitBanner');
-  if(s){b.className='exit-banner-sell';b.innerHTML='<strong>Sell mode:</strong> Both assets sold at end of period. Property sale costs deducted from proceeds. CGT (50% discount) applied to investment gains.';}
-  else{b.className='exit-banner-hold';b.innerHTML='<strong>Hold mode:</strong> Neither asset is sold. Net wealth = property value minus mortgage and portfolio as-is. No selling costs or CGT applied.';}
-}
-
-function calc(){
-  var price=n('fPrice'),deposit=n('fDeposit'),stampDuty=n('fStampDuty');
-  var convey=n('fConveyancing'),inspect=n('fInspections'),furnish=n('fFurnishing');
-  var rate=n('fRate'),term=n('fTerm')||30;
-  var council=n('fCouncil'),insurance=n('fInsurance'),maint=n('fMaintenance');
-  var bodyCorp=n('fBodyCorp'),propGrowth=n('fPropertyGrowth'),agentFee=n('fAgentFee');
-  var rent=n('fRent'),rentGrowth=n('fRentGrowth'),rentIns=n('fRentInsurance');
-  var invReturn=n('fInvReturn'),invFee=n('fInvFee');
-  var years=parseInt(document.getElementById('fYears').value)||20;
-  var oppYes=document.getElementById('oppYes').checked;
-  var s=selling();
-  var sellAgentPct=n('fSellAgent')/100;
-  var sellOther=n('fSellOther');
-  var sellTaxRate=parseFloat(document.getElementById('fSellTax').value)||0;
-  if(!price||!deposit)return;
-
-  var baseLoan=price-deposit,lmi=estimateLMI(baseLoan,price),loan=baseLoan+lmi;
-  var pct=(deposit/price*100).toFixed(1);
-  document.getElementById('depositHint').textContent=pct+'% of purchase price'+(deposit/price>=0.20?' — no LMI required':' — LMI may apply');
-  var lmiEl=document.getElementById('lmiInfo');
-  if(lmi>0){document.getElementById('lmiAmt').textContent=fmt(lmi);lmiEl.style.display='block';}
-  else lmiEl.style.display='none';
-
-  var upfrontOther=convey+inspect+furnish;
-  var monthlyRepay=calcRepayment(loan,rate,term);
-  var annualRepay=monthlyRepay*12;
-  var annualOwner=council+insurance+maint+bodyCorp+agentFee;
-  var netInvRate=(invReturn-invFee)/100;
-  var investorStart=deposit+(oppYes?stampDuty+upfrontOther:0);
-
-  var propValue=price,loanBal=loan,r=rate/100/12;
-  var portfolio=investorStart,annualRent=rent*12;
-  var totalMortgagePaid=0,totalRentPaid=0,totalInvested=investorStart;
-
-  var yr1BuyerTotal=annualRepay+annualOwner;
-  var yr1RenterTotal=annualRent+rentIns;
-  var yr1CF=yr1BuyerTotal-yr1RenterTotal;
-
-  var labels=[],buyArr=[],invArr=[],propArr=[],tableRows='';
-  scheduleRows=['Year,Property Value,Mortgage Balance,Buy Net Wealth,Invest Portfolio,Rent+Inv Net Wealth,Cash Flow,Difference'];
-
-  for(var y=1;y<=years;y++){
-    for(var m=0;m<12;m++){
-      if(loanBal>0.01){
-        var interest=loanBal*r,principal=Math.min(monthlyRepay-interest,loanBal);
-        loanBal=Math.max(loanBal-principal,0);totalMortgagePaid+=monthlyRepay;
-      }
-    }
-    propValue*=(1+propGrowth/100);
-    var annualCashFlow=annualRepay+annualOwner-(annualRent+rentIns);
-    if(annualCashFlow>0)totalInvested+=annualCashFlow;
-    portfolio=portfolio*(1+netInvRate)+annualCashFlow;
-    totalRentPaid+=annualRent;
-    annualRent*=(1+rentGrowth/100);
-
-    var buyNetWealth,invNetWealth;
-    if(s){
-      buyNetWealth=propValue*(1-sellAgentPct)-sellOther-loanBal;
-      var gain=Math.max(0,portfolio-investorStart);
-      invNetWealth=portfolio-gain*0.5*(sellTaxRate/100);
-    }else{
-      buyNetWealth=propValue-loanBal;
-      invNetWealth=portfolio;
-    }
-
-    var diff=buyNetWealth-invNetWealth;
-    var cls=diff>0?'positive-val':'negative-val';
-    var diffStr=diff>0?'Buy +'+fmt(diff):'Invest +'+fmt(Math.abs(diff));
-    var cfCol=annualCashFlow>=0?'var(--gr)':'var(--accent)';
-    labels.push('Yr '+y);buyArr.push(Math.round(buyNetWealth));invArr.push(Math.round(invNetWealth));propArr.push(Math.round(propValue));
-    tableRows+='<tr><td><strong>'+y+'</strong></td><td>'+fmt(propValue)+'</td><td>'+fmt(buyNetWealth)+'</td><td>'+fmt(portfolio)+'</td><td>'+fmt(invNetWealth)+'</td><td style="color:'+cfCol+';font-weight:600">'+(annualCashFlow>=0?'+':'')+fmt(annualCashFlow)+'</td><td class="'+cls+'">'+diffStr+'</td></tr>';
-    scheduleRows.push([y,Math.round(propValue),Math.round(loanBal),Math.round(buyNetWealth),Math.round(portfolio),Math.round(invNetWealth),Math.round(annualCashFlow),Math.round(diff)].join(','));
-  }
-
-  var finalBuy=buyArr[buyArr.length-1],finalInv=invArr[invArr.length-1],finalDiff=finalBuy-finalInv;
-  var tie=Math.abs(finalDiff)<1000,buyWins=finalDiff>0;
-
-  set('rBuyWealth',fmt(finalBuy));
-  set('rInvWealth',fmt(finalInv));
-  var rInvSub=document.getElementById('rInvWealthSub');if(rInvSub)rInvSub.textContent=s?'After CGT on gains (50% discount)':'Portfolio value — no CGT applied';
-  set('rPropValue',fmt(propArr[propArr.length-1]));
-  set('rPortfolio',fmt(portfolio));
-  var rPortSub=document.getElementById('rPortfolioSub');if(rPortSub)rPortSub.textContent=s?'Gross before CGT deduction':'Gross, before any CGT';
-  set('rMortgagePaid',fmt(totalMortgagePaid));
-  set('rRentPaid',fmt(totalRentPaid));
-  set('rAnnualOngoing',fmt(yr1BuyerTotal)+'/yr');
-  document.getElementById('rAnnualOngoingSub').textContent='Buyer: mortgage + costs · Renter: '+fmt(yr1RenterTotal)+'/yr';
-
-  var db=document.getElementById('rboxDiff');
-  db.className='result-box'+(tie?'':buyWins?' hl-green':' hl-blue');
-  set('rDiff',tie?'~Even':(buyWins?'Buy +'+fmt(finalDiff):'Invest +'+fmt(Math.abs(finalDiff))));
-  document.getElementById('rDiffSub').textContent=tie?'Similar wealth after '+years+' yrs':(buyWins?'Buying ahead after '+years+' yrs':'Investing ahead after '+years+' yrs');
-
-  var badge=document.getElementById('winnerBadge');
-  if(tie)badge.innerHTML='<span class="winner-badge winner-tie">⚖ Roughly Equal After '+years+' Years</span>';
-  else if(buyWins)badge.innerHTML='<span class="winner-badge">🏠 Buying Wins After '+years+' Years</span>';
-  else badge.innerHTML='<span class="winner-badge winner-invest">📈 Renting &amp; Investing Wins After '+years+' Years</span>';
-
-  document.getElementById('compBody').innerHTML=tableRows||'<tr><td colspan="7" style="color:var(--txl);font-style:italic;text-align:center;padding:18px">No results yet</td></tr>';
-
-  var cf1Sign=yr1CF>=0?'+':'-';
-  var cf1Col=yr1CF>=0?'color:var(--gr)':'color:var(--accent)';
-  var exitRow=s
-    ?'<tr><td>Exit costs at sale</td><td>Agent '+(sellAgentPct*100).toFixed(1)+'% + '+fmt(sellOther)+' other</td><td>CGT 50% discount at '+sellTaxRate+'% marginal rate</td></tr>'
-    :'<tr><td>Exit / tax at end</td><td>No sale — no CGT on PPOR</td><td>No sale — no CGT applied</td></tr>';
-
-  document.getElementById('assumptBody').innerHTML=
-    '<tr><td>Capital deployed at start</td><td>'+fmt(deposit)+' deposit + '+fmt(stampDuty+upfrontOther)+' upfront costs</td><td>'+fmt(investorStart)+' invested ('+(oppYes?'incl. upfront costs':'deposit only')+')</td></tr>'
-   +'<tr><td>Loan amount</td><td>'+fmt(loan)+(lmi>0?' (incl. LMI '+fmt(lmi)+')':'')+'</td><td>— no mortgage</td></tr>'
-   +'<tr><td>Annual mortgage repayments</td><td>'+fmt(annualRepay)+'/yr ('+fmt(monthlyRepay)+'/mo)</td><td>—</td></tr>'
-   +'<tr><td>Annual ownership costs (Yr 1)</td><td>'+fmt(annualOwner)+'/yr (rates, insur, maint'+(agentFee?', agent':'')+(bodyCorp?', strata':'')+')</td><td>—</td></tr>'
-   +'<tr><td>Annual rent + insurance (Yr 1)</td><td>—</td><td>'+fmt(yr1RenterTotal)+'/yr</td></tr>'
-   +'<tr><td>Annual cash flow invested (Yr 1)</td><td>—</td><td><span style="'+cf1Col+';font-weight:700">'+cf1Sign+fmt(yr1CF)+'/yr</span></td></tr>'
-   +'<tr><td>Total invested (deposit + cash flows)</td><td>—</td><td>'+fmt(totalInvested)+'</td></tr>'
-   +'<tr><td>Total mortgage paid</td><td>'+fmt(totalMortgagePaid)+'</td><td>—</td></tr>'
-   +'<tr><td>Total rent paid</td><td>—</td><td>'+fmt(totalRentPaid)+'</td></tr>'
-   +exitRow
-   +'<tr><td>Growth rate</td><td>'+propGrowth+'% p.a. property</td><td>'+invReturn+'% gross ('+invFee+'% MER)</td></tr>';
-
-  document.getElementById('cfNote').innerHTML='<strong>How the invest scenario works:</strong> The renter invests the deposit upfront'+(oppYes?', plus stamp duty and other upfront costs':'')+'. Each year, the difference between what the buyer pays (mortgage + ownership costs) and what the renter pays (rent + contents insurance) is invested into — or drawn from — the portfolio. In Year 1 the renter '+(yr1CF>=0?'saves <strong>'+fmt(yr1CF)+'</strong> compared to buying, which is invested':'pays <strong>'+fmt(Math.abs(yr1CF))+'</strong> more than the buyer, drawn from the portfolio')+'. This gap shifts each year as rent grows.'+(s?' <strong>Sell mode:</strong> property sale costs deducted; CGT 50% discount applied to investment gains.':'');
-
-  summaryRows=['Metric,Buy Scenario,Rent & Invest Scenario','Net Wealth (end),'+Math.round(finalBuy)+','+Math.round(finalInv),'Property Value (end),'+Math.round(propArr[propArr.length-1])+',N/A','Investment Portfolio (end),N/A,'+Math.round(portfolio),'Total Invested,N/A,'+Math.round(totalInvested),'Annual Buyer Outgoings Yr1,'+Math.round(yr1BuyerTotal)+',N/A','Annual Renter Outgoings Yr1,N/A,'+Math.round(yr1RenterTotal),'Annual Cash Flow Invested Yr1,N/A,'+Math.round(yr1CF),'Total Mortgage Paid,'+Math.round(totalMortgagePaid)+',N/A','Total Rent Paid,N/A,'+Math.round(totalRentPaid)];
-  drawChart(labels,buyArr,invArr,propArr);
-}
-
-function drawChart(labels,buyArr,invArr,propArr){
-  var canvas=document.getElementById('wealthChart');if(!canvas)return;
-  if(wealthChart){wealthChart.destroy();wealthChart=null;}
-  wealthChart=new Chart(canvas.getContext('2d'),{
-    type:'line',
-    data:{labels:labels,datasets:[
-      {label:'Buy: Net Wealth',data:buyArr,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,0.15)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
-      {label:'Rent & Invest: Net Wealth',data:invArr,borderColor:'rgba(63,127,181,1)',backgroundColor:'rgba(63,127,181,0.15)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
-      {label:'Property Value',data:propArr,borderColor:'rgba(232,168,56,1)',backgroundColor:'rgba(232,168,56,0.05)',borderDash:[5,4],tension:0.35,pointRadius:0,pointHoverRadius:4,borderWidth:1.8,fill:false}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(30,20,10,.93)',titleColor:'#fff',bodyColor:'rgba(255,255,255,.88)',padding:11,cornerRadius:8,callbacks:{label:function(item){return item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');}}}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#6c7a89',maxTicksLimit:14}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#6c7a89',callback:function(v){return'$'+(v>=1000000?(v/1000000).toFixed(1)+'m':Math.round(v/1000)+'k');}}}},
-      animation:{duration:350}}
-  });
-}
-
-function dlCSV(rows,fname){if(!rows||!rows.length)return;var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.join('\n'));a.download=fname;a.click();}
-
-function resetAll(){
-  var d={fPrice:800000,fDeposit:160000,fStampDuty:31070,fConveyancing:2000,fInspections:1000,fFurnishing:10000,fRate:6.00,fTerm:30,fCouncil:2000,fInsurance:2000,fMaintenance:4000,fBodyCorp:'',fPropertyGrowth:4.00,fAgentFee:'',fRent:3000,fRentGrowth:3.0,fRentInsurance:600,fInvReturn:8.0,fInvFee:0.20,fSellAgent:2.0,fSellOther:2000,fYears:20};
-  for(var k in d){var el=document.getElementById(k);if(el)el.value=d[k];}
-  document.getElementById('exitNo').checked=true;document.getElementById('oppYes').checked=true;
-  document.getElementById('fSellTax').value='32.5';
-  updateExitUI();calc();
-}
-
-['fDeposit','fStampDuty','fConveyancing','fInspections','fFurnishing','fRate','fTerm',
- 'fCouncil','fInsurance','fMaintenance','fBodyCorp','fPropertyGrowth','fAgentFee',
- 'fRent','fRentGrowth','fRentInsurance','fInvReturn','fInvFee','fSellAgent','fSellOther','fYears'
-].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calc);});
-
-document.getElementById('fPrice').addEventListener('input',function(){
-  document.getElementById('fStampDuty').value=Math.round(estimateStampDuty(parseFloat(this.value)||0));calc();
-});
-document.getElementById('fSellTax').addEventListener('change',calc);
-['oppYes','oppNo'].forEach(function(id){document.getElementById(id).addEventListener('change',calc);});
-['exitYes','exitNo'].forEach(function(id){document.getElementById(id).addEventListener('change',function(){updateExitUI();calc();});});
-
-(function(){
-  var btn=document.getElementById('rentInvBtn'),body=document.getElementById('rentInvBody');
-  btn.addEventListener('click',function(){var open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',open?'false':'true');body.classList.toggle('collapsed',open);});
-  if(window.innerWidth<900){btn.setAttribute('aria-expanded','false');body.classList.add('collapsed');}
-})();
-
-document.getElementById('amortToggle').addEventListener('click',function(){
-  var sec=document.getElementById('amortSection'),open=sec.style.display==='block';
-  sec.style.display=open?'none':'block';
-  this.innerHTML=open?'<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Show Year-by-Year Schedule':'<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Hide Year-by-Year Schedule';
-});
-
-document.getElementById('btnReset').addEventListener('click',resetAll);
-document.getElementById('btnStartOver').addEventListener('click',function(){resetAll();window.scrollTo({top:0,behavior:'smooth'});});
-document.getElementById('btnExportSummary').addEventListener('click',function(){dlCSV(summaryRows,'buy-vs-invest-summary.csv');});
-document.getElementById('btnExportSchedule').addEventListener('click',function(){dlCSV(scheduleRows,'buy-vs-invest-schedule.csv');});
-document.getElementById('btnSaveSnapshot').addEventListener('click',function(){
-  var blob=new Blob([document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  var d=new Date;a.download='buy-vs-invest-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-});
-
-updateExitUI();
-calc();
-</script>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/buy-vs-invest.js"></script>
+  <script>
+    // Populate rYears reactively
+    document.getElementById('fYears')?.addEventListener('input', () => {
+      set('rYears', document.getElementById('fYears').value);
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      set('rYears', document.getElementById('fYears')?.value || '20');
+    });
+  </script>
 </body>
 </html>
