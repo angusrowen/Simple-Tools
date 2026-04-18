@@ -1,180 +1,341 @@
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home Loan Repayment — AusCalc</title>
-  <meta name="description" content="Calculate monthly repayments, total interest and full amortisation schedule for your Australian home loan." />
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
-  <style>:root { --accent: #3f7fb5; }</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Loan Repayment Calculator — Australian Finance Tools</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+
+<!-- Google AdSense -->
+  
+  <link rel="stylesheet" href="css/home-loan.css">
 </head>
 <body>
-  <header class="site-header">
-    <a href="index.html" class="logo">
-      <i class="fa-solid fa-calculator"></i> AusCalc
+
+<div class="topbar">
+  <div class="topbar-logo">
+    <a href="index.html" title="Back to calculators" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#3f7fb5;border-radius:10px;color:#fff;text-decoration:none">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
     </a>
-    <nav>
-      <a href="index.html">Calculators</a>
-    </nav>
-  </header>
+  </div>
+  <div class="topbar-divider"></div>
+  <div>
+    <div class="topbar-title">Home Loan Repayment Calculator</div>
+    <div class="topbar-desc">Estimate repayments, interest costs &amp; loan payoff schedule</div>
+  </div>
+  <div class="topbar-right">
+  </div>
+</div>
 
-  <section class="page-hero">
-    <div class="hero-icon"><i class="fa-solid fa-house"></i></div>
-    <h1>Home Loan Repayment</h1>
-    <p>Monthly repayments, total interest cost and full amortisation schedule.</p>
-  </section>
+<div class="page-wrapper">
+  <div class="side-rail left">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        
+      </div>
+    </div>
+  </div>
+<div class="main-wrapper">
+<div class="container">
 
-  <main class="site-main">
-    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left fa-xs"></i> All Calculators</a>
-    <div class="calc-layout">
+<div class="layout">
 
-      <!-- INPUTS -->
-      <div class="panel">
-        <div class="section-label first">Loan Details</div>
-        <div class="field">
-          <label for="fLoan">Loan Amount</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fLoan" class="has-prefix" value="600000" min="0" step="5000"></div>
-          <div class="range-wrap"><input type="range" id="fLoanRange" min="0" max="3000000" step="5000" value="600000"><div class="range-labels"><span>$0</span><span>$3M</span></div></div>
-        </div>
-        <div class="inline-fields">
-          <div class="field">
-            <label for="fRate">Interest Rate</label>
-            <div class="input-wrap"><input type="number" id="fRate" class="has-suffix" value="6.0" min="0" max="20" step="0.05"><span class="suffix">%</span></div>
-          </div>
-          <div class="field">
-            <label for="fTerm">Loan Term</label>
-            <div class="input-wrap"><input type="number" id="fTerm" class="has-suffix" value="30" min="1" max="40"><span class="suffix">yrs</span></div>
-          </div>
-        </div>
-        <div class="inline-fields">
-          <div class="field">
-            <label for="fFreq">Repayment Frequency</label>
-            <select id="fFreq">
-              <option value="weekly">Weekly</option>
-              <option value="fortnightly">Fortnightly</option>
-              <option value="monthly" selected>Monthly</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="fType">Loan Type</label>
-            <select id="fType">
-              <option value="pi" selected>Principal &amp; Interest</option>
-              <option value="io">Interest Only</option>
-            </select>
-          </div>
-        </div>
-        <div id="ioTermField" class="field" style="display:none">
-          <label for="fIOTerm">Interest-Only Period</label>
-          <div class="input-wrap"><input type="number" id="fIOTerm" class="has-suffix" value="5" min="1" max="15"><span class="suffix">yrs</span></div>
-          <div class="field-hint">Loan reverts to P&amp;I for the remaining term after this period.</div>
-        </div>
+<!-- LEFT INPUTS -->
+<div>
+  <div class="card">
+    <div class="card-header-row">
+      <h2>Loan Details</h2>
+      <button type="button" class="btn btn-navy" id="btnReset1">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Reset
+      </button>
+    </div>
 
-        <!-- Optional extras (collapsible) -->
-        <button class="collapsible-header" aria-expanded="false" data-body="extrasBody" style="margin-top:.8rem">
-          <span class="ch-title">Fees &amp; Extras</span>
-          <span class="collapse-icon"><i class="fa-solid fa-chevron-down fa-xs"></i></span>
+    <div class="section-label">Loan Amount</div>
+    <div class="field">
+      <label for="fLoanAmt">Loan Amount</label>
+      <div class="input-wrap"><span class="prefix">$</span>
+        <input type="number" id="fLoanAmt" class="has-prefix" placeholder="e.g. 600000" min="0" step="1000">
+      </div>
+      <div class="range-wrap">
+        <input type="range" id="loanRange" min="0" max="3000000" step="5000" value="500000">
+        <div class="range-labels"><span>$0</span><span>$3M</span></div>
+      </div>
+    </div>
+
+    <div class="section-label">Interest Rate</div>
+    <div class="field">
+      <label for="fRate">Annual Interest Rate</label>
+      <div class="input-wrap">
+        <input type="number" id="fRate" class="has-suffix" placeholder="e.g. 6.00" min="0" max="30" step="0.05">
+        <span class="suffix">%</span>
+      </div>
+    </div>
+
+    <div class="section-label">Loan Term</div>
+    <div class="field">
+      <label for="fTerm">Loan Term</label>
+      <div class="input-wrap">
+        <input type="number" id="fTerm" class="has-suffix" placeholder="e.g. 30" min="1" max="40" step="1">
+        <span class="suffix">yrs</span>
+      </div>
+    </div>
+
+    <div class="section-label">Repayment Frequency</div>
+    <div class="toggle-group">
+      <div class="toggle-switch">
+        <input type="radio" name="freq" id="rMonthly" value="monthly" checked>
+        <label for="rMonthly">Monthly</label>
+        <input type="radio" name="freq" id="rFortnightly" value="fortnightly">
+        <label for="rFortnightly">Fortnightly</label>
+        <input type="radio" name="freq" id="rWeekly" value="weekly">
+        <label for="rWeekly">Weekly</label>
+      </div>
+    </div>
+
+    <div class="section-label">Loan Type</div>
+    <div class="toggle-group">
+      <div class="toggle-switch">
+        <input type="radio" name="ltype" id="rPI" value="pi" checked>
+        <label for="rPI">Principal &amp; Interest</label>
+        <input type="radio" name="ltype" id="rIO" value="io">
+        <label for="rIO">Interest Only</label>
+      </div>
+    </div>
+
+    <div id="ioBlock" class="hidden">
+      <div class="field" style="margin-top:10px">
+        <label for="fIOPer">Interest-Only Period</label>
+        <div class="input-wrap">
+          <input type="number" id="fIOPer" class="has-suffix" placeholder="e.g. 5" min="1" max="15" step="1">
+          <span class="suffix">yrs</span>
+        </div>
+        <div class="field-hint">Loan reverts to P&amp;I for the remaining term after this period.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card collapsible-card">
+    <button class="collapsible-header" id="addlBtn" aria-expanded="true" aria-controls="addlBody" type="button">
+      <h2 style="margin:0;padding:0;border:none">Additional Options</h2>
+      <span class="collapse-icon">
+        <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 8 10 13 15 8"/></svg>
+      </span>
+    </button>
+    <div class="collapsible-body" id="addlBody">
+
+      <div class="section-label first">Establishment Fee</div>
+      <div class="field">
+        <label for="fEstFee">Upfront Establishment Fee</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="fEstFee" class="has-prefix" placeholder="e.g. 600 (optional)" min="0" step="10">
+        </div>
+        <div class="field-hint">One-off fee charged at loan settlement. Added to your total cost.</div>
+      </div>
+
+      <div class="section-label">Monthly Fee</div>
+      <div class="field">
+        <label for="fMFee">Ongoing Monthly Fee</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="fMFee" class="has-prefix" placeholder="e.g. 10 (optional)" min="0" step="1">
+        </div>
+        <div class="field-hint">Recurring account-keeping fee charged each month over the loan term.</div>
+      </div>
+
+      <div class="section-label">Extra Repayments</div>
+      <div class="field">
+        <label for="fExtra">Extra Repayment per Period</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="fExtra" class="has-prefix" placeholder="e.g. 200" min="0" step="50">
+        </div>
+        <div class="field-hint">Additional amount on top of your minimum repayment each period.</div>
+      </div>
+
+      <div class="section-label">Offset Account</div>
+      <div class="field">
+        <label for="fOffset">Offset Balance</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="fOffset" class="has-prefix" placeholder="e.g. 50000 (optional)" min="0" step="1000">
+        </div>
+        <div class="field-hint">Interest is calculated on loan balance minus offset amount.</div>
+      </div>
+
+      <div class="section-label">Start Date</div>
+      <div class="field">
+        <label for="fStart">Loan Start Date</label>
+        <input type="month" id="fStart" style="width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.95rem;color:var(--tx);background:#fffdf8">
+        <div class="field-hint">Used to calculate your projected payoff date.</div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- end left -->
+
+<!-- RIGHT RESULTS -->
+<div>
+  <!-- Mobile mid-page ad — 300x250 Medium Rectangle -->
+  <!-- Visible only on screens below 900px wide -->
+  <div class="mobile-ad-slot">
+    <div class="mobile-ad-inner">
+      <div class="ad-slot-label">Advertisement</div>
+      <ins class="adsbygoogle"
+           style="display:inline-block;max-width:100%;width:300px;height:250px"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"></ins>
+      
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Results</h2>
+
+    <div class="results-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+      <div class="result-box highlight">
+        <div class="label" id="rRepayLbl">Monthly Repayment</div>
+        <div class="value" id="rRepay" style="color:var(--gr);font-size:1.3rem">—</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Total Repayments</div>
+        <div class="value" id="rTotal">—</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Total Interest</div>
+        <div class="value" id="rInterest" style="color:var(--red);font-weight:700">—</div>
+      </div>
+      <div class="result-box" id="rFeeBox" style="display:none">
+        <div class="label">Total Fees</div>
+        <div class="value" id="rFees" style="color:var(--am)">—</div>
+      </div>
+      <div class="result-box" id="rCostBox" style="display:none">
+        <div class="label">Total Cost of Loan</div>
+        <div class="value" id="rCost">—</div>
+      </div>
+      <div class="result-box" id="rCmpBox" style="display:none">
+        <div class="label">Comparison Rate <span style="font-size:.65rem;font-weight:400;text-transform:none">(est.)</span></div>
+        <div class="value" id="rCmp" style="color:var(--bl)">—</div>
+      </div>
+    </div>
+
+    <div id="ioMetrics" class="hidden" style="margin-bottom:14px">
+      <div class="results-grid" style="grid-template-columns:repeat(2,1fr)">
+        <div class="result-box">
+          <div class="label">IO Period Repayment</div>
+          <div class="value" id="rIORepay">—</div>
+        </div>
+        <div class="result-box">
+          <div class="label">P&amp;I Repayment (after IO)</div>
+          <div class="value" id="rPIAfter">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="derived-info" id="bannerExtra" style="display:none">
+      Extra repayments of <strong id="bnExtraAmt"></strong>/period saves <strong id="bnExtraSaved"></strong> in interest and pays off your loan <strong id="bnExtraTime"></strong> earlier.
+    </div>
+    <div class="derived-info" id="bannerOffset" style="display:none;background:var(--bll);border-color:var(--bl)">
+      Your offset of <strong id="bnOffAmt"></strong> saves <strong id="bnOffSaved"></strong> in interest, reducing your term by <strong id="bnOffTime"></strong>.
+    </div>
+    <div class="derived-info" id="bannerPayoff" style="display:none">
+      Based on your start date, your loan will be paid off by <strong id="bnPayoff"></strong>.<span id="bnPayoffNote"></span>
+    </div>
+
+    <div class="section-title">Repayment Breakdown</div>
+    <table class="combined-table">
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th style="text-align:right">Per Period</th>
+          <th style="text-align:right">Monthly</th>
+          <th style="text-align:right">Annual</th>
+          <th style="text-align:right">Loan Life</th>
+          <th style="text-align:right">% of Total</th>
+        </tr>
+      </thead>
+      <tbody id="tBody">
+        <tr><td colspan="6" style="color:var(--txl);font-style:italic;text-align:center;padding:18px">Enter loan details to see results</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Chart -->
+    <div class="chart-section">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px">
+        <div class="section-title" style="margin-bottom:0">Remaining Loan Balance Over Time</div>
+        <div style="font-size:.74rem;color:var(--txl);font-style:italic">&#9432; Hover to see interest / principal split by year</div>
+      </div>
+      <div class="chart-wrap" style="margin-top:10px">
+        <canvas id="myChart" height="140"></canvas>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(230,100,20,0.72)"></div>Interest Portion</div>
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(42,157,103,0.65)"></div>Principal Portion</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Amortisation -->
+    <button class="amort-btn" id="amortBtn" type="button">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+      Show Amortisation Schedule
+    </button>
+    <div id="amortSection" class="hidden">
+      <div class="amort-wrap">
+        <table class="amort-table">
+          <thead><tr><th>#</th><th>Period</th><th>Opening</th><th>Interest</th><th>Principal</th><th>Extra</th><th>Closing</th></tr></thead>
+          <tbody id="amortBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-bar">
+      <div class="actions-left">
+        <button type="button" class="btn btn-green" id="btnCSV">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>Export Summary CSV
         </button>
-        <div class="collapsible-body collapsed" id="extrasBody">
-          <div style="margin-top:.5rem">
-            <div class="inline-fields">
-              <div class="field">
-                <label for="fEstFee">Establishment Fee</label>
-                <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fEstFee" class="has-prefix" value="0" min="0" step="100"></div>
-                <div class="field-hint">One-off fee at settlement.</div>
-              </div>
-              <div class="field">
-                <label for="fMonthly">Monthly Fee</label>
-                <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fMonthly" class="has-prefix" value="0" min="0" step="5"></div>
-                <div class="field-hint">Recurring account-keeping fee.</div>
-              </div>
-            </div>
-            <div class="inline-fields">
-              <div class="field">
-                <label for="fExtra">Extra Repayments</label>
-                <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fExtra" class="has-prefix" value="0" min="0" step="50"></div>
-                <div class="field-hint">Additional amount per period.</div>
-              </div>
-              <div class="field">
-                <label for="fOffset">Offset Balance</label>
-                <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fOffset" class="has-prefix" value="0" min="0" step="1000"></div>
-                <div class="field-hint">Reduces interest-charged principal.</div>
-              </div>
-            </div>
-            <div class="field">
-              <label for="fStartDate">Start Date</label>
-              <input type="date" id="fStartDate" />
-              <div class="field-hint">Used to project your payoff date.</div>
-            </div>
-          </div>
-        </div>
+        <button type="button" class="btn btn-green" id="btnAmortCSV">
+          <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Export Schedule CSV
+        </button>
       </div>
-
-      <!-- RESULTS -->
-      <div class="panel">
-        <div class="results-empty" id="emptyState"><i class="fa-solid fa-house"></i><span>Enter loan details to see results</span></div>
-        <div id="resultsContent" style="display:none">
-          <div class="results-grid">
-            <div class="result-box hl-blue"><div class="lbl">Repayment</div><div class="val" id="rRepayment">—</div></div>
-            <div class="result-box"><div class="lbl">Total Repayments</div><div class="val" id="rTotalRepay">—</div></div>
-            <div class="result-box"><div class="lbl">Total Interest</div><div class="val" id="rTotalInt">—</div></div>
-          </div>
-          <div class="results-grid-2" id="ioRow" style="display:none">
-            <div class="result-box"><div class="lbl">IO Period Repayment</div><div class="val" id="rIORepay">—</div></div>
-            <div class="result-box"><div class="lbl">P&amp;I Repayment (after IO)</div><div class="val" id="rPIRepay">—</div></div>
-          </div>
-          <div id="piRow"></div>
-          <div class="result-box" style="margin-bottom:.75rem">
-            <div class="lbl">Projected Payoff Date</div>
-            <div class="val" id="rPayoffDate" style="font-size:1rem">—</div>
-          </div>
-
-          <div class="chart-section">
-            <div class="chart-title">Principal vs Total Interest</div>
-            <div class="chart-wrap" style="height:220px"><canvas id="loanChart"></canvas></div>
-          </div>
-
-          <div style="margin-top:1rem">
-            <div class="panel-title">Repayment Breakdown</div>
-            <div class="breakdown-wrap">
-              <table class="breakdown-table">
-                <thead><tr><th>Component</th><th>Total</th><th>Per Month</th><th>Per Year</th><th>% of Total</th></tr></thead>
-                <tbody id="breakdownBody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <button class="amort-btn" id="amortToggle">▼ Show Year-by-Year Schedule</button>
-          <div id="amortSection" style="display:none">
-            <div class="amort-wrap">
-              <table class="amort-table">
-                <thead><tr><th>Year</th><th>Opening</th><th>Interest</th><th>Principal</th><th>Extra</th><th>Closing</th></tr></thead>
-                <tbody id="amortBody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="actions-bar">
-            <button class="btn btn-green" id="btnExportSummary"><i class="fa-solid fa-download fa-xs"></i> Export Summary</button>
-            <button class="btn btn-green" id="btnExportSchedule"><i class="fa-solid fa-table fa-xs"></i> Export Schedule</button>
-          </div>
-          <p class="disclaimer">Estimates only. Assumes a constant interest rate and does not account for lender fees, rate changes, or early repayment restrictions. Not personal financial advice.</p>
-        </div>
+      <div style="flex:1"></div>
+      <div class="actions-right">
+        <button type="button" class="btn btn-navy" id="btnSaveSnapshot">
+          <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>Save File
+        </button>
+        <button type="button" class="btn btn-navy" id="btnReset2">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Start Over
+        </button>
       </div>
     </div>
-  </main>
 
-  <footer class="site-footer">
-    <span>&copy; <span class="js-year"></span> AusCalc &mdash; General information only, not financial advice.</span>
-    <div class="footer-links">
-      <a href="index.html">All Calculators</a>
-      <a href="#disclaimer">Disclaimer</a>
+    <div class="note">Estimates only. Assumes a constant interest rate and does not account for lender fees, rate changes, or early repayment restrictions. Not personal financial advice.</div>
+  </div>
+</div><!-- end right -->
+
+</div><!-- end layout -->
+</div><!-- /container -->
+</div><!-- /main-wrapper -->
+
+  <div class="side-rail right">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        
+      </div>
     </div>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-  <script src="js/utils.js"></script>
+  
+  </div><!-- /side-rail right -->
+
+</div><!-- /page-wrapper -->
+
+<div class="ft"><span>Estimates only — general information, not personal financial advice.</span></div>
+
+
+
   <script src="js/home-loan.js"></script>
 </body>
 </html>

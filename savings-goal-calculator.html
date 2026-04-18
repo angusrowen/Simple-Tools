@@ -1,180 +1,256 @@
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Savings Goal — AusCalc</title>
-  <meta name="description" content="Calculate how long it will take to reach your savings goal, or how much you need to save each period." />
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
-  <style>:root { --accent: #b6862c; }</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Savings Goal Calculator</title>
+
+  <!-- Google AdSense -->
+  
+  <link rel="stylesheet" href="css/savings-goal.css">
 </head>
 <body>
-  <header class="site-header">
-    <a href="index.html" class="logo">
-      <i class="fa-solid fa-calculator"></i> AusCalc
+
+<div class="topbar">
+  <div class="topbar-logo">
+    <a href="index.html" title="Back">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/>
+      </svg>
     </a>
-    <nav>
-      <a href="index.html">Calculators</a>
-    </nav>
-  </header>
+  </div>
+  <div class="topbar-divider"></div>
+  <div>
+    <div class="topbar-title">Savings Goal</div>
+    <div class="topbar-desc">Time to reach your goal or monthly amount needed.</div>
+  </div>
+</div>
 
-  <section class="page-hero">
-    <div class="hero-icon"><i class="fa-solid fa-piggy-bank"></i></div>
-    <h1>Savings Goal</h1>
-    <p>Time to reach your savings target, or contributions needed to get there.</p>
-  </section>
-
-  <main class="site-main">
-    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left fa-xs"></i> All Calculators</a>
-    <div class="calc-layout">
-
-      <!-- INPUTS -->
-      <div class="panel">
-        <div class="section-label first">Savings Details</div>
-        <div class="field">
-          <label for="fGoal">Savings Goal</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fGoal" class="has-prefix" value="50000" min="0" step="1000"></div>
-          <div class="range-wrap"><input type="range" id="fGoalRange" min="0" max="200000" step="1000" value="50000"><div class="range-labels"><span>$0</span><span>$200k</span></div></div>
-        </div>
-        <div class="field">
-          <label for="fCurrent">Current Savings</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fCurrent" class="has-prefix" value="5000" min="0" step="500"></div>
-          <div class="range-wrap"><input type="range" id="fCurrentRange" min="0" max="50000" step="500" value="5000"><div class="range-labels"><span>$0</span><span>$50k</span></div></div>
-          <div class="field-hint">Amount already saved toward this goal.</div>
-        </div>
-        <div class="inline-fields">
-          <div class="field">
-            <label for="fContrib">Regular Contributions</label>
-            <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fContrib" class="has-prefix" value="500" min="0" step="50"></div>
-            <div class="range-wrap"><input type="range" id="fContribRange" min="0" max="5000" step="50" value="500"><div class="range-labels"><span>$0</span><span>$5k</span></div></div>
-          </div>
-          <div class="field">
-            <label for="fFreq">Frequency</label>
-            <select id="fFreq">
-              <option value="weekly">Weekly</option>
-              <option value="fortnightly">Fortnightly</option>
-              <option value="monthly" selected>Monthly</option>
-            </select>
-          </div>
-        </div>
-        <div class="inline-fields">
-          <div class="field">
-            <label for="fRate">Interest Rate</label>
-            <div class="input-wrap"><input type="number" id="fRate" class="has-suffix" value="4.5" min="0" max="20" step="0.1"><span class="suffix">%</span></div>
-            <div class="field-hint">Compounded at contribution frequency.</div>
-          </div>
-          <div class="field">
-            <label for="fMaxYears">Max Time Horizon</label>
-            <div class="input-wrap"><input type="number" id="fMaxYears" class="has-suffix" value="30" min="1" max="80"><span class="suffix">yrs</span></div>
-          </div>
-        </div>
-        <div class="field">
-          <label for="fStartDate">Start Date</label>
-          <input type="date" id="fStartDate" />
-          <div class="field-hint">Used to project your goal date.</div>
-        </div>
-
-        <!-- Additional Options (collapsible) -->
-        <button class="collapsible-header" aria-expanded="false" data-body="extrasBody" style="margin-top:.8rem">
-          <span class="ch-title">Additional Options</span>
-          <span class="collapse-icon"><i class="fa-solid fa-chevron-down fa-xs"></i></span>
-        </button>
-        <div class="collapsible-body collapsed" id="extrasBody">
-          <div style="margin-top:.5rem">
-            <div class="field">
-              <label for="fLumpSums">Lump Sum Top-Ups</label>
-              <textarea id="fLumpSums" rows="4" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-btn);color:var(--text);padding:.6rem .8rem;font-size:.82rem;font-family:inherit;resize:vertical" placeholder="year, amount (one per line)&#10;e.g.&#10;2, 5000&#10;5, 10000"></textarea>
-              <div class="field-hint">One-off deposits at a specific year, e.g. tax return or bonus. Format: <code>year, amount</code></div>
-            </div>
-            <div class="field">
-              <label for="fInflation">Inflation Rate</label>
-              <div class="input-wrap"><input type="number" id="fInflation" class="has-suffix" value="2.5" min="0" max="10" step="0.1"><span class="suffix">%</span></div>
-              <div class="field-hint">Shows closing balances in today's purchasing power (Real Value column).</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RESULTS -->
-      <div class="panel">
-        <div class="results-empty" id="emptyState"><i class="fa-solid fa-piggy-bank"></i><span>Enter your savings details to see results</span></div>
-        <div id="resultsContent" style="display:none">
-          <div class="results-grid">
-            <div class="result-box hl-green"><div class="lbl">Time to Goal</div><div class="val" id="rTime">—</div></div>
-            <div class="result-box"><div class="lbl">Total Deposited</div><div class="val" id="rDeposited">—</div></div>
-            <div class="result-box"><div class="lbl">Interest Earned</div><div class="val" id="rInterest">—</div></div>
-          </div>
-          <div class="results-grid">
-            <div class="result-box"><div class="lbl">Total Lump Sums</div><div class="val" id="rLumps">—</div></div>
-            <div class="result-box"><div class="lbl">Real Value</div><div class="val" id="rRealVal">—</div></div>
-            <div class="result-box"><div class="lbl">Goal Date</div><div class="val" id="rGoalDate" style="font-size:.95rem">—</div></div>
-          </div>
-
-          <!-- Progress bar -->
-          <div style="margin-bottom:1rem">
-            <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:.35rem">
-              <span id="progressSaved"></span>
-              <span id="progressPct"></span>
-            </div>
-            <div style="background:var(--surface2);border-radius:99px;height:10px;overflow:hidden;border:1px solid var(--border)">
-              <div id="progressBar" style="height:100%;border-radius:99px;transition:width .4s ease;width:0%"></div>
-            </div>
-            <div style="font-size:.72rem;color:var(--muted);text-align:right;margin-top:.25rem" id="progressGoal"></div>
-          </div>
-
-          <div class="chart-section">
-            <div class="chart-title">Savings Growth Over Time</div>
-            <div class="chart-wrap"><canvas id="savingsChart"></canvas></div>
-            <div class="chart-hint">Hover for details</div>
-            <div class="chart-legend">
-              <div class="legend-item"><div class="legend-dot" style="background:rgba(182,134,44,1)"></div>Savings Balance</div>
-              <div class="legend-item"><div class="legend-dot" style="background:rgba(63,127,181,0.9)"></div>Total Deposited</div>
-              <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,0.9)"></div>Interest Earned</div>
-            </div>
-          </div>
-
-          <div style="margin-top:1rem">
-            <div class="panel-title">Savings Breakdown</div>
-            <div class="breakdown-wrap">
-              <table class="breakdown-table">
-                <thead><tr><th>Component</th><th>Per Period</th><th>Annual</th><th>Total</th><th>% of Goal</th></tr></thead>
-                <tbody id="breakdownBody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <button class="amort-btn" id="amortToggle">▼ Show Year-by-Year Schedule</button>
-          <div id="amortSection" style="display:none">
-            <div class="amort-wrap">
-              <table class="amort-table">
-                <thead><tr><th>Year</th><th>Opening</th><th>Contributions</th><th>Lump Sum</th><th>Interest</th><th>Closing</th><th>Real Value</th></tr></thead>
-                <tbody id="amortBody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="actions-bar">
-            <button class="btn btn-green" id="btnExportSummary"><i class="fa-solid fa-download fa-xs"></i> Export Summary</button>
-            <button class="btn btn-green" id="btnExportSchedule"><i class="fa-solid fa-table fa-xs"></i> Export Schedule</button>
-          </div>
-          <p class="disclaimer">Estimates only. Assumes constant interest rate and contributions at the start of each period, compounded at contribution frequency. Not personal financial advice.</p>
-        </div>
+<div class="page-wrapper">
+<div class="side-rail left">
+  <div class="side-rail-inner">
+    <div class="rail-ad-unit">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle"
+          style="display:inline-block;width:160px;height:600px"
+          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+          data-ad-slot="XXXXXXXXXX"></ins>
+        
       </div>
     </div>
-  </main>
+  </div>
+</div>
+<div class="main-wrapper"><div class="container"><div class="layout">
 
-  <footer class="site-footer">
-    <span>&copy; <span class="js-year"></span> AusCalc &mdash; General information only, not financial advice.</span>
-    <div class="footer-links">
-      <a href="index.html">All Calculators</a>
-      <a href="#disclaimer">Disclaimer</a>
+<!-- LEFT PANEL -->
+<div>
+<div class="card">
+  <div class="card-hdr">
+    <h2>Savings Details</h2>
+    <button class="btn btn-nv" id="btnReset" type="button">&#8635; Reset</button>
+  </div>
+
+  <div class="sec-lbl first">Goal</div>
+  <div class="field">
+    <label for="fGoal">Savings Goal</label>
+    <div class="iw"><span class="pre">$</span><input type="number" id="fGoal" class="pl" value="50000" min="0" step="500"></div>
+    <div class="range-wrap">
+      <input type="range" id="fGoalRange" min="0" max="200000" step="500" value="50000">
+      <div class="range-labels"><span>$0</span><span>$200k</span></div>
     </div>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-  <script src="js/utils.js"></script>
+  </div>
+  <div class="field">
+    <label for="fLabel">Goal Label (optional)</label>
+    <input type="text" id="fLabel" placeholder="e.g. House deposit, Emergency fund">
+  </div>
+
+  <div class="sec-lbl">Current Savings</div>
+  <div class="field">
+    <label for="fInitial">Current Balance</label>
+    <div class="iw"><span class="pre">$</span><input type="number" id="fInitial" class="pl" value="5000" min="0" step="500"></div>
+    <div class="range-wrap">
+      <input type="range" id="fInitialRange" min="0" max="50000" step="500" value="5000">
+      <div class="range-labels"><span>$0</span><span>$50k</span></div>
+    </div>
+    <div class="hint">Amount already saved toward this goal.</div>
+  </div>
+
+  <div class="sec-lbl">Mode</div>
+  <div class="tog-grp">
+    <div class="tog">
+      <input type="radio" name="mode" id="mTime" value="time" checked><label for="mTime">Time to Goal</label>
+      <input type="radio" name="mode" id="mContrib" value="contrib"><label for="mContrib">Required Contribution</label>
+    </div>
+  </div>
+
+  <div class="sec-lbl">Regular Contributions</div>
+  <div class="field">
+    <label for="fContrib">Contribution Amount</label>
+    <div class="iw"><span class="pre">$</span><input type="number" id="fContrib" class="pl" value="800" min="0" step="50"></div>
+    <div class="range-wrap">
+      <input type="range" id="fContribRange" min="0" max="5000" step="50" value="800">
+      <div class="range-labels"><span>$0</span><span>$5k</span></div>
+    </div>
+  </div>
+  <div class="tog-grp">
+    <span class="tog-lbl">Frequency</span>
+    <div class="tog">
+      <input type="radio" name="freq" id="fqW" value="52"><label for="fqW">Weekly</label>
+      <input type="radio" name="freq" id="fqF" value="26"><label for="fqF">Fortnightly</label>
+      <input type="radio" name="freq" id="fqM" value="12" checked><label for="fqM">Monthly</label>
+      <input type="radio" name="freq" id="fqA" value="1"><label for="fqA">Annually</label>
+    </div>
+  </div>
+  <div class="field dn" id="targetRow">
+    <label for="fTarget">Target Timeframe (years)</label>
+    <div class="iw"><input type="number" id="fTarget" class="pr" value="5" min="0.5" step="0.5"><span class="suf">yrs</span></div>
+  </div>
+
+  <div class="sec-lbl">Interest Rate</div>
+  <div class="field">
+    <label for="fRate">Annual Interest Rate</label>
+    <div class="iw"><input type="number" id="fRate" class="pr" value="4.5" min="0" max="50" step="0.1"><span class="suf">%</span></div>
+    <div class="hint">Compounded at contribution frequency.</div>
+  </div>
+
+  <div class="sec-lbl">Start Date</div>
+  <div class="field">
+    <label for="fStart">Start Month</label>
+    <input type="month" id="fStart">
+    <div class="hint">Used to project your goal date.</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Additional Options</h2>
+  <div class="sec-lbl first">Lump Sum Top-Ups</div>
+  <div class="hint" style="margin-bottom:10px">One-off deposits at a specific year (e.g. tax return, bonus).</div>
+  <div id="lumpList"></div>
+  <button class="sched-btn" id="btnAddLump" type="button">+ Add Lump Sum</button>
+
+  <div class="sec-lbl">Inflation</div>
+  <div class="tog-grp">
+    <div class="tog">
+      <input type="radio" name="infl" id="inflOff" value="off" checked><label for="inflOff">Off</label>
+      <input type="radio" name="infl" id="inflOn"  value="on"><label for="inflOn">Show Real Values</label>
+    </div>
+  </div>
+  <div class="field dn" id="inflRow">
+    <label for="fInfl">Annual Inflation Rate</label>
+    <div class="iw"><input type="number" id="fInfl" class="pr" value="2.5" min="0" max="20" step="0.1"><span class="suf">%</span></div>
+    <div class="hint">Closing balances in today's purchasing power.</div>
+  </div>
+</div>
+</div><!-- end left -->
+
+<!-- RIGHT PANEL -->
+<div>
+<div class="card">
+  <h2>Results</h2>
+
+  <div class="res-grid">
+    <div class="res-box hl"><div class="lbl" id="rLbl">Time to Goal</div><div class="val" id="rMain">—</div></div>
+    <div class="res-box"><div class="lbl">Total Deposited</div><div class="val" id="rDep">—</div></div>
+    <div class="res-box"><div class="lbl">Interest Earned</div><div class="val" id="rInt" style="color:var(--gr)">—</div></div>
+    <div class="res-box dn" id="rLumpBox"><div class="lbl">Total Lump Sums</div><div class="val" id="rLump" style="color:var(--am)">—</div></div>
+    <div class="res-box dn" id="rRealBox"><div class="lbl">Real Value</div><div class="val" id="rReal" style="color:var(--am)">—</div></div>
+    <div class="res-box"><div class="lbl">Goal Date</div><div class="val" id="rDate" style="font-size:.95rem">—</div></div>
+  </div>
+
+  <div class="banner bn-g dn" id="banner"></div>
+
+  <div class="sec-ttl">Progress Toward Goal</div>
+  <div class="prog-row"><span id="pSaved">$0 saved</span><span id="pPct" style="font-weight:700;color:var(--gr)">0%</span></div>
+  <div class="prog-bg"><div class="prog-fill" id="pBar" style="width:0%"></div></div>
+  <div class="prog-row" style="margin-top:4px"><span id="pGoal">Goal: —</span><span id="pTarget">Target: —</span></div>
+
+  <div class="sec-ttl">Savings Breakdown</div>
+  <table class="tbl">
+    <thead><tr><th>Component</th><th>Per Period</th><th>Annual</th><th>Total</th><th>% of Goal</th></tr></thead>
+    <tbody id="tBody"></tbody>
+  </table>
+
+  <div class="chart-area">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="sec-ttl" style="margin:0">Savings Growth Over Time</div>
+      <div style="font-size:.74rem;color:var(--txl);font-style:italic">Hover for details</div>
+    </div>
+    <div class="chart-box">
+      <canvas id="chart" height="180"></canvas>
+      <div class="legend">
+        <div class="leg-item"><div class="leg-sw" style="background:rgba(42,157,103,0.8)"></div>Initial + Contributions</div>
+        <div class="leg-item"><div class="leg-sw" style="background:rgba(232,168,56,0.8)"></div>Interest</div>
+        <div class="leg-item dn" id="legLump"><div class="leg-sw" style="background:rgba(182,134,44,0.8)"></div>Lump Sums</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="sched-btn" id="schedBtn" type="button">&#9776; Show Year-by-Year Schedule</button>
+  <div class="dn" id="schedWrap" style="max-width:100%; width:100%; overflow:hidden;">
+    <div class="sched-wrap">
+      <table class="stbl">
+        <thead><tr>
+          <th style="text-align:left">Year</th>
+          <th style="text-align:left">Date</th>
+          <th>Opening</th><th>Contributions</th><th>Lump Sum</th>
+          <th>Interest</th><th>Closing</th>
+          <th id="realCol" class="dn">Real Value</th>
+          <th>% Goal</th>
+        </tr></thead>
+        <tbody id="sBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="actions-bar">
+    <div class="actions-left">
+      <button type="button" class="btn btn-gr" id="btnCSV">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 6h14v2H5z"/></svg>
+        Export Summary CSV
+      </button>
+      <button type="button" class="btn btn-gr" id="btnSchedCSV">
+        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+        Export Schedule CSV
+      </button>
+    </div>
+    <div style="flex:1"></div>
+    <div class="actions-right">
+      <button type="button" class="btn btn-nv" id="btnSaveSnapshot">
+        <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>
+        Save File
+      </button>
+      <button type="button" class="btn btn-nv" id="btnStartOver">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Start Over
+      </button>
+    </div>
+  </div>
+
+  <div class="note">Estimates only. Assumes constant interest rate, contributions at start of each period compounded at contribution frequency. Not personal financial advice.</div>
+</div>
+</div><!-- end right -->
+
+</div></div></div>
+<div class="side-rail right">
+  <div class="side-rail-inner">
+    <div class="rail-ad-unit">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle"
+          style="display:inline-block;width:160px;height:600px"
+          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+          data-ad-slot="XXXXXXXXXX"></ins>
+        
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- end page-wrapper -->
+<div class="ft"><span>Estimates only — not personal financial advice.</span></div>
+
+
+
   <script src="js/savings-goal.js"></script>
 </body>
 </html>

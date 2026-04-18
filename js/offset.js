@@ -1,163 +1,354 @@
-/* ==========================================================
-   AusCalc — Offset Account Savings  /js/offset.js
-   ========================================================== */
+if(window.innerWidth>768&&navigator.maxTouchPoints===0){document.write('<script async src="https:\/\/pagead2.googlesyndication.com\/pagead\/js\/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"><\/script>')}
+(adsbygoogle=window.adsbygoogle||[]).push({})
+(adsbygoogle=window.adsbygoogle||[]).push({})
 
-let offsetChart = null;
-let scheduleRows = [], summaryRows = [];
+'use strict';
+function g(id){return document.getElementById(id);}
+function fmt2(n){return '$'+Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmt0(n){return '$'+Math.round(Math.abs(n)).toLocaleString('en-AU');}
+function getFreq(){return document.querySelector('input[name=freq]:checked').value;}
+function ppy(f){return f==='weekly'?52:f==='fortnightly'?26:12;}
+function fLbl(f){return f==='weekly'?'Weekly':f==='fortnightly'?'Fortnightly':'Monthly';}
 
-const PF = { weekly: 52, fortnightly: 26, monthly: 12 };
-
-function pmt(rate, n, pv) {
-  if (rate === 0) return pv / n;
-  return pv * rate / (1 - Math.pow(1 + rate, -n));
+function calcPMT(P,annRate,yrs,freq){
+  var n=ppy(freq),r=annRate/100/n,tot=yrs*n;
+  if(r===0) return tot>0?P/tot:0;
+  return P*r*Math.pow(1+r,tot)/(Math.pow(1+r,tot)-1);
 }
 
-function amortise(loan, annualRate, termYrs, freq, offsetBal, monthlyOffsetContrib) {
-  const periods = PF[freq];
-  const r       = annualRate / 100 / periods;
-  const n       = termYrs * periods;
-  const repay   = pmt(r, n, loan); // repayment always on full loan (offset reduces interest only)
-
-  let bal = loan, offset = offsetBal;
-  let totalInt = 0, totalPrinc = 0;
-  let labels = ['Start'], bArr = [Math.round(loan)];
-  const rows = [];
-  let payoffPeriod = null;
-
-  for (let p = 1; p <= n; p++) {
-    const effBal = Math.max(0, bal - offset);
-    const intAmt = effBal * r;
-    const princAmt = Math.min(bal, repay - intAmt);
-    bal -= princAmt;
-    if (bal < 0) bal = 0;
-    totalInt   += intAmt;
-    totalPrinc += princAmt;
-    // Offset grows monthly regardless of freq
-    const monthsPerPeriod = 12 / periods;
-    offset += monthlyOffsetContrib * monthsPerPeriod;
-
-    if (p % periods === 0 || bal < 0.01) {
-      const yr = Math.ceil(p / periods);
-      labels.push(`Yr ${yr}`);
-      bArr.push(Math.round(Math.max(0, bal)));
-      rows.push({ yr, bal: Math.round(Math.max(0, bal)), int: Math.round(intAmt), princ: Math.round(princAmt) });
-      if (bal < 0.01 && payoffPeriod === null) payoffPeriod = p;
+// Build WITH offset — contrib>0 means offset grows each month
+function buildWith(P,annRate,yrs,freq,offsetStart,contrib){
+  var n=ppy(freq),r=annRate/100/n,tot=yrs*n;
+  var pmt=calcPMT(P,annRate,yrs,freq);
+  var moPerPeriod=12/n; // months per repayment period
+  var bal=P,offsetBal=Math.min(offsetStart,P),rows=[],totInt=0;
+  for(var i=0;i<tot;i++){
+    if(bal<0.005) break;
+    var effP=Math.max(bal-offsetBal,0);
+    var intr=effP*r;
+    var prin=Math.min(pmt-intr,bal);
+    if(prin<0) prin=0;
+    var close=Math.max(bal-prin,0);
+    totInt+=intr;
+    rows.push({period:i+1,offsetBal:offsetBal,effectivePrin:effP,interest:intr,principal:prin,closing:close,opening:bal});
+    bal=close;
+    // Grow offset if contribution provided — cap at remaining balance
+    if(contrib>0){
+      offsetBal=Math.min(offsetBal+contrib*moPerPeriod, bal>0?bal:offsetBal);
     }
-    if (bal < 0.01) break;
+    if(bal<0.005) break;
   }
-  return { totalInt, totalPrinc, labels, bArr, rows, repay, payoffPeriod };
+  return{rows:rows,totalInterest:totInt,pmt:pmt};
 }
 
-function calc() {
-  const loan          = nv('fLoan');
-  const rate          = nv('fRate');
-  const term          = nv('fTerm');
-  const freq          = sv('fFreq') || 'monthly';
-  const offsetBal     = nv('fOffset');
-  const offsetContrib = nv('fOffsetContrib');
-
-  if (loan <= 0 || rate <= 0 || term <= 0) return;
-
-  const periods = PF[freq];
-  const startDate = new Date(sv('fStartDate') || new Date().toISOString().slice(0,10));
-
-  // With offset
-  const wo = amortise(loan, rate, term, freq, offsetBal, offsetContrib);
-  // Without offset (baseline)
-  const no = amortise(loan, rate, term, freq, 0, 0);
-
-  const intSaved  = no.totalInt - wo.totalInt;
-  const effBal    = Math.max(0, loan - offsetBal);
-
-  // Payoff dates
-  const woPayoffMonths = Math.ceil((wo.payoffPeriod || term * periods) * 12 / periods);
-  const noPayoffMonths = term * 12;
-  const monthsSaved    = noPayoffMonths - woPayoffMonths;
-
-  const woDate = new Date(startDate); woDate.setMonth(woDate.getMonth() + woPayoffMonths);
-  const noDate = new Date(startDate); noDate.setMonth(noDate.getMonth() + noPayoffMonths);
-  const fmtDate = d => d.toLocaleDateString('en-AU', { month: 'long', year: 'numeric' });
-
-  summaryRows = [
-    'Metric,With Offset,Without Offset,You Save',
-    `Monthly Repayment,${Math.round(wo.repay)},${Math.round(no.repay)},—`,
-    `Total Interest,${Math.round(wo.totalInt)},${Math.round(no.totalInt)},${Math.round(intSaved)}`,
-    `Payoff Date,${fmtDate(woDate)},${fmtDate(noDate)},${monthsSaved} months`,
-  ];
-
-  const intPerPeriod = (effBal * rate / 100 / periods);
-  const intSavedMo   = offsetBal * rate / 100 / 12;
-
-  set('rRepayment',      fmt(wo.repay) + '/mo');
-  set('rEffBal',         fmt(effBal));
-  set('rIntSavedMo',     fmt(intSavedMo) + '/mo');
-  set('rIntWith',        fmt(wo.totalInt));
-  set('rIntWithout',     fmt(no.totalInt));
-  set('rIntSaved',       fmt(intSaved));
-  set('rTimeSaved',      monthsSaved > 0 ? `${Math.floor(monthsSaved/12)}y ${monthsSaved%12}m` : '—');
-
-  // Comparison table
-  const cmpRows = [
-    ['Monthly Repayment', fmt(wo.repay),    fmt(no.repay),    '—'],
-    ['Total Interest',    fmt(wo.totalInt), fmt(no.totalInt), `<span style="color:var(--accent)">${fmt(intSaved)}</span>`],
-    ['Loan Term',         fmtDate(woDate),  fmtDate(noDate),  monthsSaved > 0 ? `${Math.floor(monthsSaved/12)}y ${monthsSaved%12}m earlier` : '—'],
-  ].map(([l,a,b,c]) => `<tr><td>${l}</td><td>${a}</td><td>${b}</td><td>${c}</td></tr>`).join('');
-  html('cmpBody', cmpRows);
-
-  // Amort table (with offset)
-  const amortHtml = wo.rows.map(r =>
-    `<tr${r.bal === 0 ? ' class="milestone-row"' : ''}><td>${r.yr}</td><td>${fmt(r.int)}</td><td>${fmt(r.princ)}</td><td><strong>${fmt(r.bal)}</strong></td></tr>`
-  ).join('');
-  html('amortBody', amortHtml);
-
-  scheduleRows = ['Year,Interest (With Offset),Principal,Closing Balance'];
-  wo.rows.forEach(r => scheduleRows.push([r.yr, r.int, r.princ, r.bal].join(',')));
-
-  show('emptyState', false);
-  show('resultsContent', true);
-  drawChart(wo.labels, wo.bArr, no.bArr);
+// Build WITHOUT offset
+function buildNo(P,annRate,yrs,freq){
+  var n=ppy(freq),r=annRate/100/n,tot=yrs*n;
+  var pmt=calcPMT(P,annRate,yrs,freq);
+  var bal=P,rows=[],totInt=0;
+  for(var i=0;i<tot;i++){
+    if(bal<0.005) break;
+    var intr=bal*r;
+    var prin=Math.min(pmt-intr,bal);
+    if(prin<0) prin=0;
+    var close=Math.max(bal-prin,0);
+    totInt+=intr;
+    rows.push({interest:intr,closing:close,opening:bal});
+    bal=close;
+    if(bal<0.005) break;
+  }
+  return{rows:rows,totalInterest:totInt,pmt:pmt};
 }
 
-function drawChart(labels, woBArr, noBArr) {
-  if (typeof Chart === 'undefined') return;
-  const canvas = document.getElementById('offsetChart');
-  if (!canvas) return;
-  if (offsetChart) { offsetChart.destroy(); offsetChart = null; }
-  const opts = JSON.parse(JSON.stringify(chartDefaults));
-  opts.plugins.tooltip.callbacks = { label: i => ` ${i.dataset.label}: ${fmt(i.parsed.y)}` };
-  offsetChart = new Chart(canvas.getContext('2d'), {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        { label: 'With Offset',    data: woBArr, borderColor: 'rgba(108,91,142,1)',  backgroundColor: 'rgba(108,91,142,0.4)', fill: 'origin', tension: 0.35, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2.5 },
-        { label: 'Without Offset', data: noBArr, borderColor: 'rgba(192,57,43,0.7)', backgroundColor: 'rgba(192,57,43,0.15)', fill: 'origin', tension: 0.35, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,4] },
+function termStr(periods,freq){
+  var n=ppy(freq),y=Math.floor(periods/n),m=Math.round((periods/n-y)*12);
+  if(m===12){y++;m=0;}
+  var s='';
+  if(y>0) s+=y+' yr'+(y!==1?'s':'');
+  if(m>0) s+=(s?' ':'')+m+' mo';
+  return s||'< 1 mo';
+}
+
+var lineChart=null;
+function makeGrad(ctx,splitRatio){
+  var h=ctx.canvas.clientHeight||120;
+  var g=ctx.createLinearGradient(0,0,0,h);
+  var sp=Math.max(0,Math.min(1,splitRatio));
+  g.addColorStop(0,  'rgba(230,100,20,0.72)');
+  g.addColorStop(sp, 'rgba(230,100,20,0.72)');
+  g.addColorStop(sp, 'rgba(42,157,103,0.65)');
+  g.addColorStop(1,  'rgba(42,157,103,0.65)');
+  return g;
+}
+function drawChart(withRows,noRows,P,yrs,freq){
+  var n=ppy(freq),labels=[],withDebt=[],noDebt=[];
+  for(var y=0;y<=yrs;y++){
+    labels.push('Yr '+y);
+    if(y===0){withDebt.push(P);noDebt.push(P);continue;}
+    var eiW=Math.min(y*n-1,withRows.length-1);
+    var eiN=Math.min(y*n-1,noRows.length-1);
+    withDebt.push(withRows[eiW]?Math.round(withRows[eiW].closing):0);
+    noDebt.push(noRows[eiN]?Math.round(noRows[eiN].closing):0);
+  }
+  var canvas=g('myChart'),ctx=canvas.getContext('2d');
+  if(lineChart){lineChart.destroy();lineChart=null;}
+  lineChart=new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:labels,
+      datasets:[
+        {label:'With Offset',data:withDebt,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,0.65)',fill:'origin',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5,order:1},
+        {label:'Without Offset',data:noDebt,borderColor:'rgba(230,100,20,1)',backgroundColor:'rgba(230,100,20,0.72)',fill:'-1',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2,order:2}
       ]
     },
-    options: opts,
+    options:{
+      responsive:true,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(30,20,50,0.92)',titleColor:'#fff',
+          bodyColor:'rgba(255,255,255,0.88)',padding:11,cornerRadius:8,
+          callbacks:{
+            label:function(item){
+              return ' '+item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');
+            }
+          }
+        }
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:10},color:'#6c7a89',maxTicksLimit:16}},
+        y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#6c7a89',callback:function(v){return '$'+(v/1000).toFixed(0)+'k';}}}
+      }
+    }
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  initCollapsibles();
-  ['fLoan','fRate','fTerm','fOffset','fOffsetContrib'].forEach(id =>
-    document.getElementById(id)?.addEventListener('input', calc));
-  document.getElementById('fFreq')?.addEventListener('change', calc);
+function calculate(){
+  var P=parseFloat(g('fLoan').value)||0;
+  var rate=parseFloat(g('fRate').value)||0;
+  var yrs=parseFloat(g('fTerm').value)||0;
+  var offset=parseFloat(g('fOffset').value)||0;
+  var contrib=parseFloat(g('fContrib').value)||0;
+  var freq=getFreq();
+  var sv=g('fStart').value;
+  var mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-  const ln = document.getElementById('fLoan'), lr = document.getElementById('fLoanRange');
-  lr?.addEventListener('input', () => { ln.value = lr.value; calc(); });
-  ln?.addEventListener('input', () => { if (+ln.value <= 3000000) lr.value = ln.value; });
-  const on = document.getElementById('fOffset'), or_ = document.getElementById('fOffsetRange');
-  or_?.addEventListener('input', () => { on.value = or_.value; calc(); });
-  on?.addEventListener('input', () => { if (+on.value <= 300000) or_.value = on.value; });
+  // Clear on invalid input
+  if(P<=0||rate<=0||yrs<=0){
+    ['rRepay','rEffective','rPeriodSaving','rIntWith','rIntNo','rSaved']
+      .forEach(function(id){g(id).innerHTML='&mdash;';});
+    g('rRepayLbl').textContent='Monthly Repayment';
+    g('rSavingLbl').textContent='Interest Saving / Month';
+    g('cmpBody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
+    ['bannerSaving','bannerContrib','bannerPayoff'].forEach(function(id){g(id).style.display='none';});
+    g('amortBody').innerHTML='';
+    if(lineChart){lineChart.destroy();lineChart=null;}
+    return;
+  }
 
-  document.getElementById('amortToggle')?.addEventListener('click', function() {
-    const s = document.getElementById('amortSection');
-    const open = s.style.display === 'block';
-    s.style.display = open ? 'none' : 'block';
-    this.textContent = open ? '▼ Show Year-by-Year Schedule' : '▲ Hide Year-by-Year Schedule';
+  var scW=buildWith(P,rate,yrs,freq,offset,contrib);
+  var scNo=buildNo(P,rate,yrs,freq);
+  var withRows=scW.rows,noRows=scNo.rows;
+  var pmt=scW.pmt;
+  var totIntW=scW.totalInterest;
+  var totIntNo=scNo.totalInterest;
+  var saved=totIntNo-totIntW;
+  var effOff=Math.min(offset,P);
+  var r0=rate/100/ppy(freq);
+  var saving0=effOff*r0; // first-period saving
+  var diff=noRows.length-withRows.length; // periods saved
+  var tsDiff=diff>0?termStr(diff,freq):'0';
+
+  // Update freq label
+  g('rRepayLbl').textContent=fLbl(freq)+' Repayment';
+  g('rSavingLbl').textContent='Interest Saving / '+fLbl(freq).replace('ly','').replace('ly','');
+
+  // Result boxes
+  g('rRepay').textContent=fmt2(pmt);
+  g('rEffective').textContent=fmt0(Math.max(P-effOff,0));
+  g('rPeriodSaving').textContent=fmt2(saving0);
+  g('rIntWith').textContent=fmt0(totIntW);
+  g('rIntNo').textContent=fmt0(totIntNo);
+  g('rSaved').textContent=fmt0(saved);
+
+  // Banners
+  if(offset>0){
+    g('bnOffsetAmt').textContent=fmt0(offset);
+    g('bnSaved').textContent=fmt0(saved);
+    g('bnTime').textContent=tsDiff;
+    g('bannerSaving').style.display='';
+  } else {
+    g('bannerSaving').style.display='none';
+  }
+  if(contrib>0){
+    g('bnContrib').textContent=fmt0(contrib);
+    g('bannerContrib').style.display='';
+  } else {
+    g('bannerContrib').style.display='none';
+  }
+  if(sv){
+    var pts=sv.split('-');
+    // With offset payoff date
+    var sdW=new Date(parseInt(pts[0]),parseInt(pts[1])-1,1);
+    sdW.setMonth(sdW.getMonth()+Math.round(withRows.length/ppy(freq)*12));
+    // No-offset payoff date
+    var sdN=new Date(parseInt(pts[0]),parseInt(pts[1])-1,1);
+    sdN.setMonth(sdN.getMonth()+Math.round(noRows.length/ppy(freq)*12));
+    g('bnPayoff').textContent=mn[sdW.getMonth()]+' '+sdW.getFullYear();
+    // Diff string for payoff banner
+    g('bnPayoffDiff').textContent=tsDiff;
+    g('bannerPayoff').style.display=diff>0?'':'none';
+  } else {
+    g('bannerPayoff').style.display='none';
+  }
+
+  // Comparison table
+  var totalRepW=pmt*withRows.length;
+  var totalRepNo=pmt*noRows.length;
+  g('cmpBody').innerHTML=
+    '<tr><td>Loan Term</td><td>'+termStr(withRows.length,freq)+'</td><td>'+termStr(noRows.length,freq)+'</td><td style="color:var(--gr);font-weight:700">'+(diff>0?'&minus;'+tsDiff:'&mdash;')+'</td></tr>'+
+    '<tr><td>Repayment ('+fLbl(freq)+')</td><td>'+fmt2(pmt)+'</td><td>'+fmt2(pmt)+'</td><td>&mdash;</td></tr>'+
+    '<tr><td>Total Interest</td><td>'+fmt0(totIntW)+'</td><td>'+fmt0(totIntNo)+'</td><td style="color:var(--gr);font-weight:700">&minus;'+fmt0(saved)+'</td></tr>'+
+    '<tr><td>Total Repayments</td><td>'+fmt0(totalRepW)+'</td><td>'+fmt0(totalRepNo)+'</td><td style="color:var(--gr);font-weight:700">&minus;'+fmt0(totalRepNo-totalRepW)+'</td></tr>'+
+    '<tr class="total-row"><td>Total Cost of Loan</td><td>'+fmt0(totalRepW)+'</td><td>'+fmt0(totalRepNo)+'</td><td style="color:var(--gr);font-weight:700">&minus;'+fmt0(totalRepNo-totalRepW)+'</td></tr>';
+
+  // Chart
+  drawChart(withRows,noRows,P,yrs,freq);
+
+  // Year-by-year schedule
+  var n2=ppy(freq);
+  var mn2=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var sd2=null;
+  if(sv){var p2=sv.split('-');sd2=new Date(parseInt(p2[0]),parseInt(p2[1])-1,1);}
+  var noIntMap={};
+  for(var k=0;k<noRows.length;k++) noIntMap[k]=noRows[k].interest;
+  var ah='',lastYr=-1;
+  for(var i=0;i<withRows.length;i++){
+    var row=withRows[i];
+    var yr=Math.floor(i/n2)+1;
+    if(yr!==lastYr){ah+='<tr class="yr-row"><td colspan="6">Year '+yr+'</td></tr>';lastYr=yr;}
+    var noIntr=(noIntMap[i]!==undefined)?noIntMap[i]:0;
+    var savingI=noIntr-row.interest;
+    var pl='';
+    if(sd2){
+      var step=freq==='monthly'?i:freq==='fortnightly'?Math.round(i*26/12):Math.round(i*52/12);
+      var pd=new Date(sd2.getFullYear(),sd2.getMonth()+step,1);
+      pl=mn2[pd.getMonth()]+' '+pd.getFullYear();
+    } else {
+      pl=fLbl(freq)+' '+(i+1);
+    }
+    ah+='<tr>'+
+      '<td>'+pl+'</td>'+
+      '<td>'+fmt0(row.offsetBal)+'</td>'+
+      '<td>'+fmt0(row.effectivePrin)+'</td>'+
+      '<td>'+fmt2(row.interest)+'</td>'+
+      '<td style="color:var(--gr)">'+(savingI>0.005?fmt2(savingI):'&mdash;')+'</td>'+
+      '<td>'+fmt0(row.closing)+'</td>'+
+    '</tr>';
+  }
+  g('amortBody').innerHTML=ah;
+}
+
+// Collapsible
+g('addlBtn').addEventListener('click',function(){
+  var b=g('addlBody'),exp=this.getAttribute('aria-expanded')==='true';
+  this.setAttribute('aria-expanded',String(!exp));
+  b.classList.toggle('collapsed',exp);
+});
+
+// Schedule toggle
+g('amortBtn').addEventListener('click',function(){
+  var s=g('amortSection'),hidden=s.classList.toggle('hidden');
+  var ico='<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>';
+  this.innerHTML=ico+(hidden?' Show Year-by-Year Schedule':' Hide Year-by-Year Schedule');
+});
+
+// Reset
+function doReset(){
+  g('fLoan').value=500000;
+  g('fRate').value=6.00;
+  g('fTerm').value=30;
+  g('fOffset').value=50000;
+  g('fContrib').value='';
+  g('rMonthly').checked=true;
+  var now=new Date();
+  g('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  calculate();
+}
+g('btnReset1').addEventListener('click',doReset);
+g('btnReset2').addEventListener('click',doReset);
+
+// CSV helpers
+function dlCSV(name,content){
+  var blob=new Blob([content],{type:'text/csv'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=name;a.click();
+}
+g('btnSnapshot').addEventListener('click',function(){
+  var html=document.documentElement.outerHTML;
+  var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  var d=new Date();
+  a.download='offset-snapshot-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+});
+g('btnCSV').addEventListener('click',function(){
+  var P=g('fLoan').value,R=g('fRate').value,T=g('fTerm').value;
+  if(!P||!R||!T) return;
+  var freq=getFreq();
+  var lines=[
+    'Offset Account Savings Calculator - Summary',
+    'Loan Balance,$'+P,
+    'Annual Interest Rate,'+R+'%',
+    'Remaining Term,'+T+' years',
+    'Offset Balance,$'+(g('fOffset').value||0),
+    'Monthly Contribution,$'+(g('fContrib').value||0),
+    'Repayment Frequency,'+fLbl(freq),
+    '',
+    'Metric,With Offset,Without Offset,Saving',
+    fLbl(freq)+' Repayment,'+g('rRepay').textContent+',,',
+    'Effective Principal,'+g('rEffective').textContent+',,',
+    'Total Interest,'+g('rIntWith').textContent+','+g('rIntNo').textContent+','+g('rSaved').textContent,
+    'Interest Saving per Period,'+g('rPeriodSaving').textContent+',,'
+  ];
+  dlCSV('offset-account-summary.csv',lines.join('\n'));
+});
+g('btnSchedCSV').addEventListener('click',function(){
+  var trs=g('amortBody').querySelectorAll('tr:not(.yr-row)');
+  if(!trs.length) return;
+  var lines=['Period,Offset Balance,Effective Principal,Interest,Interest Saved,Closing Balance'];
+  trs.forEach(function(tr){
+    lines.push(Array.from(tr.querySelectorAll('td')).map(function(td){return td.textContent.replace(/,/g,'');}).join(','));
   });
-  document.getElementById('btnExportSchedule')?.addEventListener('click', () => dlCSV(scheduleRows, 'offset-schedule.csv'));
-  document.getElementById('btnExportSummary')?.addEventListener('click',  () => dlCSV(summaryRows,  'offset-summary.csv'));
-  calc();
+  dlCSV('offset-account-schedule.csv',lines.join('\n'));
+});
+
+// Listeners
+['fLoan','fRate','fTerm','fOffset','fContrib','fStart'].forEach(function(id){
+  g(id).addEventListener('input',calculate);
+  g(id).addEventListener('change',calculate);
+});
+document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventListener('change',calculate);});
+
+// Init
+document.addEventListener('DOMContentLoaded',function(){
+  var now=new Date();
+  g('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  calculate();
+  var ni=g('fLoan'),sr=g('loanRange');
+  if(ni&&sr){
+    ni.addEventListener('input',function(){sr.value=Math.min(parseFloat(ni.value)||0,3000000);});
+    sr.addEventListener('input',function(){ni.value=sr.value;calculate();});
+  }
+  var oi=g('fOffset'),or2=g('offsetRange');
+  if(oi&&or2){
+    oi.addEventListener('input',function(){or2.value=Math.min(parseFloat(oi.value)||0,300000);});
+    or2.addEventListener('input',function(){oi.value=or2.value;calculate();});
+  }
+  if(window.innerWidth<900){
+    g('addlBody').classList.add('collapsed');
+    g('addlBtn').setAttribute('aria-expanded','false');
+  }
 });

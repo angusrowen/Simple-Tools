@@ -1,163 +1,524 @@
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Australian Income Tax — AusCalc</title>
-  <meta name="description" content="Calculate your take-home pay, income tax, Medicare levy and super for FY 2025-26." />
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
-  <style>:root { --accent: #2a9d67; }</style>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Australian Income Tax Calculator</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <!-- Google AdSense -->
+  
+  <link rel="stylesheet" href="css/income-tax.css">
 </head>
 <body>
-  <header class="site-header">
-    <a href="index.html" class="logo">
-      <i class="fa-solid fa-calculator"></i> AusCalc
+<div class="topbar">
+  <div class="topbar-logo">
+    <a href="index.html" title="Back to calculators">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zM9 13h6v2H9zm0-4h2v2H9zm4 0h2v2h-2zm-4 8h6v2H9z"/></svg>
     </a>
-    <nav>
-      <a href="index.html">Calculators</a>
-    </nav>
-  </header>
+  </div>
+  <div class="topbar-divider"></div>
+  <div>
+    <div class="topbar-title">Australian Income Tax Calculator</div>
+    <div class="topbar-desc">Estimate your tax, Medicare levy, super &amp; take-home pay</div>
+  </div>
+  <div class="topbar-right">
+    <span class="badge pt hidden" id="ptBadge">Part-Time</span>
+  </div>
+</div>
 
-  <section class="page-hero">
-    <div class="hero-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-    <h1>Australian Income Tax</h1>
-    <p>Take-home pay, tax, Medicare, HECS and super — FY 2025–26.</p>
-  </section>
+<div class="page-wrapper">
+  <div class="side-rail left">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        
+      </div>
+    </div>
+  </div>
+<div class="main-wrapper">
+<div class="container">
 
-  <main class="site-main">
-    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left fa-xs"></i> All Calculators</a>
-    <div class="calc-layout">
 
-      <!-- INPUTS -->
-      <div class="panel">
-        <div class="section-label first">Your Details</div>
-        <div class="field">
-          <label for="fIncome">Annual Income (Before Tax)</label>
-          <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fIncome" class="has-prefix" value="80000" min="0" step="1000"></div>
-          <div class="range-wrap"><input type="range" id="fIncomeRange" min="0" max="300000" step="1000" value="80000"><div class="range-labels"><span>$0</span><span>$300k</span></div></div>
+
+<div class="layout">
+
+<!-- LEFT PANEL -->
+<div>
+
+  <!-- YOUR DETAILS -->
+  <div class="card">
+    <div class="card-header-row">
+      <h2>Your Details</h2>
+      <button class="btn-action btn-reset" onclick="resetAll()">
+        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Reset
+      </button>
+    </div>
+
+    <div class="section-label">Income</div>
+    <div class="inline-fields" style="align-items:flex-end">
+      <div class="field">
+        <label>Financial Year</label>
+        <select id="financialYear">
+          <option value="2023-24">2023-24</option>
+          <option value="2024-25">2024-25</option>
+          <option value="2025-26" selected>2025-26</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Entry Method</label>
+        <select id="incMethodSelect" onchange="document.getElementById(this.value==='annual'?'methodAnnual':'methodHourly').checked=true;syncVisibility();calculate();">
+          <option value="annual" selected>Annual Salary</option>
+          <option value="hourly">Hourly Rate</option>
+        </select>
+      </div>
+    <input type="radio" name="incMethod" id="methodAnnual" value="annual" checked style="display:none">
+    <input type="radio" name="incMethod" id="methodHourly" value="hourly" style="display:none">
+    </div>
+    <div id="annualField">
+      <div class="field">
+        <label>Annual Salary / FTE ($)</label>
+        <div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="salary" value="100000" min="0" step="1000"></div>
+        <div class="range-wrap">
+          <input type="range" id="salaryRange" min="0" max="300000" step="1000" value="100000">
+          <div class="range-labels"><span>$0</span><span>$300k</span></div>
         </div>
+      </div>
+    </div>
+    <div id="hourlyFields" class="hourly-fields hidden">
+      <div class="inline-fields">
+        <div class="field"><label>Hourly Rate ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="hourlyRate" value="50" min="0" step="0.5"></div></div>
+        <div class="field"><label>Hours Per Week</label><input type="number" id="hourlyHours" value="38" min="0" max="80" step="0.5"></div>
+      </div>
+      <div class="field"><label>Weeks Per Year</label><input type="number" id="hourlyWeeks" value="52" min="1" max="52" step="1"></div>
+      <div class="derived-info" id="hourlyDerived">Derived annual salary: <span id="hourlyAnnual">$0</span></div>
+    </div>
+    
+    <div class="derived-info" id="derivedInfo">Base salary (excl. super): <span id="derivedSalary">$0</span> &nbsp;&nbsp; Super: <span id="derivedSuper">$0</span></div>
+    <div class="toggle-group">
+      <span class="toggle-label">Employment Basis</span>
+      <div class="toggle-switch">
+        <input type="radio" name="empBasis" id="basisFull" value="full" checked>
+        <label for="basisFull">Full-Time</label>
+        <input type="radio" name="empBasis" id="basisPart" value="part">
+        <label for="basisPart">Part-Time Pro-Rata</label>
+      </div>
+    </div>
+    <div id="partTimeFields" class="hidden">
+      <div class="inline-fields">
+        <div class="field"><label>Your Hours Per Week</label><input type="number" id="actualHours" value="22.8" min="0" max="80" step="0.1"></div>
+        <div class="field"><label>FTE Hours Per Week</label><input type="number" id="fteHours" value="38" min="1" max="80" step="0.1"></div>
+      </div>
+      <div class="prorata-info" id="prorataInfo" style="display:block">FTE fraction: <span id="fteFraction">0.6</span> &nbsp;&nbsp; Pro-rata salary: <span id="prorataSalary">$0</span></div>
+    </div>
+    <div class="toggle-group" style="margin-top:14px">
+      <span class="toggle-label">Pay Frequency</span>
+      <div class="toggle-switch">
+        <input type="radio" name="freqR" id="freqWeekly" value="52">
+        <label for="freqWeekly">Weekly</label>
+        <input type="radio" name="freqR" id="freqFortnightly" value="26" checked>
+        <label for="freqFortnightly">Fortnightly</label>
+        <input type="radio" name="freqR" id="freqMonthly" value="12">
+        <label for="freqMonthly">Monthly</label>
+      </div>
+    </div>
+
+    <div class="section-label">Superannuation</div>
+    <div class="switch-field">
+      <label for="superIncSwitch">Salary Includes Super</label>
+      <label class="switch">
+        <input type="checkbox" id="superIncSwitch" onchange="document.getElementById('superYes').checked=this.checked;document.getElementById('superNo').checked=!this.checked;calculate();">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="radio" name="superInc" id="superNo" value="no" checked style="display:none">
+    <input type="radio" name="superInc" id="superYes" value="yes" style="display:none">
+    <div class="field">
+      <label>Super Guarantee Rate (%)</label>
+      <div class="input-wrap"><input class="has-suffix" type="number" id="superRate" value="12.0" min="0" max="30" step="0.5"><span class="suffix">%</span></div>
+    </div>
+    <div class="info-banner" id="sgCapBanner"><strong>SG maximum base applies.</strong> <span id="sgCapDetail"></span></div>
+    <div class="field">
+      <label>Additional Super Contributions (per year)</label>
+      <div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="salSac" placeholder="0" min="0" step="100"></div>
+      <div class="field-hint">Concessional contributions taxed at 15% up to the cap limit.</div>
+    </div>
+    <div class="warning-banner" id="capWarning"><span id="capWarningTitle"></span><div class="warning-detail" id="capWarningDetail"></div></div>
+
+    <div class="section-label">Tax Settings</div>
+    <div class="field">
+      <label>Residency Status</label>
+      <select id="residency">
+        <option value="resident">Australian Resident</option>
+        <option value="foreign">Foreign Resident</option>
+        <option value="whm">Working Holiday Maker</option>
+      </select>
+    </div>
+    <div class="switch-field">
+      <label for="helpDebtSwitch">HECS/HELP Debt</label>
+      <label class="switch">
+        <input type="checkbox" id="helpDebtSwitch" onchange="document.getElementById('helpDebtYes').checked=this.checked;document.getElementById('helpDebtNo').checked=!this.checked;calculate();">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="radio" name="helpDebtR" id="helpDebtNo" value="no" checked style="display:none">
+    <input type="radio" name="helpDebtR" id="helpDebtYes" value="yes" style="display:none">
+    <div class="switch-field">
+      <label for="tfnSwitch">Tax File Number Withheld</label>
+      <label class="switch">
+        <input type="checkbox" id="tfnSwitch" onchange="document.getElementById('tfnYes').checked=this.checked;document.getElementById('tfnNo').checked=!this.checked;calculate();">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="radio" name="tfnR" id="tfnNo" value="no" checked style="display:none">
+    <input type="radio" name="tfnR" id="tfnYes" value="yes" style="display:none">
+    
+  </div>
+
+  <!-- ADDITIONAL OPTIONS (includes second job + additional income at top) -->
+  <div class="card collapsible-card" id="additionalOptionsCard">
+    <button class="collapsible-header" id="additionalOptionsToggle" onclick="toggleAdditionalOptions()" aria-expanded="true">
+      <h2 style="margin:0;padding:0;border:none">Additional Options</h2>
+      <span class="collapse-icon" id="collapseIcon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+      </span>
+    </button>
+    <div class="collapsible-body" id="additionalOptionsBody">
+
+    <div class="section-label">Additional Income</div>
+    <div class="switch-field">
+      <label for="showBonus_sw">Add additional income / annual bonus</label>
+      <label class="switch">
+        <input type="checkbox" id="showBonus_sw" onchange="document.getElementById('showBonus').checked=this.checked;document.getElementById('showBonus').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="showBonus" style="display:none">
+    <div id="bonusWrap" class="hidden">
+      <div class="field"><label>Additional Income / Annual Bonus ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="bonus" placeholder="0" min="0" step="100"></div></div>
+    </div>
+
+
+    <div class="switch-field">
+      <label for="hasSecondJob_sw">Add a second job</label>
+      <label class="switch">
+        <input type="checkbox" id="hasSecondJob_sw" onchange="document.getElementById('hasSecondJob').checked=this.checked;document.getElementById('hasSecondJob').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="hasSecondJob" style="display:none">
+    <div id="secondJobFields" class="hidden">
+      <div class="sj-note"><strong>Important:</strong> You can only claim the tax-free threshold on one job. Second job income is added to your total taxable income and is usually withheld without the threshold applied.</div>
+      <div class="toggle-group">
+        <span class="toggle-label">Second Job Income Method</span>
+        <div class="toggle-switch">
+          <input type="radio" name="sjMethod" id="sjAnnual" value="annual" checked>
+          <label for="sjAnnual">Annual Salary</label>
+          <input type="radio" name="sjMethod" id="sjHourly" value="hourly">
+          <label for="sjHourly">Hourly Rate</label>
+        </div>
+      </div>
+      <div id="sjAnnualField" class="field"><label>Second Job Annual Salary ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="sjSalary" placeholder="0" min="0" step="100"></div></div>
+      <div id="sjHourlyFields" class="hourly-fields hidden">
         <div class="inline-fields">
-          <div class="field">
-            <label for="fSuperRate">Super Rate</label>
-            <div class="input-wrap"><input type="number" id="fSuperRate" class="has-suffix" value="12" min="0" max="30" step="0.5"><span class="suffix">%</span></div>
-          </div>
-          <div class="field">
-            <label for="fFreq">Pay Frequency</label>
-            <select id="fFreq">
-              <option value="weekly">Weekly</option>
-              <option value="fortnightly">Fortnightly</option>
-              <option value="monthly" selected>Monthly</option>
-              <option value="annual">Annual</option>
-            </select>
-          </div>
+          <div class="field"><label>Second Job Hourly Rate ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="sjHourlyRate" placeholder="0" min="0" step="0.5"></div></div>
+          <div class="field"><label>Second Job Hours Per Week</label><input type="number" id="sjHours" placeholder="0" min="0" max="80" step="0.5"></div>
         </div>
-
-        <!-- Tax Settings -->
-        <button class="collapsible-header" aria-expanded="false" data-body="taxBody" style="margin-top:.8rem">
-          <span class="ch-title">Tax Settings</span>
-          <span class="collapse-icon"><i class="fa-solid fa-chevron-down fa-xs"></i></span>
-        </button>
-        <div class="collapsible-body collapsed" id="taxBody">
-          <div style="margin-top:.5rem">
-            <div class="switch-field">
-              <label for="fPHI">Private Health Insurance</label>
-              <label class="switch"><input type="checkbox" id="fPHI"><span class="switch-slider"></span></label>
-            </div>
-            <div class="switch-field">
-              <label for="fHECS">HECS/HELP Debt</label>
-              <label class="switch"><input type="checkbox" id="fHECS"><span class="switch-slider"></span></label>
-            </div>
-            <div class="switch-field">
-              <label for="fSalSac">Salary Sacrifice</label>
-              <label class="switch"><input type="checkbox" id="fSalSac"><span class="switch-slider"></span></label>
-            </div>
-            <div id="salSacField" class="field">
-              <label for="fSalSacAmt">Salary Sacrifice Amount</label>
-              <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fSalSacAmt" class="has-prefix" value="5000" min="0" step="500"></div>
-              <div class="field-hint">Reduces taxable income. Annual concessional cap: $30,000 incl. SGC.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Second Job -->
-        <button class="collapsible-header" aria-expanded="false" data-body="secondBody" style="margin-top:.8rem">
-          <span class="ch-title">Additional Income</span>
-          <span class="collapse-icon"><i class="fa-solid fa-chevron-down fa-xs"></i></span>
-        </button>
-        <div class="collapsible-body collapsed" id="secondBody">
-          <div style="margin-top:.5rem">
-            <div class="switch-field">
-              <label for="fSecondJob">Second Job / Side Income</label>
-              <label class="switch"><input type="checkbox" id="fSecondJob"><span class="switch-slider"></span></label>
-            </div>
-            <div id="secondJobField" class="field">
-              <label for="fSecondIncome">Second Income (Annual)</label>
-              <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fSecondIncome" class="has-prefix" value="20000" min="0" step="1000"></div>
-              <div class="field-hint">Added to total taxable income. Usually withheld without the tax-free threshold.</div>
-            </div>
-          </div>
+        <div class="field"><label>Second Job Weeks Per Year</label><input type="number" id="sjWeeks" value="52" min="1" max="52" step="1"></div>
+      </div>
+      <div class="toggle-group" style="margin-top:6px">
+        <span class="toggle-label">Second Job Employment Basis</span>
+        <div class="toggle-switch">
+          <input type="radio" name="sjBasis" id="sjBasisFull" value="full" checked>
+          <label for="sjBasisFull">Full-Time</label>
+          <input type="radio" name="sjBasis" id="sjBasisPart" value="part">
+          <label for="sjBasisPart">Part-Time Pro-Rata</label>
         </div>
       </div>
+      <div id="sjPartTimeFields" class="hidden">
+        <div class="inline-fields">
+          <div class="field"><label>Actual Hours Per Week</label><input type="number" id="sjActualHours" value="22.8" min="0" max="80" step="0.1"></div>
+          <div class="field"><label>FTE Hours Per Week</label><input type="number" id="sjFteHours" value="38" min="1" max="80" step="0.1"></div>
+        </div>
+        <div class="prorata-info" style="display:block">SJ FTE fraction: <span id="sjFteFraction">0.6</span> &nbsp;&nbsp; Pro-rata: <span id="sjProrataSalary">$0</span></div>
+      </div>
+      <div class="toggle-group" style="margin-top:14px">
+        <span class="toggle-label">Second Job Pay Frequency</span>
+        <div class="toggle-switch">
+          <input type="radio" name="sjFreqR" id="sjFreqWeekly" value="52">
+          <label for="sjFreqWeekly">Weekly</label>
+          <input type="radio" name="sjFreqR" id="sjFreqFortnightly" value="26" checked>
+          <label for="sjFreqFortnightly">Fortnightly</label>
+          <input type="radio" name="sjFreqR" id="sjFreqMonthly" value="12">
+          <label for="sjFreqMonthly">Monthly</label>
+        </div>
+      </div>
+      <div class="switch-field">
+      <label for="sjNoTFN_sw">No tax-free threshold claimed on second job</label>
+      <label class="switch">
+        <input type="checkbox" id="sjNoTFN_sw" checked onchange="document.getElementById('sjNoTFN').checked=this.checked;document.getElementById('sjNoTFN').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="sjNoTFN" checked style="display:none">
+      <div class="section-label">Second Job Superannuation</div>
+      <div class="switch-field">
+        <label for="sjSuperIncSwitch">Salary Includes Super</label>
+        <label class="switch">
+          <input type="checkbox" id="sjSuperIncSwitch" onchange="calculate();">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+      <div class="field">
+        <label>Second Job Super Guarantee Rate (%)</label>
+        <div class="input-wrap"><input class="has-suffix" type="number" id="sjSuperRate" value="12.0" min="0" max="30" step="0.5"><span class="suffix">%</span></div>
+      </div>
+      <div class="field">
+        <label>Additional Super Contributions ($)</label>
+        <div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="sjSalSac" placeholder="0" min="0" step="100"></div>
+        <div class="field-hint">Pooled with primary job for concessional cap purposes.</div>
+      </div>
+    </div>
 
-      <!-- RESULTS -->
-      <div class="panel">
-        <div class="results-empty" id="emptyState"><i class="fa-solid fa-file-invoice-dollar"></i><span>Enter your income to see results</span></div>
-        <div id="resultsContent" style="display:none">
-          <div class="result-box hl-green" style="margin-bottom:.75rem">
-            <div class="lbl">Take-Home Pay (per period)</div>
-            <div class="val" id="rTHP" style="font-size:2rem">—</div>
-          </div>
-          <div class="results-grid">
-            <div class="result-box"><div class="lbl">Annual Take-Home</div><div class="val" id="rAnnual">—</div></div>
-            <div class="result-box"><div class="lbl">Gross Taxable</div><div class="val" id="rGross">—</div></div>
-            <div class="result-box"><div class="lbl">Total Super</div><div class="val" id="rSuper">—</div></div>
-          </div>
-          <div class="results-grid-2">
-            <div class="result-box"><div class="lbl">Effective Tax Rate</div><div class="val" id="rEffRate">—</div></div>
-            <div class="result-box"><div class="lbl">Marginal Tax Rate</div><div class="val" id="rMargRate">—</div></div>
-          </div>
-          <div id="div293Row" style="display:none">
-            <div class="info-banner">⚠️ Division 293 tax applies: <strong id="rDiv293"></strong> — payable from your super fund or by personal assessment.</div>
-          </div>
+    <div class="section-label">Withholding</div>
+    <div class="switch-field">
+      <label for="showExtraTax_sw">Withhold extra tax each pay period</label>
+      <label class="switch">
+        <input type="checkbox" id="showExtraTax_sw" onchange="document.getElementById('showExtraTax').checked=this.checked;document.getElementById('showExtraTax').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="showExtraTax" style="display:none">
+    <div id="extraTaxWrap" class="hidden">
+      <div class="field" style="margin-top:6px"><label>Extra Tax Withheld Per Pay ($)</label><div class="input-wrap"><span class="prefix">$</span><input type="number" class="has-prefix" id="extraTax" placeholder="0" min="0" step="1"></div></div>
+    </div>
+    <div class="switch-field">
+      <label for="showPurchasedLeave_sw">Purchased leave</label>
+      <label class="switch">
+        <input type="checkbox" id="showPurchasedLeave_sw" onchange="document.getElementById('showPurchasedLeave').checked=this.checked;document.getElementById('showPurchasedLeave').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="showPurchasedLeave" style="display:none">
+    <div id="purchasedLeaveWrap" class="hidden">
+      <div class="field" style="margin-top:6px">
+        <label>Purchased Leave Weeks Per Year</label>
+        <input type="number" id="purchasedLeaveWeeks" placeholder="0" min="0" max="8" step="0.5">
+        <div class="field-hint">Salary is reduced proportionally, lowering taxable income and take-home pay.</div>
+      </div>
+    </div>
+    <div class="switch-field">
+      <label for="showGeneralSalSac_sw">Additional salary sacrifice</label>
+      <label class="switch">
+        <input type="checkbox" id="showGeneralSalSac_sw" onchange="document.getElementById('showGeneralSalSac').checked=this.checked;document.getElementById('showGeneralSalSac').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="showGeneralSalSac" style="display:none">
+    <div id="generalSalSacWrap" class="hidden">
+      <div class="field" style="margin-top:6px">
+        <label>Annual Salary Sacrifice Amount ($)</label>
+        <div class="input-wrap"><span class="prefix">$</span><input type="number" class="has-prefix" id="generalSalSacAmt" placeholder="0" min="0" step="100"></div>
+        <div class="field-hint">Pre-tax deduction (e.g. car, laptop, other benefits). Reduces taxable income.</div>
+      </div>
+    </div>
 
-          <div style="margin-top:1rem">
-            <div class="panel-title">Pay Breakdown (Annual)</div>
-            <div class="breakdown-wrap">
-              <table class="breakdown-table">
-                <thead><tr><th>Component</th><th>Weekly</th><th>Fortnightly</th><th>Monthly</th><th>Annual</th></tr></thead>
-                <tbody id="breakdownBody"></tbody>
-              </table>
-            </div>
-          </div>
+    <div class="section-label">Medicare Levy Surcharge</div>
+    <div class="switch-field">
+      <label for="mlsEnabled_sw">No private health insurance (MLS may apply)</label>
+      <label class="switch">
+        <input type="checkbox" id="mlsEnabled_sw" onchange="document.getElementById('mlsEnabled').checked=this.checked;document.getElementById('mlsEnabled').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="mlsEnabled" style="display:none">
+    <div id="mlsFields" class="mls-fields hidden">
+      <div class="field">
+        <label>Family Status for MLS</label>
+        <select id="mlsFamily">
+          <option value="single">Single</option>
+          <option value="family">Family</option>
+        </select>
+      </div>
+    </div>
 
-          <div style="margin-top:1rem">
-            <div class="panel-title">Tax Brackets</div>
-            <div class="breakdown-wrap">
-              <table class="breakdown-table">
-                <thead><tr><th>Bracket</th><th>Taxable Amount</th><th>Tax Applied</th></tr></thead>
-                <tbody id="bracketBody"></tbody>
-              </table>
-            </div>
-          </div>
+    <div class="section-label">Tax Offsets</div>
+    <div class="switch-field">
+      <label for="seniorsOffset_sw">Seniors and Pensioners Tax Offset (SAPTO)</label>
+      <label class="switch">
+        <input type="checkbox" id="seniorsOffset_sw" onchange="document.getElementById('seniorsOffset').checked=this.checked;document.getElementById('seniorsOffset').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="seniorsOffset" style="display:none">
+    <div id="seniorsFields" class="seniors-fields hidden">
+      <div class="field">
+        <label>Filing Status</label>
+        <select id="seniorsStatus">
+          <option value="single">Single</option>
+          <option value="couple-each">Couple (each, separate income)</option>
+          <option value="couple-illness">Couple (separated by illness)</option>
+        </select>
+      </div>
+    </div>
 
-          <p class="disclaimer">Estimates only for FY 2025–26. Does not account for all deductions, private health rebates, or individual circumstances. Division 293 is payable separately. Family Tax Benefit not included. Consult a registered tax agent for personal advice.</p>
+    <div class="section-label">Family Tax Benefit</div>
+    <div class="switch-field">
+      <label for="ftbEnabled_sw">Estimate Family Tax Benefit</label>
+      <label class="switch">
+        <input type="checkbox" id="ftbEnabled_sw" onchange="document.getElementById('ftbEnabled').checked=this.checked;document.getElementById('ftbEnabled').dispatchEvent(new Event('change'));">
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+    <input type="checkbox" id="ftbEnabled" style="display:none">
+    <div id="ftbFields" class="ftb-fields hidden">
+      <div class="inline-fields">
+        <div class="field"><label>Children Under 13</label><input type="number" id="ftbUnder13" value="1" min="0" max="20" step="1"></div>
+        <div class="field"><label>Children 13-15</label><input type="number" id="ftb13to15" value="0" min="0" max="20" step="1"></div>
+      </div>
+      <div class="inline-fields">
+        <div class="field"><label>Children 16-19</label><input type="number" id="ftb16to19" value="0" min="0" max="20" step="1"></div>
+        <div class="field"><label>Family Income ($)</label><div class="input-wrap"><span class="prefix">$</span><input class="has-prefix" type="number" id="ftbFamilyIncome" placeholder="0" min="0" step="1000"></div><div class="field-hint">Combined annual income for FTB income test.</div></div>
+      </div>
+    </div>
+
+    </div><!-- /collapsible-body -->
+  </div>
+
+</div><!-- /left panel -->
+
+<!-- Mobile mid-page ad — 300×250 Medium Rectangle -->
+<!-- Visible only on screens below 900px wide -->
+<div class="mobile-ad-slot">
+  <div class="mobile-ad-inner">
+    <div class="ad-slot-label">Advertisement</div>
+    <ins class="adsbygoogle"
+         style="display:inline-block;max-width:100%;width:300px;height:250px"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"></ins>
+    
+  </div>
+</div>
+
+<!-- RIGHT PANEL (RESULTS) -->
+<div>
+  <div class="card" id="results">
+    <h2>Results</h2>
+
+    <div class="results-grid">
+      <div class="result-box highlight">
+        <div class="label">Take-Home Pay (per period)</div>
+        <div class="value" id="takeHomePeriod">$0.00</div>
+      </div>
+      <div class="result-box highlight">
+        <div class="label">Annual Take-Home Pay</div>
+        <div class="value" id="takeHomeAnnual">$0</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Gross Taxable Income</div>
+        <div class="value" id="grossDisplay">$0</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Total Super</div>
+        <div class="value" id="totalSuperDisplay">$0</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Effective Tax Rate</div>
+        <div class="value" id="effectiveRate">0%</div>
+      </div>
+      <div class="result-box">
+        <div class="label">Marginal Tax Rate</div>
+        <div class="value" id="marginalRate">0%</div>
+      </div>
+    </div>
+
+    <table class="combined-table">
+      <thead><tr><th>Component</th><th>Weekly</th><th>Fortnightly</th><th>Monthly</th><th>Annual</th></tr></thead>
+      <tbody id="combinedBody"></tbody>
+    </table>
+
+    <!-- PIE CHART -->
+    <div class="pie-section">
+      <div class="section-title">Pay Breakdown (Annual)</div>
+      <div class="pie-card">
+        <div class="pie-wrap">
+          <canvas id="payPie" width="260" height="260" aria-label="Pie chart of annual pay breakdown"></canvas>
+        </div>
+        <div class="pie-legend" id="pieLegend">
+          <div class="legend-row"><span class="legend-swatch" style="background:#2a9d67"></span><span class="legend-label">Take-home pay</span><span class="legend-amount" id="pieHome">$0</span><span class="legend-share" id="pieHomePct">0%</span></div>
+          <div class="legend-row"><span class="legend-swatch" style="background:#e53935"></span><span class="legend-label">Tax and levies</span><span class="legend-amount" id="pieTax">$0</span><span class="legend-share" id="pieTaxPct">0%</span></div>
+          <div class="legend-row" id="pieHelpRow" style="display:none"><span class="legend-swatch" style="background:#e67e22"></span><span class="legend-label">HECS/HELP</span><span class="legend-amount" id="pieHelp">$0</span><span class="legend-share" id="pieHelpPct">0%</span></div>
+          <div class="legend-row"><span class="legend-swatch" style="background:#3f7fb5"></span><span class="legend-label">Superannuation</span><span class="legend-amount" id="pieSuper">$0</span><span class="legend-share" id="pieSuperPct">0%</span></div>
         </div>
       </div>
     </div>
-  </main>
 
-  <footer class="site-footer">
-    <span>&copy; <span class="js-year"></span> AusCalc &mdash; General information only, not financial advice.</span>
-    <div class="footer-links">
-      <a href="index.html">All Calculators</a>
-      <a href="#disclaimer">Disclaimer</a>
+    <div class="results-lower">
+      <div>
+        <div class="section-title">Tax Brackets</div>
+        <table class="bracket-table">
+          <thead><tr><th>Bracket</th><th>Taxable</th><th>Tax Applied</th></tr></thead>
+          <tbody id="bracketBody"></tbody>
+        </table>
+      </div>
+      <div>
+        <div class="section-title">Key Rates <span id="ratesYear">FY 2025-26</span></div>
+        <table class="key-rates-table">
+          <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+          <tbody id="ratesBody"></tbody>
+        </table>
+      </div>
     </div>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-  <script src="js/utils.js"></script>
+
+    <div class="actions-bar">
+      <button class="btn-action btn-export" onclick="exportCSV()">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zm-3-7l-4 4-4-4h2.5v-3h3v3H15z"/></svg>
+        Export Summary CSV
+      </button>
+      <div class="actions-right">
+        <button class="btn-action btn-save" onclick="saveHTML()">
+          <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V7l-4-4zm-5 16a3 3 0 110-6 3 3 0 010 6zm3-10H5V5h10v4z"/></svg>
+          Save File
+        </button>
+        <button class="btn-action btn-reset" onclick="resetAll();window.scrollTo({top:0,behavior:'smooth'});">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          Start Over
+        </button>
+      </div>
+    </div>
+
+    <p class="note">This calculator provides estimates only. It does not account for all deductions, private health insurance rebates, or other individual circumstances. Super contributions tax (15%) on concessional contributions is paid inside the fund. Division 293 tax is paid from your super fund or by personal assessment. Family Tax Benefit estimates are indicative only. Consult a registered tax agent or Services Australia for personal advice.</p>
+  </div>
+</div><!-- /right panel -->
+
+</div><!-- /layout -->
+</div><!-- /container -->
+</div>
+  <div class="side-rail right">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        
+      </div>
+    </div>
+  </div><!-- /main-wrapper -->
+
+<!-- /right-rail -->
+
+</div><!-- /page-wrapper -->
+<div class="ft"><span>Estimates only — general information, not personal financial advice.</span></div>
+
+
+
+
+
   <script src="js/income-tax.js"></script>
 </body>
 </html>
