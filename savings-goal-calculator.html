@@ -4,257 +4,329 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Savings Goal Calculator</title>
+<style>
+:root {
+  --dk:#2d3a42; --nv:#3e5f75; --gr:#2a9d67; --grl:#e7f8ef;
+  
+  --bg:#f5f2ec; --card:#fffdfa; --bdr:#ddd7cf;
+  --tx:#22313f; --txl:#6c7a89; --red:#e53935;
+  --bl:#3f7fb5; --bll:#edf5fb; --am:#b6862c; --aml:#faf2df;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { width:100%; max-width:100%; overflow-x:hidden; }
+body {
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:linear-gradient(180deg,#ece8e0 0%,var(--bg) 200px,var(--bg) 100%);
+  color:var(--tx); line-height:1.5; min-height:100vh;
+  display:flex; flex-direction:column; overflow-x:hidden;
+}
+/* ── top bar ── */
+.topbar {
+  background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%);
+  padding:18px 32px; display:flex; align-items:center; gap:16px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+  box-shadow:0 8px 24px rgba(45,70,91,.14); flex-shrink:0;
+}
+.topbar-logo a {
+  display:flex; align-items:center; justify-content:center;
+  width:40px; height:40px; background:var(--am);
+  border-radius:10px; color:#fff; text-decoration:none;
+}
+.topbar-divider { width:1px; height:28px; background:rgba(255,255,255,.18); }
+.topbar-title   { color:#fff; font-size:1rem; font-weight:700; }
+.topbar-desc    { font-size:.78rem; color:rgba(255,255,255,.6); margin-top:2px; }
 
+/* ── page wrapper + side rails ── */
+.page-wrapper {
+  display:flex; justify-content:center; align-items:stretch;
+  gap:0; width:100%; overflow:hidden; position:relative; min-height:100vh;
+}
+.side-rail {
+  display:none; width:180px; min-width:180px; flex-shrink:0;
+  position:absolute; top:120px; z-index:10;
+}
+.side-rail.left  { left:0; }
+.side-rail.right { right:0; }
+.side-rail-inner { position:sticky; top:80px; padding:8px; display:flex; flex-direction:column; align-items:center; }
+.rail-ad-label {
+  font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.4px;
+  color:var(--txl); text-align:center; padding:8px 0 4px;
+  border-bottom:1px solid var(--bdr); margin-bottom:8px; width:100%;
+}
+.rail-ad-inner { padding:8px; display:flex; justify-content:center; align-items:center; min-height:620px; }
+.rail-ad-unit {
+  background:var(--card); border:1px solid var(--bdr);
+  border-radius:18px; overflow:hidden; box-shadow:0 8px 24px rgba(45,50,40,.06);
+}
+
+/* ── main wrapper ── */
+.main-wrapper {
+  background:transparent; padding:24px 32px; flex:1;
+  min-width:0; overflow-x:hidden; max-width:100%;
+  box-sizing:border-box; width:100%;
+}
+.container {
+  max-width:1100px; margin:0 auto; width:100%;
+  min-width:0; overflow-x:hidden; box-sizing:border-box;
+}
+.layout {
+  display:grid; grid-template-columns:minmax(0,380px) 1fr;
+  gap:24px; align-items:start; min-width:0; overflow-x:hidden;
+}
+
+/* ── cards ── */
+.card {
+  background:var(--card); border:1px solid var(--bdr); border-radius:18px;
+  padding:20px 24px; margin-bottom:16px;
+  box-shadow:0 8px 24px rgba(45,50,40,.06);
+  min-width:0; box-sizing:border-box; overflow:hidden; max-width:100%;
+}
+.card h2 { font-size:1rem; margin-bottom:16px; padding-bottom:8px; border-bottom:2px solid var(--gr); color:var(--dk); }
+.card-hdr {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:16px; padding-bottom:8px; border-bottom:2px solid var(--gr);
+}
+.card-hdr h2 { margin:0; padding:0; border:none; font-size:1rem; color:var(--dk); }
+
+/* ── section labels ── */
+.sec-lbl {
+  font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.4px;
+  color:var(--gr); margin-top:16px; margin-bottom:10px;
+  padding-top:12px; border-top:1px solid var(--bdr);
+}
+.sec-lbl.first { margin-top:0; padding-top:0; border-top:none; }
+
+/* ── fields ── */
+.field       { margin-bottom:14px; }
+.field label {
+  display:block; font-size:.8rem; font-weight:600; margin-bottom:4px;
+  color:var(--txl); text-transform:uppercase; letter-spacing:.3px;
+}
+.hint { font-size:.75rem; color:var(--txl); margin-top:3px; }
+.range-wrap { margin-top:6px; }
+input[type=range] { width:100%; accent-color:var(--gr); cursor:pointer; display:block; }
+.range-labels { display:flex; justify-content:space-between; font-size:.72rem; color:var(--txl); margin-top:2px; }
+
+/* ── inputs ── */
+.iw { position:relative; }
+.iw .pre, .iw .suf {
+  position:absolute; top:50%; transform:translateY(-50%);
+  font-size:.9rem; font-weight:600; color:var(--txl); pointer-events:none; z-index:1;
+}
+.iw .pre { left:10px; }
+.iw .suf { right:10px; }
+.iw input { width:100%; }
+.iw input.pl { padding-left:22px; }
+.iw input.pr { padding-right:28px; }
+input[type=number], input[type=text], input[type=month] {
+  width:100%; padding:9px 12px; border:1px solid var(--bdr);
+  border-radius:8px; font-size:.95rem; color:var(--tx);
+  background:#fffdf8; font-family:inherit; transition:border-color .15s;
+}
+input:focus { outline:none; border-color:var(--gr); box-shadow:0 0 0 3px rgba(42,157,103,.15); }
+input[type=number]::-webkit-inner-spin-button { opacity:.4; }
+
+/* ── toggles ── */
+.tog-grp { margin-bottom:14px; }
+.tog-lbl { display:block; font-size:.8rem; font-weight:600; margin-bottom:6px; color:var(--txl); text-transform:uppercase; letter-spacing:.3px; }
+.tog { display:flex; border:1px solid var(--bdr); border-radius:8px; overflow:hidden; }
+.tog input[type=radio] { display:none; }
+.tog label {
+  flex:1; text-align:center; padding:8px 6px; font-size:.8rem; font-weight:600;
+  cursor:pointer; background:#fffdf8; color:var(--txl);
+  border-right:1px solid var(--bdr); transition:all .15s;
+}
+.tog label:last-of-type { border-right:none; }
+.tog input[type=radio]:checked + label { background:var(--gr); color:#fff; }
+
+/* ── collapsible ── */
+.collapsible-header {
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+  background:none; border:none; cursor:pointer; padding:0 0 8px 0;
+  border-bottom:2px solid var(--gr); margin-bottom:16px; text-align:left; gap:10px;
+}
+.collapsible-header[aria-expanded="false"] { border-bottom-color:var(--bdr); margin-bottom:0; }
+.collapsible-header h2 { margin:0; padding:0; border:none; font-size:1rem; color:var(--dk); }
+.collapsible-header:hover h2 { color:var(--gr); }
+.collapse-icon { color:var(--gr); transition:transform .25s; display:flex; align-items:center; }
+.collapsible-header[aria-expanded="true"] .collapse-icon { transform:rotate(180deg); }
+.collapsible-body { overflow:hidden; transition:max-height .3s ease,opacity .25s ease; max-height:4000px; opacity:1; }
+.collapsible-body.collapsed { max-height:0; opacity:0; pointer-events:none; }
+
+/* ── result boxes ── */
+.res-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+.res-box  { background:#f8f5ef; border:1px solid var(--bdr); border-radius:12px; padding:12px 14px; }
+.res-box.hl { background:var(--grl); border-color:var(--gr); }
+.res-box .lbl { font-size:.73rem; text-transform:uppercase; letter-spacing:.3px; color:var(--txl); font-weight:600; margin-bottom:2px; }
+.res-box .val { font-size:1.15rem; font-weight:700; color:var(--dk); }
+.res-box.hl .val { color:var(--gr); font-size:1.3rem; }
+
+/* ── banners ── */
+.banner { border-radius:8px; padding:10px 13px; margin-bottom:12px; font-size:.84rem; display:none; }
+.bn-g   { background:var(--grl); border:1px solid var(--gr); }
+
+/* ── section titles ── */
+.sec-ttl { font-size:.85rem; font-weight:700; margin:18px 0 8px; color:var(--dk); }
+
+/* ── progress ── */
+.prog-bg { background:#e8e3d8; border-radius:99px; height:12px; overflow:hidden; border:1px solid var(--bdr); margin:6px 0; }
+.prog-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,var(--gr),#57c48a); transition:width .5s; }
+.prog-row  { display:flex; justify-content:space-between; font-size:.78rem; color:var(--txl); }
+
+/* ── tables ── */
+.tbl { width:100%; border-collapse:collapse; font-size:.88rem; }
+.tbl th { text-align:left; padding:8px 10px; background:var(--bg); font-weight:600; font-size:.75rem; text-transform:uppercase; color:var(--txl); border-bottom:2px solid var(--bdr); }
+.tbl th:not(:first-child) { text-align:right; }
+.tbl td { padding:8px 10px; border-bottom:1px solid var(--bdr); }
+.tbl td:not(:first-child) { text-align:right; font-variant-numeric:tabular-nums; }
+.tbl .tot td { font-weight:700; border-top:2px solid var(--dk); border-bottom:none; }
+
+/* ── chart ── */
+.chart-area { margin-top:20px; padding-top:18px; border-top:1px solid var(--bdr); }
+.chart-box  { background:#f8f5ef; border:1px solid var(--bdr); border-radius:14px; padding:14px; overflow:hidden; }
+canvas { display:block; }
+.legend { display:flex; gap:16px; margin-top:10px; justify-content:center; flex-wrap:wrap; }
+.leg-item { display:flex; align-items:center; gap:6px; font-size:.8rem; font-weight:600; }
+.leg-sw { width:12px; height:12px; border-radius:3px; }
+
+/* ── schedule ── */
+.sched-btn {
+  display:inline-flex; align-items:center; gap:6px;
+  background:none; border:1px solid var(--bdr); border-radius:8px;
+  padding:6px 14px; font-size:.8rem; font-weight:600; color:var(--txl);
+  cursor:pointer; margin-top:16px; font-family:inherit;
+}
+.sched-btn:hover { border-color:var(--gr); color:var(--gr); }
+.sched-wrap { max-height:360px; overflow-y:auto; overflow-x:auto; border:1px solid var(--bdr); border-radius:10px; margin-top:10px; max-width:100%; width:100%; -webkit-overflow-scrolling:touch; }
+.stbl { width:100%; min-width:480px; border-collapse:collapse; font-size:.82rem; }
+.stbl th { text-align:right; padding:6px 10px; background:var(--bg); font-size:.73rem; text-transform:uppercase; color:var(--txl); border-bottom:2px solid var(--bdr); position:sticky; top:0; }
+.stbl th:first-child, .stbl th:nth-child(2) { text-align:left; }
+.stbl td { padding:6px 10px; border-bottom:1px solid var(--bdr); text-align:right; font-variant-numeric:tabular-nums; }
+.stbl td:first-child, .stbl td:nth-child(2) { text-align:left; }
+
+/* ── actions ── */
+.actions-bar { display:flex; align-items:center; gap:10px; margin-top:20px; padding-top:16px; border-top:1px solid var(--bdr); flex-wrap:wrap; }
+.actions-left, .actions-right { display:flex; flex-direction:row; gap:10px; flex-wrap:wrap; }
+@media (max-width:600px) {
+  .actions-bar { display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:start; }
+  .actions-bar div[style] { display:none; }
+  .actions-left, .actions-right { flex-direction:column; gap:8px; }
+  .actions-left .btn, .actions-right .btn { width:100%; justify-content:center; }
+}
+.btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border:none; border-radius:8px; font-size:.8rem; font-weight:600; cursor:pointer; transition:background .15s; font-family:inherit; }
+.btn svg { width:14px; height:14px; fill:currentColor; }
+.btn-nv { background:var(--nv); color:#fff; }
+.btn-gr { background:var(--gr); color:#fff; }
+
+/* ── lump sums ── */
+.lump-row { display:grid; grid-template-columns:1fr 1fr 34px; gap:8px; margin-bottom:8px; align-items:end; }
+.lump-rm  { background:#f8f5ef; border:1px solid var(--bdr); border-radius:8px; color:var(--red); cursor:pointer; height:38px; font-size:1rem; font-family:inherit; }
+.lump-rm:hover { background:#fde8e8; border-color:var(--red); }
+
+/* ── note + footer ── */
+.note { font-size:.78rem; color:var(--txl); margin-top:16px; padding-top:12px; border-top:1px solid var(--bdr); line-height:1.6; }
+.ft { background:linear-gradient(180deg,#4d7289 0%,var(--nv) 100%); padding:14px 32px; text-align:center; }
+.ft span { color:rgba(255,255,255,.75); font-size:.82rem; }
+
+/* ── utility ── */
+.dn { display:none; }
+
+/* ── Show side rails only on very wide screens ── */
+@media (min-width:1400px) {
+  .side-rail { display:flex; flex-direction:column; }
+  .main-wrapper { padding-left:200px; padding-right:200px; }
+}
+
+/* ── Tablet ── */
+@media (max-width:1000px) {
+  .layout { grid-template-columns:1fr; }
+  .main-wrapper { padding:16px; }
+  .topbar { padding:10px 16px; }
+  .res-grid { grid-template-columns:1fr 1fr; }
+}
+
+/* ── Hide all ads on mobile/touch ── */
+@media (max-width:768px) {
+  ins.adsbygoogle, .side-rail {
+    display:none !important; width:0 !important; height:0 !important;
+    max-width:0 !important; overflow:hidden !important;
+    visibility:hidden !important; position:absolute !important;
+    pointer-events:none !important;
+  }
+  .res-grid { grid-template-columns:1fr 1fr !important; gap:8px !important; }
+}
+@media (max-width:1024px) and (pointer:coarse) {
+  ins.adsbygoogle, .side-rail {
+    display:none !important; width:0 !important; height:0 !important;
+    max-width:0 !important; overflow:hidden !important;
+    visibility:hidden !important; position:absolute !important;
+    pointer-events:none !important;
+  }
+}
+
+/* ── Mobile small ── */
+@media (max-width:480px) {
+  .main-wrapper { padding:12px !important; box-sizing:border-box !important; }
+  .layout { grid-template-columns:1fr !important; gap:10px !important; }
+  .card { padding:14px !important; box-sizing:border-box !important; width:100% !important; max-width:100% !important; }
+
+  /* Topbar */
+  .topbar { padding:10px 14px !important; gap:10px !important; }
+  .topbar-title { font-size:.95rem !important; }
+
+  /* Card header: keep on one line but shrink btn */
+  .card-hdr { flex-wrap:wrap !important; gap:6px !important; }
+  .card-hdr h2 { flex:1 !important; min-width:0 !important; font-size:.9rem !important; }
+  .card-hdr .btn { font-size:.72rem !important; padding:5px 10px !important; white-space:nowrap !important; }
+
+  /* Toggles */
+  .tog label { font-size:.68rem !important; padding:6px 3px !important; }
+
+  /* Inputs */
+  input[type=number], input[type=text], input[type=month] { font-size:.88rem !important; padding:7px 8px !important; }
+  .iw input.pl { padding-left:20px !important; }
+  .iw input.pr { padding-right:24px !important; }
+
+  /* Results */
+  .res-grid { grid-template-columns:1fr 1fr !important; gap:8px !important; }
+  .res-box .val { font-size:1rem !important; }
+  .res-box.hl .val { font-size:1.1rem !important; }
+  .res-box .lbl { font-size:.68rem !important; }
+
+  /* Tables */
+  .tbl { display:block !important; overflow-x:auto !important; font-size:.78rem !important; }
+  .stbl { display:block !important; overflow-x:auto !important; font-size:.72rem !important; }
+
+  /* Misc */
+  .actions { flex-wrap:wrap !important; }
+  .btn { font-size:.78rem !important; padding:7px 12px !important; }
+  .ft { padding:10px 14px !important; }
+  .sec-ttl { font-size:.82rem !important; }
+  .note { font-size:.74rem !important; }
+  .hint { font-size:.72rem !important; }
+}
+@media (min-width:481px) and (max-width:768px) {
+  .main-wrapper { padding:14px 18px !important; box-sizing:border-box !important; }
+  .layout { grid-template-columns:1fr !important; }
+  .card-hdr { flex-wrap:wrap !important; gap:6px !important; }
+  .card-hdr h2 { flex:1 !important; font-size:.92rem !important; }
+}
+
+/* ── CSS grid column overflow fix ── */
+.layout > div { min-width:0; max-width:100%; }
+.main-wrapper, .layout > div { min-width:0; }
+
+/* Chart section containment */
+.chart-section { overflow:hidden; max-width:100%; }
+
+/* ── Mobile overflow safety net ── */
+html, body { overflow-x:hidden; }
+.layout, .card, .main-wrapper, .container { min-width:0; overflow-x:hidden; box-sizing:border-box; width:100%; max-width:100%; }
+</style>
   <!-- Google AdSense -->
-  <script>
-    if (window.innerWidth > 768 && navigator.maxTouchPoints === 0) {
-      document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"><\/scr'+'ipt>');
-    }
-  </script>
-  <link rel="stylesheet" href="css/savings-goal.css">
-</head>
-<body>
+  
 
-<div class="topbar">
-  <div class="topbar-logo">
-    <a href="index.html" title="Back">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/>
-      </svg>
-    </a>
-  </div>
-  <div class="topbar-divider"></div>
-  <div>
-    <div class="topbar-title">Savings Goal</div>
-    <div class="topbar-desc">Time to reach your goal or monthly amount needed.</div>
-  </div>
-</div>
-
-<div class="page-wrapper">
-<div class="side-rail left">
-  <div class="side-rail-inner">
-    <div class="rail-ad-unit">
-      <div class="rail-ad-label">Advertisement</div>
-      <div class="rail-ad-inner">
-        <ins class="adsbygoogle"
-          style="display:inline-block;width:160px;height:600px"
-          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-          data-ad-slot="XXXXXXXXXX"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="main-wrapper"><div class="container"><div class="layout">
-
-<!-- LEFT PANEL -->
-<div>
-<div class="card">
-  <div class="card-hdr">
-    <h2>Savings Details</h2>
-    <button class="btn btn-nv" id="btnReset" type="button">&#8635; Reset</button>
-  </div>
-
-  <div class="sec-lbl first">Goal</div>
-  <div class="field">
-    <label for="fGoal">Savings Goal</label>
-    <div class="iw"><span class="pre">$</span><input type="number" id="fGoal" class="pl" value="50000" min="0" step="500"></div>
-    <div class="range-wrap">
-      <input type="range" id="fGoalRange" min="0" max="200000" step="500" value="50000">
-      <div class="range-labels"><span>$0</span><span>$200k</span></div>
-    </div>
-  </div>
-  <div class="field">
-    <label for="fLabel">Goal Label (optional)</label>
-    <input type="text" id="fLabel" placeholder="e.g. House deposit, Emergency fund">
-  </div>
-
-  <div class="sec-lbl">Current Savings</div>
-  <div class="field">
-    <label for="fInitial">Current Balance</label>
-    <div class="iw"><span class="pre">$</span><input type="number" id="fInitial" class="pl" value="5000" min="0" step="500"></div>
-    <div class="range-wrap">
-      <input type="range" id="fInitialRange" min="0" max="50000" step="500" value="5000">
-      <div class="range-labels"><span>$0</span><span>$50k</span></div>
-    </div>
-    <div class="hint">Amount already saved toward this goal.</div>
-  </div>
-
-  <div class="sec-lbl">Mode</div>
-  <div class="tog-grp">
-    <div class="tog">
-      <input type="radio" name="mode" id="mTime" value="time" checked><label for="mTime">Time to Goal</label>
-      <input type="radio" name="mode" id="mContrib" value="contrib"><label for="mContrib">Required Contribution</label>
-    </div>
-  </div>
-
-  <div class="sec-lbl">Regular Contributions</div>
-  <div class="field">
-    <label for="fContrib">Contribution Amount</label>
-    <div class="iw"><span class="pre">$</span><input type="number" id="fContrib" class="pl" value="800" min="0" step="50"></div>
-    <div class="range-wrap">
-      <input type="range" id="fContribRange" min="0" max="5000" step="50" value="800">
-      <div class="range-labels"><span>$0</span><span>$5k</span></div>
-    </div>
-  </div>
-  <div class="tog-grp">
-    <span class="tog-lbl">Frequency</span>
-    <div class="tog">
-      <input type="radio" name="freq" id="fqW" value="52"><label for="fqW">Weekly</label>
-      <input type="radio" name="freq" id="fqF" value="26"><label for="fqF">Fortnightly</label>
-      <input type="radio" name="freq" id="fqM" value="12" checked><label for="fqM">Monthly</label>
-      <input type="radio" name="freq" id="fqA" value="1"><label for="fqA">Annually</label>
-    </div>
-  </div>
-  <div class="field dn" id="targetRow">
-    <label for="fTarget">Target Timeframe (years)</label>
-    <div class="iw"><input type="number" id="fTarget" class="pr" value="5" min="0.5" step="0.5"><span class="suf">yrs</span></div>
-  </div>
-
-  <div class="sec-lbl">Interest Rate</div>
-  <div class="field">
-    <label for="fRate">Annual Interest Rate</label>
-    <div class="iw"><input type="number" id="fRate" class="pr" value="4.5" min="0" max="50" step="0.1"><span class="suf">%</span></div>
-    <div class="hint">Compounded at contribution frequency.</div>
-  </div>
-
-  <div class="sec-lbl">Start Date</div>
-  <div class="field">
-    <label for="fStart">Start Month</label>
-    <input type="month" id="fStart">
-    <div class="hint">Used to project your goal date.</div>
-  </div>
-</div>
-
-<div class="card">
-  <h2>Additional Options</h2>
-  <div class="sec-lbl first">Lump Sum Top-Ups</div>
-  <div class="hint" style="margin-bottom:10px">One-off deposits at a specific year (e.g. tax return, bonus).</div>
-  <div id="lumpList"></div>
-  <button class="sched-btn" id="btnAddLump" type="button">+ Add Lump Sum</button>
-
-  <div class="sec-lbl">Inflation</div>
-  <div class="tog-grp">
-    <div class="tog">
-      <input type="radio" name="infl" id="inflOff" value="off" checked><label for="inflOff">Off</label>
-      <input type="radio" name="infl" id="inflOn"  value="on"><label for="inflOn">Show Real Values</label>
-    </div>
-  </div>
-  <div class="field dn" id="inflRow">
-    <label for="fInfl">Annual Inflation Rate</label>
-    <div class="iw"><input type="number" id="fInfl" class="pr" value="2.5" min="0" max="20" step="0.1"><span class="suf">%</span></div>
-    <div class="hint">Closing balances in today's purchasing power.</div>
-  </div>
-</div>
-</div><!-- end left -->
-
-<!-- RIGHT PANEL -->
-<div>
-<div class="card">
-  <h2>Results</h2>
-
-  <div class="res-grid">
-    <div class="res-box hl"><div class="lbl" id="rLbl">Time to Goal</div><div class="val" id="rMain">—</div></div>
-    <div class="res-box"><div class="lbl">Total Deposited</div><div class="val" id="rDep">—</div></div>
-    <div class="res-box"><div class="lbl">Interest Earned</div><div class="val" id="rInt" style="color:var(--gr)">—</div></div>
-    <div class="res-box dn" id="rLumpBox"><div class="lbl">Total Lump Sums</div><div class="val" id="rLump" style="color:var(--am)">—</div></div>
-    <div class="res-box dn" id="rRealBox"><div class="lbl">Real Value</div><div class="val" id="rReal" style="color:var(--am)">—</div></div>
-    <div class="res-box"><div class="lbl">Goal Date</div><div class="val" id="rDate" style="font-size:.95rem">—</div></div>
-  </div>
-
-  <div class="banner bn-g dn" id="banner"></div>
-
-  <div class="sec-ttl">Progress Toward Goal</div>
-  <div class="prog-row"><span id="pSaved">$0 saved</span><span id="pPct" style="font-weight:700;color:var(--gr)">0%</span></div>
-  <div class="prog-bg"><div class="prog-fill" id="pBar" style="width:0%"></div></div>
-  <div class="prog-row" style="margin-top:4px"><span id="pGoal">Goal: —</span><span id="pTarget">Target: —</span></div>
-
-  <div class="sec-ttl">Savings Breakdown</div>
-  <table class="tbl">
-    <thead><tr><th>Component</th><th>Per Period</th><th>Annual</th><th>Total</th><th>% of Goal</th></tr></thead>
-    <tbody id="tBody"></tbody>
-  </table>
-
-  <div class="chart-area">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <div class="sec-ttl" style="margin:0">Savings Growth Over Time</div>
-      <div style="font-size:.74rem;color:var(--txl);font-style:italic">Hover for details</div>
-    </div>
-    <div class="chart-box">
-      <canvas id="chart" height="180"></canvas>
-      <div class="legend">
-        <div class="leg-item"><div class="leg-sw" style="background:rgba(42,157,103,0.8)"></div>Initial + Contributions</div>
-        <div class="leg-item"><div class="leg-sw" style="background:rgba(232,168,56,0.8)"></div>Interest</div>
-        <div class="leg-item dn" id="legLump"><div class="leg-sw" style="background:rgba(182,134,44,0.8)"></div>Lump Sums</div>
-      </div>
-    </div>
-  </div>
-
-  <button class="sched-btn" id="schedBtn" type="button">&#9776; Show Year-by-Year Schedule</button>
-  <div class="dn" id="schedWrap" style="max-width:100%; width:100%; overflow:hidden;">
-    <div class="sched-wrap">
-      <table class="stbl">
-        <thead><tr>
-          <th style="text-align:left">Year</th>
-          <th style="text-align:left">Date</th>
-          <th>Opening</th><th>Contributions</th><th>Lump Sum</th>
-          <th>Interest</th><th>Closing</th>
-          <th id="realCol" class="dn">Real Value</th>
-          <th>% Goal</th>
-        </tr></thead>
-        <tbody id="sBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="actions-bar">
-    <div class="actions-left">
-      <button type="button" class="btn btn-gr" id="btnCSV">
-        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 6h14v2H5z"/></svg>
-        Export Summary CSV
-      </button>
-      <button type="button" class="btn btn-gr" id="btnSchedCSV">
-        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
-        Export Schedule CSV
-      </button>
-    </div>
-    <div style="flex:1"></div>
-    <div class="actions-right">
-      <button type="button" class="btn btn-nv" id="btnSaveSnapshot">
-        <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>
-        Save File
-      </button>
-      <button type="button" class="btn btn-nv" id="btnStartOver">
-        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-        Start Over
-      </button>
-    </div>
-  </div>
-
-  <div class="note">Estimates only. Assumes constant interest rate, contributions at start of each period compounded at contribution frequency. Not personal financial advice.</div>
-</div>
-</div><!-- end right -->
-
-</div></div></div>
-<div class="side-rail right">
-  <div class="side-rail-inner">
-    <div class="rail-ad-unit">
-      <div class="rail-ad-label">Advertisement</div>
-      <div class="rail-ad-inner">
-        <ins class="adsbygoogle"
-          style="display:inline-block;width:160px;height:600px"
-          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-          data-ad-slot="XXXXXXXXXX"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      </div>
-    </div>
-  </div>
-</div>
-</div><!-- end page-wrapper -->
-<div class="ft"><span>Estimates only — not personal financial advice.</span></div>
-
-
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script src="js/savings-goal.js"></script>
 </body>
 </html>
