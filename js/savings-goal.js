@@ -358,12 +358,12 @@
     if (!num || !rng) return;
     rng.addEventListener('input', function() {
       num.value = rng.value;
-      calc();
+      calculate();
     });
     num.addEventListener('input', function() {
       var v = parseFloat(num.value) || 0;
       if (v <= cap) rng.value = v;
-      calc();
+      calculate();
     });
   });
 
