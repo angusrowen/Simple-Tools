@@ -1,34 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
-<script>
-var _isMobile = window.innerWidth<=768 || (navigator.maxTouchPoints>0 && window.innerWidth<=1024);
-if(_isMobile){
-  window.adsbygoogle={loaded:true,push:function(){}};
-  document.addEventListener('DOMContentLoaded',function(){
-  // Salary slider sync
-  (function(){
-    var si=document.getElementById('salary'),sr=document.getElementById('salaryRange');
-    if(si&&sr){
-      si.addEventListener('input',function(){if(parseFloat(si.value)<=300000)sr.value=si.value;else sr.value=300000;calculate();});
-      sr.addEventListener('input',function(){si.value=sr.value;calculate();});
-    }
-  })();
-  // Pay frequency radio listeners
-  // Second job pay frequency radios
-  ['sjFreqFortnightly','sjFreqWeekly','sjFreqMonthly'].forEach(function(id){
-    var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
-  });
-  ['freqFortnightly','freqWeekly','freqMonthly'].forEach(function(id){
-    var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
-  });
-    document.querySelectorAll(
-      'ins.adsbygoogle,.ad-slot,.mobile-ad-slot,.mobile-ad-inner,.side-rail,[data-ad-client],[data-ad-slot]'
-    ).forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});
-    document.querySelectorAll('script[src*="googlesyndication"]')
-      .forEach(function(el){el.parentNode&&el.parentNode.removeChild(el);});
-  });
-</script>
+
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
