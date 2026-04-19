@@ -1,9 +1,9 @@
-
 var wealthChart=null,summaryRows=[],scheduleRows=[];
 function n(id){var v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v;}
 function fmt(v){return'$'+Math.round(Math.abs(v)).toLocaleString('en-AU');}
 function set(id,val){var el=document.getElementById(id);if(el)el.textContent=val;}
 function selling(){return document.getElementById('exitYes').checked;}
+
 
 function estimateStampDuty(p){
   if(p<=16000)return p*0.0125;if(p<=35000)return 200+(p-16000)*0.015;
@@ -19,6 +19,7 @@ function calcRepayment(P,annRate,termYrs){
   return P*r*Math.pow(1+r,nn)/(Math.pow(1+r,nn)-1);
 }
 
+
 function updateExitUI(){
   var s=selling();
   document.getElementById('exitFields').style.display=s?'block':'none';
@@ -26,6 +27,15 @@ function updateExitUI(){
   if(s){b.className='exit-banner-sell';b.innerHTML='<strong>Sell mode:</strong> Both assets sold at end of period. Property sale costs deducted from proceeds. CGT (50% discount) applied to investment gains.';}
   else{b.className='exit-banner-hold';b.innerHTML='<strong>Hold mode:</strong> Neither asset is sold. Net wealth = property value minus mortgage and portfolio as-is. No selling costs or CGT applied.';}
 }
+
+
+function syncSlider(inputId, sliderId){
+  var input=document.getElementById(inputId), slider=document.getElementById(sliderId);
+  if(!input||!slider)return;
+  input.addEventListener('input',function(){slider.value=this.value;calc();});
+  slider.addEventListener('input',function(){input.value=this.value;calc();});
+}
+
 
 function calc(){
   var price=n('fPrice'),deposit=n('fDeposit'),stampDuty=n('fStampDuty');
@@ -43,12 +53,18 @@ function calc(){
   var sellTaxRate=parseFloat(document.getElementById('fSellTax').value)||0;
   if(!price||!deposit)return;
 
+
   var baseLoan=price-deposit,lmi=estimateLMI(baseLoan,price),loan=baseLoan+lmi;
   var pct=(deposit/price*100).toFixed(1);
   document.getElementById('depositHint').textContent=pct+'% of purchase price'+(deposit/price>=0.20?' — no LMI required':' — LMI may apply');
   var lmiEl=document.getElementById('lmiInfo');
   if(lmi>0){document.getElementById('lmiAmt').textContent=fmt(lmi);lmiEl.style.display='block';}
   else lmiEl.style.display='none';
+
+  // Keep deposit slider max in sync with price
+  var depositSlider=document.getElementById('depositRange');
+  if(depositSlider)depositSlider.max=Math.max(price,parseInt(depositSlider.max));
+
 
   var upfrontOther=convey+inspect+furnish;
   var monthlyRepay=calcRepayment(loan,rate,term);
@@ -57,16 +73,20 @@ function calc(){
   var netInvRate=(invReturn-invFee)/100;
   var investorStart=deposit+(oppYes?stampDuty+upfrontOther:0);
 
+
   var propValue=price,loanBal=loan,r=rate/100/12;
   var portfolio=investorStart,annualRent=rent*12;
   var totalMortgagePaid=0,totalRentPaid=0,totalInvested=investorStart;
+
 
   var yr1BuyerTotal=annualRepay+annualOwner;
   var yr1RenterTotal=annualRent+rentIns;
   var yr1CF=yr1BuyerTotal-yr1RenterTotal;
 
+
   var labels=[],buyArr=[],invArr=[],propArr=[],tableRows='';
   scheduleRows=['Year,Property Value,Mortgage Balance,Buy Net Wealth,Invest Portfolio,Rent+Inv Net Wealth,Cash Flow,Difference'];
+
 
   for(var y=1;y<=years;y++){
     for(var m=0;m<12;m++){
@@ -82,6 +102,7 @@ function calc(){
     totalRentPaid+=annualRent;
     annualRent*=(1+rentGrowth/100);
 
+
     var buyNetWealth,invNetWealth;
     if(s){
       buyNetWealth=propValue*(1-sellAgentPct)-sellOther-loanBal;
@@ -92,17 +113,20 @@ function calc(){
       invNetWealth=portfolio;
     }
 
+
     var diff=buyNetWealth-invNetWealth;
     var cls=diff>0?'positive-val':'negative-val';
     var diffStr=diff>0?'Buy +'+fmt(diff):'Invest +'+fmt(Math.abs(diff));
-    var cfCol=annualCashFlow>=0?'var(--gr)':'var(--accent)';
+    var cfCol=annualCashFlow>=0?'var(--green)':'var(--accent)';
     labels.push('Yr '+y);buyArr.push(Math.round(buyNetWealth));invArr.push(Math.round(invNetWealth));propArr.push(Math.round(propValue));
     tableRows+='<tr><td><strong>'+y+'</strong></td><td>'+fmt(propValue)+'</td><td>'+fmt(buyNetWealth)+'</td><td>'+fmt(portfolio)+'</td><td>'+fmt(invNetWealth)+'</td><td style="color:'+cfCol+';font-weight:600">'+(annualCashFlow>=0?'+':'')+fmt(annualCashFlow)+'</td><td class="'+cls+'">'+diffStr+'</td></tr>';
     scheduleRows.push([y,Math.round(propValue),Math.round(loanBal),Math.round(buyNetWealth),Math.round(portfolio),Math.round(invNetWealth),Math.round(annualCashFlow),Math.round(diff)].join(','));
   }
 
+
   var finalBuy=buyArr[buyArr.length-1],finalInv=invArr[invArr.length-1],finalDiff=finalBuy-finalInv;
   var tie=Math.abs(finalDiff)<1000,buyWins=finalDiff>0;
+
 
   set('rBuyWealth',fmt(finalBuy));
   set('rInvWealth',fmt(finalInv));
@@ -115,23 +139,28 @@ function calc(){
   set('rAnnualOngoing',fmt(yr1BuyerTotal)+'/yr');
   document.getElementById('rAnnualOngoingSub').textContent='Buyer: mortgage + costs · Renter: '+fmt(yr1RenterTotal)+'/yr';
 
+
   var db=document.getElementById('rboxDiff');
   db.className='result-box'+(tie?'':buyWins?' hl-green':' hl-blue');
   set('rDiff',tie?'~Even':(buyWins?'Buy +'+fmt(finalDiff):'Invest +'+fmt(Math.abs(finalDiff))));
   document.getElementById('rDiffSub').textContent=tie?'Similar wealth after '+years+' yrs':(buyWins?'Buying ahead after '+years+' yrs':'Investing ahead after '+years+' yrs');
 
-  var badge=document.getElementById('winnerBadge');
-  if(tie)badge.innerHTML='<span class="winner-badge winner-tie">⚖ Roughly Equal After '+years+' Years</span>';
-  else if(buyWins)badge.innerHTML='<span class="winner-badge">🏠 Buying Wins After '+years+' Years</span>';
-  else badge.innerHTML='<span class="winner-badge winner-invest">📈 Renting &amp; Investing Wins After '+years+' Years</span>';
 
-  document.getElementById('compBody').innerHTML=tableRows||'<tr><td colspan="7" style="color:var(--txl);font-style:italic;text-align:center;padding:18px">No results yet</td></tr>';
+  var badge=document.getElementById('winnerBadge');
+  if(tie)badge.innerHTML='<span class="winner-badge winner-tie">&#9878; Roughly Equal After '+years+' Years</span>';
+  else if(buyWins)badge.innerHTML='<span class="winner-badge">&#127968; Buying Wins After '+years+' Years</span>';
+  else badge.innerHTML='<span class="winner-badge winner-invest">&#128200; Renting &amp; Investing Wins After '+years+' Years</span>';
+
+
+  document.getElementById('compBody').innerHTML=tableRows||'<tr><td colspan="7" style="color:var(--text-light);font-style:italic;text-align:center;padding:18px">No results yet</td></tr>';
+
 
   var cf1Sign=yr1CF>=0?'+':'-';
-  var cf1Col=yr1CF>=0?'color:var(--gr)':'color:var(--accent)';
+  var cf1Col=yr1CF>=0?'color:var(--green)':'color:var(--accent)';
   var exitRow=s
     ?'<tr><td>Exit costs at sale</td><td>Agent '+(sellAgentPct*100).toFixed(1)+'% + '+fmt(sellOther)+' other</td><td>CGT 50% discount at '+sellTaxRate+'% marginal rate</td></tr>'
     :'<tr><td>Exit / tax at end</td><td>No sale — no CGT on PPOR</td><td>No sale — no CGT applied</td></tr>';
+
 
   document.getElementById('assumptBody').innerHTML=
     '<tr><td>Capital deployed at start</td><td>'+fmt(deposit)+' deposit + '+fmt(stampDuty+upfrontOther)+' upfront costs</td><td>'+fmt(investorStart)+' invested ('+(oppYes?'incl. upfront costs':'deposit only')+')</td></tr>'
@@ -146,11 +175,14 @@ function calc(){
    +exitRow
    +'<tr><td>Growth rate</td><td>'+propGrowth+'% p.a. property</td><td>'+invReturn+'% gross ('+invFee+'% MER)</td></tr>';
 
+
   document.getElementById('cfNote').innerHTML='<strong>How the invest scenario works:</strong> The renter invests the deposit upfront'+(oppYes?', plus stamp duty and other upfront costs':'')+'. Each year, the difference between what the buyer pays (mortgage + ownership costs) and what the renter pays (rent + contents insurance) is invested into — or drawn from — the portfolio. In Year 1 the renter '+(yr1CF>=0?'saves <strong>'+fmt(yr1CF)+'</strong> compared to buying, which is invested':'pays <strong>'+fmt(Math.abs(yr1CF))+'</strong> more than the buyer, drawn from the portfolio')+'. This gap shifts each year as rent grows.'+(s?' <strong>Sell mode:</strong> property sale costs deducted; CGT 50% discount applied to investment gains.':'');
+
 
   summaryRows=['Metric,Buy Scenario,Rent & Invest Scenario','Net Wealth (end),'+Math.round(finalBuy)+','+Math.round(finalInv),'Property Value (end),'+Math.round(propArr[propArr.length-1])+',N/A','Investment Portfolio (end),N/A,'+Math.round(portfolio),'Total Invested,N/A,'+Math.round(totalInvested),'Annual Buyer Outgoings Yr1,'+Math.round(yr1BuyerTotal)+',N/A','Annual Renter Outgoings Yr1,N/A,'+Math.round(yr1RenterTotal),'Annual Cash Flow Invested Yr1,N/A,'+Math.round(yr1CF),'Total Mortgage Paid,'+Math.round(totalMortgagePaid)+',N/A','Total Rent Paid,N/A,'+Math.round(totalRentPaid)];
   drawChart(labels,buyArr,invArr,propArr);
 }
+
 
 function drawChart(labels,buyArr,invArr,propArr){
   var canvas=document.getElementById('wealthChart');if(!canvas)return;
@@ -169,27 +201,45 @@ function drawChart(labels,buyArr,invArr,propArr){
   });
 }
 
+
 function dlCSV(rows,fname){if(!rows||!rows.length)return;var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.join('\n'));a.download=fname;a.click();}
+
 
 function resetAll(){
   var d={fPrice:800000,fDeposit:160000,fStampDuty:31070,fConveyancing:2000,fInspections:1000,fFurnishing:10000,fRate:6.00,fTerm:30,fCouncil:2000,fInsurance:2000,fMaintenance:4000,fBodyCorp:'',fPropertyGrowth:4.00,fAgentFee:'',fRent:3000,fRentGrowth:3.0,fRentInsurance:600,fInvReturn:8.0,fInvFee:0.20,fSellAgent:2.0,fSellOther:2000,fYears:20};
   for(var k in d){var el=document.getElementById(k);if(el)el.value=d[k];}
+  // Reset sliders
+  var sliders={priceRange:800000,depositRange:160000};
+  for(var s in sliders){var sl=document.getElementById(s);if(sl)sl.value=sliders[s];}
   document.getElementById('exitNo').checked=true;document.getElementById('oppYes').checked=true;
   document.getElementById('fSellTax').value='32.5';
   updateExitUI();calc();
 }
+
 
 ['fDeposit','fStampDuty','fConveyancing','fInspections','fFurnishing','fRate','fTerm',
  'fCouncil','fInsurance','fMaintenance','fBodyCorp','fPropertyGrowth','fAgentFee',
  'fRent','fRentGrowth','fRentInsurance','fInvReturn','fInvFee','fSellAgent','fSellOther','fYears'
 ].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calc);});
 
+
+// Price slider — also auto-updates stamp duty
 document.getElementById('fPrice').addEventListener('input',function(){
+  var slider=document.getElementById('priceRange');if(slider)slider.value=this.value;
   document.getElementById('fStampDuty').value=Math.round(estimateStampDuty(parseFloat(this.value)||0));calc();
 });
+document.getElementById('priceRange').addEventListener('input',function(){
+  document.getElementById('fPrice').value=this.value;
+  document.getElementById('fStampDuty').value=Math.round(estimateStampDuty(parseFloat(this.value)||0));calc();
+});
+
+// Deposit slider
+syncSlider('fDeposit','depositRange');
+
 document.getElementById('fSellTax').addEventListener('change',calc);
 ['oppYes','oppNo'].forEach(function(id){document.getElementById(id).addEventListener('change',calc);});
 ['exitYes','exitNo'].forEach(function(id){document.getElementById(id).addEventListener('change',function(){updateExitUI();calc();});});
+
 
 (function(){
   var btn=document.getElementById('rentInvBtn'),body=document.getElementById('rentInvBody');
@@ -197,11 +247,13 @@ document.getElementById('fSellTax').addEventListener('change',calc);
   if(window.innerWidth<900){btn.setAttribute('aria-expanded','false');body.classList.add('collapsed');}
 })();
 
+
 document.getElementById('amortToggle').addEventListener('click',function(){
   var sec=document.getElementById('amortSection'),open=sec.style.display==='block';
   sec.style.display=open?'none':'block';
   this.innerHTML=open?'<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Show Year-by-Year Schedule':'<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Hide Year-by-Year Schedule';
 });
+
 
 document.getElementById('btnReset').addEventListener('click',resetAll);
 document.getElementById('btnStartOver').addEventListener('click',function(){resetAll();window.scrollTo({top:0,behavior:'smooth'});});
@@ -213,6 +265,7 @@ document.getElementById('btnSaveSnapshot').addEventListener('click',function(){
   var d=new Date;a.download='buy-vs-invest-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
 });
+
 
 updateExitUI();
 calc();
