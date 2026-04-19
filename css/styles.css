@@ -5,10 +5,27 @@
    ============================================================ */
 
 :root{
-  --dk:#2d3a42;--nv:#3e5f75;--gr:#2a9d67;--grl:#e7f8ef;
-  --bg:#f5f2ec;--card:#fffdfa;--bdr:#ddd7cf;
-  --tx:#22313f;--txl:#6c7a89;--red:#e53935;
-  --bl:#3f7fb5;--bll:#edf5fb;--am:#b6862c;--aml:#faf2df;--help:#e67e22;--helpl:#fef4e8;
+  --accent:#c0392b;
+  --am:#b6862c;
+  --amb:#b6862c;
+  --aml:#faf2df;
+  --bdr:#ddd7cf;
+  --bg:#f5f2ec;
+  --bl:#3f7fb5;
+  --bll:#edf5fb;
+  --card:#fffdfa;
+  --dk:#2d3a42;
+  --gr:#2a9d67;
+  --grl:#e7f8ef;
+  --help:#e67e22;
+  --helpl:#fef4e8;
+  --nv:#3e5f75;
+  --pu:#7b5ea7;
+  --pul:#f3eeff;
+  --red:#e53935;
+  --super:#7a5230;
+  --tx:#22313f;
+  --txl:#6c7a89;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
