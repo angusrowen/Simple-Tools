@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HECS-HELP Student Loan Calculator</title>
+<title>HECS-HELP Student Loan Calculator — Australian Finance Tools</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
 <!-- Google AdSense -->
 <script>if(window.innerWidth>768 && navigator.maxTouchPoints===0){document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></scr'+'ipt>');}</script>
-  <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
 <div class="topbar">
   <div class="topbar-logo">
-    <a href="index.html" title="Back to calculators">
+    <a href="index.html" title="Back to calculators" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#e8650a;border-radius:10px;color:#fff;text-decoration:none">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
     </a>
   </div>
@@ -23,253 +23,264 @@
     <div class="topbar-title">HECS-HELP Student Loan Calculator</div>
     <div class="topbar-desc">Estimate your compulsory repayments, payoff timeline &amp; indexation impact — 2025–26 ATO rates</div>
   </div>
+  <div class="topbar-right"></div>
 </div>
 
 <div class="page-wrapper">
 
   <div class="side-rail left">
     <div class="side-rail-inner">
-      <div class="rail-ad-unit">
-        <div class="rail-ad-label">Advertisement</div>
-        <div class="rail-ad-inner">
-          <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
-               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-wrapper">
+  <div class="container">
+  <div class="layout">
+
+  <!-- ═══ LEFT — INPUTS ═══ -->
+  <div>
+    <div class="card">
+      <div class="card-header-row">
+        <h2>Your Details</h2>
+        <button class="btn btn-navy" id="btnReset" type="button">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          Reset
+        </button>
+      </div>
+
+      <div class="section-label first">Loan Balance</div>
+      <div class="field">
+        <label for="loanBalance">Current HECS-HELP Debt</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="loanBalance" class="has-prefix" value="35000" min="0" max="999999" step="500">
+        </div>
+        <div class="range-wrap">
+          <input type="range" id="loanBalanceRange" min="0" max="200000" step="500" value="35000">
+          <div class="range-labels"><span>$0</span><span>$200k</span></div>
         </div>
       </div>
-    </div>
-  </div>
 
-<div class="main-wrapper">
-<div class="container">
-<div class="layout">
+      <div class="section-label">Income</div>
+      <div class="field">
+        <label for="grossIncome">Annual Taxable Income</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="grossIncome" class="has-prefix" value="75000" min="0" max="999999" step="1000">
+        </div>
+        <div class="range-wrap">
+          <input type="range" id="grossIncomeRange" min="0" max="300000" step="1000" value="75000">
+          <div class="range-labels"><span>$0</span><span>$300k</span></div>
+        </div>
+        <div class="field-hint">Use your repayment income — taxable income plus reportable fringe benefits, net investment losses and reportable super contributions.</div>
+      </div>
+      <div class="field">
+        <label for="incomeGrowth">Expected Annual Income Growth</label>
+        <div class="input-wrap">
+          <input type="number" id="incomeGrowth" class="has-suffix" value="3" min="0" max="20" step="0.5">
+          <span class="suffix">%</span>
+        </div>
+      </div>
 
-<!-- ═══ LEFT — INPUTS ═══ -->
-<div>
-  <div class="card">
-    <div class="card-header-row">
-      <h2>Your Details</h2>
-      <button class="btn btn-navy" id="btnReset" type="button">
-        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-        Reset
-      </button>
-    </div>
+      <div class="section-label">Indexation</div>
+      <div class="field">
+        <label for="indexRate">Annual Indexation Rate</label>
+        <div class="input-wrap">
+          <input type="number" id="indexRate" class="has-suffix" value="3.2" min="0" max="15" step="0.1">
+          <span class="suffix">%</span>
+        </div>
+        <div class="field-hint">2025 ATO rate: 3.2% (lower of CPI or WPI). Adjust for your own projection.</div>
+      </div>
 
-    <div class="section-label first">Loan Balance</div>
-    <div class="field">
-      <label for="loanBalance">Current HECS-HELP Debt</label>
-      <div class="input-wrap"><span class="prefix">$</span>
-        <input type="number" id="loanBalance" class="has-prefix" value="35000" min="0" max="999999" step="500">
-      </div>
-      <div class="range-wrap">
-        <input type="range" id="loanBalanceRange" min="0" max="200000" step="500" value="35000">
-        <div class="range-labels"><span>$0</span><span>$200k</span></div>
-      </div>
-    </div>
-
-    <div class="section-label">Income</div>
-    <div class="field">
-      <label for="grossIncome">Annual Taxable Income</label>
-      <div class="input-wrap"><span class="prefix">$</span>
-        <input type="number" id="grossIncome" class="has-prefix" value="75000" min="0" max="999999" step="1000">
-      </div>
-      <div class="range-wrap">
-        <input type="range" id="grossIncomeRange" min="0" max="300000" step="1000" value="75000">
-        <div class="range-labels"><span>$0</span><span>$300k</span></div>
-      </div>
-      <div class="field-hint">Use your repayment income — taxable income plus reportable fringe benefits, net investment losses and reportable super contributions.</div>
-    </div>
-    <div class="field">
-      <label for="incomeGrowth">Expected Annual Income Growth</label>
-      <div class="input-wrap">
-        <input type="number" id="incomeGrowth" class="has-suffix" value="3" min="0" max="20" step="0.5">
-        <span class="suffix">%</span>
+      <div class="section-label">Voluntary Repayments</div>
+      <div class="field">
+        <label for="extraRepay">Additional Voluntary Repayment</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="extraRepay" class="has-prefix" value="0" min="0" max="999999" step="100">
+        </div>
+        <div class="field-hint">Per year, on top of your compulsory repayment.</div>
       </div>
     </div>
+  </div><!-- /left -->
 
-    <div class="section-label">Indexation</div>
-    <div class="field">
-      <label for="indexRate">Annual Indexation Rate</label>
-      <div class="input-wrap">
-        <input type="number" id="indexRate" class="has-suffix" value="3.2" min="0" max="15" step="0.1">
-        <span class="suffix">%</span>
-      </div>
-      <div class="field-hint">2025 ATO rate: 3.2% (lower of CPI or WPI). Adjust for your own projection.</div>
-    </div>
+  <!-- ═══ RIGHT — RESULTS ═══ -->
+  <div>
 
-    <div class="section-label">Voluntary Repayments</div>
-    <div class="field">
-      <label for="extraRepay">Additional Voluntary Repayment</label>
-      <div class="input-wrap"><span class="prefix">$</span>
-        <input type="number" id="extraRepay" class="has-prefix" value="0" min="0" max="999999" step="100">
-      </div>
-      <div class="field-hint">Per year, on top of your compulsory repayment.</div>
-    </div>
-
-  </div>
-</div><!-- /left -->
-
-<!-- ═══ RIGHT — RESULTS ═══ -->
-<div>
-  <div class="card">
-    <h2>Results</h2>
-
-    <div id="belowThreshBanner" class="banner bn-amber" style="display:none">
-      ⚠️ Your income is <strong>below the $67,000 repayment threshold</strong>. No compulsory HECS repayment is required this year — but indexation still applies to your balance.
-    </div>
-    <div id="aboveThreshBanner" class="banner bn-green" style="display:none">
-      ✅ Your income is above the repayment threshold. Compulsory repayments will be withheld by your employer via PAYG.
-    </div>
-
-    <!-- Summary boxes -->
-    <div class="results-grid">
-      <div class="result-box hl">
-        <div class="lbl">Annual Repayment</div>
-        <div class="val" id="rAnnual">—</div>
-      </div>
-      <div class="result-box">
-        <div class="lbl">Monthly Est.</div>
-        <div class="val" id="rMonthly">—</div>
-      </div>
-      <div class="result-box">
-        <div class="lbl">Effective Rate</div>
-        <div class="val" id="rEffRate">—</div>
-      </div>
-      <div class="result-box">
-        <div class="lbl">Payoff In</div>
-        <div class="val" id="rPayoffYrs">—</div>
-      </div>
-      <div class="result-box">
-        <div class="lbl">Total Repaid</div>
-        <div class="val" id="rTotalPaid">—</div>
-      </div>
-      <div class="result-box hl-red">
-        <div class="lbl">Total Indexation</div>
-        <div class="val" id="rTotalIndex">—</div>
+    <!-- Mobile ad -->
+    <div class="mobile-ad-slot">
+      <div class="mobile-ad-inner">
+        <div class="ad-slot-label">Advertisement</div>
+        <ins class="adsbygoogle"
+             style="display:inline-block;max-width:100%;width:300px;height:250px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
     </div>
 
-    <!-- Repayment Breakdown (personal-loan style) -->
-    <div class="section-title">Repayment Breakdown</div>
-    <table class="bd-table">
-      <thead>
-        <tr>
-          <th>Component</th>
-          <th>Annual</th>
-          <th>Monthly</th>
-          <th>Loan Life</th>
-          <th>% of Total</th>
-        </tr>
-      </thead>
-      <tbody id="breakdownBody">
-        <tr><td colspan="5" style="color:var(--txl);font-size:.85rem">Enter your details to see results</td></tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <h2>Results</h2>
 
-    <!-- Chart -->
-    <div class="chart-section">
-      <div class="chart-header">
-        <div class="section-title" style="margin:0">Remaining Loan Balance Over Time</div>
-        <span class="chart-hint">ⓘ Hover to see detail by year</span>
+      <div id="belowThreshBanner" class="warning-banner" style="display:none">
+        ⚠️ Your income is <strong>below the $67,000 repayment threshold</strong>. No compulsory HECS repayment is required this year — but indexation still applies to your balance.
       </div>
-      <div class="chart-wrap">
-        <canvas id="balanceChart" height="220"></canvas>
+      <div id="aboveThreshBanner" class="info-banner" style="display:none">
+        ✅ Your income is above the repayment threshold. Compulsory repayments will be withheld by your employer via PAYG.
       </div>
-      <div class="chart-legend">
+
+      <!-- Summary boxes -->
+      <div class="results-grid">
+        <div class="result-box hl-orange">
+          <div class="lbl">Annual Repayment</div>
+          <div class="val" id="rAnnual">—</div>
+        </div>
+        <div class="result-box">
+          <div class="lbl">Monthly Est.</div>
+          <div class="val" id="rMonthly">—</div>
+        </div>
+        <div class="result-box">
+          <div class="lbl">Effective Rate</div>
+          <div class="val" id="rEffRate">—</div>
+        </div>
+        <div class="result-box">
+          <div class="lbl">Payoff In</div>
+          <div class="val" id="rPayoffYrs">—</div>
+        </div>
+        <div class="result-box">
+          <div class="lbl">Total Repaid</div>
+          <div class="val" id="rTotalPaid">—</div>
+        </div>
+        <div class="result-box hl-red">
+          <div class="lbl">Total Indexation</div>
+          <div class="val" id="rTotalIndex">—</div>
+        </div>
+      </div>
+
+      <!-- Repayment Breakdown -->
+      <div class="section-title">Repayment Breakdown</div>
+      <table class="combined-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Annual</th>
+            <th>Monthly</th>
+            <th>Loan Life</th>
+            <th>% of Total</th>
+          </tr>
+        </thead>
+        <tbody id="breakdownBody">
+          <tr><td colspan="5" style="color:var(--text-light);font-style:italic;text-align:center;padding:18px">Enter your details to see results</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Chart -->
+      <div class="chart-section">
+        <div class="chart-header">
+          <div class="section-title" style="margin:0">Remaining Loan Balance Over Time</div>
+          <span class="chart-hint">&#9432; Hover to see detail by year</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="balanceChart" height="220"></canvas>
+        </div>
+        <div class="chart-legend">
           <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(230,100,20,0.72)"></div>Closing Balance</div>
           <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(229,57,53,0.75)"></div>Indexation Added</div>
           <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(42,157,103,.75)"></div>Annual Repayment</div>
           <div class="chart-legend-item" id="legVoluntary" style="display:none"><div class="chart-swatch" style="background:rgba(63,127,181,.7)"></div>Voluntary Repayment</div>
         </div>
       </div>
-      
-      <!-- Show Schedule button — same pattern as personal loan -->
-    <button class="amort-btn" id="amortToggle" type="button">
-      <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
-      Show Year-by-Year Schedule
-    </button>
 
-    <div id="amortSection" class="hidden">
-      <div class="amort-wrap">
-        <table class="amort-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Year</th>
-              <th>Opening</th>
-              <th>Indexation</th>
-              <th>Compulsory</th>
-              <th id="thVoluntary" style="display:none">Voluntary</th>
-              <th>Closing</th>
-            </tr>
-          </thead>
-          <tbody id="amortBody"></tbody>
+      <!-- Year-by-year schedule -->
+      <button class="amort-btn" id="amortToggle" type="button">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+        Show Year-by-Year Schedule
+      </button>
+
+      <div id="amortSection" class="hidden">
+        <div class="amort-wrap">
+          <table class="amort-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Year</th>
+                <th>Opening</th>
+                <th>Indexation</th>
+                <th>Compulsory</th>
+                <th id="thVoluntary" style="display:none">Voluntary</th>
+                <th>Closing</th>
+              </tr>
+            </thead>
+            <tbody id="amortBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Repayment Thresholds -->
+      <div class="chart-section">
+        <div class="section-title">2025–26 Repayment Thresholds</div>
+        <p style="font-size:.83rem;color:var(--text-light);margin-bottom:10px">From 2025–26, HECS uses a <strong>marginal rate system</strong> — you only pay on income <em>above</em> each threshold. Your active bracket is highlighted. Indexation applied 1 June (2025: 3.2%).</p>
+        <table class="bracket-table">
+          <thead><tr><th>Repayment Income Range</th><th>Rate / Calculation</th></tr></thead>
+          <tbody id="bracketBody"></tbody>
         </table>
       </div>
-    </div>
 
+      <!-- Actions -->
+      <div class="actions-bar">
+        <div class="actions-left">
+          <button class="btn btn-green" id="btnCSV" type="button">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
+            Export Summary CSV
+          </button>
+          <button class="btn btn-green" id="btnAmortCSV" type="button">
+            <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+            Export Schedule CSV
+          </button>
+        </div>
+        <div style="flex:1"></div>
+        <div class="actions-right">
+          <button class="btn btn-navy" id="btnSave" type="button">
+            <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>
+            Save File
+          </button>
+          <button class="btn btn-navy" id="btnStartOver" type="button">
+            <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            Start Over
+          </button>
+        </div>
+      </div>
 
-    <!-- Repayment Thresholds — combined inline -->
-    <div class="chart-section">
-      <div class="section-title">2025–26 Repayment Thresholds</div>
-      <p style="font-size:.83rem;color:var(--txl);margin-bottom:10px">From 2025–26, HECS uses a <strong>marginal rate system</strong> — you only pay on income <em>above</em> each threshold. Your active bracket is highlighted. Indexation applied 1 June (2025: 3.2%).</p>
-      <table class="bracket-table">
-        <thead><tr><th>Repayment Income Range</th><th>Rate / Calculation</th></tr></thead>
-        <tbody id="bracketBody"></tbody>
-      </table>
-    </div>
+      <div class="note">Estimates only. Assumes constant indexation rate and steady income growth. Actual repayments are withheld by your employer via PAYG and reconciled at tax time. Not financial advice — refer to <a href="https://www.ato.gov.au" target="_blank" rel="noopener">ato.gov.au</a> for official figures.</div>
 
-    <!-- Actions bar — inside same card, below schedule -->
-    <div class="actions-bar">
-      <button class="btn btn-green" id="btnCSV" type="button">
-        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
-        Export Summary CSV
-      </button>
-      <button class="btn btn-green" id="btnAmortCSV" type="button">
-        <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
-        Export Schedule CSV
-      </button>
-      <div style="flex:1"></div>
-      <button class="btn btn-navy" id="btnSave" type="button">
-        <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>
-        Save File
-      </button>
-      <button class="btn btn-navy" id="btnStartOver" type="button">
-        <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-        Start Over
-      </button>
-    </div>
+      <!-- Hidden stubs to prevent JS errors -->
+      <button id="ratesToggle" style="display:none"></button>
+      <div id="ratesBody" style="display:none"></div>
 
-    <div class="note">Estimates only. Assumes constant indexation rate and steady income growth. Actual repayments are withheld by your employer via PAYG and reconciled at tax time. Not financial advice — refer to <a href="https://www.ato.gov.au" target="_blank" rel="noopener">ato.gov.au</a> for official figures.</div>
-  </div><!-- /results card -->
+    </div><!-- /results card -->
+  </div><!-- /right -->
 
-    <!-- Hidden stubs to prevent JS errors -->
-    <button id="ratesToggle" style="display:none"></button>
-    <div id="ratesBody" style="display:none"></div>
-
-</div><!-- /right -->
-</div><!-- /layout -->
-</div><!-- /container -->
-</div><!-- /main-wrapper -->
+  </div><!-- /layout -->
+  </div><!-- /container -->
+  </div><!-- /main-wrapper -->
 
   <div class="side-rail right">
     <div class="side-rail-inner">
-      <div class="rail-ad-unit">
-        <div class="rail-ad-label">Advertisement</div>
-        <div class="rail-ad-inner">
-          <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
-               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-        </div>
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
     </div>
   </div>
+
 </div><!-- /page-wrapper -->
 
 <div class="ft"><span>HECS-HELP Calculator &mdash; 2025&ndash;26 ATO Rates &mdash; Estimates Only</span></div>
 
-
-
-  <script src="js/hecs.js"></script>
+<script src="js/hecs.js"></script>
 </body>
 </html>
