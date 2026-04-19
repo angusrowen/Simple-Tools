@@ -4,15 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
 <title>Buy vs Invest Calculator – Australian Finance Tools</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
-  <link rel="stylesheet" href="css/styles.css">
+<!-- Google AdSense -->
+<script>if(window.innerWidth>768 && navigator.maxTouchPoints===0){document.write('<scr'+'ipt async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></scr'+'ipt>');}</script>
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
 <div class="topbar">
   <div class="topbar-logo">
-    <a href="index.html" title="Back to calculators">
-      <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+    <a href="index.html" title="Back to calculators" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#c0392b;border-radius:10px;color:#fff;text-decoration:none">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
     </a>
   </div>
   <div class="topbar-divider"></div>
@@ -20,17 +23,24 @@
     <div class="topbar-title">Buy vs Invest Calculator</div>
     <div class="topbar-desc">Long-term wealth comparison: owning a home vs renting and investing your capital.</div>
   </div>
+  <div class="topbar-right"></div>
 </div>
 
 <div class="page-wrapper">
-  <div class="side-rail left"><div class="side-rail-inner"><div class="rail-ad-unit">
-    <div class="rail-ad-label">Advertisement</div>
-    <div style="padding:8px;display:flex;justify-content:center;min-height:620px">
-      <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+  <div class="side-rail left">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
     </div>
-  </div></div></div>
+  </div>
 
-  <div class="main-wrapper"><div class="container"><div class="layout">
+  <div class="main-wrapper">
+  <div class="container">
+  <div class="layout">
 
   <!-- ══ LEFT PANEL ══ -->
   <div>
@@ -41,12 +51,32 @@
           <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>Reset
         </button>
       </div>
+
       <div class="section-label first">Purchase Price &amp; Deposit</div>
-      <div class="field"><label for="fPrice">Property Purchase Price</label>
-        <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fPrice" class="has-prefix" value="800000" min="0" step="5000"></div></div>
-      <div class="field"><label for="fDeposit">Deposit Amount</label>
-        <div class="input-wrap"><span class="prefix">$</span><input type="number" id="fDeposit" class="has-prefix" value="160000" min="0" step="5000"></div>
-        <div class="field-hint" id="depositHint">20.0% of purchase price — no LMI required</div></div>
+
+      <div class="field">
+        <label for="fPrice">Property Purchase Price</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="fPrice" class="has-prefix" value="800000" min="0" step="5000">
+        </div>
+        <div class="range-wrap">
+          <input type="range" id="priceRange" min="0" max="3000000" step="5000" value="800000">
+          <div class="range-labels"><span>$0</span><span>$3M</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="fDeposit">Deposit Amount</label>
+        <div class="input-wrap"><span class="prefix">$</span>
+          <input type="number" id="fDeposit" class="has-prefix" value="160000" min="0" step="5000">
+        </div>
+        <div class="range-wrap">
+          <input type="range" id="depositRange" min="0" max="1500000" step="5000" value="160000">
+          <div class="range-labels"><span>$0</span><span>$1.5M</span></div>
+        </div>
+        <div class="field-hint" id="depositHint">20.0% of purchase price — no LMI required</div>
+      </div>
+
       <div class="derived-info" id="lmiInfo"><strong>LMI estimated at <span id="lmiAmt">$0</span></strong> — deposit below 20%. Added to loan amount.</div>
 
       <div class="section-label">Upfront Costs (Buying)</div>
@@ -155,7 +185,7 @@
         </div>
         <div class="section-label">Investment CGT on Sale</div>
         <div class="field"><label for="fSellTax">Marginal Tax Rate</label>
-          <select id="fSellTax" style="width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-size:.9rem;color:var(--tx);background:#fffdf8;font-family:inherit;cursor:pointer;box-sizing:border-box">
+          <select id="fSellTax">
             <option value="0">0% — $0 to $18,200</option>
             <option value="19">19% — $18,201 to $45,000</option>
             <option value="32.5" selected>32.5% — $45,001 to $120,000</option>
@@ -169,12 +199,23 @@
   </div>
 
   <!-- ══ RIGHT PANEL ══ -->
-  <div style="min-width:0;overflow:hidden">
+  <div>
+
+    <!-- Mobile ad -->
+    <div class="mobile-ad-slot">
+      <div class="mobile-ad-inner">
+        <div class="ad-slot-label">Advertisement</div>
+        <ins class="adsbygoogle"
+             style="display:inline-block;max-width:100%;width:300px;height:250px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+
     <div class="card">
       <h2>Results</h2>
       <div id="winnerBadge"></div>
 
-      <!-- 8 equal cards in a 4-col grid (2-col on mobile) -->
       <div class="results-grid">
         <div class="result-box hl-green">
           <div class="lbl">Buy: Net Wealth</div>
@@ -218,15 +259,15 @@
 
       <!-- Chart -->
       <div class="chart-section">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px">
-          <div class="section-title">Wealth Comparison Over Time</div>
-          <div style="font-size:.74rem;color:var(--txl);font-style:italic">ℹ Hover for details</div>
+        <div class="chart-header">
+          <div class="section-title" style="margin:0">Wealth Comparison Over Time</div>
+          <div class="chart-hint">&#9432; Hover for details</div>
         </div>
         <div class="chart-wrap"><canvas id="wealthChart"></canvas></div>
         <div class="chart-legend" style="margin-top:10px;margin-bottom:0">
-          <div class="legend-item"><div class="legend-dot" style="background:rgba(42,157,103,1)"></div>Buy: Net Wealth</div>
-          <div class="legend-item"><div class="legend-dot" style="background:rgba(63,127,181,1)"></div>Rent &amp; Invest: Net Wealth</div>
-          <div class="legend-item"><div class="legend-dot" style="background:rgba(232,168,56,1)"></div>Property Value</div>
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(42,157,103,1)"></div>Buy: Net Wealth</div>
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(63,127,181,1)"></div>Rent &amp; Invest: Net Wealth</div>
+          <div class="chart-legend-item"><div class="chart-swatch" style="background:rgba(232,168,56,1)"></div>Property Value</div>
         </div>
       </div>
 
@@ -234,20 +275,22 @@
       <button type="button" class="amort-btn" id="amortToggle">
         <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Show Year-by-Year Schedule
       </button>
-      <div id="amortSection" style="display:none;max-width:100%;overflow:hidden">
+      <div id="amortSection" style="display:none">
         <div class="amort-wrap">
           <table class="amort-table">
             <thead><tr>
               <th>Yr</th><th>Property Value</th><th>Buy Net Wealth</th>
               <th>Invest Portfolio</th><th>Rent+Inv Wealth</th><th>Cash Flow</th><th>Ahead By</th>
             </tr></thead>
-            <tbody id="compBody"><tr><td colspan="7" style="color:var(--txl);font-style:italic;text-align:center;padding:18px">Enter details to see results</td></tr></tbody>
+            <tbody id="compBody">
+              <tr><td colspan="7" style="color:var(--text-light);font-style:italic;text-align:center;padding:18px">Enter details to see results</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Scenario Summary (simple) -->
-      <div class="section-title" style="margin-top:20px;padding-top:18px;border-top:1px solid var(--bdr)">Scenario Summary</div>
+      <!-- Scenario Summary -->
+      <div class="section-title" style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border)">Scenario Summary</div>
       <table class="combined-table">
         <thead><tr><th>Item</th><th>Buy Scenario</th><th>Rent &amp; Invest Scenario</th></tr></thead>
         <tbody id="assumptBody"></tbody>
@@ -274,25 +317,29 @@
         </div>
       </div>
 
-      <div class="disclaimer">Estimates only. Assumes constant growth rates. Property net wealth = property value minus remaining mortgage (owner-occupied, no CGT). The invest scenario reinvests the annual cash flow difference each year — if buying is cheaper in a given year, that gap is drawn from the portfolio. Investment returns shown after estimated CGT where selected. Not personal financial advice.</div>
+      <div class="note">Estimates only. Assumes constant growth rates. Property net wealth = property value minus remaining mortgage (owner-occupied, no CGT). The invest scenario reinvests the annual cash flow difference each year — if buying is cheaper in a given year, that gap is drawn from the portfolio. Investment returns shown after estimated CGT where selected. Not personal financial advice.</div>
     </div>
   </div>
 
-  </div></div></div>
+  </div><!-- /layout -->
+  </div><!-- /container -->
+  </div><!-- /main-wrapper -->
 
-  <div class="side-rail right"><div class="side-rail-inner"><div class="rail-ad-unit">
-    <div class="rail-ad-label">Advertisement</div>
-    <div style="padding:8px;display:flex;justify-content:center;min-height:620px">
-      <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+  <div class="side-rail right">
+    <div class="side-rail-inner">
+      <div class="rail-ad-label">Advertisement</div>
+      <div class="rail-ad-inner">
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
     </div>
-  </div></div></div>
-</div>
+  </div>
+
+</div><!-- /page-wrapper -->
 
 <div class="ft"><span>&copy; 2025 Australian Finance Tools &nbsp;&middot;&nbsp; <a href="Privacy">Privacy</a></span></div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-
-
-  <script src="js/buy-vs-invest.js"></script>
+<script src="js/buy-vs-invest.js"></script>
 </body>
 </html>
