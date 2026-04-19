@@ -1,4 +1,3 @@
-
 (function() {
   'use strict';
 
@@ -104,10 +103,8 @@
     var ctx    = canvas.getContext('2d');
     if (chartObj) { chartObj.destroy(); chartObj = null; }
 
-    var P    = parseFloat(el('fLoanAmt').value) || 0;
-
-    var lastIdx  = -1;
-    var rafBusy  = false;
+    var P = parseFloat(el('fLoanAmt').value) || 0;
+    var lastIdx = -1, rafBusy = false;
 
     var splitPlugin = {
       id: 'split',
@@ -132,23 +129,12 @@
       }
     };
 
-    var loanAmt = parseFloat(el('fLoanAmt').value) || 0;
     chartObj = new Chart(ctx, {
       type: 'line',
       data: {
         labels: cd.labels,
         datasets: [
-          {
-            label: 'Balance',
-            data:  cd.debt,
-            borderColor: '#e6641e',
-            backgroundColor: makeGrad(ctx, 0),
-            fill: 'origin',
-            tension: 0.35,
-            pointRadius: 1,
-            pointHoverRadius: 5,
-            borderWidth: 2.5
-          },
+          { label:'Balance', data:cd.debt,    borderColor:'#e6641e', backgroundColor:makeGrad(ctx,0), fill:'origin', tension:0.35, pointRadius:1, pointHoverRadius:5, borderWidth:2.5 },
           { label:'_p', data:cd.debt,    borderWidth:0, pointRadius:0, pointHoverRadius:0, backgroundColor:'transparent', borderColor:'transparent', fill:false },
           { label:'_i', data:cd.annInt,  borderWidth:0, pointRadius:0, pointHoverRadius:0, backgroundColor:'transparent', borderColor:'transparent', fill:false },
           { label:'_c', data:cd.cumPaid, borderWidth:0, pointRadius:0, pointHoverRadius:0, backgroundColor:'transparent', borderColor:'transparent', fill:false }
@@ -160,11 +146,7 @@
         plugins: {
           legend: { display:false },
           tooltip: {
-            backgroundColor: 'rgba(30,20,50,0.92)',
-            titleColor: '#fff',
-            bodyColor:  'rgba(255,255,255,0.88)',
-            padding: 11,
-            cornerRadius: 8,
+            backgroundColor:'rgba(30,20,50,0.92)', titleColor:'#fff', bodyColor:'rgba(255,255,255,0.88)', padding:11, cornerRadius:8,
             callbacks: {
               label: function(item) {
                 var l = item.dataset.label;
@@ -189,12 +171,7 @@
         },
         scales: {
           x: { grid:{display:false}, ticks:{font:{size:10}, color:'#6c7a89', maxTicksLimit:16} },
-          y: {
-            min: 0,
-            max: P,
-            grid: { color:'rgba(0,0,0,.05)' },
-            ticks: { font:{size:10}, color:'#6c7a89', callback: function(v){ return '$'+(v/1000).toFixed(0)+'k'; } }
-          }
+          y: { min:0, max:P, grid:{color:'rgba(0,0,0,.05)'}, ticks:{font:{size:10}, color:'#6c7a89', callback: function(v){ return '$'+(v/1000).toFixed(0)+'k'; }} }
         },
         animation: { duration:350 }
       },
@@ -214,47 +191,42 @@
     var ltype  = getLType();
     var ioPer  = parseFloat(el('fIOPer').value)       || 0;
     var extra  = parseFloat(el('fExtra').value)       || 0;
-    var offset = parseFloat(el('fOffset').value) || 0;
-    var estFee = parseFloat(el('fEstFee').value) || 0;
-    var mFee   = parseFloat(el('fMFee').value)   || 0;
+    var offset = parseFloat(el('fOffset').value)      || 0;
+    var estFee = parseFloat(el('fEstFee').value)      || 0;
+    var mFee   = parseFloat(el('fMFee').value)        || 0;
     var startV = el('fStart').value;
 
     if (!P || !rate || !term) { clearAll(); return; }
 
-    var r   = rate / 100 / n;
+    var r = rate / 100 / n;
 
-    // Base schedule (no extra, no offset, P&I)
     var baseS   = buildSched(P, rate, term, freq, 0, 0, 'pi', 0);
-    // Actual schedule
     var actualS = buildSched(P, rate, term, freq, extra, offset, ltype, ioPer);
 
     savedRows = actualS.rows;
 
-    var totInt   = actualS.totalInterest;
+    var totInt     = actualS.totalInterest;
     var mFeePerPer = freq==='monthly' ? mFee : freq==='fortnightly' ? mFee*12/26 : mFee*12/52;
     var totMFees   = mFee * term * 12;
     var totalFees  = estFee + totMFees;
     var totRepay   = P + totInt;
     var totCost    = totRepay + totalFees;
-    var actPers  = actualS.rows.length;
-    var basePers = baseS.rows.length;
-    var baseInt  = baseS.totalInterest;
+    var actPers    = actualS.rows.length;
+    var basePers   = baseS.rows.length;
+    var baseInt    = baseS.totalInterest;
 
-    // Repayment amounts
     var piPers = term * n - (ltype === 'io' ? ioPer * n : 0);
     var piPmt  = r === 0 ? P / Math.max(piPers, 1) : P * (r * Math.pow(1+r,piPers)) / (Math.pow(1+r,piPers)-1);
     var ioPmt  = P * r;
     var basePmt= r === 0 ? P / (term*n) : P * (r * Math.pow(1+r,term*n)) / (Math.pow(1+r,term*n)-1);
     var dispPmt= ltype === 'io' ? ioPmt : basePmt;
 
-    // ── Key metrics
     el('rRepayLbl').textContent = fLbl(freq) + ' Repayment';
     el('rRepay').textContent    = d2(dispPmt);
     el('rTotal').textContent    = d0(totRepay);
     el('rInterest').textContent = d0(totInt);
 
     if (totalFees > 0) {
-      // Comparison rate via Newton-Raphson IRR
       function compRate() {
         var pmtAdj = dispPmt + mFeePerPer;
         var cf = [-(P - estFee)];
@@ -288,56 +260,55 @@
       el('ioMetrics').classList.add('hidden');
     }
 
-    // ── Banners
-    var saved = baseInt - totInt;
-    var tSaved= basePers - actPers;
+    // ── Banners — use classList
+    var saved  = baseInt - totInt;
+    var tSaved = basePers - actPers;
     if (extra > 0 && saved > 100) {
-      el('bannerExtra').style.display = 'block';
-      el('bnExtraAmt').textContent    = d2(extra);
-      el('bnExtraSaved').textContent  = d0(saved);
-      el('bnExtraTime').textContent   = fmtTime(tSaved, freq);
+      el('bannerExtra').classList.remove('hidden');
+      el('bnExtraAmt').textContent   = d2(extra);
+      el('bnExtraSaved').textContent = d0(saved);
+      el('bnExtraTime').textContent  = fmtTime(tSaved, freq);
     } else {
-      el('bannerExtra').style.display = 'none';
+      el('bannerExtra').classList.add('hidden');
     }
 
     if (offset > 0) {
       var noOff  = buildSched(P, rate, term, freq, extra, 0, 'pi', 0);
       var oSaved = noOff.totalInterest - totInt;
       var oTime  = noOff.rows.length - actPers;
-      el('bannerOffset').style.display = 'block';
-      el('bnOffAmt').textContent       = d0(offset);
-      el('bnOffSaved').textContent     = d0(oSaved);
-      el('bnOffTime').textContent      = fmtTime(oTime, freq);
+      el('bannerOffset').classList.remove('hidden');
+      el('bnOffAmt').textContent    = d0(offset);
+      el('bnOffSaved').textContent  = d0(oSaved);
+      el('bnOffTime').textContent   = fmtTime(oTime, freq);
     } else {
-      el('bannerOffset').style.display = 'none';
+      el('bannerOffset').classList.add('hidden');
     }
 
     if (startV) {
-      var sp     = startV.split('-');
-      var sDate  = new Date(parseInt(sp[0]), parseInt(sp[1])-1, 1);
+      var sp    = startV.split('-');
+      var sDate = new Date(parseInt(sp[0]), parseInt(sp[1])-1, 1);
       var payoff;
-      if      (freq === 'monthly')      { payoff = new Date(sDate); payoff.setMonth(payoff.getMonth() + actPers); }
-      else if (freq === 'fortnightly')  { payoff = new Date(sDate.getTime() + actPers * 14 * 86400000); }
-      else                              { payoff = new Date(sDate.getTime() + actPers * 7  * 86400000); }
-      el('bannerPayoff').style.display = 'block';
-      el('bnPayoff').textContent       = payoff.toLocaleDateString('en-AU', {month:'long', year:'numeric'});
-      el('bnPayoffNote').textContent   = tSaved > 0 ? ' That is ' + fmtTime(tSaved, freq) + ' earlier than standard.' : '';
+      if      (freq === 'monthly')     { payoff = new Date(sDate); payoff.setMonth(payoff.getMonth() + actPers); }
+      else if (freq === 'fortnightly') { payoff = new Date(sDate.getTime() + actPers * 14 * 86400000); }
+      else                             { payoff = new Date(sDate.getTime() + actPers * 7  * 86400000); }
+      el('bannerPayoff').classList.remove('hidden');
+      el('bnPayoff').textContent     = payoff.toLocaleDateString('en-AU', {month:'long', year:'numeric'});
+      el('bnPayoffNote').textContent = tSaved > 0 ? ' That is ' + fmtTime(tSaved, freq) + ' earlier than standard.' : '';
     } else {
-      el('bannerPayoff').style.display = 'none';
+      el('bannerPayoff').classList.add('hidden');
     }
 
-    // ── Breakdown table (PL-style)
-    function trow(lbl, pp, life, rowStyle) {
+    // ── Breakdown table
+    function trow(lbl, pp, life) {
       var mo  = freq==='weekly' ? pp*52/12 : freq==='fortnightly' ? pp*26/12 : pp;
       var ann = mo * 12;
-      var pct = totCost > 0 ? (life/totCost*100) : 0;
-      var s   = rowStyle ? ' style="'+rowStyle+'"' : '';
-      return '<tr'+s+'><td>'+lbl+'</td>'
+      var pc  = totCost > 0 ? (life/totCost*100) : 0;
+      return '<tr><td>'+lbl+'</td>'
            + '<td style="text-align:right">'+d2(pp)+'</td>'
            + '<td style="text-align:right">'+d2(mo)+'</td>'
            + '<td style="text-align:right">'+d0(ann)+'</td>'
            + '<td style="text-align:right">'+d0(life)+'</td>'
-           + '<td style="text-align:right">'+pct.toFixed(1)+'%</td></tr>';
+           + '<td style="text-align:right">'+pc.toFixed(1)+'%</td></tr>';
     }
     var rows = '';
     rows += trow('Minimum Repayment', dispPmt, dispPmt * actPers);
@@ -353,11 +324,11 @@
     if (offset > 0) {
       var noOff2 = buildSched(P, rate, term, freq, extra, 0, 'pi', 0);
       var oSv2   = noOff2.totalInterest - totInt;
-      rows += '<tr style="background:var(--bll)"><td style="color:var(--bl);font-weight:600">&#8627; Offset Saving ('+d0(offset)+')</td>'
+      rows += '<tr style="background:var(--blue-light)"><td style="color:var(--blue);font-weight:600">&#8627; Offset Saving ('+d0(offset)+')</td>'
             + '<td style="text-align:right">—</td><td style="text-align:right">—</td>'
-            + '<td style="text-align:right;color:var(--bl)">'+d0(oSv2/term)+'/yr</td>'
-            + '<td style="text-align:right;color:var(--bl)">&#8722;'+d0(oSv2)+'</td>'
-            + '<td style="text-align:right;color:var(--bl)">'+(oSv2/noOff2.totalInterest*100).toFixed(1)+'% less</td></tr>';
+            + '<td style="text-align:right;color:var(--blue)">'+d0(oSv2/term)+'/yr</td>'
+            + '<td style="text-align:right;color:var(--blue)">&#8722;'+d0(oSv2)+'</td>'
+            + '<td style="text-align:right;color:var(--blue)">'+(oSv2/noOff2.totalInterest*100).toFixed(1)+'% less</td></tr>';
     }
     rows += '<tr class="total-row"><td>Total Cost of Loan</td>'
           + '<td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td>'
@@ -366,10 +337,8 @@
     el('tBody').innerHTML = rows;
 
     // ── Chart
-    var cd = buildChartArrays(actualS.rows, P, term, freq);
-    drawChart(cd);
+    drawChart(buildChartArrays(actualS.rows, P, term, freq));
 
-    // Rebuild amort if visible
     if (!el('amortSection').classList.contains('hidden')) renderAmort();
   }
 
@@ -378,8 +347,8 @@
     el('rRepay').textContent    = '—';
     el('rTotal').textContent    = '—';
     el('rInterest').textContent = '—';
-    el('tBody').innerHTML = '<tr><td colspan="6" style="color:var(--txl);font-style:italic;text-align:center;padding:18px">Enter loan details to see results</td></tr>';
-    ['bannerExtra','bannerOffset','bannerPayoff'].forEach(function(id){ el(id).style.display='none'; });
+    el('tBody').innerHTML = '<tr><td colspan="6" style="color:var(--text-light);font-style:italic;text-align:center;padding:18px">Enter loan details to see results</td></tr>';
+    ['bannerExtra','bannerOffset','bannerPayoff'].forEach(function(id){ el(id).classList.add('hidden'); });
     if (chartObj) { chartObj.destroy(); chartObj = null; }
     el('amortBody').innerHTML = '';
   }
@@ -412,9 +381,9 @@
       var lbl = unit + ' ' + (i+1);
       if (sDate) {
         var d;
-        if      (freq==='monthly')      { d=new Date(sDate); d.setMonth(d.getMonth()+i); }
-        else if (freq==='fortnightly')  { d=new Date(sDate.getTime()+i*14*86400000); }
-        else                            { d=new Date(sDate.getTime()+i*7*86400000); }
+        if      (freq==='monthly')     { d=new Date(sDate); d.setMonth(d.getMonth()+i); }
+        else if (freq==='fortnightly') { d=new Date(sDate.getTime()+i*14*86400000); }
+        else                           { d=new Date(sDate.getTime()+i*7*86400000); }
         lbl = d.toLocaleDateString('en-AU',{month:'short',year:'numeric'});
       }
       html += '<tr>'
@@ -436,7 +405,6 @@
     var P    = parseFloat(el('fLoanAmt').value)||0;
     var rate = parseFloat(el('fRate').value)||0;
     var term = parseFloat(el('fTerm').value)||0;
-    var freq = getFreq();
     var lines= ['Loan Amount,'+P,'Interest Rate,'+rate+'%','Loan Term,'+term+' years','','Component,Per Period,Monthly,Annual,Loan Life'];
     el('tBody').querySelectorAll('tr').forEach(function(tr){
       var cells=[]; tr.querySelectorAll('td').forEach(function(td){ cells.push('"'+td.textContent.trim()+'"'); });
@@ -460,9 +428,9 @@
       var lbl = unit+' '+(i+1);
       if (sDate) {
         var d;
-        if      (freq==='monthly')      { d=new Date(sDate); d.setMonth(d.getMonth()+i); }
-        else if (freq==='fortnightly')  { d=new Date(sDate.getTime()+i*14*86400000); }
-        else                            { d=new Date(sDate.getTime()+i*7*86400000); }
+        if      (freq==='monthly')     { d=new Date(sDate); d.setMonth(d.getMonth()+i); }
+        else if (freq==='fortnightly') { d=new Date(sDate.getTime()+i*14*86400000); }
+        else                           { d=new Date(sDate.getTime()+i*7*86400000); }
         lbl=d.toLocaleDateString('en-AU',{month:'short',year:'numeric'});
       }
       cumI+=row.interest; cumP+=row.principal+row.extra;
@@ -501,29 +469,22 @@
   document.addEventListener('DOMContentLoaded', function() {
     initCollapsible();
 
-    // Set defaults
     var t = new Date();
-    el('fStart').value    = t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0');
-    el('fLoanAmt').value  = '500000';
-    el('fRate').value     = '6.00';
-    el('fTerm').value     = '30';
+    el('fStart').value   = t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0');
+    el('fLoanAmt').value = '500000';
+    el('fRate').value    = '6.00';
+    el('fTerm').value    = '30';
     calculate();
 
     // Loan amount slider sync
     (function() {
       var ni = el('fLoanAmt'), sr = el('loanRange');
       if (ni && sr) {
-        ni.addEventListener('input', function() {
-          sr.value = Math.min(parseFloat(ni.value) || 0, 3000000);
-        });
-        sr.addEventListener('input', function() {
-          ni.value = sr.value;
-          calculate();
-        });
+        ni.addEventListener('input', function() { sr.value = Math.min(parseFloat(ni.value) || 0, 3000000); });
+        sr.addEventListener('input', function() { ni.value = sr.value; calculate(); });
       }
     })();
 
-    // Input events
     ['fLoanAmt','fRate','fTerm','fExtra','fOffset','fIOPer','fStart','fEstFee','fMFee']
       .forEach(function(id){ el(id).addEventListener('input', calculate); });
 
@@ -534,9 +495,18 @@
     el('rPI').addEventListener('change', function() { el('ioBlock').classList.add('hidden');    calculate(); });
 
     el('btnReset1').addEventListener('click', doReset);
-    el('btnReset2').addEventListener('click', doReset);
+    el('btnStartOver').addEventListener('click', doReset);
     el('btnCSV').addEventListener('click', exportCSV);
     el('btnAmortCSV').addEventListener('click', exportAmortCSV);
+
+    el('btnSaveSnapshot').addEventListener('click', function() {
+      var blob = new Blob([document.documentElement.outerHTML], {type:'text/html;charset=utf-8'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      var d = new Date();
+      a.download = 'home-loan-calculator-' + d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + '.html';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    });
 
     el('amortBtn').addEventListener('click', function() {
       var sec  = el('amortSection');
@@ -547,10 +517,3 @@
   });
 
 })();
-
-  document.getElementById('btnSaveSnapshot').addEventListener('click',function(){
-    var blob=new Blob([document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
-    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
-    var d=new Date;a.download='home-loan-calculator-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-  });

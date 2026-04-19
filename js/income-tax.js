@@ -1,4 +1,3 @@
-
 // ─── Formatters ────────────────────────────────────────────────────────────
 function fmt(n){var a=Math.abs(n);var s=a.toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});return(n<0?'-$':'$')+s;}
 function fmtW(n){return '$'+Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:0,maximumFractionDigits:0});}
@@ -38,7 +37,7 @@ function getSecondJobIncome(){
   var sjHourlyRate=parseFloat(document.getElementById('sjHourlyRate').value)||0;
   var sjHours=parseFloat(document.getElementById('sjHours').value)||0;
   var sjWeeks=parseFloat(document.getElementById('sjWeeks').value)||0;
-  if(sjSalary===0 && (sjHourlyRate===0 || sjHours===0 || sjWeeks===0)) return 0;  // No data entered
+  if(sjSalary===0 && (sjHourlyRate===0 || sjHours===0 || sjWeeks===0)) return 0;
   var income;
   if(method==='hourly'){
     income=sjHourlyRate*sjHours*sjWeeks;
@@ -88,14 +87,13 @@ function calcSAPTO(income,fy,status){
   return Math.max(0,s.max-(income-s.cutIn)*s.max/(s.cutOut-s.cutIn));
 }
 function calcFTB(fy,under13,t13to15,t16to19,familyIncome){
-  var ftbA=fy.ftbA;var total=0;
+  var ftbA=fy.ftbA;
   var maxA=(under13*ftbA.rateUnder13)+(t13to15*ftbA.rate13to15)+(t16to19*ftbA.rate16to19);
   var base=(under13+t13to15+t16to19)*ftbA.baseRatePerChild;
   var reduced=maxA;
   if(familyIncome>ftbA.incomeThreshold2)reduced=Math.max(base,maxA-(familyIncome-ftbA.incomeThreshold2)*ftbA.taperRate2);
   else if(familyIncome>ftbA.incomeThreshold1)reduced=Math.max(base,maxA-(familyIncome-ftbA.incomeThreshold1)*ftbA.taperRate1);
-  total=Math.max(0,reduced);
-  return total;
+  return Math.max(0,reduced);
 }
 
 // ─── Visibility ─────────────────────────────────────────────────────────────
@@ -104,7 +102,8 @@ function syncVisibility(){
   document.getElementById('annualField').classList.toggle('hidden',hourly);
   document.getElementById('hourlyFields').classList.toggle('hidden',!hourly);
   var superInc=document.getElementById('superYes').checked;
-  var di=document.getElementById('derivedInfo'); if(di) di.style.display=superInc?'block':'none';
+  var di=document.getElementById('derivedInfo');
+  if(di){if(superInc)di.classList.remove('hidden');else di.classList.add('hidden');}
   var pt=document.getElementById('basisPart').checked;
   document.getElementById('partTimeFields').classList.toggle('hidden',!pt);
   document.getElementById('ptBadge').classList.toggle('hidden',!pt);
@@ -120,7 +119,7 @@ function syncVisibility(){
   document.getElementById('sjHourlyFields').classList.toggle('hidden',!sjHourly);
   var sjPart=document.getElementById('sjBasisPart')&&document.getElementById('sjBasisPart').checked;
   var sjPTF=document.getElementById('sjPartTimeFields');
-  if(sjPTF) sjPTF.classList.toggle('hidden',!sjPart);
+  if(sjPTF)sjPTF.classList.toggle('hidden',!sjPart);
   var showBonus=document.getElementById('showBonus').checked;
   document.getElementById('bonusWrap').classList.toggle('hidden',!showBonus);
   var showExtraTax=document.getElementById('showExtraTax')&&document.getElementById('showExtraTax').checked;
@@ -153,21 +152,25 @@ function calculate(){
     superAmt=baseSalary*superRate;
     document.getElementById('fteFraction').textContent=prorataFraction.toFixed(4);
     document.getElementById('prorataSalary').textContent=fmtW(baseSalary);
-    document.getElementById('prorataInfo').style.display='block';
-  } else {document.getElementById('prorataInfo').style.display='none';}
+    document.getElementById('prorataInfo').classList.remove('hidden');
+  } else {
+    document.getElementById('prorataInfo').classList.add('hidden');
+  }
   if(isSuperInc()){document.getElementById('derivedSalary').textContent=fmtW(baseSalary);document.getElementById('derivedSuper').textContent=fmtW(superAmt);}
-  if(isHourly()){document.getElementById('hourlyAnnual').textContent=fmtW(inputSalary);document.getElementById('hourlyDerived').style.display='block';}
-  else{document.getElementById('hourlyDerived').style.display='none';}
+  if(isHourly()){document.getElementById('hourlyAnnual').textContent=fmtW(inputSalary);document.getElementById('hourlyDerived').classList.remove('hidden');}
+  else{document.getElementById('hourlyDerived').classList.add('hidden');}
   // SG cap
   var sgMaxAnnual=fy.sgMaxQuarter*4;
   var sgCapBanner=document.getElementById('sgCapBanner');
   if(baseSalary>sgMaxAnnual){
     var cappedSuper=sgMaxAnnual*superRate;
     document.getElementById('sgCapDetail').textContent='Super capped at '+fmtW(cappedSuper)+'/yr based on max earnings base.';
-    sgCapBanner.style.display='block';
+    sgCapBanner.classList.remove('hidden');
     superAmt=cappedSuper;
-  } else {sgCapBanner.style.display='none';}
-  // add second job income
+  } else {
+    sgCapBanner.classList.add('hidden');
+  }
+  // second job income
   var secondJobIncome=getSecondJobIncome();
   var sjSuperRate=getSJSuperRate();
   var sjSalSac=getSJSalSac();
@@ -216,8 +219,10 @@ function calculate(){
   if(totalConcessional>fy.concessionalCap){
     document.getElementById('capWarningTitle').textContent='Concessional cap exceeded by '+fmtW(totalConcessional-fy.concessionalCap);
     document.getElementById('capWarningDetail').textContent='Total concessional contributions of '+fmtW(totalConcessional)+' exceed the '+fmtW(fy.concessionalCap)+' cap. Excess is taxed at marginal rate.';
-    capWarning.style.display='block';
-  } else {capWarning.style.display='none';}
+    capWarning.classList.remove('hidden');
+  } else {
+    capWarning.classList.add('hidden');
+  }
   // div293
   var div293=0;
   var totalInc=grossTaxable+superAmt;
@@ -309,19 +314,17 @@ function calculate(){
   addRate('Concessional Cap',fmtW(fy.concessionalCap));
   addRate('Medicare Levy Threshold',fmtW(fy.medicareLower)+' – '+fmtW(fy.medicareUpper));
   addRate('Medicare Levy','2.0% (resident)');
-  if(document.getElementById('helpDebtYes').checked) addRate('HELP Repayment Method',fy.helpShort);
-  if(totalInc>fy.div293Threshold) addRate('Div 293 Tax (applied)',fmtW(div293));
-  if(baseSalary>fy.sgMaxQuarter*4) addRate('SG Max Earnings Base',fmtW(fy.sgMaxQuarter*4)+'/yr');
-  if(totalConcessional>fy.concessionalCap) addRate('Concessional Excess',fmtW(totalConcessional-fy.concessionalCap));
+  if(document.getElementById('helpDebtYes').checked)addRate('HELP Repayment Method',fy.helpShort);
+  if(totalInc>fy.div293Threshold)addRate('Div 293 Tax (applied)',fmtW(div293));
+  if(baseSalary>fy.sgMaxQuarter*4)addRate('SG Max Earnings Base',fmtW(fy.sgMaxQuarter*4)+'/yr');
+  if(totalConcessional>fy.concessionalCap)addRate('Concessional Excess',fmtW(totalConcessional-fy.concessionalCap));
   document.getElementById('ratesYear').textContent=fy.label;
-  // update pie
   updatePie(netAnnual,incomeTax+medicare+mls+(extraTax*freq),help,superAmt+(secondJobIncome>0?sjSuperAmt:0));
 }
 
 // ─── Pie Chart ───────────────────────────────────────────────────────────────
 var payChart=null;
 function updatePie(takeHome,tax,helpAmt,superAmt){
-  // tax already excludes HELP (passed separately), we show HELP as its own slice
   var hasHelp=helpAmt>0;
   var data,labels,colors;
   if(hasHelp){
@@ -334,7 +337,6 @@ function updatePie(takeHome,tax,helpAmt,superAmt){
     colors=['#2a9d67','#e53935','#3f7fb5'];
   }
   var total=data.reduce(function(a,b){return a+b;},0)||1;
-  // legend
   document.getElementById('pieHome').textContent='$'+Math.round(Math.max(0,takeHome)).toLocaleString('en-AU');
   document.getElementById('pieTax').textContent='$'+Math.round(Math.max(0,tax)).toLocaleString('en-AU');
   document.getElementById('pieSuper').textContent='$'+Math.round(Math.max(0,superAmt)).toLocaleString('en-AU');
@@ -343,7 +345,7 @@ function updatePie(takeHome,tax,helpAmt,superAmt){
   document.getElementById('pieSuperPct').textContent=((Math.max(0,superAmt)/total)*100).toFixed(1)+'%';
   var helpRow=document.getElementById('pieHelpRow');
   if(helpRow){
-    helpRow.style.display=hasHelp?'grid':'none';
+    if(hasHelp)helpRow.classList.remove('hidden');else helpRow.classList.add('hidden');
     document.getElementById('pieHelp').textContent='$'+Math.round(helpAmt).toLocaleString('en-AU');
     document.getElementById('pieHelpPct').textContent=((helpAmt/total)*100).toFixed(1)+'%';
   }
@@ -367,8 +369,6 @@ function updatePie(takeHome,tax,helpAmt,superAmt){
 // ─── FY Change ───────────────────────────────────────────────────────────────
 function onFYChange(){
   var fy=getFY();
-  
-  
   document.getElementById('superRate').value=fy.superDefault;
   document.getElementById('sjSuperRate').value=fy.superDefault;
   calculate();
@@ -388,7 +388,6 @@ function resetAll(){
   document.getElementById('showBonus').checked=false;
   document.getElementById('superRate').value='12.0';
   document.getElementById('salSac').value='';
-  document.querySelector('input[name="freqR"]:checked').value='26';
   document.getElementById('residency').value='resident';
   document.getElementById('helpDebtYes').checked=false;
   document.getElementById('tfnYes').checked=false;
@@ -464,7 +463,7 @@ function saveHTML(){
   h+='.bracket-active td{color:#22313f}.bracket-inactive td{color:#6c7a89}.lw{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}.st{font-size:.85rem;font-weight:700;margin:0 0 8px;color:#2d465b}';
   h+='.stamp{font-size:.78rem;color:#6c7a89;margin-top:16px;padding-top:12px;border-top:1px solid #d7e1ea;line-height:1.5}';
   h+='@media print{body{background:#fff}.ct{padding:16px}.cd{box-shadow:none;break-inside:avoid}}@media(max-width:800px){.sg{grid-template-columns:1fr 1fr}.lw{grid-template-columns:1fr}}';
-  h+='<\/style>e></head><body>';
+  h+='</style></head><body>';
   h+='<div class="hd"><div class="hd-t">Income Tax Calculation Record</div><div class="hd-d">Generated: '+dateStr+'</div></div>';
   h+='<div class="ct"><div class="cd"><h2>Results Summary</h2><div class="sg">';
   h+='<div class="sb hl"><div class="lb">Take-Home Pay ('+freqLabel+')</div><div class="vl">'+takeHome+'</div></div>';
@@ -481,30 +480,25 @@ function saveHTML(){
   var link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='tax-calculation-'+fy.label.replace(/\s/g,'-')+'-'+now.toISOString().slice(0,10)+'.html';link.click();URL.revokeObjectURL(link.href);
 }
 
-// ─── Event Listeners & Init ──────────────────────────────────────────────────
-
+// ─── Collapsible ─────────────────────────────────────────────────────────────
 function toggleAdditionalOptions(forceState){
   var btn=document.getElementById('additionalOptionsToggle');
   var body=document.getElementById('additionalOptionsBody');
   if(!btn||!body) return;
-  var isOpen = btn.getAttribute('aria-expanded')==='true';
-  var open = forceState !== undefined ? forceState : !isOpen;
-  // If user clicked (no forceState), mark as manually toggled
-  if(forceState === undefined) _userToggledOptions = true;
-  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  body.classList.toggle('collapsed', !open);
+  var isOpen=btn.getAttribute('aria-expanded')==='true';
+  var open=forceState!==undefined?forceState:!isOpen;
+  if(forceState===undefined)_userToggledOptions=true;
+  btn.setAttribute('aria-expanded',open?'true':'false');
+  body.classList.toggle('collapsed',!open);
 }
-var _userToggledOptions = false;
+var _userToggledOptions=false;
 function setCollapsibleByViewport(){
-  // Only auto-set if user hasn't manually toggled
   if(_userToggledOptions) return;
-  // portrait or narrow = collapse; landscape/desktop = open
-  var portrait = window.innerWidth < window.innerHeight || window.innerWidth < 900;
+  var portrait=window.innerWidth<window.innerHeight||window.innerWidth<900;
   toggleAdditionalOptions(!portrait);
 }
-// NO resize listener — keyboard open/close on mobile triggers resize
-// and would auto-collapse sections the user intentionally opened
 
+// ─── Event Listeners & Init ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',function(){
   // Salary slider sync
   (function(){
@@ -514,8 +508,6 @@ document.addEventListener('DOMContentLoaded',function(){
       sr.addEventListener('input',function(){si.value=sr.value;calculate();});
     }
   })();
-  // Pay frequency radio listeners
-  // Second job pay frequency radios
   ['sjFreqFortnightly','sjFreqWeekly','sjFreqMonthly'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
   });
@@ -523,7 +515,6 @@ document.addEventListener('DOMContentLoaded',function(){
     var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
   });
   setCollapsibleByViewport();
-  // number/select inputs
   ['salary','hourlyRate','hourlyHours','hourlyWeeks','superRate','salSac','extraTax','purchasedLeaveWeeks','generalSalSacAmt','bonus','actualHours','fteHours','ftbUnder13','ftb13to15','ftb16to19','ftbFamilyIncome','sjSalary','sjHourlyRate','sjHours','sjWeeks','sjSuperRate','sjSalSac','sjActualHours','sjFteHours'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.addEventListener('input',calculate);
   });
@@ -536,5 +527,10 @@ document.addEventListener('DOMContentLoaded',function(){
   ['showPurchasedLeave_sw','showGeneralSalSac_sw','seniorsOffset_sw','ftbEnabled_sw','mlsEnabled_sw','hasSecondJob_sw','showBonus_sw','sjNoTFN_sw','showExtraTax_sw','helpDebtSwitch','tfnSwitch','superIncSwitch','sjSuperIncSwitch'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.addEventListener('change',calculate);
   });
+  // Reset / export button wiring
+  var btnReset=document.getElementById('btnReset');if(btnReset)btnReset.addEventListener('click',resetAll);
+  var btnStartOver=document.getElementById('btnStartOver');if(btnStartOver)btnStartOver.addEventListener('click',resetAll);
+  var btnCSV=document.getElementById('btnCSV');if(btnCSV)btnCSV.addEventListener('click',exportCSV);
+  var btnSave=document.getElementById('btnSave');if(btnSave)btnSave.addEventListener('click',saveHTML);
   onFYChange();
 });

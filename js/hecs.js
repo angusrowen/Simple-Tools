@@ -1,5 +1,4 @@
-
-// ─── ATO 2025-26 brackets ────────────────────────────────────────────────────
+// ─── ATO 2025-26 brackets ───────────────────────────────────────────────────
 const BRACKETS = [
   { min:0,       max:67000,   label:'$0 – $67,000',        calc:'Nil'                               },
   { min:67001,   max:125000,  label:'$67,001 – $125,000',   calc:'15c per $1 over $67,000'           },
@@ -38,7 +37,7 @@ ratesBtn.addEventListener('click', () => {
   ratesBody.classList.toggle('collapsed', open);
 });
 
-// ─── Show/hide schedule toggle (amort-btn style) ─────────────────────────────
+// ─── Show/hide schedule toggle ────────────────────────────────────────────────
 const amortToggle = $('amortToggle'), amortSection = $('amortSection');
 let schedVisible = false;
 amortToggle.addEventListener('click', () => {
@@ -105,16 +104,14 @@ function calc(){
 
   const annualRepay = calcAnnualRepayment(income);
 
-  // Banners
-  $('belowThreshBanner').style.display = income <= 67000 ? '' : 'none';
-  $('aboveThreshBanner').style.display = income >  67000 ? '' : 'none';
-
-  // Badge
-  const badge = {textContent:'',className:'',style:{display:'none'}}; // removed badge
-  if(income <= 67000)      { badge.textContent='Below threshold'; badge.className='threshold-badge';       badge.style.display=''; }
-  else if(income <= 125000){ badge.textContent='Bracket 2';       badge.className='threshold-badge above'; badge.style.display=''; }
-  else if(income <= 179285){ badge.textContent='Bracket 3';       badge.className='threshold-badge above'; badge.style.display=''; }
-  else                      { badge.textContent='Bracket 4';       badge.className='threshold-badge high';  badge.style.display=''; }
+  // Banners — use classList
+  if(income <= 67000){
+    $('belowThreshBanner').classList.remove('hidden');
+    $('aboveThreshBanner').classList.add('hidden');
+  } else {
+    $('belowThreshBanner').classList.add('hidden');
+    $('aboveThreshBanner').classList.remove('hidden');
+  }
 
   // Bracket table
   const bTbody = $('bracketBody'); bTbody.innerHTML = '';
@@ -145,7 +142,7 @@ function calc(){
   // Breakdown table
   const bdbody = $('breakdownBody'); bdbody.innerHTML = '';
   const bdRows = [
-    { label:'Compulsory Repayment', annual:annualRepay,         monthly:annualRepay/12,  life:totalComp,  share:totalAll>0?totalComp/totalAll*100:0  },
+    { label:'Compulsory Repayment', annual:annualRepay,           monthly:annualRepay/12,          life:totalComp,  share:totalAll>0?totalComp/totalAll*100:0  },
     showVol ? { label:'Voluntary Repayment', annual:extra, monthly:extra/12, life:totalVol, share:totalAll>0?totalVol/totalAll*100:0 } : null,
     { label:'Indexation (est.)',    annual:balance*indexRate/100, monthly:balance*indexRate/100/12, life:totalIndex, share:totalAll>0?totalIndex/totalAll*100:0 }
   ].filter(Boolean);
@@ -164,28 +161,26 @@ function calc(){
   balChart.data.datasets[1].data   = sched.map(r => r.indexation);
   balChart.data.datasets[2].data   = sched.map(r => r.compulsory);
   balChart.data.datasets[3].data   = showVol ? sched.map(r => r.voluntary) : [];
-  $('legVoluntary').style.display  = showVol ? '' : 'none';
+  if(showVol) $('legVoluntary').classList.remove('hidden');
+  else        $('legVoluntary').classList.add('hidden');
   balChart.update();
 
   // Year-by-year schedule table
-  // Show/hide voluntary column header
-  $('thVoluntary').style.display = showVol ? '' : 'none';
+  if(showVol) $('thVoluntary').classList.remove('hidden');
+  else        $('thVoluntary').classList.add('hidden');
 
   const amortBody = $('amortBody'); amortBody.innerHTML = '';
-
   sched.forEach(r => {
-    // Year header row (yr-row) — same as personal loan
     const yrTr = document.createElement('tr');
     yrTr.className = 'yr-row';
     const colspan = showVol ? 7 : 6;
     yrTr.innerHTML = `<td colspan="${colspan}">${r.year}</td>`;
     amortBody.appendChild(yrTr);
 
-    // Data row
     const tr = document.createElement('tr');
-    const volCell = showVol ? `<td style="color:var(--bl)">${fmt2(r.voluntary)}</td>` : '';
+    const volCell = showVol ? `<td style="color:var(--blue)">${fmt2(r.voluntary)}</td>` : '';
     const closingVal = r.closing < 0.01
-      ? `<td style="color:var(--gr);font-weight:700">Paid Off</td>`
+      ? `<td style="color:var(--green);font-weight:700">Paid Off</td>`
       : `<td>${fmt2(r.closing)}</td>`;
     tr.innerHTML = `
       <td>${r.n}</td>
@@ -198,12 +193,10 @@ function calc(){
     amortBody.appendChild(tr);
   });
 
-  // Store for CSV export
   window._schedData = { sched, showVol, annualRepay, totalComp, totalVol, totalIndex, totalAll };
 }
 
-// ─── Export Summary CSV ──────────────────────────────────────────────────────
-
+// ─── Export / Snapshot ───────────────────────────────────────────────────────
 $('btnSave').addEventListener('click', () => {
   const html = document.documentElement.outerHTML;
   const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
@@ -232,7 +225,6 @@ $('btnCSV').addEventListener('click', () => {
   a.click();
 });
 
-// ─── Export Schedule CSV ─────────────────────────────────────────────────────
 $('btnAmortCSV').addEventListener('click', () => {
   const { sched = [], showVol = false } = window._schedData || {};
   const volHdr = showVol ? ',Voluntary Repayment' : '';
