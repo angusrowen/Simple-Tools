@@ -1,4 +1,3 @@
-
 var superChart = null;
 var summaryRows = [];
 var scheduleRows = [];
@@ -22,21 +21,19 @@ function fmt(v) {
   return "$" + Math.round(v).toLocaleString("en-AU");
 }
 
-
-// ── NCC bring-forward logic (2025-26 ATO caps) ──────────────────────────────
-// Determines max NCC allowed based on projected balance at time of contribution
+// ── NCC bring-forward logic (2025-26 ATO caps) ──────────────────────────────────────────
 function nccMaxCap(projectedBal, age) {
-  if (age >= 75) return 120000;           // no bring-forward at 75+
-  if (projectedBal >= 1900000) return 0;  // TSB >= $1.9m: ineligible
-  if (projectedBal >= 1780000) return 120000; // annual cap only
-  if (projectedBal >= 1660000) return 240000; // 2-yr bring-forward
-  return 360000;                          // 3-yr bring-forward
+  if (age >= 75) return 120000;
+  if (projectedBal >= 1900000) return 0;
+  if (projectedBal >= 1780000) return 120000;
+  if (projectedBal >= 1660000) return 240000;
+  return 360000;
 }
 
 function validateNCC(projectedBal, ncc, age) {
   var status = document.getElementById("fNCCStatus");
   if (!status) return;
-  if (ncc <= 0) { status.style.display = "none"; return; }
+  if (ncc <= 0) { status.classList.add("hidden"); return; }
 
   var cap    = nccMaxCap(projectedBal, age);
   var isOver = ncc > cap;
@@ -61,8 +58,8 @@ function validateNCC(projectedBal, ncc, age) {
     msg = "✓ Within standard annual cap ($120,000). Projected balance at age " + age + ": " + balFmt + ".";
   }
 
-  status.textContent   = msg;
-  status.style.display = "block";
+  status.textContent = msg;
+  status.classList.remove("hidden");
   if (cap === 0 || isOver) {
     status.style.background = "#fdecea"; status.style.color = "#b71c1c"; status.style.border = "1px solid #f5c6c6";
   } else {
@@ -93,7 +90,7 @@ function calc() {
 
   var ytr = Math.floor(ra - ca);
   var ril = document.getElementById("retireInfoLeft");
-  if (ril) { ril.textContent = ytr + (ytr === 1 ? " year to retirement" : " years to retirement"); ril.style.display = "block"; }
+  if (ril) { ril.textContent = ytr + (ytr === 1 ? " year to retirement" : " years to retirement"); ril.classList.remove("hidden"); }
   var av = 0;
   if (vf === "monthly") av = va * 12;
   else if (vf === "annual") av = va;
@@ -110,7 +107,6 @@ function calc() {
   cArr.push(0);
 
   var nccApplied = false;
-  // Handle NCC at current age (before loop starts)
   if (ncc > 0 && nccAge <= ca && nccAge < ra) {
     var nccCap0 = nccMaxCap(bal, nccAge);
     var nccAmt0 = Math.min(ncc, nccCap0);
@@ -120,12 +116,11 @@ function calc() {
   }
   for (var y = 0; y < ytr; y++) {
     var age   = ca + y + 1;
-    // Apply one-off NCC at nominated age (before growth for that year)
     if (ncc > 0 && !nccApplied && age === nccAge && nccAge < ra) {
       var nccCap = nccMaxCap(bal, nccAge);
       var nccAmt = Math.min(ncc, nccCap);
       if (nccAmt > 0) { bal += nccAmt; cum += nccAmt; }
-      validateNCC(bal - nccAmt, ncc, nccAge); // pass pre-NCC projected balance for display
+      validateNCC(bal - nccAmt, ncc, nccAge);
       nccApplied = true;
     }
     var sgn   = cs * sr * (1 - ct);
@@ -181,43 +176,37 @@ function calc() {
   ];
 
   set("rBalance",       fmt(dispBal));
-  set("rBalanceSub",    im === "real" ? "In todays dollars (inflation adjusted)" : "Nominal future value");
+  set("rBalanceSub",    im === "real" ? "In today’s dollars (inflation adjusted)" : "Nominal future value");
   set("rMonthlyIncome", fmt(dw/12) + "/mo");
   set("rLastsUntil",    rb > 0 ? "Age " + le + "+" : "Age " + lasts);
   set("rLastsUntilSub", rb > 0 ? "Outlasts life expectancy" : "Depleted before life expectancy");
   set("rEmployer",      fmt(tEmp));
   set("rVoluntary",     fmt(tVol));
-  var vb = document.getElementById("volBox"); if (vb) vb.style.display = tVol > 0 ? "block" : "none";
+  var vb = document.getElementById("volBox");
+  if (vb) { if (tVol > 0) vb.classList.remove("hidden"); else vb.classList.add("hidden"); }
   var dispGrw = (im === "real") ? tGrw / Math.pow(1 + inf, ytr) : tGrw;
   set("rGrowth",        fmt(dispGrw));
   set("rDrawdownAmt",   fmt(dw) + "/yr");
   document.getElementById("rDrawdownInflSub").textContent = "Adjusts +" + (inf*100).toFixed(1) + "%/yr with inflation";
-  document.getElementById("amortBody").innerHTML = rows || "<tr><td colspan=\"6\" style=\"text-align:center;color:var(--txl);padding:14px\">No results yet</td></tr>";
-  // Deflate chart arrays when Real $ mode is active
+  document.getElementById("amortBody").innerHTML = rows || "<tr><td colspan=\"6\" style=\"text-align:center;color:var(--text-light);padding:14px\">No results yet</td></tr>";
+
   var chartBArr = bArr, chartDArr = dArr, chartCArr = cArr;
   if (im === "real" && inf > 0) {
-    chartBArr = bArr.map(function(v, i) {
-      return v === null ? null : Math.round(v / Math.pow(1 + inf, i));
-    });
-    chartCArr = cArr.map(function(v, i) {
-      return v === null ? null : Math.round(v / Math.pow(1 + inf, i));
-    });
-    chartDArr = dArr.map(function(v, i) {
-      return v === null ? null : Math.round(v / Math.pow(1 + inf, i));
-    });
+    chartBArr = bArr.map(function(v, i) { return v === null ? null : Math.round(v / Math.pow(1 + inf, i)); });
+    chartCArr = cArr.map(function(v, i) { return v === null ? null : Math.round(v / Math.pow(1 + inf, i)); });
+    chartDArr = dArr.map(function(v, i) { return v === null ? null : Math.round(v / Math.pow(1 + inf, i)); });
   }
-  // If NCC age is outside accumulation range, show status with starting balance as estimate
+
   if (ncc > 0 && !nccApplied) {
     validateNCC(n("fCurrentBalance"), ncc, nccAge);
   } else if (ncc <= 0) {
     var st = document.getElementById("fNCCStatus");
-    if (st) st.style.display = "none";
+    if (st) st.classList.add("hidden");
   }
   drawChart(labels, chartBArr, chartDArr, chartCArr);
 }
 
 function drawChart(labels, bArr, dArr, cArr) {
-  
   if (typeof Chart === "undefined") return;
   var canvas = document.getElementById("superChart");
   if (!canvas) return;
@@ -254,7 +243,8 @@ function drawChart(labels, bArr, dArr, cArr) {
 function toggleVol() {
   var sw = document.getElementById("volSwitch");
   var on = sw && sw.checked;
-  document.getElementById("volOnFields").style.display = on ? "block" : "none";
+  var fields = document.getElementById("volOnFields");
+  if (fields) { if (on) fields.classList.remove("hidden"); else fields.classList.add("hidden"); }
   if (on) {
     var f = radio("volFreq");
     document.getElementById("volContribLabel").textContent = f === "monthly" ? "Monthly Voluntary Contribution" : "Annual Voluntary Contribution";
@@ -264,16 +254,15 @@ function toggleVol() {
 function toggleNCC() {
   var sw = document.getElementById("nccSwitch");
   var on = sw && sw.checked;
-  document.getElementById("nccFields").style.display = on ? "block" : "none";
+  var fields = document.getElementById("nccFields");
+  if (fields) { if (on) fields.classList.remove("hidden"); else fields.classList.add("hidden"); }
 }
-
 
 function toggleInflMode() {
   var real = radio("inflMode") === "real";
-  // inflationField always visible
   document.getElementById("inflModeHint").textContent = real
-    ? "Showing values in today's dollars. Enter an inflation rate below to deflate future amounts."
-    : "Nominal shows future dollar amounts at face value. Switch to Real to adjust for inflation and see what your balance is worth in today's purchasing power.";
+    ? "Showing values in today’s dollars. Enter an inflation rate below to deflate future amounts."
+    : "Nominal shows future dollar amounts at face value. Switch to Real to adjust for inflation and see what your balance is worth in today’s purchasing power.";
   calc();
 }
 
@@ -286,7 +275,10 @@ function resetAll() {
   document.getElementById("fSalaryRange").value = 90000;
   document.getElementById("fCurrentBalanceRange").value = 75000;
   document.getElementById("inflNominal").checked = true;
-  toggleVol(); toggleInflMode(); var ri=document.getElementById("retireInfo"); if(ri) ri.style.display="none"; var ril=document.getElementById("retireInfoLeft"); if(ril) ril.style.display="none"; calc();
+  toggleVol(); toggleInflMode();
+  var ri = document.getElementById("retireInfo"); if (ri) ri.classList.add("hidden");
+  var ril = document.getElementById("retireInfoLeft"); if (ril) ril.classList.add("hidden");
+  calc();
 }
 
 function dlCSV(rows, fname) {
@@ -298,10 +290,10 @@ function dlCSV(rows, fname) {
 }
 
 // Wire inputs
-["fCurrentAge","fRetireAge","fSalary","fSuperRate","fSalGrowth","fCurrentBalance","fVolContrib","fReturnRate","fReturnRetire","fFee","fTax","fInflation","fDrawdown","fLifeExpect",
-  "fNCC","fNCCAge"].forEach(function(id) {
+["fCurrentAge","fRetireAge","fSalary","fSuperRate","fSalGrowth","fCurrentBalance","fVolContrib","fReturnRate","fReturnRetire","fFee","fTax","fInflation","fDrawdown","fLifeExpect","fNCC","fNCCAge"].forEach(function(id) {
   var el = document.getElementById(id); if (el) el.addEventListener("input", calc);
 });
+
 // Salary slider sync
 (function(){
   var num = document.getElementById("fSalary");
@@ -310,6 +302,7 @@ function dlCSV(rows, fname) {
   rng.addEventListener("input", function() { num.value = rng.value; calc(); });
   num.addEventListener("input", function() { if (parseFloat(num.value) <= 300000) rng.value = num.value; });
 })();
+
 // Balance slider sync
 (function(){
   var num = document.getElementById("fCurrentBalance");
@@ -318,14 +311,15 @@ function dlCSV(rows, fname) {
   rng.addEventListener("input", function() { num.value = rng.value; calc(); });
   num.addEventListener("input", function() { if (parseFloat(num.value) <= 1000000) rng.value = num.value; });
 })();
-// Frequency toggle for concessional (monthly/annual)
+
 ["volMonthly","volAnnual"].forEach(function(id) {
   var el = document.getElementById(id); if (el) el.addEventListener("change", function() { toggleVol(); calc(); });
 });
-// volSwitch and nccSwitch use inline onchange handlers
+
 ["inflNominal","inflReal"].forEach(function(id) {
   document.getElementById(id).addEventListener("change", function() { toggleInflMode(); calc(); });
 });
+
 document.getElementById("btnReset").addEventListener("click", resetAll);
 document.getElementById("btnStartOver").addEventListener("click", resetAll);
 document.getElementById("btnExportSummary").addEventListener("click",  function() { dlCSV(summaryRows,  "super-summary.csv"); });
@@ -354,9 +348,10 @@ document.getElementById("btnSaveSnapshot").addEventListener("click", function() 
 // Year-by-year toggle
 document.getElementById("amortToggle").addEventListener("click", function() {
   var sec = document.getElementById("amortSection");
-  var open = sec.style.display === "block";
-  sec.style.display = open ? "none" : "block";
-  this.innerHTML = (open ? '<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> Show Year-by-Year Schedule' : '<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> Hide Year-by-Year Schedule');
+  var hidden = sec.classList.toggle("hidden");
+  this.innerHTML = (hidden
+    ? '<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> Show Year-by-Year Schedule'
+    : '<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> Hide Year-by-Year Schedule');
 });
 
 // Init

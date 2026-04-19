@@ -1,4 +1,3 @@
-
 (function(){
 'use strict';
 function g(id){return document.getElementById(id);}
@@ -9,6 +8,7 @@ function getFreq(){return document.querySelector('input[name="freq"]:checked').v
 function ppy(f){return f==='weekly'?52:f==='fortnightly'?26:12;}
 function fLbl(f){return f==='weekly'?'Weekly':f==='fortnightly'?'Fortnightly':'Monthly';}
 function toMo(v,f){return f==='weekly'?v*52/12:f==='fortnightly'?v*26/12:v;}
+
 
 function buildSched(P,rate,yrs,freq,extra,balloon){
   var n=ppy(freq),r=rate/100/n,tot=yrs*n,eff=P-balloon;
@@ -30,7 +30,9 @@ function buildSched(P,rate,yrs,freq,extra,balloon){
   return{rows:rows,totalInterest:totInt,pmt:pmt};
 }
 
+
 var lineChart=null,lastCD=null;
+
 
 function chartData(rows,P,yrs,freq){
   var n=ppy(freq),labels=[],debt=[],annInt=[null],cumPaid=[0];
@@ -47,6 +49,7 @@ function chartData(rows,P,yrs,freq){
   return{labels:labels,debt:debt,annInt:annInt,cumPaid:cumPaid};
 }
 
+
 function mkGrad(ctx,ratio){
   var h=ctx.canvas.clientHeight||120,gr=ctx.createLinearGradient(0,0,0,h);
   var s=Math.max(0,Math.min(1,1-ratio));
@@ -56,6 +59,7 @@ function mkGrad(ctx,ratio){
   gr.addColorStop(1,'rgba(42,157,103,0.65)');
   return gr;
 }
+
 
 function drawLine(cd){
   lastCD=cd;
@@ -110,12 +114,11 @@ function drawLine(cd){
       }},
       scales:{
         x:{grid:{display:false},ticks:{font:{size:10},color:'#6c7a89',maxTicksLimit:16}},
-        y:{grid:{color:'rgba(0,0,0,.05)'},max:Math.ceil(P0*1.25/1000)*1000,ticks:{font:{size:10},color:'#6c7a89',callback:function(v){return '$'+v.toLocaleString('en-AU');}}}
+        y:{grid:{color:'rgba(0,0,0,.05)'},max:Math.ceil((parseFloat(g('fAmt').value)||0)*1.25/1000)*1000,ticks:{font:{size:10},color:'#6c7a89',callback:function(v){return '$'+v.toLocaleString('en-AU');}}}
       }
     },
     plugins:[sp]
   });
-  // Default highlight at midpoint so gradient shows principal/interest split on load
   var midIdx=Math.floor(cd.labels.length/2);
   lastIdx=midIdx;
   var ratio=P0>0?(P0-(cd.debt[midIdx]||0))/P0:0;
@@ -139,8 +142,8 @@ function calculate(){
   if(P<=0||rate<=0||yrs<=0){
     g('rRepay').innerHTML='&#8212;';g('rTotal').innerHTML='&#8212;';g('rInterest').innerHTML='&#8212;';
     g('rFeeBox').style.display='none';g('rCostBox').style.display='none';g('rCmpBox').style.display='none';
-    g('bannerExtra').style.display='none';g('bannerBalloon').style.display='none';g('bannerPayoff').style.display='none';
-    g('tBody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
+    ['bannerExtra','bannerBalloon','bannerPayoff'].forEach(function(id){g(id).classList.add('hidden');});
+    g('tBody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-light);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
     g('amortBody').innerHTML='';
     return;
   }
@@ -188,19 +191,19 @@ function calculate(){
     var ms=Math.round((noEx.rows.length-nPers)*12/n);
     var ts=ms>=12?Math.floor(ms/12)+'yr '+(ms%12)+'m':ms+' months';
     g('bnExtraAmt').textContent=fmt2(extra);g('bnExtraSaved').textContent=fmt0(saved);g('bnExtraTime').textContent=ts;
-    g('bannerExtra').style.display='';
-  }else{g('bannerExtra').style.display='none';}
+    g('bannerExtra').classList.remove('hidden');
+  }else{g('bannerExtra').classList.add('hidden');}
 
-  if(balloon>0){g('bnBalloon').textContent=fmt0(balloon);g('bannerBalloon').style.display='';}
-  else{g('bannerBalloon').style.display='none';}
+  if(balloon>0){g('bnBalloon').textContent=fmt0(balloon);g('bannerBalloon').classList.remove('hidden');}
+  else{g('bannerBalloon').classList.add('hidden');}
 
   if(sv){
     var pts=sv.split('-'),sd=new Date(parseInt(pts[0]),parseInt(pts[1])-1,1);
     sd.setMonth(sd.getMonth()+Math.round(nPers*12/n));
     var mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     g('bnPayoff').textContent=mn[sd.getMonth()]+' '+sd.getFullYear();
-    g('bannerPayoff').style.display='';
-  }else{g('bannerPayoff').style.display='none';}
+    g('bannerPayoff').classList.remove('hidden');
+  }else{g('bannerPayoff').classList.add('hidden');}
 
   function trow(lbl,pp,life){
     var mo=toMo(pp,freq),ann=mo*12,pct=totCost>0?(life/totCost*100):0;
@@ -234,17 +237,20 @@ function calculate(){
   g('amortBody').innerHTML=ah;
 }
 
+
 g('addlBtn').addEventListener('click',function(){
   var b=g('addlBody'),exp=this.getAttribute('aria-expanded')==='true';
   this.setAttribute('aria-expanded',String(!exp));
   b.classList.toggle('collapsed',exp);
 });
 
+
 g('amortBtn').addEventListener('click',function(){
   var s=g('amortSection'),hidden=s.classList.toggle('hidden');
   var ico='<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> ';
   this.innerHTML=ico+(hidden?'Show Repayment Schedule':'Hide Repayment Schedule');
 });
+
 
 function doReset(){
   g('fAmt').value='20000';g('amtRange').value='20000';
@@ -260,19 +266,21 @@ function doReset(){
   g('rMonthly').checked=true;
   g('rRepay').innerHTML='&#8212;';g('rTotal').innerHTML='&#8212;';g('rInterest').innerHTML='&#8212;';
   g('rFeeBox').style.display='none';g('rCostBox').style.display='none';g('rCmpBox').style.display='none';
-  g('bannerExtra').style.display='none';g('bannerBalloon').style.display='none';g('bannerPayoff').style.display='none';
-  g('tBody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--txl);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
+  ['bannerExtra','bannerBalloon','bannerPayoff'].forEach(function(id){g(id).classList.add('hidden');});
+  g('tBody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-light);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
   g('amortBody').innerHTML='';
   calculate();
 }
 g('btnReset1').addEventListener('click',doReset);
-g('btnReset2').addEventListener('click',doReset);
+g('btnStartOver').addEventListener('click',doReset);
+
 
 function dlCSV(name,content){
   var blob=new Blob([content],{type:'text/csv'});
   var a=document.createElement('a');
   a.href=URL.createObjectURL(blob);a.download=name;a.click();
 }
+
 
 g('btnCSV').addEventListener('click',function(){
   var P=g('fAmt').value,R=g('fRate').value,T=g('fTerm').value;
@@ -295,6 +303,7 @@ g('btnCSV').addEventListener('click',function(){
   dlCSV('personal-loan-summary.csv',lines.join('\n'));
 });
 
+
 g('btnAmortCSV').addEventListener('click',function(){
   var trs=g('amortBody').querySelectorAll('tr:not(.yr-row)');
   if(!trs.length)return;
@@ -305,16 +314,26 @@ g('btnAmortCSV').addEventListener('click',function(){
   dlCSV('personal-loan-schedule.csv',lines.join('\n'));
 });
 
+
+g('btnSaveSnapshot').addEventListener('click',function(){
+  var blob=new Blob([document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  var d=new Date();
+  a.download='personal-loan-calculator-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+});
+
+
 ['fAmt','fRate','fTerm','fExtra','fEstFee','fMFee','fBalloon','fStart','fPurpose'].forEach(function(id){
   g(id).addEventListener('input',calculate);
   g(id).addEventListener('change',calculate);
 });
 document.querySelectorAll('input[name="freq"]').forEach(function(r){r.addEventListener('change',calculate);});
 
+
 document.addEventListener('DOMContentLoaded',function(){
-  // Loan amount slider sync
   (function(){
-    var ni=g('fAmt'), sr=g('amtRange');
+    var ni=g('fAmt'),sr=g('amtRange');
     if(ni&&sr){
       ni.addEventListener('input',function(){sr.value=Math.min(parseFloat(ni.value)||0,100000);});
       sr.addEventListener('input',function(){ni.value=sr.value;calculate();});
@@ -331,12 +350,3 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 
 })();
-
-  // Save Snapshot
-  document.getElementById('btnSaveSnapshot').addEventListener('click',function(){
-    var blob=new Blob([document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
-    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
-    var d=new Date;a.download='personal-loan-calculator-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-  });
-

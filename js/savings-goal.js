@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
 // ── helpers ──────────────────────────────────────────────────────────────
   function el(id)   { return document.getElementById(id); }
-  function dn(id)   { el(id).classList.add('dn'); }
-  function sh(id)   { el(id).classList.remove('dn'); }
+  function hide(id) { el(id).classList.add('hidden'); }
+  function show(id) { el(id).classList.remove('hidden'); }
   function f0(n)    { return '$' + Math.round(Math.abs(n)).toLocaleString('en-AU'); }
   function f2(n)    { return '$' + Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function pct(n)   { return n.toFixed(1) + '%'; }
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var now = new Date();
   el('fStart').value = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
 
-  // ── lump sums ─────────────────────────────────────────────────────────────
+  // ── lump sums ─────────────────────────────────────────────────────
   var lumpId = 0;
   el('btnAddLump').onclick = function () {
     var id  = lumpId++;
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
       + '<input type="number" id="la'+id+'" class="pl" min="0" step="100" value="1000"></div></div>'
       + '<div class="field" style="margin:0"><label>At Year #</label>'
       + '<input type="number" id="ly'+id+'" min="1" max="50" value="1"></div>'
-      + '<button type="button" class="lump-rm" data-id="'+id+'">&#x2715;</button>';
+      + '<button type="button" class="lump-rm" data-id="'+id+'">✕</button>';
     el('lumpList').appendChild(div);
     el('la'+id).oninput = calculate;
     el('ly'+id).oninput = calculate;
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // ── main calculate ────────────────────────────────────────────────────────
+  // ── main calculate ──────────────────────────────────────────────────────────────────
   var lastRows = [], lastGoal = 0, lastFreq = 12;
 
   function calculate() {
@@ -185,12 +185,12 @@ document.addEventListener('DOMContentLoaded', function() {
     el('rInt').textContent  = f0(totI);
     el('rDate').textContent = goalDate;
 
-    if (totL > 0) { sh('rLumpBox'); el('rLump').textContent = f0(totL); } else dn('rLumpBox');
-    if (useInfl && rows.length) { sh('rRealBox'); el('rReal').textContent = f0(rows[rows.length-1].real); } else dn('rRealBox');
+    if (totL > 0) { show('rLumpBox'); el('rLump').textContent = f0(totL); } else hide('rLumpBox');
+    if (useInfl && rows.length) { show('rRealBox'); el('rReal').textContent = f0(rows[rows.length-1].real); } else hide('rRealBox');
 
     // banner
     var lbl = el('fLabel').value || 'your goal';
-    sh('banner');
+    show('banner');
     el('banner').innerHTML = 'You will reach <strong>' + lbl + '</strong> (' + f0(goal) + ') in <strong>' + ts + '</strong>'
       + (goalDate !== '—' ? ' — by <strong>' + goalDate + '</strong>' : '') + '.';
 
@@ -211,29 +211,29 @@ document.addEventListener('DOMContentLoaded', function() {
     el('tBody').innerHTML = t;
 
     // chart
-    if (totL > 0) sh('legLump'); else dn('legLump');
+    if (totL > 0) show('legLump'); else hide('legLump');
     drawChart(lbls, chartC, chartI, chartL);
 
     // schedule
-    if (useInfl) sh('realCol'); else dn('realCol');
+    if (useInfl) show('realCol'); else hide('realCol');
     var sh2 = '';
     rows.forEach(function(row) {
       var yDate = startYM ? addMonths(startYM, row.y * 12) : 'Year ' + row.y;
       sh2 += '<tr>'
         + '<td>Year ' + row.y + '</td><td>' + yDate + '</td>'
         + '<td>' + f0(row.open) + '</td>'
-        + '<td style="color:var(--gr)">' + f0(row.c) + '</td>'
-        + '<td style="color:var(--am)">' + (row.l > 0 ? f0(row.l) : '—') + '</td>'
-        + '<td style="color:var(--am)">' + f0(row.i) + '</td>'
+        + '<td style="color:var(--green)">' + f0(row.c) + '</td>'
+        + '<td style="color:var(--amber)">' + (row.l > 0 ? f0(row.l) : '—') + '</td>'
+        + '<td style="color:var(--amber)">' + f0(row.i) + '</td>'
         + '<td style="font-weight:700">' + f0(row.close) + '</td>'
-        + (useInfl ? '<td style="color:var(--am)">' + f0(row.real) + '</td>' : '')
+        + (useInfl ? '<td style="color:var(--amber)">' + f0(row.real) + '</td>' : '')
         + '<td>' + pct(Math.min(100, row.close/goal*100)) + '</td>'
         + '</tr>';
     });
     el('sBody').innerHTML = sh2;
   }
 
-  // ── event wiring ──────────────────────────────────────────────────────────
+  // ── event wiring ────────────────────────────────────────────────────────────────
   ['fGoal','fInitial','fContrib','fRate','fTarget','fLabel','fInfl','fStart'].forEach(function(id) {
     el(id).oninput  = calculate;
     el(id).onchange = calculate;
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('input[name="mode"]').forEach(function(r) {
     r.onchange = function() {
       var isC = mode() === 'contrib';
-      if (isC) sh('targetRow'); else dn('targetRow');
+      if (isC) show('targetRow'); else hide('targetRow');
       el('fContrib').readOnly = isC;
       el('fContrib').style.opacity = isC ? '0.5' : '1';
       calculate();
@@ -251,13 +251,13 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   document.querySelectorAll('input[name="infl"]').forEach(function(r) {
     r.onchange = function() {
-      if (inflOn()) sh('inflRow'); else dn('inflRow');
+      if (inflOn()) show('inflRow'); else hide('inflRow');
       calculate();
     };
   });
 
   el('schedBtn').onclick = function() {
-    var hidden = el('schedWrap').classList.toggle('dn');
+    var hidden = el('schedWrap').classList.toggle('hidden');
     this.textContent = (hidden ? '☰ Show' : '☰ Hide') + ' Year-by-Year Schedule';
   };
 
@@ -267,11 +267,17 @@ document.addEventListener('DOMContentLoaded', function() {
     el('fTarget').value='5'; el('fLabel').value='';
     el('fqM').checked=true; el('mTime').checked=true; el('inflOff').checked=true;
     el('fContrib').readOnly=false; el('fContrib').style.opacity='1';
-    dn('targetRow'); dn('inflRow'); dn('rRealBox'); dn('rLumpBox');
+    hide('targetRow'); hide('inflRow'); hide('rRealBox'); hide('rLumpBox');
     el('lumpList').innerHTML='';
     var n=new Date();
     el('fStart').value=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0');
     calculate();
+  };
+
+  el('btnStartOver').onclick = function() {
+    if (confirm('Reset all fields to defaults?')) {
+      location.reload();
+    }
   };
 
   function dlCSV(name, rows2) {
@@ -295,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!lastRows.length) return;
     var startYM = el('fStart').value;
     var useInfl = inflOn();
-    var lines = [['Year','Date','Opening','Contributions','Lump Sum','Interest','Closing'+(useInfl?',Real Value':''),]+',%Goal'];
+    var lines = [['Year','Date','Opening','Contributions','Lump Sum','Interest','Closing'+(useInfl?',Real Value':'')]+',%Goal'];
     lastRows.forEach(function(row) {
       var yDate = startYM ? addMonths(startYM, row.y*12) : 'Year'+row.y;
       var r2 = [row.y, yDate, Math.round(row.open), Math.round(row.c),
@@ -318,14 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
   };
 
-  el('btnStartOver').onclick = function() {
-    if (confirm('Reset all fields to defaults?')) {
-      location.reload();
-    }
-  };
-
-
-  // ── slider sync ──────────────────────────────────────────
+  // ── slider sync ──────────────────────────────────────────────────
   [
     ['fGoal',    'fGoalRange',    200000],
     ['fInitial', 'fInitialRange', 50000],
@@ -344,8 +343,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // ── run on startup ────────────────────────────────────────────────────────
+  // ── run on startup ────────────────────────────────────────────────────────────────
   calculate();
-
 
 });
