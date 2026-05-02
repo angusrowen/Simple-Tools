@@ -1306,15 +1306,17 @@ ins.adsbygoogle iframe,
   .layout{grid-template-columns:1fr !important;}
 }
 
-/* ── Topbar icon buttons (Return & Dark Mode) ───────────── */
+/* ══════════════════════════════════════════════════════════
+   TOPBAR UTILITY BUTTONS  (Return & Dark-mode toggle)
+   Added after original styles — appended only, no overrides
+   ══════════════════════════════════════════════════════════ */
 
+/* Shared shell — both buttons look the same */
 .btn-home,
 .btn-theme {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
   border: 1px solid rgba(255,255,255,.22);
   border-radius: 8px;
   background: rgba(255,255,255,.10);
@@ -1325,6 +1327,7 @@ ins.adsbygoogle iframe,
   transition: background .15s, border-color .15s;
   font-family: inherit;
   padding: 0;
+  line-height: 1;
 }
 .btn-home:hover,
 .btn-theme:hover {
@@ -1333,39 +1336,87 @@ ins.adsbygoogle iframe,
 }
 .btn-home svg,
 .btn-theme svg {
-  width: 16px;
-  height: 16px;
   fill: currentColor;
   flex-shrink: 0;
+  display: block;
 }
-/* Hide any text label inside btn-home */
-.btn-home span { display: none; }
 
-/* ── Collapsible header — button reset ──────────────────── */
-/* Prevents browser from adding white background / border to <button> */
+/* ── Return button (btn-home)
+   Desktop: pill with arrow + "All Calculators" text
+   Mobile:  square icon-only                            */
+.btn-home {
+  gap: 7px;
+  padding: 0 14px;
+  height: 34px;
+  font-size: .8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: .2px;
+}
+.btn-home svg { width: 15px; height: 15px; }
+/* Text label — visible on desktop, hidden on mobile */
+.btn-home .btn-home-label { display: inline; }
 
+/* ── Dark-mode toggle (btn-theme)
+   Always a 34×34 square icon; only one icon shown at a time */
+.btn-theme {
+  width: 34px;
+  height: 34px;
+}
+.btn-theme svg { width: 17px; height: 17px; }
+
+/* JS adds data-theme="dark" to <html> — toggle icon visibility */
+/* Default (light mode): show moon, hide sun */
+.btn-theme .icon-sun  { display: none; }
+.btn-theme .icon-moon { display: block; }
+/* Dark mode: show sun, hide moon */
+[data-theme="dark"] .btn-theme .icon-sun  { display: block; }
+[data-theme="dark"] .btn-theme .icon-moon { display: none; }
+
+/* ── Stack: return button ABOVE theme button in topbar-right ─
+   topbar-right is already display:flex — change to column     */
+.topbar-right {
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 6px !important;
+  justify-content: center !important;
+}
+
+/* ── Mobile: icon-only for btn-home, keep btn-theme square ── */
+@media (max-width: 600px) {
+  .btn-home {
+    width: 34px;
+    padding: 0 !important;
+    justify-content: center;
+  }
+  .btn-home .btn-home-label { display: none !important; }
+}
+
+/* ── Collapsible header — browser button reset ───────────── */
+/* Prevents white box / border when using <button> element   */
 .collapsible-header {
   -webkit-appearance: none;
   appearance: none;
-  background: none;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  margin: 0;
-  padding-bottom: 8px;
-  margin-bottom: 16px;
+  background: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  border-radius: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
   width: 100%;
   text-align: left;
   font: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  border-bottom: 2px solid var(--green);
-  box-shadow: none;
+  box-shadow: none !important;
   outline: none;
+  /* border-bottom and margin-bottom preserved from base rule */
 }
-.collapsible-header[aria-expanded="false"] {
-  border-bottom-color: var(--border);
-  margin-bottom: 0;
+
+/* ── Mobile: input prefix gap — match desktop exactly ───────
+   On mobile the base rule padding:7px 8px overrides the input
+   padding, so .has-prefix loses its left spacing. Re-apply.  */
+@media (max-width: 480px) {
+  .input-wrap input.has-prefix  { padding-left:  22px !important; }
+  .input-wrap input.has-suffix  { padding-right: 28px !important; }
 }
