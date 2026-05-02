@@ -239,7 +239,6 @@ body{
 
 /* Collapsible cards */
 .collapsible-header {
-  /* Full button reset */
   -webkit-appearance: none;
   appearance: none;
   background: none;
@@ -250,7 +249,6 @@ body{
   width: 100%;
   text-align: left;
   font: inherit;
-  /* Layout */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -365,7 +363,7 @@ input[type=number]::placeholder{color:#c5bdb2;}
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button{opacity:.4;}
 
-..input-wrap{
+.input-wrap{
   position:relative;
   display:flex;
   align-items:center;
@@ -382,10 +380,10 @@ input[type=number]::-webkit-outer-spin-button{opacity:.4;}
   z-index:1;
 }
 
-.input-wrap .prefix { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); z-index: 1; pointer-events: none; }
-.input-wrap .suffix { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 1; pointer-events: none; }
-.input-wrap input.has-prefix, input.has-prefix { padding-left: 26px !important; }
-.input-wrap input.has-suffix, input.has-suffix { padding-right: 30px !important; }
+.input-wrap .prefix{left:10px;}
+.input-wrap .suffix{right:10px;}
+.input-wrap input.has-prefix{padding-left:32px;}
+.input-wrap input.has-suffix{padding-right:30px;}
 .input-wrap input:not(.has-prefix):not(.has-suffix){padding:9px 12px;}
 
 input[type=range]{
@@ -1316,80 +1314,21 @@ ins.adsbygoogle iframe,
   .layout{grid-template-columns:1fr !important;}
 }
 
-/* ── Dark mode ─────────────────────────────────────────────── */
-[data-theme="dark"] {
-  --bg: #141e28;
-  --card: #1e2d3a;
-  --border: #2e3d4a;
-  --text: #d4dde6;
-  --text-light: #8a9bab;
-  --dark: #e8edf2;
-  --navy: #4a7a9b;
-  --green: #3dbf7e;
-  --green-light: #1a3d2e;
-  --brown: #9a7250;
-  --brown-light: #2a2018;
-  --slate: #8a9bab;
-  --slate-light: #1e2530;
-  --input-bg: #162130;
-  --input-border: #2e3d4a;
-  --result-bg: #162130;
-  --toggle-bg: #2e3d4a;
-}
-[data-theme="dark"] body { background: var(--bg); color: var(--text); }
-[data-theme="dark"] .topbar { background: #111e2a; border-color: #2e3d4a; }
-[data-theme="dark"] .card, [data-theme="dark"] .calc-card { background: var(--card); border-color: var(--border); }
-[data-theme="dark"] .field input, [data-theme="dark"] .field select,
-[data-theme="dark"] input[type=number], [data-theme="dark"] input[type=text],
-[data-theme="dark"] input[type=month], [data-theme="dark"] select {
-  background: var(--input-bg); border-color: var(--input-border); color: var(--text);
-}
-[data-theme="dark"] .toggle-switch label { background: var(--toggle-bg); color: var(--text-light); }
-[data-theme="dark"] .result-box, [data-theme="dark"] .res-box { background: var(--result-bg); border-color: var(--border); }
-[data-theme="dark"] .amort-table th, [data-theme="dark"] .stbl th,
-[data-theme="dark"] .tbl th { background: #111e2a; }
-[data-theme="dark"] .amort-table td, [data-theme="dark"] .stbl td,
-[data-theme="dark"] .tbl td { border-color: var(--border); }
-[data-theme="dark"] .note, [data-theme="dark"] .disclaimer { border-color: var(--border); background: var(--result-bg); }
-[data-theme="dark"] .hero { background: var(--card); border-color: var(--border); }
-[data-theme="dark"] .chart-wrap, [data-theme="dark"] .chart-box { background: var(--result-bg); border-color: var(--border); }
-[data-theme="dark"] .collapsible-header h2 { color: var(--dark); }
-[data-theme="dark"] .section-label { border-color: var(--border); color: var(--text-light); }
-[data-theme="dark"] .side-rail-inner { background: var(--card); border-color: var(--border); }
-[data-theme="dark"] .ft { background: linear-gradient(180deg,#1c3040 0%,#111e2a 100%); }
-
-/* ── Return + Theme buttons ────────────────────────────────── */
-.btn-home {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 34px; height: 34px;
-  border: 1px solid rgba(255,255,255,.25); border-radius: 7px;
-  background: rgba(255,255,255,.12);
-  transition: background .15s, border-color .15s;
-  flex-shrink: 0; text-decoration: none; color: rgba(255,255,255,.9);
-}
-.btn-home:hover { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.45); }
-.btn-home svg { width: 16px; height: 16px; fill: currentColor; }
-.btn-theme {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 34px; height: 34px; border-radius: 7px;
-  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
-  color: rgba(255,255,255,.9); cursor: pointer; flex-shrink: 0;
-  transition: background .15s, border-color .15s;
-}
-.btn-theme:hover { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.45); }
-.btn-theme svg { width: 16px; height: 16px; fill: currentColor; }
-.btn-theme .icon-sun  { display: none; }
-.btn-theme .icon-moon { display: block; }
-[data-theme="dark"] .btn-theme .icon-sun  { display: block; }
-[data-theme="dark"] .btn-theme .icon-moon { display: none; }
-/* Collapsible chevron: ↓ collapsed (default), ↑ expanded */
-.collapse-icon { color: var(--green); transition: transform .25s ease; display: flex; align-items: center; }
-.collapsible-header[aria-expanded="true"] .collapse-icon { transform: rotate(180deg); }
-.collapsible-header[aria-expanded="false"] { border-bottom-color: var(--border); margin-bottom: 0; }
-
-/* Mobile: dollar prefix vertical alignment */
-.input-wrap .prefix, .input-wrap .suffix {
-  top: 50%; transform: translateY(-50%);
-}
+[data-theme="dark"] .collapsible-header { background: none; }
 
 .btn-home span { display: none; }
+
+/* ── Mobile portrait: prefix, topbar, buttons ─────────── */
+@media (max-width:480px){
+  .topbar { padding: 8px 12px !important; gap: 8px !important; }
+  .topbar-right { margin-left: auto !important; gap: 6px !important; flex-wrap: nowrap !important; }
+  .btn-home,
+  .btn-theme { width: 34px !important; height: 34px !important; min-width: 34px !important; padding: 0 !important; }
+
+  .input-wrap .prefix { left: 12px !important; top: 50% !important; transform: translateY(-50%) !important; }
+  .input-wrap .suffix { right: 10px !important; top: 50% !important; transform: translateY(-50%) !important; }
+  .input-wrap input.has-prefix,
+  input.has-prefix  { padding-left:  34px !important; }
+  .input-wrap input.has-suffix,
+  input.has-suffix  { padding-right: 30px !important; }
+}
