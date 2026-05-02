@@ -137,12 +137,12 @@ function calculate(){
 
   if(P<=0||rate<=0||yrs<=0){
     ['rRepay','rEffective','rPeriodSaving','rIntWith','rIntNo','rSaved']
-      .forEach(function(id){g(id).innerHTML='&mdash;';});
+      .forEach(function(id){el(id).innerHTML='&mdash;';});
     el('rRepayLbl').textContent='Monthly Repayment';
     el('rSavingLbl').textContent='Interest Saving / Month';
     el('cmpBody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-light);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
     ['bannerSaving','bannerContrib','bannerPayoff'].forEach(function(id){
-      g(id).classList.add('hidden');
+      el(id).classList.add('hidden');
     });
     el('amortBody').innerHTML='';
     if(lineChart){lineChart.destroy();lineChart=null;}
@@ -255,7 +255,7 @@ el('addlBtn').addEventListener('click',function(){
 
 
 // Schedule toggle
-el('amortToggle').addEventListener('click',function(){
+el('amortBtn').addEventListener('click',function(){
   var s=el('amortSection'),hidden=s.classList.toggle('hidden');
   var ico='<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>';
   this.innerHTML=ico+(hidden?' Show Year-by-Year Schedule':' Hide Year-by-Year Schedule');
@@ -290,7 +290,7 @@ function dlCSV(name,content){
   var a=document.createElement('a');
   a.href=URL.createObjectURL(blob);a.download=name;a.click();
 }
-el('btnSaveSnapshot').addEventListener('click',function(){
+el('btnSnapshot').addEventListener('click',function(){
   var html=document.documentElement.outerHTML;
   var blob=new Blob([html],{type:'text/html;charset=utf-8'});
   var a=document.createElement('a');
@@ -299,7 +299,7 @@ el('btnSaveSnapshot').addEventListener('click',function(){
   a.download='offset-snapshot-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
 });
-el('btnExportSummary').addEventListener('click',function(){
+el('btnCSV').addEventListener('click',function(){
   var P=el('fLoan').value,R=el('fRate').value,T=el('fTerm').value;
   if(!P||!R||!T) return;
   var freq=getFreq();
@@ -320,7 +320,7 @@ el('btnExportSummary').addEventListener('click',function(){
   ];
   dlCSV('offset-account-summary.csv',lines.join('\n'));
 });
-el('btnExportSchedule').addEventListener('click',function(){
+el('btnSchedCSV').addEventListener('click',function(){
   var trs=el('amortBody').querySelectorAll('tr:not(.yr-row)');
   if(!trs.length) return;
   var lines=['Period,Offset Balance,Effective Principal,Interest,Interest Saved,Closing Balance'];
@@ -333,8 +333,8 @@ el('btnExportSchedule').addEventListener('click',function(){
 
 // Input listeners
 ['fLoan','fRate','fTerm','fOffset','fContrib','fStart'].forEach(function(id){
-  g(id).addEventListener('input',calculate);
-  g(id).addEventListener('change',calculate);
+  el(id).addEventListener('input',calculate);
+  el(id).addEventListener('change',calculate);
 });
 document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventListener('change',calculate);});
 

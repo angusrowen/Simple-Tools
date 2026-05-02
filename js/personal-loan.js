@@ -142,7 +142,7 @@ function calculate(){
   if(P<=0||rate<=0||yrs<=0){
     el('rRepay').innerHTML='&#8212;';el('rTotal').innerHTML='&#8212;';el('rInterest').innerHTML='&#8212;';
     el('rFeeBox').classList.add('hidden');el('rCostBox').classList.add('hidden');el('rCmpBox').classList.add('hidden');
-    ['bannerExtra','bannerBalloon','bannerPayoff'].forEach(function(id){g(id).classList.add('hidden');});
+    ['bannerExtra','bannerBalloon','bannerPayoff'].forEach(function(id){el(id).classList.add('hidden');});
     el('tBody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-light);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
     el('amortBody').innerHTML='';
     return;
@@ -245,7 +245,7 @@ el('addlBtn').addEventListener('click',function(){
 });
 
 
-el('amortToggle').addEventListener('click',function(){
+el('amortBtn').addEventListener('click',function(){
   var s=el('amortSection'),hidden=s.classList.toggle('hidden');
   var ico='<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg> ';
   this.innerHTML=ico+(hidden?'Show Repayment Schedule':'Hide Repayment Schedule');
@@ -272,7 +272,7 @@ function doReset(){
   el('rMonthly').checked=true;
   el('rRepay').innerHTML='&#8212;';el('rTotal').innerHTML='&#8212;';el('rInterest').innerHTML='&#8212;';
   el('rFeeBox').classList.add('hidden');el('rCostBox').classList.add('hidden');el('rCmpBox').classList.add('hidden');
-  ['bannerExtra','bannerBalloon','bannerPayoff'].forEach(function(id){g(id).classList.add('hidden');});
+  ['bannerExtra','bannerBalloon','bannerPayoff'].forEach(function(id){el(id).classList.add('hidden');});
   el('tBody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-light);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
   el('amortBody').innerHTML='';
   calculate();
@@ -286,8 +286,58 @@ function dlCSV(name,content){
   var a=document.createElement('a');
   a.href=URL.createObjectURL(blob);a.download=name;a.click();
 }
-document.addEventListener('DOMContentLoaded',function(){
 
+
+el('btnCSV').addEventListener('click',function(){
+  var P=el('fAmt').value,R=el('fRate').value,T=el('fTerm').value;
+  if(!P||!R||!T)return;
+  var purpose=el('fPurpose').options[el('fPurpose').selectedIndex].text;
+  var lines=[
+    'Personal Loan Repayment Calculator - Summary',
+    'Loan Purpose,'+purpose,
+    'Loan Amount,$'+P,
+    'Annual Rate,'+R+'%',
+    'Term,'+T+' years',
+    'Frequency,'+fLbl(getFreq()),
+    'Repayment,'+el('rRepay').textContent,
+    'Total Repayments,'+el('rTotal').textContent,
+    'Total Interest,'+el('rInterest').textContent
+  ];
+  !if(el('rFeeBox').classList.contains('hidden'))lines.push('Total Fees,'+el('rFees').textContent);
+  !if(el('rCostBox').classList.contains('hidden'))lines.push('Total Cost,'+el('rCost').textContent);
+  !if(el('rCmpBox').classList.contains('hidden'))lines.push('Comparison Rate (est.),'+el('rCmp').textContent);
+  dlCSV('personal-loan-summary.csv',lines.join('\n'));
+});
+
+
+el('btnAmortCSV').addEventListener('click',function(){
+  var trs=el('amortBody').querySelectorAll('tr:not(.yr-row)');
+  if(!trs.length)return;
+  var lines=['#,Period,Opening Balance,Interest,Principal,Extra,Closing Balance'];
+  trs.forEach(function(tr){
+    lines.push(Array.from(tr.querySelectorAll('td')).map(function(td){return td.textContent.replace(/,/g,'');}).join(','));
+  });
+  dlCSV('personal-loan-schedule.csv',lines.join('\n'));
+});
+
+
+el('btnSaveSnapshot').addEventListener('click',function(){
+  var blob=new Blob([document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  var d=new Date();
+  a.download='personal-loan-calculator-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+});
+
+
+['fAmt','fRate','fTerm','fExtra','fEstFee','fMFee','fBalloon','fStart','fPurpose'].forEach(function(id){
+  el(id).addEventListener('input',calculate);
+  el(id).addEventListener('change',calculate);
+});
+document.querySelectorAll('input[name="freq"]').forEach(function(r){r.addEventListener('change',calculate);});
+
+
+document.addEventListener('DOMContentLoaded',function(){
   (function(){
     var ni=el('fAmt'),sr=el('amtRange');
     if(ni&&sr){
@@ -303,54 +353,6 @@ document.addEventListener('DOMContentLoaded',function(){
   calculate();
   var b=el('addlBody');
   if(window.innerWidth<900)b.classList.add('collapsed'),el('addlBtn').setAttribute('aria-expanded','false');
-
-  el('btnExportSummary').addEventListener('click',function(){
-    var P=el('fAmt').value,R=el('fRate').value,T=el('fTerm').value;
-    if(!P||!R||!T)return;
-    var purpose=el('fPurpose').options[el('fPurpose').selectedIndex].text;
-    var lines=[
-      'Personal Loan Repayment Calculator - Summary',
-      'Loan Purpose,'+purpose,
-      'Loan Amount,$'+P,
-      'Annual Rate,'+R+'%',
-      'Term,'+T+' years',
-      'Frequency,'+fLbl(getFreq()),
-      'Repayment,'+el('rRepay').textContent,
-      'Total Repayments,'+el('rTotal').textContent,
-      'Total Interest,'+el('rInterest').textContent
-    ];
-    !if(el('rFeeBox').classList.contains('hidden'))lines.push('Total Fees,'+el('rFees').textContent);
-    !if(el('rCostBox').classList.contains('hidden'))lines.push('Total Cost,'+el('rCost').textContent);
-    !if(el('rCmpBox').classList.contains('hidden'))lines.push('Comparison Rate (est.),'+el('rCmp').textContent);
-    dlCSV('personal-loan-summary.csv',lines.join('\n'));
-  });
-  
-  
-  el('btnExportSchedule').addEventListener('click',function(){
-    var trs=el('amortBody').querySelectorAll('tr:not(.yr-row)');
-    if(!trs.length)return;
-    var lines=['#,Period,Opening Balance,Interest,Principal,Extra,Closing Balance'];
-    trs.forEach(function(tr){
-      lines.push(Array.from(tr.querySelectorAll('td')).map(function(td){return td.textContent.replace(/,/g,'');}).join(','));
-    });
-    dlCSV('personal-loan-schedule.csv',lines.join('\n'));
-  });
-  
-  
-  el('btnSaveSnapshot').addEventListener('click',function(){
-    var blob=new Blob([document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
-    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
-    var d=new Date();
-    a.download='personal-loan-calculator-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-  });
-  
-  
-  ['fAmt','fRate','fTerm','fExtra','fEstFee','fMFee','fBalloon','fStart','fPurpose'].forEach(function(id){
-    g(id).addEventListener('input',calculate);
-    g(id).addEventListener('change',calculate);
-  });
-  document.querySelectorAll('input[name="freq"]').forEach(function(r){r.addEventListener('change',calculate);});
 });
 
 })();
