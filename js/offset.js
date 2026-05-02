@@ -1,4 +1,3 @@
-(function(){
 'use strict';
 function g(id){return document.getElementById(id);}
 function fmt2(n){return '$'+Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});}
@@ -249,8 +248,7 @@ function calculate(){
 
 // Collapsible
 document.addEventListener('DOMContentLoaded',function(){
-
-  var now=new Date();
+var now=new Date();
   g('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
   calculate();
   var ni=g('fLoan'),sr=g('loanRange');
@@ -268,98 +266,96 @@ document.addEventListener('DOMContentLoaded',function(){
     g('addlBtn').setAttribute('aria-expanded','false');
   }
 
-  g('addlBtn').addEventListener('click',function(){
-    var b=g('addlBody'),exp=this.getAttribute('aria-expanded')==='true';
-    this.setAttribute('aria-expanded',String(!exp));
-    b.classList.toggle('collapsed',exp);
-  });
-
-
-  // Schedule toggle
-  g('amortToggle').addEventListener('click',function(){
-    var s=g('amortSection'),hidden=s.classList.toggle('hidden');
-    var ico='<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>';
-    this.innerHTML=ico+(hidden?' Show Year-by-Year Schedule':' Hide Year-by-Year Schedule');
-  });
-
-
-  // Reset
-  function doReset(){
-    document.querySelectorAll('.collapsible-header').forEach(function(h){
-      h.setAttribute('aria-expanded','true');
-      var body=h.nextElementSibling;
-      if(body&&body.classList.contains('collapsible-body'))body.classList.remove('collapsed');
-    });
-    g('fLoan').value=500000;
-    g('fRate').value=6.00;
-    g('fTerm').value=30;
-    g('fOffset').value=50000;
-    g('fContrib').value='';
-    g('rMonthly').checked=true;
-    var now=new Date();
-    g('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
-    calculate();
-  }
-  g('btnReset').addEventListener('click',doReset);
-  g('btnStartOver').addEventListener('click',function(){doReset();window.scrollTo({top:0,behavior:'smooth'});});
-
-
-  // CSV helpers
-  function dlCSV(name,content){
-    var blob=new Blob([content],{type:'text/csv'});
-    var a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);a.download=name;a.click();
-  }
-  g('btnSaveSnapshot').addEventListener('click',function(){
-    var html=document.documentElement.outerHTML;
-    var blob=new Blob([html],{type:'text/html;charset=utf-8'});
-    var a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);
-    var d=new Date();
-    a.download='offset-snapshot-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-  });
-  g('btnExportSummary').addEventListener('click',function(){
-    var P=g('fLoan').value,R=g('fRate').value,T=g('fTerm').value;
-    if(!P||!R||!T) return;
-    var freq=getFreq();
-    var lines=[
-      'Offset Account Savings Calculator - Summary',
-      'Loan Balance,$'+P,
-      'Annual Interest Rate,'+R+'%',
-      'Remaining Term,'+T+' years',
-      'Offset Balance,$'+(g('fOffset').value||0),
-      'Monthly Contribution,$'+(g('fContrib').value||0),
-      'Repayment Frequency,'+fLbl(freq),
-      '',
-      'Metric,With Offset,Without Offset,Saving',
-      fLbl(freq)+' Repayment,'+g('rRepay').textContent+',,',
-      'Effective Principal,'+g('rEffective').textContent+',,',
-      'Total Interest,'+g('rIntWith').textContent+','+g('rIntNo').textContent+','+g('rSaved').textContent,
-      'Interest Saving per Period,'+g('rPeriodSaving').textContent+',,'
-    ];
-    dlCSV('offset-account-summary.csv',lines.join('\n'));
-  });
-  g('btnExportSchedule').addEventListener('click',function(){
-    var trs=g('amortBody').querySelectorAll('tr:not(.yr-row)');
-    if(!trs.length) return;
-    var lines=['Period,Offset Balance,Effective Principal,Interest,Interest Saved,Closing Balance'];
-    trs.forEach(function(tr){
-      lines.push(Array.from(tr.querySelectorAll('td')).map(function(td){return td.textContent.replace(/,/g,'');}).join(','));
-    });
-    dlCSV('offset-account-schedule.csv',lines.join('\n'));
-  });
-
-
-  // Input listeners
-  ['fLoan','fRate','fTerm','fOffset','fContrib','fStart'].forEach(function(id){
-    g(id).addEventListener('input',calculate);
-    g(id).addEventListener('change',calculate);
-  });
-  document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventListener('change',calculate);});
-
-
-  // Init
+g('addlBtn').addEventListener('click',function(){
+  var b=g('addlBody'),exp=this.getAttribute('aria-expanded')==='true';
+  this.setAttribute('aria-expanded',String(!exp));
+  b.classList.toggle('collapsed',exp);
 });
 
-})();
+
+// Schedule toggle
+g('amortToggle').addEventListener('click',function(){
+  var s=g('amortSection'),hidden=s.classList.toggle('hidden');
+  var ico='<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>';
+  this.innerHTML=ico+(hidden?' Show Year-by-Year Schedule':' Hide Year-by-Year Schedule');
+});
+
+
+// Reset
+function doReset(){
+  document.querySelectorAll('.collapsible-header').forEach(function(h){
+    h.setAttribute('aria-expanded','true');
+    var body=h.nextElementSibling;
+    if(body&&body.classList.contains('collapsible-body'))body.classList.remove('collapsed');
+  });
+  g('fLoan').value=500000;
+  g('fRate').value=6.00;
+  g('fTerm').value=30;
+  g('fOffset').value=50000;
+  g('fContrib').value='';
+  g('rMonthly').checked=true;
+  var now=new Date();
+  g('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  calculate();
+}
+g('btnReset').addEventListener('click',doReset);
+g('btnStartOver').addEventListener('click',function(){doReset();window.scrollTo({top:0,behavior:'smooth'});});
+
+
+// CSV helpers
+function dlCSV(name,content){
+  var blob=new Blob([content],{type:'text/csv'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=name;a.click();
+}
+g('btnSaveSnapshot').addEventListener('click',function(){
+  var html=document.documentElement.outerHTML;
+  var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  var d=new Date();
+  a.download='offset-snapshot-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+});
+g('btnExportSummary').addEventListener('click',function(){
+  var P=g('fLoan').value,R=g('fRate').value,T=g('fTerm').value;
+  if(!P||!R||!T) return;
+  var freq=getFreq();
+  var lines=[
+    'Offset Account Savings Calculator - Summary',
+    'Loan Balance,$'+P,
+    'Annual Interest Rate,'+R+'%',
+    'Remaining Term,'+T+' years',
+    'Offset Balance,$'+(g('fOffset').value||0),
+    'Monthly Contribution,$'+(g('fContrib').value||0),
+    'Repayment Frequency,'+fLbl(freq),
+    '',
+    'Metric,With Offset,Without Offset,Saving',
+    fLbl(freq)+' Repayment,'+g('rRepay').textContent+',,',
+    'Effective Principal,'+g('rEffective').textContent+',,',
+    'Total Interest,'+g('rIntWith').textContent+','+g('rIntNo').textContent+','+g('rSaved').textContent,
+    'Interest Saving per Period,'+g('rPeriodSaving').textContent+',,'
+  ];
+  dlCSV('offset-account-summary.csv',lines.join('\n'));
+});
+g('btnExportSchedule').addEventListener('click',function(){
+  var trs=g('amortBody').querySelectorAll('tr:not(.yr-row)');
+  if(!trs.length) return;
+  var lines=['Period,Offset Balance,Effective Principal,Interest,Interest Saved,Closing Balance'];
+  trs.forEach(function(tr){
+    lines.push(Array.from(tr.querySelectorAll('td')).map(function(td){return td.textContent.replace(/,/g,'');}).join(','));
+  });
+  dlCSV('offset-account-schedule.csv',lines.join('\n'));
+});
+
+
+// Input listeners
+['fLoan','fRate','fTerm','fOffset','fContrib','fStart'].forEach(function(id){
+  g(id).addEventListener('input',calculate);
+  g(id).addEventListener('change',calculate);
+});
+document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventListener('change',calculate);});
+
+
+// Init
+});
