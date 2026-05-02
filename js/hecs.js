@@ -197,7 +197,7 @@ function calc(){
 }
 
 // ─── Export / Snapshot ───────────────────────────────────────────────────────
-$('btnSave').addEventListener('click', () => {
+$('btnSaveSnapshot').addEventListener('click', () => {
   const html = document.documentElement.outerHTML;
   const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
   const a = document.createElement('a');
@@ -207,7 +207,7 @@ $('btnSave').addEventListener('click', () => {
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
 });
 
-$('btnCSV').addEventListener('click', () => {
+$('btnExportSummary').addEventListener('click', () => {
   const d = window._schedData || {};
   const balance = parseFloat($('loanBalance').value)||0;
   const income  = parseFloat($('grossIncome').value)||0;
@@ -225,7 +225,7 @@ $('btnCSV').addEventListener('click', () => {
   a.click();
 });
 
-$('btnAmortCSV').addEventListener('click', () => {
+$('btnExportSchedule').addEventListener('click', () => {
   const { sched = [], showVol = false } = window._schedData || {};
   const volHdr = showVol ? ',Voluntary Repayment' : '';
   let csv = `#,Year,Opening Balance,Indexation,Compulsory Repayment${volHdr},Closing Balance\n`;
@@ -239,9 +239,15 @@ $('btnAmortCSV').addEventListener('click', () => {
   a.click();
 });
 
-$('btnStartOver').addEventListener('click', () => { $('btnReset').click(); });
+$('btnStartOver').addEventListener('click',function(){$('btnReset').click();window.scrollTo({top:0,behavior:'smooth'});});
 
 $('btnReset').addEventListener('click', () => {
+  // Reset collapsibles to default open state
+  document.querySelectorAll('.collapsible-header').forEach(function(h){
+    h.setAttribute('aria-expanded','true');
+    var body=h.nextElementSibling;
+    if(body&&body.classList.contains('collapsible-body'))body.classList.remove('collapsed');
+  });
   $('loanBalance').value = 35000; $('loanBalanceRange').value = 35000;
   $('grossIncome').value = 75000; $('grossIncomeRange').value = 75000;
   $('incomeGrowth').value = 3;

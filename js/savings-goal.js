@@ -256,12 +256,18 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   });
 
-  el('schedBtn').onclick = function() {
+  el('amortToggle').onclick = function() {
     var hidden = el('schedWrap').classList.toggle('hidden');
     this.textContent = (hidden ? '☰ Show' : '☰ Hide') + ' Year-by-Year Schedule';
   };
 
   el('btnReset').onclick = function() {
+  // Reset collapsibles to default open state
+  document.querySelectorAll('.collapsible-header').forEach(function(h){
+    h.setAttribute('aria-expanded','true');
+    var body=h.nextElementSibling;
+    if(body&&body.classList.contains('collapsible-body'))body.classList.remove('collapsed');
+  });
     el('fGoal').value='50000'; el('fInitial').value='5000';
     el('fContrib').value='800'; el('fRate').value='4.5';
     el('fTarget').value='5'; el('fLabel').value='';
@@ -274,18 +280,14 @@ document.addEventListener('DOMContentLoaded', function() {
     calculate();
   };
 
-  el('btnStartOver').onclick = function() {
-    if (confirm('Reset all fields to defaults?')) {
-      location.reload();
-    }
-  };
+  el('btnStartOver').onclick=function(){el('btnReset').onclick();window.scrollTo({top:0,behavior:'smooth'});};
 
   function dlCSV(name, rows2) {
     var a=document.createElement('a');
     a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows2.join('\n'));
     a.download=name; a.click();
   }
-  el('btnCSV').onclick = function() {
+  el('btnExportSummary').onclick = function() {
     var lbl = el('fLabel').value || 'Savings';
     dlCSV(lbl+'_summary.csv', [
       'Savings Goal Calculator',
@@ -297,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
       'Goal Date,' + el('rDate').textContent
     ]);
   };
-  el('btnSchedCSV').onclick = function() {
+  el('btnExportSchedule').onclick = function() {
     if (!lastRows.length) return;
     var startYM = el('fStart').value;
     var useInfl = inflOn();

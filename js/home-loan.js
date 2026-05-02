@@ -240,16 +240,16 @@
         }
         return cr * n * 100;
       }
-      el('rFeeBox').style.display  = '';
+      el('rFeeBox').classList.remove('hidden');
       el('rFees').textContent      = d0(totalFees);
-      el('rCostBox').style.display = '';
+      el('rCostBox').classList.remove('hidden');
       el('rCost').textContent      = d0(totCost);
-      el('rCmpBox').style.display  = '';
+      el('rCmpBox').classList.remove('hidden');
       el('rCmp').textContent       = compRate().toFixed(2) + '%';
     } else {
-      el('rFeeBox').style.display  = 'none';
-      el('rCostBox').style.display = 'none';
-      el('rCmpBox').style.display  = 'none';
+      el('rFeeBox').classList.add('hidden');
+      el('rCostBox').classList.add('hidden');
+      el('rCmpBox').classList.add('hidden');
     }
 
     if (ltype === 'io' && ioPer > 0) {
@@ -354,6 +354,12 @@
   }
 
   function doReset() {
+  // Reset collapsibles to default open state
+  document.querySelectorAll('.collapsible-header').forEach(function(h){
+    h.setAttribute('aria-expanded','true');
+    var body=h.nextElementSibling;
+    if(body&&body.classList.contains('collapsible-body'))body.classList.remove('collapsed');
+  });
     ['fLoanAmt','fRate','fTerm','fExtra','fOffset','fIOPer','fEstFee','fMFee'].forEach(function(id){ el(id).value=''; });
     el('fStart').value = '';
     el('rMonthly').checked = true;
@@ -361,7 +367,7 @@
     el('ioBlock').classList.add('hidden');
     el('ioMetrics').classList.add('hidden');
     el('amortSection').classList.add('hidden');
-    el('amortBtn').textContent = ' Show Amortisation Schedule';
+    el('amortToggle').textContent = ' Show Amortisation Schedule';
     clearAll();
     window.scrollTo({ top:0, behavior:'smooth' });
   }
@@ -494,10 +500,10 @@
     el('rIO').addEventListener('change', function() { el('ioBlock').classList.remove('hidden'); calculate(); });
     el('rPI').addEventListener('change', function() { el('ioBlock').classList.add('hidden');    calculate(); });
 
-    el('btnReset1').addEventListener('click', doReset);
+    el('btnReset').addEventListener('click', doReset);
     el('btnStartOver').addEventListener('click', doReset);
-    el('btnCSV').addEventListener('click', exportCSV);
-    el('btnAmortCSV').addEventListener('click', exportAmortCSV);
+    el('btnExportSummary').addEventListener('click', exportCSV);
+    el('btnExportSchedule').addEventListener('click', exportAmortCSV);
 
     el('btnSaveSnapshot').addEventListener('click', function() {
       var blob = new Blob([document.documentElement.outerHTML], {type:'text/html;charset=utf-8'});
@@ -508,7 +514,7 @@
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
     });
 
-    el('amortBtn').addEventListener('click', function() {
+    el('amortToggle').addEventListener('click', function() {
       var sec  = el('amortSection');
       var open = sec.classList.contains('hidden');
       if (open) { sec.classList.remove('hidden'); renderAmort(); this.textContent=' Hide Amortisation Schedule'; }

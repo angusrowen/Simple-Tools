@@ -22,7 +22,7 @@ function calcRepayment(P,annRate,termYrs){
 
 function updateExitUI(){
   var s=selling();
-  document.getElementById('exitFields').style.display=s?'block':'none';
+  if(s){document.getElementById('exitFields').classList.remove('hidden');}else{document.getElementById('exitFields').classList.add('hidden');}
   var b=document.getElementById('exitBanner');
   if(s){b.className='exit-banner-sell';b.innerHTML='<strong>Sell mode:</strong> Both assets sold at end of period. Property sale costs deducted from proceeds. CGT (50% discount) applied to investment gains.';}
   else{b.className='exit-banner-hold';b.innerHTML='<strong>Hold mode:</strong> Neither asset is sold. Net wealth = property value minus mortgage and portfolio as-is. No selling costs or CGT applied.';}
@@ -58,8 +58,8 @@ function calc(){
   var pct=(deposit/price*100).toFixed(1);
   document.getElementById('depositHint').textContent=pct+'% of purchase price'+(deposit/price>=0.20?' — no LMI required':' — LMI may apply');
   var lmiEl=document.getElementById('lmiInfo');
-  if(lmi>0){document.getElementById('lmiAmt').textContent=fmt(lmi);lmiEl.style.display='block';}
-  else lmiEl.style.display='none';
+  if(lmi>0){document.getElementById('lmiAmt').textContent=fmt(lmi);lmiEl.classList.remove('hidden');}
+  else lmiEl.classList.add('hidden');
 
   // Keep deposit slider max in sync with price
   var depositSlider=document.getElementById('depositRange');
@@ -206,6 +206,12 @@ function dlCSV(rows,fname){if(!rows||!rows.length)return;var a=document.createEl
 
 
 function resetAll(){
+  // Reset collapsibles to default open state
+  document.querySelectorAll('.collapsible-header').forEach(function(h){
+    h.setAttribute('aria-expanded','true');
+    var body=h.nextElementSibling;
+    if(body&&body.classList.contains('collapsible-body'))body.classList.remove('collapsed');
+  });
   var d={fPrice:800000,fDeposit:160000,fStampDuty:31070,fConveyancing:2000,fInspections:1000,fFurnishing:10000,fRate:6.00,fTerm:30,fCouncil:2000,fInsurance:2000,fMaintenance:4000,fBodyCorp:'',fPropertyGrowth:4.00,fAgentFee:'',fRent:3000,fRentGrowth:3.0,fRentInsurance:600,fInvReturn:8.0,fInvFee:0.20,fSellAgent:2.0,fSellOther:2000,fYears:20};
   for(var k in d){var el=document.getElementById(k);if(el)el.value=d[k];}
   // Reset sliders
@@ -249,8 +255,8 @@ document.getElementById('fSellTax').addEventListener('change',calc);
 
 
 document.getElementById('amortToggle').addEventListener('click',function(){
-  var sec=document.getElementById('amortSection'),open=sec.style.display==='block';
-  sec.style.display=open?'none':'block';
+  var sec=document.getElementById('amortSection'),open=!sec.classList.contains('hidden');
+  if(open){sec.classList.add('hidden');}else{sec.classList.remove('hidden');}
   this.innerHTML=open?'<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Show Year-by-Year Schedule':'<svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>Hide Year-by-Year Schedule';
 });
 

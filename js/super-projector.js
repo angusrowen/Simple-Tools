@@ -267,6 +267,12 @@ function toggleInflMode() {
 }
 
 function resetAll() {
+  // Reset collapsibles to default open state
+  document.querySelectorAll('.collapsible-header').forEach(function(h){
+    h.setAttribute('aria-expanded','true');
+    var body=h.nextElementSibling;
+    if(body&&body.classList.contains('collapsible-body'))body.classList.remove('collapsed');
+  });
   var d = {fCurrentAge:35,fRetireAge:67,fSalary:90000,fSuperRate:12,fSalGrowth:2.5,fCurrentBalance:75000,fVolContrib:200,fReturnRate:7.5,fReturnRetire:5.5,fFee:0.60,fTax:15,fInflation:2.5,fDrawdown:65000,fLifeExpect:87,fNCC:0,fNCCAge:35};
   for (var k in d) document.getElementById(k).value = d[k];
   var volSw = document.getElementById("volSwitch"); if (volSw) volSw.checked = false;
@@ -321,7 +327,7 @@ function dlCSV(rows, fname) {
 });
 
 document.getElementById("btnReset").addEventListener("click", resetAll);
-document.getElementById("btnStartOver").addEventListener("click", resetAll);
+document.getElementById("btnStartOver").addEventListener("click",function(){resetAll();window.scrollTo({top:0,behavior:"smooth"});});
 document.getElementById("btnExportSummary").addEventListener("click",  function() { dlCSV(summaryRows,  "super-summary.csv"); });
 document.getElementById("btnExportSchedule").addEventListener("click", function() { dlCSV(scheduleRows, "super-schedule.csv"); });
 document.getElementById("btnSaveSnapshot").addEventListener("click", function() {

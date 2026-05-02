@@ -376,6 +376,12 @@ function onFYChange(){
 
 // ─── Reset ───────────────────────────────────────────────────────────────────
 function resetAll(){
+  // Reset collapsibles to default open state
+  document.querySelectorAll('.collapsible-header').forEach(function(h){
+    h.setAttribute('aria-expanded','true');
+    var body=h.nextElementSibling;
+    if(body&&body.classList.contains('collapsible-body'))body.classList.remove('collapsed');
+  });
   document.getElementById('financialYear').value='2025-26';
   document.getElementById('salary').value='100000';
   document.getElementById('hourlyRate').value='50';
@@ -529,8 +535,8 @@ document.addEventListener('DOMContentLoaded',function(){
   });
   // Reset / export button wiring
   var btnReset=document.getElementById('btnReset');if(btnReset)btnReset.addEventListener('click',resetAll);
-  var btnStartOver=document.getElementById('btnStartOver');if(btnStartOver)btnStartOver.addEventListener('click',resetAll);
-  var btnCSV=document.getElementById('btnCSV');if(btnCSV)btnCSV.addEventListener('click',exportCSV);
-  var btnSave=document.getElementById('btnSave');if(btnSave)btnSave.addEventListener('click',saveHTML);
+  var btnStartOver=document.getElementById('btnStartOver');if(btnStartOver)btnStartOver.addEventListener('click',function(){resetAll();window.scrollTo({top:0,behavior:'smooth'});});
+  var btnCSV=document.getElementById('btnExportSummary');if(btnCSV)btnCSV.addEventListener('click',exportCSV);
+  var btnSave=document.getElementById('btnSaveSnapshot');if(btnSave)btnSave.addEventListener('click',saveHTML);
   onFYChange();
 });

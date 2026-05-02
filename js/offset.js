@@ -1,5 +1,5 @@
 'use strict';
-function g(id){return document.getElementById(id);}
+function el(id){return document.getElementById(id);}
 function fmt2(n){return '$'+Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function fmt0(n){return '$'+Math.round(Math.abs(n)).toLocaleString('en-AU');}
 function getFreq(){return document.querySelector('input[name=freq]:checked').value;}
@@ -90,7 +90,7 @@ function drawChart(withRows,noRows,P,yrs,freq){
     withDebt.push(withRows[eiW]?Math.round(withRows[eiW].closing):0);
     noDebt.push(noRows[eiN]?Math.round(noRows[eiN].closing):0);
   }
-  var canvas=g('myChart'),ctx=canvas.getContext('2d');
+  var canvas=el('myChart'),ctx=canvas.getContext('2d');
   if(lineChart){lineChart.destroy();lineChart=null;}
   lineChart=new Chart(ctx,{
     type:'line',
@@ -126,25 +126,25 @@ function drawChart(withRows,noRows,P,yrs,freq){
 
 
 function calculate(){
-  var P=parseFloat(g('fLoan').value)||0;
-  var rate=parseFloat(g('fRate').value)||0;
-  var yrs=parseFloat(g('fTerm').value)||0;
-  var offset=parseFloat(g('fOffset').value)||0;
-  var contrib=parseFloat(g('fContrib').value)||0;
+  var P=parseFloat(el('fLoan').value)||0;
+  var rate=parseFloat(el('fRate').value)||0;
+  var yrs=parseFloat(el('fTerm').value)||0;
+  var offset=parseFloat(el('fOffset').value)||0;
+  var contrib=parseFloat(el('fContrib').value)||0;
   var freq=getFreq();
-  var sv=g('fStart').value;
+  var sv=el('fStart').value;
   var mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
   if(P<=0||rate<=0||yrs<=0){
     ['rRepay','rEffective','rPeriodSaving','rIntWith','rIntNo','rSaved']
       .forEach(function(id){g(id).innerHTML='&mdash;';});
-    g('rRepayLbl').textContent='Monthly Repayment';
-    g('rSavingLbl').textContent='Interest Saving / Month';
-    g('cmpBody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-light);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
+    el('rRepayLbl').textContent='Monthly Repayment';
+    el('rSavingLbl').textContent='Interest Saving / Month';
+    el('cmpBody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-light);font-style:italic;padding:20px">Enter loan details to see results</td></tr>';
     ['bannerSaving','bannerContrib','bannerPayoff'].forEach(function(id){
       g(id).classList.add('hidden');
     });
-    g('amortBody').innerHTML='';
+    el('amortBody').innerHTML='';
     if(lineChart){lineChart.destroy();lineChart=null;}
     return;
   }
@@ -162,30 +162,30 @@ function calculate(){
   var diff=noRows.length-withRows.length;
   var tsDiff=diff>0?termStr(diff,freq):'0';
 
-  g('rRepayLbl').textContent=fLbl(freq)+' Repayment';
-  g('rSavingLbl').textContent='Interest Saving / '+fLbl(freq).replace('ly','').replace('ly','');
+  el('rRepayLbl').textContent=fLbl(freq)+' Repayment';
+  el('rSavingLbl').textContent='Interest Saving / '+fLbl(freq).replace('ly','').replace('ly','');
 
-  g('rRepay').textContent=fmt2(pmt);
-  g('rEffective').textContent=fmt0(Math.max(P-effOff,0));
-  g('rPeriodSaving').textContent=fmt2(saving0);
-  g('rIntWith').textContent=fmt0(totIntW);
-  g('rIntNo').textContent=fmt0(totIntNo);
-  g('rSaved').textContent=fmt0(saved);
+  el('rRepay').textContent=fmt2(pmt);
+  el('rEffective').textContent=fmt0(Math.max(P-effOff,0));
+  el('rPeriodSaving').textContent=fmt2(saving0);
+  el('rIntWith').textContent=fmt0(totIntW);
+  el('rIntNo').textContent=fmt0(totIntNo);
+  el('rSaved').textContent=fmt0(saved);
 
   // Banners — use class="hidden" toggle
   if(offset>0){
-    g('bnOffsetAmt').textContent=fmt0(offset);
-    g('bnSaved').textContent=fmt0(saved);
-    g('bnTime').textContent=tsDiff;
-    g('bannerSaving').classList.remove('hidden');
+    el('bnOffsetAmt').textContent=fmt0(offset);
+    el('bnSaved').textContent=fmt0(saved);
+    el('bnTime').textContent=tsDiff;
+    el('bannerSaving').classList.remove('hidden');
   } else {
-    g('bannerSaving').classList.add('hidden');
+    el('bannerSaving').classList.add('hidden');
   }
   if(contrib>0){
-    g('bnContrib').textContent=fmt0(contrib);
-    g('bannerContrib').classList.remove('hidden');
+    el('bnContrib').textContent=fmt0(contrib);
+    el('bannerContrib').classList.remove('hidden');
   } else {
-    g('bannerContrib').classList.add('hidden');
+    el('bannerContrib').classList.add('hidden');
   }
   if(sv){
     var pts=sv.split('-');
@@ -193,17 +193,17 @@ function calculate(){
     sdW.setMonth(sdW.getMonth()+Math.round(withRows.length/ppy(freq)*12));
     var diff2=noRows.length-withRows.length;
     var tsDiff2=diff2>0?termStr(diff2,freq):'0';
-    g('bnPayoff').textContent=mn[sdW.getMonth()]+' '+sdW.getFullYear();
-    g('bnPayoffDiff').textContent=tsDiff2;
-    if(diff2>0) g('bannerPayoff').classList.remove('hidden');
-    else g('bannerPayoff').classList.add('hidden');
+    el('bnPayoff').textContent=mn[sdW.getMonth()]+' '+sdW.getFullYear();
+    el('bnPayoffDiff').textContent=tsDiff2;
+    if(diff2>0) el('bannerPayoff').classList.remove('hidden');
+    else el('bannerPayoff').classList.add('hidden');
   } else {
-    g('bannerPayoff').classList.add('hidden');
+    el('bannerPayoff').classList.add('hidden');
   }
 
   var totalRepW=pmt*withRows.length;
   var totalRepNo=pmt*noRows.length;
-  g('cmpBody').innerHTML=
+  el('cmpBody').innerHTML=
     '<tr><td>Loan Term</td><td>'+termStr(withRows.length,freq)+'</td><td>'+termStr(noRows.length,freq)+'</td><td style="color:var(--green);font-weight:700">'+(diff>0?'&minus;'+tsDiff:'&mdash;')+'</td></tr>'+
     '<tr><td>Repayment ('+fLbl(freq)+')</td><td>'+fmt2(pmt)+'</td><td>'+fmt2(pmt)+'</td><td>&mdash;</td></tr>'+
     '<tr><td>Total Interest</td><td>'+fmt0(totIntW)+'</td><td>'+fmt0(totIntNo)+'</td><td style="color:var(--green);font-weight:700">&minus;'+fmt0(saved)+'</td></tr>'+
@@ -242,21 +242,21 @@ function calculate(){
       '<td>'+fmt0(row.closing)+'</td>'+
     '</tr>';
   }
-  g('amortBody').innerHTML=ah;
+  el('amortBody').innerHTML=ah;
 }
 
 
 // Collapsible
-g('addlBtn').addEventListener('click',function(){
-  var b=g('addlBody'),exp=this.getAttribute('aria-expanded')==='true';
+el('addlBtn').addEventListener('click',function(){
+  var b=el('addlBody'),exp=this.getAttribute('aria-expanded')==='true';
   this.setAttribute('aria-expanded',String(!exp));
   b.classList.toggle('collapsed',exp);
 });
 
 
 // Schedule toggle
-g('amortBtn').addEventListener('click',function(){
-  var s=g('amortSection'),hidden=s.classList.toggle('hidden');
+el('amortToggle').addEventListener('click',function(){
+  var s=el('amortSection'),hidden=s.classList.toggle('hidden');
   var ico='<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>';
   this.innerHTML=ico+(hidden?' Show Year-by-Year Schedule':' Hide Year-by-Year Schedule');
 });
@@ -264,18 +264,24 @@ g('amortBtn').addEventListener('click',function(){
 
 // Reset
 function doReset(){
-  g('fLoan').value=500000;
-  g('fRate').value=6.00;
-  g('fTerm').value=30;
-  g('fOffset').value=50000;
-  g('fContrib').value='';
-  g('rMonthly').checked=true;
+  // Reset collapsibles to default open state
+  document.querySelectorAll('.collapsible-header').forEach(function(h){
+    h.setAttribute('aria-expanded','true');
+    var body=h.nextElementSibling;
+    if(body&&body.classList.contains('collapsible-body'))body.classList.remove('collapsed');
+  });
+  el('fLoan').value=500000;
+  el('fRate').value=6.00;
+  el('fTerm').value=30;
+  el('fOffset').value=50000;
+  el('fContrib').value='';
+  el('rMonthly').checked=true;
   var now=new Date();
-  g('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  el('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
   calculate();
 }
-g('btnReset1').addEventListener('click',doReset);
-g('btnStartOver').addEventListener('click',doReset);
+el('btnReset').addEventListener('click',doReset);
+el('btnStartOver').addEventListener('click',function(){doReset();window.scrollTo({top:0,behavior:'smooth'});});
 
 
 // CSV helpers
@@ -284,7 +290,7 @@ function dlCSV(name,content){
   var a=document.createElement('a');
   a.href=URL.createObjectURL(blob);a.download=name;a.click();
 }
-g('btnSnapshot').addEventListener('click',function(){
+el('btnSaveSnapshot').addEventListener('click',function(){
   var html=document.documentElement.outerHTML;
   var blob=new Blob([html],{type:'text/html;charset=utf-8'});
   var a=document.createElement('a');
@@ -293,8 +299,8 @@ g('btnSnapshot').addEventListener('click',function(){
   a.download='offset-snapshot-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.html';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
 });
-g('btnCSV').addEventListener('click',function(){
-  var P=g('fLoan').value,R=g('fRate').value,T=g('fTerm').value;
+el('btnExportSummary').addEventListener('click',function(){
+  var P=el('fLoan').value,R=el('fRate').value,T=el('fTerm').value;
   if(!P||!R||!T) return;
   var freq=getFreq();
   var lines=[
@@ -302,20 +308,20 @@ g('btnCSV').addEventListener('click',function(){
     'Loan Balance,$'+P,
     'Annual Interest Rate,'+R+'%',
     'Remaining Term,'+T+' years',
-    'Offset Balance,$'+(g('fOffset').value||0),
-    'Monthly Contribution,$'+(g('fContrib').value||0),
+    'Offset Balance,$'+(el('fOffset').value||0),
+    'Monthly Contribution,$'+(el('fContrib').value||0),
     'Repayment Frequency,'+fLbl(freq),
     '',
     'Metric,With Offset,Without Offset,Saving',
-    fLbl(freq)+' Repayment,'+g('rRepay').textContent+',,',
-    'Effective Principal,'+g('rEffective').textContent+',,',
-    'Total Interest,'+g('rIntWith').textContent+','+g('rIntNo').textContent+','+g('rSaved').textContent,
-    'Interest Saving per Period,'+g('rPeriodSaving').textContent+',,'
+    fLbl(freq)+' Repayment,'+el('rRepay').textContent+',,',
+    'Effective Principal,'+el('rEffective').textContent+',,',
+    'Total Interest,'+el('rIntWith').textContent+','+el('rIntNo').textContent+','+el('rSaved').textContent,
+    'Interest Saving per Period,'+el('rPeriodSaving').textContent+',,'
   ];
   dlCSV('offset-account-summary.csv',lines.join('\n'));
 });
-g('btnSchedCSV').addEventListener('click',function(){
-  var trs=g('amortBody').querySelectorAll('tr:not(.yr-row)');
+el('btnExportSchedule').addEventListener('click',function(){
+  var trs=el('amortBody').querySelectorAll('tr:not(.yr-row)');
   if(!trs.length) return;
   var lines=['Period,Offset Balance,Effective Principal,Interest,Interest Saved,Closing Balance'];
   trs.forEach(function(tr){
@@ -336,20 +342,20 @@ document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventList
 // Init
 document.addEventListener('DOMContentLoaded',function(){
   var now=new Date();
-  g('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  el('fStart').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
   calculate();
-  var ni=g('fLoan'),sr=g('loanRange');
+  var ni=el('fLoan'),sr=el('loanRange');
   if(ni&&sr){
     ni.addEventListener('input',function(){sr.value=Math.min(parseFloat(ni.value)||0,3000000);});
     sr.addEventListener('input',function(){ni.value=sr.value;calculate();});
   }
-  var oi=g('fOffset'),or2=g('offsetRange');
+  var oi=el('fOffset'),or2=el('offsetRange');
   if(oi&&or2){
     oi.addEventListener('input',function(){or2.value=Math.min(parseFloat(oi.value)||0,300000);});
     or2.addEventListener('input',function(){oi.value=or2.value;calculate();});
   }
   if(window.innerWidth<900){
-    g('addlBody').classList.add('collapsed');
-    g('addlBtn').setAttribute('aria-expanded','false');
+    el('addlBody').classList.add('collapsed');
+    el('addlBtn').setAttribute('aria-expanded','false');
   }
 });

@@ -14,7 +14,7 @@
 
 <div class="topbar">
   <div class="topbar-logo">
-    <a href="index.html" title="Back to calculators" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#6c5b8e;border-radius:10px;color:#fff;text-decoration:none">
+    <a href="index.html" title="Back to all calculators" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#6c5b8e;border-radius:10px;color:#fff;text-decoration:none">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M17 12c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.24-5 5-5 5 2.24 5 5zm-5-7A7 7 0 1 0 12 19 7 7 0 0 0 12 5zm-1 3v4l3.28 1.97.72-1.21-2.75-1.63V8H11zm9.78 2.61l-1.42-1.42-1.4 1.42 1.42 1.42 1.4-1.42zM3.64 10.19L2.22 11.61l1.4 1.42 1.42-1.42-1.4-1.42zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
     </a>
   </div>
@@ -48,7 +48,7 @@
     <div class="card">
       <div class="card-header-row">
         <h2>Loan &amp; Offset Details</h2>
-        <button class="btn btn-navy" id="btnReset1" type="button">
+        <button class="btn btn-navy" id="btnReset" type="button">
           <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
           Reset
         </button>
@@ -236,7 +236,7 @@
       </div>
 
       <!-- Schedule -->
-      <button class="amort-btn" id="amortBtn" type="button">
+      <button class="amort-btn" id="amortToggle" type="button">
         <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
         Show Year-by-Year Schedule
       </button>
@@ -261,18 +261,18 @@
       <!-- Actions -->
       <div class="actions-bar">
         <div class="actions-left">
-          <button class="btn btn-green" id="btnCSV" type="button">
+          <button class="btn btn-green" id="btnExportSummary" type="button">
             <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-13 9v2h14v-2H6z"/></svg>
             Export Summary CSV
           </button>
-          <button class="btn btn-green" id="btnSchedCSV" type="button">
+          <button class="btn btn-green" id="btnExportSchedule" type="button">
             <svg viewBox="0 0 24 24"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
             Export Schedule CSV
           </button>
         </div>
         <div style="flex:1"></div>
         <div class="actions-right">
-          <button class="btn btn-navy" id="btnSnapshot" type="button">
+          <button class="btn btn-navy" id="btnSaveSnapshot" type="button">
             <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>
             Save File
           </button>
@@ -304,7 +304,7 @@
 
 </div><!-- /page-wrapper -->
 
-<div class="ft"><span>&copy; 2025 Australian Finance Tools &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy</a></span></div>
+<div class="ft"><span>&copy; 2026 Australian Finance Tools &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy</a></span></div>
 
 <script src="js/offset.js"></script>
 </body>
