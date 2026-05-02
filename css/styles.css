@@ -365,7 +365,7 @@ input[type=number]::placeholder{color:#c5bdb2;}
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button{opacity:.4;}
 
-.input-wrap{
+..input-wrap{
   position:relative;
   display:flex;
   align-items:center;
@@ -382,10 +382,10 @@ input[type=number]::-webkit-outer-spin-button{opacity:.4;}
   z-index:1;
 }
 
-.input-wrap .prefix{left:10px; top:50%; transform:translateY(-50%);}
-.input-wrap .suffix{right:10px; top:50%; transform:translateY(-50%);}
-.input-wrap input.has-prefix{padding-left:26px;}
-.input-wrap input.has-suffix{padding-right:30px;}
+.input-wrap .prefix { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); z-index: 1; pointer-events: none; }
+.input-wrap .suffix { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 1; pointer-events: none; }
+.input-wrap input.has-prefix, input.has-prefix { padding-left: 26px !important; }
+.input-wrap input.has-suffix, input.has-suffix { padding-right: 30px !important; }
 .input-wrap input:not(.has-prefix):not(.has-suffix){padding:9px 12px;}
 
 input[type=range]{
