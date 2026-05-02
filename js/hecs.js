@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded',function(){
 // ─── ATO 2025-26 brackets ───────────────────────────────────────────────────
 const BRACKETS = [
   { min:0,       max:67000,   label:'$0 – $67,000',        calc:'Nil'                               },
@@ -54,7 +55,7 @@ function initChart(){
   balChart = new Chart($('balanceChart').getContext('2d'), {
     type: 'bar',
     data: { labels:[], datasets:[
-      { label:'Closing Balance',     data:[], backgroundColor:'rgba(230,100,20,0.72)', stack:'balance',   order:1 },
+      { label:'Closing Balance',     data:[], backgroundColor:'rgba(230,126,34,0.68)', stack:'balance',   order:1 },
       { label:'Indexation Added',    data:[], backgroundColor:'rgba(229,57,53,0.75)',  stack:'balance',   order:2 },
       { label:'Annual Repayment',    data:[], backgroundColor:'rgba(42,157,103,.75)',  stack:'repayment', order:3 },
       { label:'Voluntary Repayment', data:[], backgroundColor:'rgba(63,127,181,.7)',   stack:'repayment', order:4 }
@@ -258,3 +259,4 @@ $('btnReset').addEventListener('click', () => {
 
 initChart();
 calc();
+});

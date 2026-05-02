@@ -53,10 +53,10 @@ function chartData(rows,P,yrs,freq){
 function mkGrad(ctx,ratio){
   var h=ctx.canvas.clientHeight||120,gr=ctx.createLinearGradient(0,0,0,h);
   var s=Math.max(0,Math.min(1,1-ratio));
-  gr.addColorStop(0,'rgba(230,100,20,0.72)');
-  gr.addColorStop(s,'rgba(230,100,20,0.72)');
-  gr.addColorStop(s,'rgba(42,157,103,0.65)');
-  gr.addColorStop(1,'rgba(42,157,103,0.65)');
+  gr.addColorStop(0,'rgba(230,126,34,0.68)');
+  gr.addColorStop(s,'rgba(230,126,34,0.68)');
+  gr.addColorStop(s,'rgba(42,175,110,0.65)');
+  gr.addColorStop(1,'rgba(42,175,110,0.65)');
   return gr;
 }
 

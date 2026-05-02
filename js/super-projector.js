@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded',function(){
 var superChart = null;
 var summaryRows = [];
 var scheduleRows = [];
@@ -216,9 +217,9 @@ function drawChart(labels, bArr, dArr, cArr) {
     data: {
       labels: labels,
       datasets: [
-        { label: "Cumulative Contributions", data: cArr, borderColor: "rgba(63,127,181,1)",  backgroundColor: "rgba(63,127,181,0.65)",  fill: "origin", tension: 0.35, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, order: 2 },
+        { label: "Cumulative Contributions", data: cArr, borderColor: "rgba(63,140,200,1)",  backgroundColor: "rgba(63,140,200,0.65)",  fill: "origin", tension: 0.35, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, order: 2 },
         { label: "Superannuation Growth",    data: bArr, borderColor: "rgba(232,168,56,1)",  backgroundColor: "rgba(232,168,56,0.65)",  fill: "-1",     tension: 0.35, pointRadius: 1, pointHoverRadius: 5, borderWidth: 2.5, order: 1 },
-        { label: "Retirement Balance",       data: dArr, borderColor: "rgba(42,157,103,1)",  backgroundColor: "rgba(42,157,103,0.65)",  fill: "origin", tension: 0.35, pointRadius: 1, pointHoverRadius: 5, borderWidth: 2.5, order: 1 }
+        { label: "Retirement Balance",       data: dArr, borderColor: "rgba(42,175,110,1)",  backgroundColor: "rgba(42,175,110,0.65)",  fill: "origin", tension: 0.35, pointRadius: 1, pointHoverRadius: 5, borderWidth: 2.5, order: 1 }
       ]
     },
     options: {
@@ -267,12 +268,6 @@ function toggleInflMode() {
 }
 
 function resetAll() {
-  // Reset collapsibles to default open state
-  document.querySelectorAll('.collapsible-header').forEach(function(h){
-    h.setAttribute('aria-expanded','true');
-    var body=h.nextElementSibling;
-    if(body&&body.classList.contains('collapsible-body'))body.classList.remove('collapsed');
-  });
   var d = {fCurrentAge:35,fRetireAge:67,fSalary:90000,fSuperRate:12,fSalGrowth:2.5,fCurrentBalance:75000,fVolContrib:200,fReturnRate:7.5,fReturnRetire:5.5,fFee:0.60,fTax:15,fInflation:2.5,fDrawdown:65000,fLifeExpect:87,fNCC:0,fNCCAge:35};
   for (var k in d) document.getElementById(k).value = d[k];
   var volSw = document.getElementById("volSwitch"); if (volSw) volSw.checked = false;
@@ -327,7 +322,7 @@ function dlCSV(rows, fname) {
 });
 
 document.getElementById("btnReset").addEventListener("click", resetAll);
-document.getElementById("btnStartOver").addEventListener("click",function(){resetAll();window.scrollTo({top:0,behavior:"smooth"});});
+document.getElementById("btnStartOver").addEventListener("click", resetAll);
 document.getElementById("btnExportSummary").addEventListener("click",  function() { dlCSV(summaryRows,  "super-summary.csv"); });
 document.getElementById("btnExportSchedule").addEventListener("click", function() { dlCSV(scheduleRows, "super-schedule.csv"); });
 document.getElementById("btnSaveSnapshot").addEventListener("click", function() {
@@ -370,3 +365,4 @@ toggleInflMode();
   if (ca && na && na.value === "35") na.value = ca.value;
 })();
 calc();
+});
