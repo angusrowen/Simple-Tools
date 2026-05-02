@@ -192,29 +192,51 @@ body{
   .hd{padding:12px 18px}
 }
 
+/* ── Dark mode (index) ─────────────────────────────────── */
 [data-theme="dark"] {
   --bg:#141e28; --card:#1e2d3a; --border:#2e3d4a;
   --text:#d4dde6; --text-light:#8a9bab; --dark:#e8edf2;
-  --navy:#5b8aaa; --green:#3dbf7e; --green-light:#1a3d2e;
+  --navy:#4a7a9b; --green:#3dbf7e; --green-light:#1a3d2e;
+  --brown:#9a7250; --brown-light:#2a2018;
+  --slate:#8a9bab; --slate-light:#1e2530;
 }
 [data-theme="dark"] body { background:var(--bg); color:var(--text); }
-[data-theme="dark"] .tool-card { background:var(--card); border-color:var(--border); }
-[data-theme="dark"] .tool-card:hover { border-color:var(--accent, var(--green)); }
-[data-theme="dark"] .card-title { color:var(--dark); }
-[data-theme="dark"] .card-desc { color:var(--text-light); }
-[data-theme="dark"] .hd { background:linear-gradient(180deg,#1a2d3e 0%,#111e2a 100%); }
-[data-theme="dark"] .hero-section { background:linear-gradient(135deg,#1a2530,#141e28); border-color:var(--border); color:var(--text-light); }
-[data-theme="dark"] .hero-section p { color:var(--text-light); }
-[data-theme="dark"] .ft { background:linear-gradient(180deg,#1a2d3e 0%,#111e2a 100%); }
-.btn-theme { display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;cursor:pointer;flex-shrink:0; }
-.btn-theme:hover { background:rgba(255,255,255,.22); }
-.btn-theme svg { width:16px;height:16px;fill:currentColor; }
-.btn-theme .icon-sun { display:none; }
-.btn-theme .icon-moon { display:block; }
-[data-theme="dark"] .btn-theme .icon-sun { display:block; }
-[data-theme="dark"] .btn-theme .icon-moon { display:none; }
+[data-theme="dark"] .hd { background:linear-gradient(180deg,#1c3040 0%,#111e2a 100%); }
+[data-theme="dark"] .hero-section { background:linear-gradient(135deg,#1a2530,#141e28); border-color:#2e3d4a; }
+[data-theme="dark"] .hero-section p { color:#8a9bab; }
+[data-theme="dark"] .tool-card { background:#1e2d3a; border-color:#2e3d4a; }
+[data-theme="dark"] .tool-card:hover { border-color:var(--accent,#3dbf7e); }
+[data-theme="dark"] .card-title { color:#e8edf2; }
+[data-theme="dark"] .card-desc { color:#8a9bab; }
+[data-theme="dark"] .side-rail-inner { background:#1e2d3a; border-color:#2e3d4a; }
+[data-theme="dark"] .rail-ad-label { color:#8a9bab; border-color:#2e3d4a; }
+[data-theme="dark"] .ft { background:linear-gradient(180deg,#1c3040 0%,#111e2a 100%); }
+/* Theme button on index (inside .hd which has dark bg) */
+#idxThemeBtn {
+  display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:8px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  color:#fff;cursor:pointer;flex-shrink:0;margin-left:auto;
+}
+#idxThemeBtn:hover { background:rgba(255,255,255,.22); }
+#idxThemeBtn svg { width:17px;height:17px;fill:currentColor; }
+#idxThemeBtn .icon-sun { display:none; }
+#idxThemeBtn .icon-moon { display:block; }
+[data-theme="dark"] #idxThemeBtn .icon-sun { display:block; }
+[data-theme="dark"] #idxThemeBtn .icon-moon { display:none; }
 </style>
 <script src="js/theme.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('idxThemeBtn');
+  if (btn) btn.addEventListener('click', function() {
+    var cur = document.documentElement.getAttribute('data-theme');
+    var next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('auscalc-theme', next);
+  });
+});
+</script>
 </head>
 <body>
 
@@ -226,7 +248,9 @@ body{
   <div>
     <div class="hd-title">Australian Finance Tools</div>
     <div class="hd-sub">Free calculators for everyday financial decisions</div>
-    <div style="margin-left:auto;"><button id="btnTheme" class="btn-theme" aria-label="Toggle dark mode"><svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg class="icon-sun"  viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 17a5 5 0 100-10 5 5 0 000 10zm0-14a1 1 0 011 1v1a1 1 0 11-2 0V4a1 1 0 011-1zm0 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm9-8a1 1 0 010 2h-1a1 1 0 110-2h1zM4 12a1 1 0 010 2H3a1 1 0 110-2h1zm14.66-6.24a1 1 0 010 1.41l-.71.71a1 1 0 11-1.41-1.41l.71-.71a1 1 0 011.41 0zM7.05 16.95a1 1 0 010 1.41l-.71.71a1 1 0 11-1.41-1.41l.71-.71a1 1 0 011.41 0zm12.02 2.12a1 1 0 01-1.41 0l-.71-.71a1 1 0 111.41-1.41l.71.71a1 1 0 010 1.41zM6.34 7.76a1 1 0 01-1.41 0l-.71-.71a1 1 0 011.41-1.41l.71.71a1 1 0 010 1.41z"/></svg></button></div>
+  </div>
+
+  <button id="idxThemeBtn" aria-label="Toggle dark mode"><svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg class="icon-sun"  viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 17a5 5 0 100-10 5 5 0 000 10zm0-14a1 1 0 011 1v1a1 1 0 11-2 0V4a1 1 0 011-1zm0 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm9-8a1 1 0 010 2h-1a1 1 0 110-2h1zM4 12a1 1 0 010 2H3a1 1 0 110-2h1zm14.66-6.24a1 1 0 010 1.41l-.71.71a1 1 0 11-1.41-1.41l.71-.71a1 1 0 011.41 0zM7.05 16.95a1 1 0 010 1.41l-.71.71a1 1 0 11-1.41-1.41l.71-.71a1 1 0 011.41 0zm12.02 2.12a1 1 0 01-1.41 0l-.71-.71a1 1 0 111.41-1.41l.71.71a1 1 0 010 1.41zM6.34 7.76a1 1 0 01-1.41 0l-.71-.71a1 1 0 011.41-1.41l.71.71a1 1 0 010 1.41z"/></svg></button>
 </div>
 
 <!-- Hero -->
