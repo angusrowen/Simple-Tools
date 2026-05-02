@@ -238,14 +238,24 @@ body{
 .card-header-row h2{margin:0;padding:0;border:none;}
 
 /* Collapsible cards */
-.collapsible-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  cursor:pointer;
-  padding-bottom:8px;
-  border-bottom:2px solid var(--green);
-  margin-bottom:16px;
+.collapsible-header {
+  /* Full button reset */
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 8px 0;
+  margin: 0 0 16px 0;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border-bottom: 2px solid var(--green);
 }
 
 .collapsible-header h2{color:var(--dark);margin:0;padding:0;border:none;}
