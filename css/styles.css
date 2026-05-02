@@ -1308,10 +1308,9 @@ ins.adsbygoogle iframe,
 
 /* ══════════════════════════════════════════════════════════
    TOPBAR UTILITY BUTTONS  (Return & Dark-mode toggle)
-   Added after original styles — appended only, no overrides
    ══════════════════════════════════════════════════════════ */
 
-/* Shared shell — both buttons look the same */
+/* Shared shell */
 .btn-home,
 .btn-theme {
   display: inline-flex;
@@ -1342,8 +1341,8 @@ ins.adsbygoogle iframe,
 }
 
 /* ── Return button (btn-home)
-   Desktop: pill with arrow + "All Calculators" text
-   Mobile:  square icon-only                            */
+   Desktop: pill with left-arrow + "All Calculators" text, side-by-side with theme btn
+   Mobile:  square icon-only, stacked above theme btn                                 */
 .btn-home {
   gap: 7px;
   padding: 0 14px;
@@ -1354,18 +1353,16 @@ ins.adsbygoogle iframe,
   letter-spacing: .2px;
 }
 .btn-home svg { width: 15px; height: 15px; }
-/* Text label — visible on desktop, hidden on mobile */
 .btn-home .btn-home-label { display: inline; }
 
-/* ── Dark-mode toggle (btn-theme)
-   Always a 34×34 square icon; only one icon shown at a time */
+/* ── Dark-mode toggle (btn-theme) — always 34×34 icon square */
 .btn-theme {
   width: 34px;
   height: 34px;
 }
 .btn-theme svg { width: 17px; height: 17px; }
 
-/* JS adds data-theme="dark" to <html> — toggle icon visibility */
+/* Only one icon shown at a time based on data-theme on <html> */
 /* Default (light mode): show moon, hide sun */
 .btn-theme .icon-sun  { display: none; }
 .btn-theme .icon-moon { display: block; }
@@ -1373,17 +1370,17 @@ ins.adsbygoogle iframe,
 [data-theme="dark"] .btn-theme .icon-sun  { display: block; }
 [data-theme="dark"] .btn-theme .icon-moon { display: none; }
 
-/* ── Stack: return button ABOVE theme button in topbar-right ─
-   topbar-right is already display:flex — change to column     */
-.topbar-right {
-  flex-direction: column !important;
-  align-items: flex-end !important;
-  gap: 6px !important;
-  justify-content: center !important;
-}
+/* ── Desktop: buttons side-by-side (topbar-right default is already row) ── */
+/* topbar-right is display:flex; align-items:center; gap:10px — leave it as row */
+/* No override needed for desktop */
 
-/* ── Mobile: icon-only for btn-home, keep btn-theme square ── */
+/* ── Mobile: stack vertically, btn-home becomes icon-only square ── */
 @media (max-width: 600px) {
+  .topbar-right {
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: 5px !important;
+  }
   .btn-home {
     width: 34px;
     padding: 0 !important;
@@ -1392,8 +1389,7 @@ ins.adsbygoogle iframe,
   .btn-home .btn-home-label { display: none !important; }
 }
 
-/* ── Collapsible header — browser button reset ───────────── */
-/* Prevents white box / border when using <button> element   */
+/* ── Collapsible header — browser <button> reset ── */
 .collapsible-header {
   -webkit-appearance: none;
   appearance: none;
@@ -1410,12 +1406,9 @@ ins.adsbygoogle iframe,
   font: inherit;
   box-shadow: none !important;
   outline: none;
-  /* border-bottom and margin-bottom preserved from base rule */
 }
 
-/* ── Mobile: input prefix gap — match desktop exactly ───────
-   On mobile the base rule padding:7px 8px overrides the input
-   padding, so .has-prefix loses its left spacing. Re-apply.  */
+/* ── Mobile: input prefix/suffix gap — match desktop ── */
 @media (max-width: 480px) {
   .input-wrap input.has-prefix  { padding-left:  22px !important; }
   .input-wrap input.has-suffix  { padding-right: 28px !important; }
