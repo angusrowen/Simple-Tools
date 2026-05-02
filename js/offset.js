@@ -1,3 +1,4 @@
+(function(){
 'use strict';
 function g(id){return document.getElementById(id);}
 function fmt2(n){return '$'+Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});}
