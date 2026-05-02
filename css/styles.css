@@ -238,22 +238,14 @@ body{
 .card-header-row h2{margin:0;padding:0;border:none;}
 
 /* Collapsible cards */
-.collapsible-header {
-  -webkit-appearance: none;
-  appearance: none;
-  background: none;
-  border: none;
-  border-radius: 0;
-  padding: 0 0 8px 0;
-  margin: 0 0 16px 0;
-  width: 100%;
-  text-align: left;
-  font: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  border-bottom: 2px solid var(--green);
+.collapsible-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+  padding-bottom:8px;
+  border-bottom:2px solid var(--green);
+  margin-bottom:16px;
 }
 
 .collapsible-header h2{color:var(--dark);margin:0;padding:0;border:none;}
@@ -382,8 +374,8 @@ input[type=number]::-webkit-outer-spin-button{opacity:.4;}
 
 .input-wrap .prefix{left:10px;}
 .input-wrap .suffix{right:10px;}
-.input-wrap input.has-prefix{padding-left:32px;}
-.input-wrap input.has-suffix{padding-right:30px;}
+.input-wrap input.has-prefix{padding-left:22px;}
+.input-wrap input.has-suffix{padding-right:28px;}
 .input-wrap input:not(.has-prefix):not(.has-suffix){padding:9px 12px;}
 
 input[type=range]{
@@ -1314,21 +1306,66 @@ ins.adsbygoogle iframe,
   .layout{grid-template-columns:1fr !important;}
 }
 
-[data-theme="dark"] .collapsible-header { background: none; }
+/* ── Topbar icon buttons (Return & Dark Mode) ───────────── */
 
+.btn-home,
+.btn-theme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 8px;
+  background: rgba(255,255,255,.10);
+  color: rgba(255,255,255,.88);
+  cursor: pointer;
+  flex-shrink: 0;
+  text-decoration: none;
+  transition: background .15s, border-color .15s;
+  font-family: inherit;
+  padding: 0;
+}
+.btn-home:hover,
+.btn-theme:hover {
+  background: rgba(255,255,255,.20);
+  border-color: rgba(255,255,255,.40);
+}
+.btn-home svg,
+.btn-theme svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+/* Hide any text label inside btn-home */
 .btn-home span { display: none; }
 
-/* ── Mobile portrait: prefix, topbar, buttons ─────────── */
-@media (max-width:480px){
-  .topbar { padding: 8px 12px !important; gap: 8px !important; }
-  .topbar-right { margin-left: auto !important; gap: 6px !important; flex-wrap: nowrap !important; }
-  .btn-home,
-  .btn-theme { width: 34px !important; height: 34px !important; min-width: 34px !important; padding: 0 !important; }
+/* ── Collapsible header — button reset ──────────────────── */
+/* Prevents browser from adding white background / border to <button> */
 
-  .input-wrap .prefix { left: 12px !important; top: 50% !important; transform: translateY(-50%) !important; }
-  .input-wrap .suffix { right: 10px !important; top: 50% !important; transform: translateY(-50%) !important; }
-  .input-wrap input.has-prefix,
-  input.has-prefix  { padding-left:  34px !important; }
-  .input-wrap input.has-suffix,
-  input.has-suffix  { padding-right: 30px !important; }
+.collapsible-header {
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border-bottom: 2px solid var(--green);
+  box-shadow: none;
+  outline: none;
+}
+.collapsible-header[aria-expanded="false"] {
+  border-bottom-color: var(--border);
+  margin-bottom: 0;
 }
