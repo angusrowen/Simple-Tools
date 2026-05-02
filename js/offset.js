@@ -264,7 +264,6 @@ el('amortBtn').addEventListener('click',function(){
 
 // Reset
 function doReset(){
-  // Reset collapsibles to default open state
   document.querySelectorAll('.collapsible-header').forEach(function(h){
     h.setAttribute('aria-expanded','true');
     var body=h.nextElementSibling;

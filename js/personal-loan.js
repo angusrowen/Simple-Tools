@@ -253,7 +253,6 @@ el('amortBtn').addEventListener('click',function(){
 
 
 function doReset(){
-  // Reset collapsibles to default open state
   document.querySelectorAll('.collapsible-header').forEach(function(h){
     h.setAttribute('aria-expanded','true');
     var body=h.nextElementSibling;
@@ -303,9 +302,9 @@ el('btnCSV').addEventListener('click',function(){
     'Total Repayments,'+el('rTotal').textContent,
     'Total Interest,'+el('rInterest').textContent
   ];
-  !if(el('rFeeBox').classList.contains('hidden'))lines.push('Total Fees,'+el('rFees').textContent);
-  !if(el('rCostBox').classList.contains('hidden'))lines.push('Total Cost,'+el('rCost').textContent);
-  !if(el('rCmpBox').classList.contains('hidden'))lines.push('Comparison Rate (est.),'+el('rCmp').textContent);
+  if(!el('rFeeBox').classList.contains('hidden'))lines.push('Total Fees,'+el('rFees').textContent);
+  if(!el('rCostBox').classList.contains('hidden'))lines.push('Total Cost,'+el('rCost').textContent);
+  if(!el('rCmpBox').classList.contains('hidden'))lines.push('Comparison Rate (est.),'+el('rCmp').textContent);
   dlCSV('personal-loan-summary.csv',lines.join('\n'));
 });
 
