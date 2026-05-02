@@ -205,23 +205,23 @@
           <div class="lbl">Total Interest</div>
           <div class="val" id="rInterest">&#8212;</div>
         </div>
-        <div class="result-box hl-amber" id="rFeeBox" style="display:none">
+        <div class="result-box hl-amber" id="rFeeBox" class="hidden">
           <div class="lbl">Total Fees</div>
           <div class="val" id="rFees">&#8212;</div>
         </div>
-        <div class="result-box" id="rCostBox" style="display:none">
+        <div class="result-box" id="rCostBox" class="hidden">
           <div class="lbl">Total Cost of Loan</div>
           <div class="val" id="rCost">&#8212;</div>
         </div>
-        <div class="result-box hl-blue" id="rCmpBox" style="display:none">
+        <div class="result-box hl-blue" id="rCmpBox" class="hidden">
           <div class="lbl">Comparison Rate <span style="font-size:.65rem;font-weight:400;text-transform:none">(est.)</span></div>
           <div class="val" id="rCmp">&#8212;</div>
         </div>
       </div>
 
-      <div class="derived-info" id="bannerExtra" style="display:none">Extra repayments of <strong id="bnExtraAmt"></strong>/period saves <strong id="bnExtraSaved"></strong> in interest and pays off your loan <strong id="bnExtraTime"></strong> earlier.</div>
-      <div class="warning-banner" id="bannerBalloon" style="display:none">A balloon of <strong id="bnBalloon"></strong> is due at end of term. Your periodic repayments are calculated on the amortised portion only.</div>
-      <div class="derived-info" id="bannerPayoff" style="display:none">Based on your start date, your loan will be paid off by <strong id="bnPayoff"></strong>.</div>
+      <div class="derived-info" id="bannerExtra" class="hidden">Extra repayments of <strong id="bnExtraAmt"></strong>/period saves <strong id="bnExtraSaved"></strong> in interest and pays off your loan <strong id="bnExtraTime"></strong> earlier.</div>
+      <div class="warning-banner" id="bannerBalloon" class="hidden">A balloon of <strong id="bnBalloon"></strong> is due at end of term. Your periodic repayments are calculated on the amortised portion only.</div>
+      <div class="derived-info" id="bannerPayoff" class="hidden">Based on your start date, your loan will be paid off by <strong id="bnPayoff"></strong>.</div>
 
       <div class="section-title">Repayment Breakdown</div>
       <table class="combined-table">
@@ -284,7 +284,7 @@
             <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>
             Save File
           </button>
-          <button class="btn btn-navy" id="btnReset2" type="button">
+          <button class="btn btn-navy" id="btnStartOver" type="button">
             <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
             Start Over
           </button>
