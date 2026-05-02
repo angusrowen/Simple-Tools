@@ -90,10 +90,10 @@
     var h    = ctx.canvas.clientHeight || 120;
     var g    = ctx.createLinearGradient(0, 0, 0, h);
     var sp   = Math.max(0, Math.min(1, 1 - paidRatio));
-    g.addColorStop(0,  'rgba(230,126,34,0.68)');
-    g.addColorStop(sp, 'rgba(230,126,34,0.68)');
-    g.addColorStop(sp, 'rgba(42,175,110,0.65)');
-    g.addColorStop(1,  'rgba(42,175,110,0.65)');
+    g.addColorStop(0,  'rgba(230,100,20,0.72)');
+    g.addColorStop(sp, 'rgba(230,100,20,0.72)');
+    g.addColorStop(sp, 'rgba(42,157,103,0.65)');
+    g.addColorStop(1,  'rgba(42,157,103,0.65)');
     return g;
   }
 

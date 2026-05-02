@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded',function(){
+document.addEventListener('DOMContentLoaded', function() {
 var wealthChart=null,summaryRows=[],scheduleRows=[];
 function n(id){var v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v;}
 function fmt(v){return'$'+Math.round(Math.abs(v)).toLocaleString('en-AU');}
@@ -191,8 +191,8 @@ function drawChart(labels,buyArr,invArr,propArr){
   wealthChart=new Chart(canvas.getContext('2d'),{
     type:'line',
     data:{labels:labels,datasets:[
-      {label:'Buy: Net Wealth',data:buyArr,borderColor:'rgba(42,175,110,1)',backgroundColor:'rgba(42,157,103,0.15)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
-      {label:'Rent & Invest: Net Wealth',data:invArr,borderColor:'rgba(63,140,200,1)',backgroundColor:'rgba(63,127,181,0.15)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
+      {label:'Buy: Net Wealth',data:buyArr,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,0.15)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
+      {label:'Rent & Invest: Net Wealth',data:invArr,borderColor:'rgba(63,127,181,1)',backgroundColor:'rgba(63,127,181,0.15)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
       {label:'Property Value',data:propArr,borderColor:'rgba(232,168,56,1)',backgroundColor:'rgba(232,168,56,0.05)',borderDash:[5,4],tension:0.35,pointRadius:0,pointHoverRadius:4,borderWidth:1.8,fill:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},

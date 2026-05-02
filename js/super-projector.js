@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded',function(){
+document.addEventListener('DOMContentLoaded', function() {
 var superChart = null;
 var summaryRows = [];
 var scheduleRows = [];
@@ -217,9 +217,9 @@ function drawChart(labels, bArr, dArr, cArr) {
     data: {
       labels: labels,
       datasets: [
-        { label: "Cumulative Contributions", data: cArr, borderColor: "rgba(63,140,200,1)",  backgroundColor: "rgba(63,140,200,0.65)",  fill: "origin", tension: 0.35, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, order: 2 },
+        { label: "Cumulative Contributions", data: cArr, borderColor: "rgba(63,127,181,1)",  backgroundColor: "rgba(63,127,181,0.65)",  fill: "origin", tension: 0.35, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, order: 2 },
         { label: "Superannuation Growth",    data: bArr, borderColor: "rgba(232,168,56,1)",  backgroundColor: "rgba(232,168,56,0.65)",  fill: "-1",     tension: 0.35, pointRadius: 1, pointHoverRadius: 5, borderWidth: 2.5, order: 1 },
-        { label: "Retirement Balance",       data: dArr, borderColor: "rgba(42,175,110,1)",  backgroundColor: "rgba(42,175,110,0.65)",  fill: "origin", tension: 0.35, pointRadius: 1, pointHoverRadius: 5, borderWidth: 2.5, order: 1 }
+        { label: "Retirement Balance",       data: dArr, borderColor: "rgba(42,157,103,1)",  backgroundColor: "rgba(42,157,103,0.65)",  fill: "origin", tension: 0.35, pointRadius: 1, pointHoverRadius: 5, borderWidth: 2.5, order: 1 }
       ]
     },
     options: {

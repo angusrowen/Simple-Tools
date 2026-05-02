@@ -239,26 +239,16 @@ body {
 /* ── Collapsible cards ─────────────────────────────────────── */
 .collapsible-header {
   display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer; padding: 10px 14px; margin: -20px -22px 14px;
-  border-radius: 16px 16px 0 0; background: var(--addl-bg);
-  border-bottom: 1px solid var(--addl-border);
-  transition: background .15s;
+  cursor: pointer; padding-bottom: 8px;
+  border-bottom: 2px solid var(--green); margin-bottom: 14px;
 }
-.collapsible-header:hover { background: var(--bg); }
-.collapsible-header h2 { color: var(--dark); margin: 0; padding: 0; border: none; font-size: .88rem; }
-
-.collapsible-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  background: var(--green); color: #fff;
-  font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .4px;
-  padding: 3px 9px; border-radius: 999px;
-}
-.collapsible-pill svg { width: 11px; height: 11px; fill: currentColor; }
+.collapsible-header h2 { color: var(--dark); margin: 0; padding: 0; border: none; }
+.collapsible-header:hover h2 { color: var(--green); }
 
 .collapse-icon {
   color: var(--green); transition: transform .25s; display: flex; align-items: center;
-  margin-left: 8px;
 }
+/* Chevron UP = expanded, DOWN = collapsed (default) */
 .collapsible-header[aria-expanded="true"] .collapse-icon { transform: rotate(180deg); }
 
 .collapsible-body {
@@ -266,7 +256,7 @@ body {
   max-height: 4000px; opacity: 1;
 }
 .collapsible-body.collapsed { max-height: 0; opacity: 0; pointer-events: none; }
-.collapsible-header[aria-expanded="false"] { border-bottom-color: transparent; margin-bottom: 0; border-radius: 16px; }
+.collapsible-header[aria-expanded="false"] { border-bottom-color: var(--border); margin-bottom: 0; }
 
 /* ── Labels & fields ───────────────────────────────────────── */
 .section-label {
@@ -317,9 +307,9 @@ select {
   position: absolute; font-size: .88rem; font-weight: 600;
   color: var(--text-light); pointer-events: none; user-select: none; z-index: 1;
 }
-.input-wrap .prefix { left: 10px; }
-.input-wrap .suffix { right: 10px; }
-.input-wrap input.has-prefix { padding-left: 22px; }
+.input-wrap .prefix { left: 10px; top: 50%; transform: translateY(-50%); }
+.input-wrap .suffix { right: 10px; top: 50%; transform: translateY(-50%); }
+.input-wrap input.has-prefix { padding-left: 20px; }
 .input-wrap input.has-suffix { padding-right: 28px; }
 .input-wrap input:not(.has-prefix):not(.has-suffix) { padding: 9px 12px; }
 
@@ -766,3 +756,30 @@ ins.adsbygoogle, ins.adsbygoogle iframe, .ad-slot, .mobile-ad-slot, .mobile-ad-i
   .main-wrapper { padding: 14px 18px !important; box-sizing: border-box !important; }
   .layout { grid-template-columns: 1fr !important; }
 }
+
+/* ── Dark mode inputs ──────────────────────────────────────── */
+[data-theme="dark"] .field input,
+[data-theme="dark"] .field select,
+[data-theme="dark"] input[type=number],
+[data-theme="dark"] input[type=text],
+[data-theme="dark"] input[type=month],
+[data-theme="dark"] select {
+  background: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text);
+}
+[data-theme="dark"] .toggle-switch label { background: var(--toggle-bg); color: var(--text-light); }
+[data-theme="dark"] .toggle-switch { border-color: var(--border); }
+[data-theme="dark"] .card { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .result-box, [data-theme="dark"] .res-box { background: var(--result-bg); border-color: var(--border); }
+[data-theme="dark"] .amort-wrap, [data-theme="dark"] .sched-wrap { border-color: var(--border); }
+[data-theme="dark"] .amort-table th, [data-theme="dark"] .stbl th,
+[data-theme="dark"] .combined-table th, [data-theme="dark"] .tbl th { background: var(--bg); }
+[data-theme="dark"] .amort-table td, [data-theme="dark"] .stbl td,
+[data-theme="dark"] .combined-table td, [data-theme="dark"] .tbl td { border-color: var(--border); }
+[data-theme="dark"] .prog-bg { background: var(--border); }
+[data-theme="dark"] .actions-bar { border-color: var(--border); }
+[data-theme="dark"] .section-label { border-color: var(--border); }
+[data-theme="dark"] .note, [data-theme="dark"] .disclaimer { border-color: var(--border); background: var(--bg); }
+[data-theme="dark"] .hero { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .chart-wrap, [data-theme="dark"] .chart-box, [data-theme="dark"] .pie-card { background: var(--result-bg); border-color: var(--border); }

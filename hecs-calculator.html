@@ -15,16 +15,19 @@
 
 <div class="topbar">
   <div class="topbar-logo">
-    <a href="index.html" title="Back to all calculators" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#e67e22;border-radius:10px;color:#fff;text-decoration:none">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+    <a href="index.html">
+      <div class="app-mark">AC</div>
+      <div>
+        <div class="topbar-title">AusCalc</div>
+        
+      </div>
     </a>
   </div>
-  <div class="topbar-divider"></div>
-  <div>
-    <div class="topbar-title">HECS-HELP Student Loan Calculator</div>
-    <div class="topbar-desc">Estimate your compulsory repayments, payoff timeline &amp; indexation impact — 2025–26 ATO rates</div>
+  <div class="topbar-right">
+    
+    <a href="index.html" class="btn-home"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg><span>All Calculators</span></a>
+    <button id="btnTheme" class="btn-theme" aria-label="Toggle dark mode"><svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg class="icon-sun"  viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 17a5 5 0 100-10 5 5 0 000 10zm0-14a1 1 0 011 1v1a1 1 0 11-2 0V4a1 1 0 011-1zm0 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm9-8a1 1 0 010 2h-1a1 1 0 110-2h1zM4 12a1 1 0 010 2H3a1 1 0 110-2h1zm14.66-6.24a1 1 0 010 1.41l-.71.71a1 1 0 11-1.41-1.41l.71-.71a1 1 0 011.41 0zM7.05 16.95a1 1 0 010 1.41l-.71.71a1 1 0 11-1.41-1.41l.71-.71a1 1 0 011.41 0zm12.02 2.12a1 1 0 01-1.41 0l-.71-.71a1 1 0 111.41-1.41l.71.71a1 1 0 010 1.41zM6.34 7.76a1 1 0 01-1.41 0l-.71-.71a1 1 0 011.41-1.41l.71.71a1 1 0 010 1.41z"/></svg></button>
   </div>
-  <div class="topbar-right"></div>
 </div>
 
 <div class="page-wrapper">
@@ -280,7 +283,7 @@
 
 </div><!-- /page-wrapper -->
 
-<div class="ft"><span>&copy; 2026 Australian Finance Tools &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy</a></span></div>
+<footer class="ft"><span>Estimates only &mdash; not personal financial advice.</span></footer>
 
 <script src="js/hecs.js"></script>
 </body>

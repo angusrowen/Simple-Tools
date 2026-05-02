@@ -74,10 +74,10 @@ function makeGrad(ctx,splitRatio){
   var h=ctx.canvas.clientHeight||120;
   var gr=ctx.createLinearGradient(0,0,0,h);
   var sp=Math.max(0,Math.min(1,splitRatio));
-  gr.addColorStop(0,  'rgba(230,126,34,0.68)');
-  gr.addColorStop(sp, 'rgba(230,126,34,0.68)');
-  gr.addColorStop(sp, 'rgba(42,175,110,0.65)');
-  gr.addColorStop(1,  'rgba(42,175,110,0.65)');
+  gr.addColorStop(0,  'rgba(230,100,20,0.72)');
+  gr.addColorStop(sp, 'rgba(230,100,20,0.72)');
+  gr.addColorStop(sp, 'rgba(42,157,103,0.65)');
+  gr.addColorStop(1,  'rgba(42,157,103,0.65)');
   return gr;
 }
 function drawChart(withRows,noRows,P,yrs,freq){
@@ -97,8 +97,8 @@ function drawChart(withRows,noRows,P,yrs,freq){
     data:{
       labels:labels,
       datasets:[
-        {label:'With Offset',data:withDebt,borderColor:'rgba(42,175,110,1)',backgroundColor:'rgba(42,175,110,0.65)',fill:'origin',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5,order:1},
-        {label:'Without Offset',data:noDebt,borderColor:'rgba(230,126,34,1)',backgroundColor:'rgba(230,126,34,0.68)',fill:'-1',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2,order:2}
+        {label:'With Offset',data:withDebt,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,0.65)',fill:'origin',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5,order:1},
+        {label:'Without Offset',data:noDebt,borderColor:'rgba(230,100,20,1)',backgroundColor:'rgba(230,100,20,0.72)',fill:'-1',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2,order:2}
       ]
     },
     options:{
