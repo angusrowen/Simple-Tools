@@ -1413,3 +1413,162 @@ ins.adsbygoogle iframe,
   .input-wrap input.has-prefix  { padding-left:  22px !important; }
   .input-wrap input.has-suffix  { padding-right: 28px !important; }
 }
+
+/* ══ DARK MODE ══════════════════════════════════════════════════════════════
+   Remaps all CSS variables used throughout the calculator stylesheets.
+   Triggered by data-theme="dark" on <html>, set via localStorage.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="dark"] {
+  /* Neutrals */
+  --bg:          #111e2a;
+  --page-bg:     #0f1a24;
+  --card:        #1a2a38;
+  --result-bg:   #1e3044;
+  --border:      #2e3d4a;
+  --text:        #d4dde6;
+  --text-light:  #8a9bab;
+  --dark:        #e8edf2;
+  --navy:        #4d7a96;
+
+  /* Semantic colours — slightly brightened for dark surfaces */
+  --green:        #3dbf7e;
+  --green-light:  #1a3328;
+  --blue:         #5a9fd4;
+  --blue-light:   #162333;
+  --amber:        #d4a847;
+  --amber-light:  #2a2010;
+  --orange:       #f0953a;
+  --orange-light: #2a1a08;
+  --red:          #f06060;
+  --red-light:    #2a1010;
+  --purple:       #a07fd4;
+  --purple-light: #1e1530;
+}
+
+[data-theme="dark"] body {
+  background: var(--page-bg);
+  color: var(--text);
+}
+
+/* Topbar — keep its own gradient, just darken */
+[data-theme="dark"] .topbar {
+  background: linear-gradient(180deg, #1c3040 0%, #111e2a 100%);
+}
+
+/* Cards */
+[data-theme="dark"] .card {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+/* Inputs */
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="month"],
+[data-theme="dark"] select {
+  background: #152030;
+  border-color: var(--border);
+  color: var(--text);
+}
+
+[data-theme="dark"] input[type="range"] {
+  accent-color: var(--green);
+}
+
+/* Toggle switches */
+[data-theme="dark"] .toggle-switch label {
+  background: #1a2a38;
+  border-color: var(--border);
+  color: var(--text-light);
+}
+
+/* Result boxes */
+[data-theme="dark"] .result-box,
+[data-theme="dark"] .res-box {
+  background: var(--result-bg);
+  border-color: var(--border);
+}
+
+/* Tables */
+[data-theme="dark"] table thead th,
+[data-theme="dark"] .tbl thead th,
+[data-theme="dark"] .combined-table thead th,
+[data-theme="dark"] .amort-table thead th {
+  background: #1a2a38;
+  color: var(--text-light);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] table tbody td,
+[data-theme="dark"] .tbl tbody td,
+[data-theme="dark"] .combined-table tbody td,
+[data-theme="dark"] .amort-table tbody td {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+[data-theme="dark"] .tbl tr:nth-child(even),
+[data-theme="dark"] .combined-table tbody tr:nth-child(even) {
+  background: #182535;
+}
+
+/* Derived info banners */
+[data-theme="dark"] .derived-info {
+  background: #1a2a38;
+  border-color: var(--border);
+  color: var(--text-light);
+}
+
+/* Action buttons — keep their colours but adjust bg */
+[data-theme="dark"] .btn-navy {
+  background: #2a4a60;
+}
+
+/* Footer */
+[data-theme="dark"] .ft {
+  background: linear-gradient(180deg, #1c3040 0%, #111e2a 100%);
+  color: var(--text-light);
+}
+
+/* Side rails */
+[data-theme="dark"] .side-rail-inner {
+  background: #1a2a38;
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .rail-ad-label {
+  color: var(--text-light);
+  border-color: var(--border);
+}
+
+/* Collapsible headers */
+[data-theme="dark"] .collapsible-header {
+  border-color: var(--border);
+}
+
+/* Section labels */
+[data-theme="dark"] .section-label {
+  color: var(--text-light);
+}
+
+/* Chart area */
+[data-theme="dark"] .chart-section {
+  background: var(--card);
+}
+
+/* Actions bar */
+[data-theme="dark"] .actions-bar {
+  border-color: var(--border);
+  background: var(--card);
+}
+
+/* Note/disclaimer text */
+[data-theme="dark"] .note {
+  color: var(--text-light);
+}
+
+/* Page wrapper background */
+[data-theme="dark"] .page-wrapper {
+  background: var(--page-bg);
+}
