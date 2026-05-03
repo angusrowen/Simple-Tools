@@ -362,11 +362,14 @@ document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventList
 
 
 /* ── Topbar: inject Return + Dark Mode buttons ─────────────────────────────
-   Uses same localStorage key as index (auscalc-theme) so theme persists
-   across pages. Click handler is wired here, not via theme.js.             */
+   Reads localStorage on load so theme persists across page navigation.     */
 (function () {
   var PREF  = 'auscalc-theme';
   var html  = document.documentElement;
+
+  /* Apply saved theme immediately on load */
+  var saved = localStorage.getItem(PREF);
+  if (saved) html.setAttribute('data-theme', saved);
 
   var ARROW = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>';
   var SUN   = '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
@@ -381,7 +384,6 @@ document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventList
     var container = document.querySelector('.topbar-right');
     if (!container || container.querySelector('.btn-home')) return;
 
-    /* Return button */
     var btnHome = document.createElement('a');
     btnHome.href = 'index.html';
     btnHome.className = 'btn-home';
@@ -389,7 +391,6 @@ document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventList
     btnHome.innerHTML = ARROW + '<span class="btn-home-label">All Calculators</span>';
     container.appendChild(btnHome);
 
-    /* Dark mode toggle — click handler wired right here after button exists */
     var btnTheme = document.createElement('button');
     btnTheme.type = 'button';
     btnTheme.className = 'btn-theme';
