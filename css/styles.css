@@ -1256,13 +1256,20 @@ ins.adsbygoogle iframe,
 
 /* Actions bar: 2-col grid on small */
 @media (max-width:600px){
-  .actions-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start;}
+  .actions-bar{display:flex;flex-direction:column;gap:8px;align-items:stretch;}
   .actions-bar > div[style]{display:none;}
-  .actions-left,.actions-right{flex-direction:column;gap:8px;}
+  .actions-left,.actions-right{flex-direction:row;gap:6px;flex-wrap:nowrap;width:100%;}
+  .actions-right{margin-left:0;}
   .actions-left .btn,
   .actions-right .btn,
   .actions-left .btn-action,
-  .actions-right .btn-action{width:100%;justify-content:center;}
+  .actions-right .btn-action{
+    flex:1;
+    justify-content:center;
+    white-space:nowrap;
+    padding:8px 8px;
+    font-size:.72rem;
+  }
 }
 
 /* Mobile portrait */
@@ -1309,8 +1316,6 @@ ins.adsbygoogle iframe,
 /* ══════════════════════════════════════════════════════════
    TOPBAR UTILITY BUTTONS  (Return & Dark-mode toggle)
    ══════════════════════════════════════════════════════════ */
-
-/* Shared shell */
 .btn-home,
 .btn-theme {
   display: inline-flex;
@@ -1334,15 +1339,8 @@ ins.adsbygoogle iframe,
   border-color: rgba(255,255,255,.40);
 }
 .btn-home svg,
-.btn-theme svg {
-  fill: currentColor;
-  flex-shrink: 0;
-  display: block;
-}
+.btn-theme svg { fill: currentColor; flex-shrink: 0; display: block; }
 
-/* ── Return button (btn-home)
-   Desktop: pill with left-arrow + "All Calculators" text, side-by-side with theme btn
-   Mobile:  square icon-only, stacked above theme btn                                 */
 .btn-home {
   gap: 7px;
   padding: 0 14px;
@@ -1355,26 +1353,14 @@ ins.adsbygoogle iframe,
 .btn-home svg { width: 15px; height: 15px; }
 .btn-home .btn-home-label { display: inline; }
 
-/* ── Dark-mode toggle (btn-theme) — always 34×34 icon square */
-.btn-theme {
-  width: 34px;
-  height: 34px;
-}
+.btn-theme { width: 34px; height: 34px; }
 .btn-theme svg { width: 17px; height: 17px; }
 
-/* Only one icon shown at a time based on data-theme on <html> */
-/* Default (light mode): show moon, hide sun */
 .btn-theme .icon-sun  { display: none; }
 .btn-theme .icon-moon { display: block; }
-/* Dark mode: show sun, hide moon */
 [data-theme="dark"] .btn-theme .icon-sun  { display: block; }
 [data-theme="dark"] .btn-theme .icon-moon { display: none; }
 
-/* ── Desktop: buttons side-by-side (topbar-right default is already row) ── */
-/* topbar-right is display:flex; align-items:center; gap:10px — leave it as row */
-/* No override needed for desktop */
-
-/* ── Mobile: stack vertically, btn-home becomes icon-only square ── */
 @media (max-width: 600px) {
   .topbar-right {
     flex-direction: column !important;
@@ -1389,7 +1375,6 @@ ins.adsbygoogle iframe,
   .btn-home .btn-home-label { display: none !important; }
 }
 
-/* ── Collapsible header — browser <button> reset ── */
 .collapsible-header {
   -webkit-appearance: none;
   appearance: none;
@@ -1408,19 +1393,13 @@ ins.adsbygoogle iframe,
   outline: none;
 }
 
-/* ── Mobile: input prefix/suffix gap — match desktop ── */
 @media (max-width: 480px) {
   .input-wrap input.has-prefix  { padding-left:  22px !important; }
   .input-wrap input.has-suffix  { padding-right: 28px !important; }
 }
 
-/* ══ DARK MODE ══════════════════════════════════════════════════════════════
-   Remaps all CSS variables used throughout the calculator stylesheets.
-   Triggered by data-theme="dark" on <html>, set via localStorage.
-   ══════════════════════════════════════════════════════════════════════════ */
-
+/* ══ DARK MODE ══════════════════════════════════════════════════════════════ */
 [data-theme="dark"] {
-  /* Neutrals */
   --bg:          #111e2a;
   --page-bg:     #0f1a24;
   --card:        #1a2a38;
@@ -1430,8 +1409,6 @@ ins.adsbygoogle iframe,
   --text-light:  #8a9bab;
   --dark:        #e8edf2;
   --navy:        #4d7a96;
-
-  /* Semantic colours — slightly brightened for dark surfaces */
   --green:        #3dbf7e;
   --green-light:  #1a3328;
   --blue:         #5a9fd4;
@@ -1445,130 +1422,35 @@ ins.adsbygoogle iframe,
   --purple:       #a07fd4;
   --purple-light: #1e1530;
 }
-
-[data-theme="dark"] body {
-  background: var(--page-bg);
-  color: var(--text);
-}
-
-/* Topbar — keep its own gradient, just darken */
-[data-theme="dark"] .topbar {
-  background: linear-gradient(180deg, #1c3040 0%, #111e2a 100%);
-}
-
-/* Cards */
-[data-theme="dark"] .card {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-/* Inputs */
+[data-theme="dark"] body { background: var(--page-bg); color: var(--text); }
+[data-theme="dark"] .topbar { background: linear-gradient(180deg,#1c3040 0%,#111e2a 100%); }
+[data-theme="dark"] .card { background: var(--card); border-color: var(--border); }
 [data-theme="dark"] input[type="number"],
 [data-theme="dark"] input[type="text"],
 [data-theme="dark"] input[type="month"],
-[data-theme="dark"] select {
-  background: #152030;
-  border-color: var(--border);
-  color: var(--text);
-}
-
-[data-theme="dark"] input[type="range"] {
-  accent-color: var(--green);
-}
-
-/* Toggle switches */
-[data-theme="dark"] .toggle-switch label {
-  background: #1a2a38;
-  border-color: var(--border);
-  color: var(--text-light);
-}
-
-/* Result boxes */
+[data-theme="dark"] select { background: #152030; border-color: var(--border); color: var(--text); }
+[data-theme="dark"] input[type="range"] { accent-color: var(--green); }
+[data-theme="dark"] .toggle-switch label { background: #1a2a38; border-color: var(--border); color: var(--text-light); }
 [data-theme="dark"] .result-box,
-[data-theme="dark"] .res-box {
-  background: var(--result-bg);
-  border-color: var(--border);
-}
-
-/* Tables */
+[data-theme="dark"] .res-box { background: var(--result-bg); border-color: var(--border); }
 [data-theme="dark"] table thead th,
 [data-theme="dark"] .tbl thead th,
 [data-theme="dark"] .combined-table thead th,
-[data-theme="dark"] .amort-table thead th {
-  background: #1a2a38;
-  color: var(--text-light);
-  border-color: var(--border);
-}
-
+[data-theme="dark"] .amort-table thead th { background: #1a2a38; color: var(--text-light); border-color: var(--border); }
 [data-theme="dark"] table tbody td,
 [data-theme="dark"] .tbl tbody td,
 [data-theme="dark"] .combined-table tbody td,
-[data-theme="dark"] .amort-table tbody td {
-  border-color: var(--border);
-  color: var(--text);
-}
-
+[data-theme="dark"] .amort-table tbody td { border-color: var(--border); color: var(--text); }
 [data-theme="dark"] .tbl tr:nth-child(even),
-[data-theme="dark"] .combined-table tbody tr:nth-child(even) {
-  background: #182535;
-}
-
-/* Derived info banners */
-[data-theme="dark"] .derived-info {
-  background: #1a2a38;
-  border-color: var(--border);
-  color: var(--text-light);
-}
-
-/* Action buttons — keep their colours but adjust bg */
-[data-theme="dark"] .btn-navy {
-  background: #2a4a60;
-}
-
-/* Footer */
-[data-theme="dark"] .ft {
-  background: linear-gradient(180deg, #1c3040 0%, #111e2a 100%);
-  color: var(--text-light);
-}
-
-/* Side rails */
-[data-theme="dark"] .side-rail-inner {
-  background: #1a2a38;
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .rail-ad-label {
-  color: var(--text-light);
-  border-color: var(--border);
-}
-
-/* Collapsible headers */
-[data-theme="dark"] .collapsible-header {
-  border-color: var(--border);
-}
-
-/* Section labels */
-[data-theme="dark"] .section-label {
-  color: var(--text-light);
-}
-
-/* Chart area */
-[data-theme="dark"] .chart-section {
-  background: var(--card);
-}
-
-/* Actions bar */
-[data-theme="dark"] .actions-bar {
-  border-color: var(--border);
-  background: var(--card);
-}
-
-/* Note/disclaimer text */
-[data-theme="dark"] .note {
-  color: var(--text-light);
-}
-
-/* Page wrapper background */
-[data-theme="dark"] .page-wrapper {
-  background: var(--page-bg);
-}
+[data-theme="dark"] .combined-table tbody tr:nth-child(even) { background: #182535; }
+[data-theme="dark"] .derived-info { background: #1a2a38; border-color: var(--border); color: var(--text-light); }
+[data-theme="dark"] .btn-navy { background: #2a4a60; }
+[data-theme="dark"] .ft { background: linear-gradient(180deg,#1c3040 0%,#111e2a 100%); color: var(--text-light); }
+[data-theme="dark"] .side-rail-inner { background: #1a2a38; border-color: var(--border); }
+[data-theme="dark"] .rail-ad-label { color: var(--text-light); border-color: var(--border); }
+[data-theme="dark"] .collapsible-header { border-color: var(--border); }
+[data-theme="dark"] .section-label { color: var(--text-light); }
+[data-theme="dark"] .chart-section { background: var(--card); }
+[data-theme="dark"] .actions-bar { border-color: var(--border); background: var(--card); }
+[data-theme="dark"] .note { color: var(--text-light); }
+[data-theme="dark"] .page-wrapper { background: var(--page-bg); }

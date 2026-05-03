@@ -211,6 +211,10 @@ body{
 [data-theme="dark"] .side-rail-inner { background:#1e2d3a; border-color:#2e3d4a; }
 [data-theme="dark"] .rail-ad-label { color:#8a9bab; border-color:#2e3d4a; }
 [data-theme="dark"] .ft { background:linear-gradient(180deg,#1c3040 0%,#111e2a 100%); }
+/* Personal Loan card: charcoal accent is invisible in dark mode — force cta to white */
+[data-theme="dark"] a.tool-card[href*="personal-loan"] .card-cta { color: #e8edf2; }
+[data-theme="dark"] a.tool-card[href*="personal-loan"] .card-cta svg { fill: #e8edf2; }
+
 /* Theme button on index (inside .hd which has dark bg) */
 #idxThemeBtn {
   display:inline-flex;align-items:center;justify-content:center;
