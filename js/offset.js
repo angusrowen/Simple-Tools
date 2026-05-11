@@ -98,7 +98,7 @@ function drawChart(withRows,noRows,P,yrs,freq){
       labels:labels,
       datasets:[
         {label:'With Offset',data:withDebt,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,0.65)',fill:'origin',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5,order:1},
-        {label:'Without Offset',data:noDebt,borderColor:'rgba(230,100,20,1)',backgroundColor:'rgba(230,100,20,0.72)',fill:'-1',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2,order:2}
+        {label:'Without Offset',data:noDebt,borderColor:'rgba(230,100,20,1)',backgroundColor:'rgba(230,100,20,0.65)',fill:'-1',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5,order:2}
       ]
     },
     options:{
@@ -367,7 +367,6 @@ document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventList
   var PREF  = 'auscalc-theme';
   var html  = document.documentElement;
 
-  /* Apply saved theme immediately on load */
   var saved = localStorage.getItem(PREF);
   if (saved) html.setAttribute('data-theme', saved);
 

@@ -192,11 +192,11 @@ function drawChart(labels,buyArr,invArr,propArr){
     data:{labels:labels,datasets:[
       {label:'Buy: Net Wealth',data:buyArr,borderColor:'rgba(42,157,103,1)',backgroundColor:'rgba(42,157,103,0.15)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
       {label:'Rent & Invest: Net Wealth',data:invArr,borderColor:'rgba(63,127,181,1)',backgroundColor:'rgba(63,127,181,0.15)',fill:true,tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
-      {label:'Property Value',data:propArr,borderColor:'rgba(232,168,56,1)',backgroundColor:'rgba(232,168,56,0.05)',borderDash:[5,4],tension:0.35,pointRadius:0,pointHoverRadius:4,borderWidth:1.8,fill:false}
+      {label:'Property Value',data:propArr,borderColor:'rgba(232,168,56,1)',backgroundColor:'rgba(232,168,56,0.05)',borderDash:[5,4],tension:0.35,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(30,20,10,.93)',titleColor:'#fff',bodyColor:'rgba(255,255,255,.88)',padding:11,cornerRadius:8,callbacks:{label:function(item){return item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');}}}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#6c7a89',maxTicksLimit:14}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#6c7a89',callback:function(v){return'$'+(v>=1000000?(v/1000000).toFixed(1)+'m':Math.round(v/1000)+'k');}}}},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(30,20,50,0.92)',titleColor:'#fff',bodyColor:'rgba(255,255,255,.88)',padding:11,cornerRadius:8,callbacks:{label:function(item){return item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');}}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#6c7a89',maxTicksLimit:16}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#6c7a89',callback:function(v){return'$'+(v>=1000000?(v/1000000).toFixed(1)+'m':Math.round(v/1000)+'k');}}}},
       animation:{duration:350}}
   });
 }
@@ -283,7 +283,6 @@ calc();
   var PREF  = 'auscalc-theme';
   var html  = document.documentElement;
 
-  /* Apply saved theme immediately on load */
   var saved = localStorage.getItem(PREF);
   if (saved) html.setAttribute('data-theme', saved);
 

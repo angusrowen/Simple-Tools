@@ -67,7 +67,7 @@ function initChart(){
       },
       plugins:{
         legend:{display:false},
-        tooltip:{ callbacks:{ label: c => ' '+c.dataset.label+': '+fmt(c.parsed.y) } }
+        tooltip:{ backgroundColor:'rgba(30,20,50,0.92)', titleColor:'#fff', bodyColor:'rgba(255,255,255,0.88)', padding:11, cornerRadius:8, callbacks:{ label: c => ' '+c.dataset.label+': '+fmt(c.parsed.y) } }
       }
     }
   });
@@ -266,7 +266,6 @@ calc();
   var PREF  = 'auscalc-theme';
   var html  = document.documentElement;
 
-  /* Apply saved theme immediately on load */
   var saved = localStorage.getItem(PREF);
   if (saved) html.setAttribute('data-theme', saved);
 

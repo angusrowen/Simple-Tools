@@ -216,7 +216,7 @@ function drawChart(labels, bArr, dArr, cArr) {
     data: {
       labels: labels,
       datasets: [
-        { label: "Cumulative Contributions", data: cArr, borderColor: "rgba(63,127,181,1)",  backgroundColor: "rgba(63,127,181,0.65)",  fill: "origin", tension: 0.35, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, order: 2 },
+        { label: "Cumulative Contributions", data: cArr, borderColor: "rgba(63,127,181,1)",  backgroundColor: "rgba(63,127,181,0.65)",  fill: "origin", tension: 0.35, pointRadius: 1, pointHoverRadius: 5, borderWidth: 2.5, order: 2 },
         { label: "Superannuation Growth",    data: bArr, borderColor: "rgba(232,168,56,1)",  backgroundColor: "rgba(232,168,56,0.65)",  fill: "-1",     tension: 0.35, pointRadius: 1, pointHoverRadius: 5, borderWidth: 2.5, order: 1 },
         { label: "Retirement Balance",       data: dArr, borderColor: "rgba(42,157,103,1)",  backgroundColor: "rgba(42,157,103,0.65)",  fill: "origin", tension: 0.35, pointRadius: 1, pointHoverRadius: 5, borderWidth: 2.5, order: 1 }
       ]
@@ -227,7 +227,7 @@ function drawChart(labels, bArr, dArr, cArr) {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: "rgba(30,20,10,.93)", titleColor: "#fff", bodyColor: "rgba(255,255,255,.88)", padding: 11, cornerRadius: 8,
+          backgroundColor: "rgba(30,20,50,0.92)", titleColor: "#fff", bodyColor: "rgba(255,255,255,.88)", padding: 11, cornerRadius: 8,
           callbacks: { label: function(item) { return item.dataset.label + ": $" + Math.round(item.parsed.y).toLocaleString("en-AU"); } }
         }
       },
@@ -372,7 +372,6 @@ calc();
   var PREF  = 'auscalc-theme';
   var html  = document.documentElement;
 
-  /* Apply saved theme immediately on load */
   var saved = localStorage.getItem(PREF);
   if (saved) html.setAttribute('data-theme', saved);
 

@@ -83,7 +83,7 @@ function drawLine(cd){
   lineChart=new Chart(ctx,{
     type:'line',
     data:{labels:cd.labels,datasets:[
-      {label:'Balance',data:cd.debt,borderColor:'#e6641e',backgroundColor:mkGrad(ctx,0),fill:'origin',tension:0.4,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
+      {label:'Balance',data:cd.debt,borderColor:'#e6641e',backgroundColor:mkGrad(ctx,0),fill:'origin',tension:0.35,pointRadius:1,pointHoverRadius:5,borderWidth:2.5},
       {label:'_p',data:cd.debt,borderWidth:0,pointRadius:0,pointHoverRadius:0,backgroundColor:'transparent',borderColor:'transparent',fill:false},
       {label:'_i',data:cd.annInt,borderWidth:0,pointRadius:0,pointHoverRadius:0,backgroundColor:'transparent',borderColor:'transparent',fill:false},
       {label:'_c',data:cd.cumPaid,borderWidth:0,pointRadius:0,pointHoverRadius:0,backgroundColor:'transparent',borderColor:'transparent',fill:false}
@@ -363,7 +363,6 @@ document.addEventListener('DOMContentLoaded',function(){
   var PREF  = 'auscalc-theme';
   var html  = document.documentElement;
 
-  /* Apply saved theme immediately on load */
   var saved = localStorage.getItem(PREF);
   if (saved) html.setAttribute('data-theme', saved);
 
