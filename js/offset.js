@@ -112,6 +112,11 @@ function drawChart(withRows,noRows,P,yrs,freq){
           callbacks:{
             label:function(item){
               return ' '+item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');
+            },
+            labelColor:function(item){
+              var colors=['rgba(42,157,103,1)','rgba(230,100,20,1)'];
+              var c=colors[item.datasetIndex]||'rgba(150,150,150,1)';
+              return{borderColor:c,backgroundColor:c,borderRadius:2};
             }
           }
         }
@@ -361,12 +366,12 @@ document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventList
 });
 
 
+
 /* ── Topbar: inject Return + Dark Mode buttons ─────────────────────────────
    Reads localStorage on load so theme persists across page navigation.     */
 (function () {
   var PREF  = 'auscalc-theme';
   var html  = document.documentElement;
-
   var saved = localStorage.getItem(PREF);
   if (saved) html.setAttribute('data-theme', saved);
 
@@ -382,14 +387,12 @@ document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventList
   function injectButtons() {
     var container = document.querySelector('.topbar-right');
     if (!container || container.querySelector('.btn-home')) return;
-
     var btnHome = document.createElement('a');
     btnHome.href = 'index.html';
     btnHome.className = 'btn-home';
     btnHome.title = 'Back to all calculators';
     btnHome.innerHTML = ARROW + '<span class="btn-home-label">All Calculators</span>';
     container.appendChild(btnHome);
-
     var btnTheme = document.createElement('button');
     btnTheme.type = 'button';
     btnTheme.className = 'btn-theme';

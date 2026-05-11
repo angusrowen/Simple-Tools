@@ -195,7 +195,7 @@ function drawChart(labels,buyArr,invArr,propArr){
       {label:'Property Value',data:propArr,borderColor:'rgba(232,168,56,1)',backgroundColor:'rgba(232,168,56,0.05)',borderDash:[5,4],tension:0.35,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(30,20,50,0.92)',titleColor:'#fff',bodyColor:'rgba(255,255,255,.88)',padding:11,cornerRadius:8,callbacks:{label:function(item){return item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');}}}},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(30,20,50,0.92)',titleColor:'#fff',bodyColor:'rgba(255,255,255,.88)',padding:11,cornerRadius:8,callbacks:{label:function(item){return item.dataset.label+': $'+Math.round(item.parsed.y).toLocaleString('en-AU');},labelColor:function(item){var colors=['rgba(42,157,103,1)','rgba(63,127,181,1)','rgba(232,168,56,1)'];var c=colors[item.datasetIndex]||'rgba(150,150,150,1)';return{borderColor:c,backgroundColor:c,borderRadius:2};}}}},
       scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#6c7a89',maxTicksLimit:16}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#6c7a89',callback:function(v){return'$'+(v>=1000000?(v/1000000).toFixed(1)+'m':Math.round(v/1000)+'k');}}}},
       animation:{duration:350}}
   });
@@ -277,12 +277,12 @@ updateExitUI();
 calc();
 
 
+
 /* ── Topbar: inject Return + Dark Mode buttons ─────────────────────────────
    Reads localStorage on load so theme persists across page navigation.     */
 (function () {
   var PREF  = 'auscalc-theme';
   var html  = document.documentElement;
-
   var saved = localStorage.getItem(PREF);
   if (saved) html.setAttribute('data-theme', saved);
 
@@ -298,14 +298,12 @@ calc();
   function injectButtons() {
     var container = document.querySelector('.topbar-right');
     if (!container || container.querySelector('.btn-home')) return;
-
     var btnHome = document.createElement('a');
     btnHome.href = 'index.html';
     btnHome.className = 'btn-home';
     btnHome.title = 'Back to all calculators';
     btnHome.innerHTML = ARROW + '<span class="btn-home-label">All Calculators</span>';
     container.appendChild(btnHome);
-
     var btnTheme = document.createElement('button');
     btnTheme.type = 'button';
     btnTheme.className = 'btn-theme';
