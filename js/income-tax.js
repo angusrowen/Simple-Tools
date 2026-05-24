@@ -10,7 +10,8 @@ var fyConfig={
 '2023-24':{label:'FY 2023-24',dates:'1 Jul 2023 – 30 Jun 2024',superDefault:11.0,medicareLower:24276,medicareUpper:30345,concessionalCap:27500,sgMaxQuarter:60220,div293Threshold:250000,mlsThresholds:{single:[90000,105000,140000],family:[180000,210000,280000]},rates:[0.01,0.0125,0.015],brackets:{resident:[{min:0,max:18200,rate:0},{min:18200,max:45000,rate:0.19},{min:45000,max:120000,rate:0.325},{min:120000,max:180000,rate:0.37},{min:180000,max:Infinity,rate:0.45}],foreign:[{min:0,max:120000,rate:0.325},{min:120000,max:180000,rate:0.37},{min:180000,max:Infinity,rate:0.45}],whm:[{min:0,max:45000,rate:0.15},{min:45000,max:120000,rate:0.325},{min:120000,max:180000,rate:0.37},{min:180000,max:Infinity,rate:0.45}]},lito:function(i){if(i<=45000)return 700;if(i<=66667)return Math.max(0,700-(i-45000)*0.05);return Math.max(0,325-(i-66667)*0.015);},sapto:{single:{max:2230,cutIn:32279,cutOut:50119},couple:{max:1602,cutIn:28974,cutOut:41790},illness:{max:2040,cutIn:31279,cutOut:95198}},noTfnRate:0.47,calcHELP:function(i){var t=[{mn:0,mx:51550,r:0},{mn:51550,mx:59518,r:.01},{mn:59518,mx:63089,r:.02},{mn:63089,mx:66875,r:.025},{mn:66875,mx:70888,r:.03},{mn:70888,mx:75140,r:.035},{mn:75140,mx:79649,r:.04},{mn:79649,mx:84429,r:.045},{mn:84429,mx:89494,r:.05},{mn:89494,mx:94865,r:.055},{mn:94865,mx:100557,r:.06},{mn:100557,mx:106590,r:.065},{mn:106590,mx:112985,r:.07},{mn:112985,mx:119764,r:.075},{mn:119764,mx:126950,r:.08},{mn:126950,mx:134568,r:.085},{mn:134568,mx:142642,r:.09},{mn:142642,mx:151200,r:.095},{mn:151200,mx:Infinity,r:.10}];for(var j=0;j<t.length;j++){if(i>=t[j].mn&&i<t[j].mx)return i*t[j].r;}return i*0.10;},helpShort:'Flat % of total income',ftbA:{rateUnder13:6536,rate13to15:8240,rate16to19:8240,incomeThreshold1:58108,taperRate1:0.20,incomeThreshold2:103368,taperRate2:0.30,baseRatePerChild:1849},ftbB:{primaryUnder5:4441,primary5to18:3186}},
 '2024-25':{label:'FY 2024-25',dates:'1 Jul 2024 – 30 Jun 2025',superDefault:11.5,medicareLower:26000,medicareUpper:32500,concessionalCap:30000,sgMaxQuarter:62270,div293Threshold:250000,mlsThresholds:{single:[93000,108000,144000],family:[186000,216000,288000]},rates:[0.01,0.0125,0.015],brackets:{resident:[{min:0,max:18200,rate:0},{min:18200,max:45000,rate:0.16},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}],foreign:[{min:0,max:45000,rate:0.30},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}],whm:[{min:0,max:45000,rate:0.15},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}]},lito:function(i){if(i<=45000)return 700;if(i<=66667)return Math.max(0,700-(i-45000)*0.05);return Math.max(0,325-(i-66667)*0.015);},sapto:{single:{max:2230,cutIn:33532,cutOut:51094},couple:{max:1602,cutIn:31468,cutOut:43750},illness:{max:2040,cutIn:31279,cutOut:95198}},noTfnRate:0.47,calcHELP:function(i){var t=[{mn:0,mx:54435,r:0},{mn:54435,mx:62850,r:.01},{mn:62850,mx:66620,r:.02},{mn:66620,mx:70618,r:.025},{mn:70618,mx:74855,r:.03},{mn:74855,mx:79346,r:.035},{mn:79346,mx:84107,r:.04},{mn:84107,mx:89154,r:.045},{mn:89154,mx:94503,r:.05},{mn:94503,mx:100174,r:.055},{mn:100174,mx:106185,r:.06},{mn:106185,mx:112556,r:.065},{mn:112556,mx:119310,r:.07},{mn:119310,mx:126467,r:.075},{mn:126467,mx:134056,r:.08},{mn:134056,mx:142100,r:.085},{mn:142100,mx:150626,r:.09},{mn:150626,mx:159663,r:.095},{mn:159663,mx:Infinity,r:.10}];for(var j=0;j<t.length;j++){if(i>=t[j].mn&&i<t[j].mx)return i*t[j].r;}return i*0.10;},helpShort:'Flat % of total income',ftbA:{rateUnder13:6706,rate13to15:8454,rate16to19:8454,incomeThreshold1:61063,taperRate1:0.20,incomeThreshold2:107413,taperRate2:0.30,baseRatePerChild:1896},ftbB:{primaryUnder5:4554,primary5to18:3268}},
 '2025-26':{label:'FY 2025-26',dates:'1 Jul 2025 – 30 Jun 2026',superDefault:12.0,medicareLower:26000,medicareUpper:32500,concessionalCap:30000,sgMaxQuarter:65070,div293Threshold:250000,mlsThresholds:{single:[96000,112000,148000],family:[192000,224000,296000]},rates:[0.01,0.0125,0.015],brackets:{resident:[{min:0,max:18200,rate:0},{min:18200,max:45000,rate:0.16},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}],foreign:[{min:0,max:45000,rate:0.30},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}],whm:[{min:0,max:45000,rate:0.15},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}]},lito:function(i){if(i<=45000)return 700;if(i<=66667)return Math.max(0,700-(i-45000)*0.05);return Math.max(0,325-(i-66667)*0.015);},sapto:{single:{max:2230,cutIn:33532,cutOut:51094},couple:{max:1602,cutIn:31468,cutOut:43750},illness:{max:2040,cutIn:31279,cutOut:95198}},noTfnRate:0.47,calcHELP:function(i){if(i<67000)return 0;if(i<125000)return(i-67000)*0.15;if(i<179285)return 8700+(i-125000)*0.17;return i*0.10;},helpShort:'Progressive marginal',ftbA:{rateUnder13:6900,rate13to15:8700,rate16to19:8700,incomeThreshold1:62634,taperRate1:0.20,incomeThreshold2:110000,taperRate2:0.30,baseRatePerChild:1950},ftbB:{primaryUnder5:4680,primary5to18:3360}}
-};
+,
+'2026-27':{label:'FY 2026–27',dates:'1 Jul 2026 – 30 Jun 2027',superDefault:12.0,medicareLower:26000,medicareUpper:32500,concessionalCap:32500,sgMaxQuarter:67707,div293Threshold:250000,mlsThresholds:{single:[96000,112000,148000],family:[192000,224000,296000],rates:[0.01,0.0125,0.015]},brackets:{resident:[{min:0,max:18200,rate:0},{min:18200,max:45000,rate:0.15},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}],foreign:[{min:0,max:45000,rate:0.30},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}],whm:[{min:0,max:45000,rate:0.15},{min:45000,max:135000,rate:0.30},{min:135000,max:190000,rate:0.37},{min:190000,max:Infinity,rate:0.45}]},lito:function(i){if(i<=37500)return 700;if(i<=45000)return Math.max(0,700-(i-37500)*0.05);return Math.max(0,325-(i-45000)*0.015);},sapto:{single:{max:2230,cutIn:36034,cutOut:53874},couple:{max:1602,cutIn:31847,cutOut:44663},illness:{max:2040,cutIn:34767,cutOut:51087}},noTfnRate:0.47,calcHELP:function(i){if(i<=67000)return 0;if(i<=125000)return(i-67000)*0.15;if(i<=179285)return 8700+(i-125000)*0.17;return i*0.10;},helpShort:'Progressive marginal',ftbA:{rateUnder13:1950,rate13to15:2536,rate16to19:2536,incomeThreshold1:162634,taperRate1:0.20,incomeThreshold2:110000,taperRate2:0.30,baseRatePerChild:1950},ftbB:{primaryUnder5:5429,primary5to18:3836}}};
 
 function getFY(){return fyConfig[document.getElementById('financialYear').value]||fyConfig['2025-26'];}
 function isHourly(){return document.getElementById('methodHourly').checked;}
@@ -382,7 +383,7 @@ function resetAll(){
     var body=h.nextElementSibling;
     if(body&&body.classList.contains('collapsible-body'))body.classList.remove('collapsed');
   });
-  document.getElementById('financialYear').value='2025-26';
+  document.getElementById('financialYear').value='2026-27';
   document.getElementById('salary').value='100000';
   document.getElementById('hourlyRate').value='50';
   document.getElementById('hourlyHours').value='38';
@@ -542,49 +543,29 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 
 
+
 /* ── Topbar: inject Return + Dark Mode buttons ─────────────────────────────
    Reads localStorage on load so theme persists across page navigation.     */
 (function () {
   var PREF  = 'auscalc-theme';
   var html  = document.documentElement;
-
   var saved = localStorage.getItem(PREF);
   if (saved) html.setAttribute('data-theme', saved);
-
   var ARROW = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>';
   var SUN   = '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
   var MOON  = '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-
-  function applyTheme(t) {
-    html.setAttribute('data-theme', t);
-    localStorage.setItem(PREF, t);
-  }
-
-  function injectButtons() {
-    var container = document.querySelector('.topbar-right');
-    if (!container || container.querySelector('.btn-home')) return;
-
-    var btnHome = document.createElement('a');
-    btnHome.href = 'index.html';
-    btnHome.className = 'btn-home';
-    btnHome.title = 'Back to all calculators';
-    btnHome.innerHTML = ARROW + '<span class="btn-home-label">All Calculators</span>';
+  function applyTheme(t){html.setAttribute('data-theme',t);localStorage.setItem(PREF,t);}
+  function injectButtons(){
+    var container=document.querySelector('.topbar-right');
+    if(!container||container.querySelector('.btn-home'))return;
+    var btnHome=document.createElement('a');btnHome.href='index.html';btnHome.className='btn-home';
+    btnHome.title='Back to all calculators';
+    btnHome.innerHTML=ARROW+'<span class="btn-home-label">All Calculators</span>';
     container.appendChild(btnHome);
-
-    var btnTheme = document.createElement('button');
-    btnTheme.type = 'button';
-    btnTheme.className = 'btn-theme';
-    btnTheme.setAttribute('aria-label', 'Toggle dark mode');
-    btnTheme.innerHTML = SUN + MOON;
-    btnTheme.addEventListener('click', function () {
-      applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-    });
+    var btnTheme=document.createElement('button');btnTheme.type='button';btnTheme.className='btn-theme';
+    btnTheme.setAttribute('aria-label','Toggle dark mode');btnTheme.innerHTML=SUN+MOON;
+    btnTheme.addEventListener('click',function(){applyTheme(html.getAttribute('data-theme')==='dark'?'light':'dark');});
     container.appendChild(btnTheme);
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', injectButtons);
-  } else {
-    injectButtons();
-  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',injectButtons);}else{injectButtons();}
 })();

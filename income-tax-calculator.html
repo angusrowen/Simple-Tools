@@ -14,7 +14,7 @@
 
 <div class="topbar">
   <div class="topbar-logo">
-    <a href="index.html" title="Back to all calculators" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#2a9d67;border-radius:10px;color:#fff;text-decoration:none">
+    <a href="index.html" title="Back to calculators" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#2a9d67;border-radius:10px;color:#fff;text-decoration:none">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zM9 13h6v2H9zm0-4h2v2H9zm4 0h2v2h-2zm-4 8h6v2H9z"/></svg>
     </a>
   </div>
@@ -62,7 +62,8 @@
           <select id="financialYear">
             <option value="2023-24">2023-24</option>
             <option value="2024-25">2024-25</option>
-            <option value="2025-26" selected>2025-26</option>
+            <option value="2025-26">2025-26</option>
+            <option value="2026-27" selected>2026-27</option>
           </select>
         </div>
         <div class="field">
@@ -429,7 +430,7 @@
           <div class="lbl">Effective Tax Rate</div>
           <div class="val" id="effectiveRate">0%</div>
         </div>
-        <div class="result-box">
+        <div class="result-box hl-amber">
           <div class="lbl">Marginal Tax Rate</div>
           <div class="val" id="marginalRate">0%</div>
         </div>
@@ -474,7 +475,7 @@
 
       <div class="actions-bar">
         <div class="actions-left">
-          <button class="btn btn-green" id="btnExportSummary" onclick="exportCSV()">
+          <button class="btn btn-green" id="btnCSV" onclick="exportCSV()">
             <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zm-3-7l-4 4-4-4h2.5v-3h3v3H15z"/></svg>
             Export Summary CSV
           </button>
@@ -513,7 +514,7 @@
 
 </div><!-- /page-wrapper -->
 
-<div class="ft"><span>&copy; 2026 Australian Finance Tools &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy</a></span></div>
+<div class="ft"><span>&copy; 2025 Australian Finance Tools &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy</a></span></div>
 
 <script src="js/income-tax.js"></script>
 </body>

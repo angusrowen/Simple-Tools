@@ -1,4 +1,5 @@
-// ─── ATO 2025-26 brackets ───────────────────────────────────────────────────
+// ─── ATO 2026-27 brackets ───────────────────────────────────────────────────
+// NOTE: $67,000 repayment threshold carried from 2025-26 — update when ATO publishes 2026-27 indexed figure
 const BRACKETS = [
   { min:0,       max:67000,   label:'$0 – $67,000',        calc:'Nil'                               },
   { min:67001,   max:125000,  label:'$67,001 – $125,000',   calc:'15c per $1 over $67,000'           },
@@ -251,7 +252,7 @@ $('btnReset').addEventListener('click', () => {
   $('loanBalance').value = 35000; $('loanBalanceRange').value = 35000;
   $('grossIncome').value = 75000; $('grossIncomeRange').value = 75000;
   $('incomeGrowth').value = 3;
-  $('indexRate').value = 3.2;
+  $('indexRate').value = 3.2; // 2026-27 indexation rate TBC — update when ATO confirms
   $('extraRepay').value = 0;
   calc();
 });
@@ -260,49 +261,29 @@ initChart();
 calc();
 
 
+
 /* ── Topbar: inject Return + Dark Mode buttons ─────────────────────────────
    Reads localStorage on load so theme persists across page navigation.     */
 (function () {
   var PREF  = 'auscalc-theme';
   var html  = document.documentElement;
-
   var saved = localStorage.getItem(PREF);
   if (saved) html.setAttribute('data-theme', saved);
-
   var ARROW = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>';
   var SUN   = '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
   var MOON  = '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-
-  function applyTheme(t) {
-    html.setAttribute('data-theme', t);
-    localStorage.setItem(PREF, t);
-  }
-
-  function injectButtons() {
-    var container = document.querySelector('.topbar-right');
-    if (!container || container.querySelector('.btn-home')) return;
-
-    var btnHome = document.createElement('a');
-    btnHome.href = 'index.html';
-    btnHome.className = 'btn-home';
-    btnHome.title = 'Back to all calculators';
-    btnHome.innerHTML = ARROW + '<span class="btn-home-label">All Calculators</span>';
+  function applyTheme(t){html.setAttribute('data-theme',t);localStorage.setItem(PREF,t);}
+  function injectButtons(){
+    var container=document.querySelector('.topbar-right');
+    if(!container||container.querySelector('.btn-home'))return;
+    var btnHome=document.createElement('a');btnHome.href='index.html';btnHome.className='btn-home';
+    btnHome.title='Back to all calculators';
+    btnHome.innerHTML=ARROW+'<span class="btn-home-label">All Calculators</span>';
     container.appendChild(btnHome);
-
-    var btnTheme = document.createElement('button');
-    btnTheme.type = 'button';
-    btnTheme.className = 'btn-theme';
-    btnTheme.setAttribute('aria-label', 'Toggle dark mode');
-    btnTheme.innerHTML = SUN + MOON;
-    btnTheme.addEventListener('click', function () {
-      applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-    });
+    var btnTheme=document.createElement('button');btnTheme.type='button';btnTheme.className='btn-theme';
+    btnTheme.setAttribute('aria-label','Toggle dark mode');btnTheme.innerHTML=SUN+MOON;
+    btnTheme.addEventListener('click',function(){applyTheme(html.getAttribute('data-theme')==='dark'?'light':'dark');});
     container.appendChild(btnTheme);
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', injectButtons);
-  } else {
-    injectButtons();
-  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',injectButtons);}else{injectButtons();}
 })();
